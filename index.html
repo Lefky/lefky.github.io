@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Working hours</title>
+	<link rel="shortcut icon" type="image/png" href="http://www.sclance.com/cliparts/time-png/time-png_8433.png"/>
+	
+	<script>
+		Date.prototype.subtractDays = function(days) {
+			var date = new Date(this.valueOf());
+			date.setDate(date.getDate() - days);
+			return date;
+		}
+
+		// Conversion functions
+		function timeStringToFloat(time) {
+			var hoursMinutes = time.split(/[.:]/);
+			var hours = parseInt(hoursMinutes[0], 10);
+			var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
+			return hours + minutes / 60;
+		}
+
+		function floatToTimeString(timedec){
+			var sign = timedec < 0 ? "-" : "";
+			var hours = Math.floor(Math.abs(timedec));
+			var minutes = Math.floor((Math.abs(timedec) * 60) % 60);
+			return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+		}
+
+		// Setters & getters
+		function getStart(){
+			var time = document.getElementById("start_time").value;
+			var time_dec = timeStringToFloat(time);
+			if (!time_dec) {
+				time_dec = 0;
+			}
+			return time_dec;
+		}
+
+		function setStart(time){
+			document.getElementById("start_time").value = floatToTimeString(time);
+		}
+
+		function getEnd(){
+			var time = document.getElementById("end_time").value;
+			var time_dec = timeStringToFloat(time);
+			if (!time_dec) {
+				time_dec = now();
+			}
+			return time_dec;
+		}
+
+		function setEnd(time){
+			document.getElementById("end_time").value = floatToTimeString(time);
+		}
+
+		function getBreak(){
+			var time = document.getElementById("break_time").value;
+			var time_dec = timeStringToFloat(time);
+			if (!time_dec) {
+				time_dec = 0;
+			}
+			return time_dec;
+		}
+
+		function setBreak(time){
+			document.getElementById("break_time").value = floatToTimeString(time);
+		}
+
+		function getHourSchedule(){
+			var e = document.getElementById("hourschedule");
+			var time = e.options[e.selectedIndex].value;
+			//var time = document.getElementById("hourschedule").value;
+			if (!time) {
+				time = 0;
+			}
+			return time;
+		}
+
+		function getTotal() {
+			var worktime = getEnd() - getStart();
+			
+			setTotal(worktime);
+			setRecup(worktime - getBreak() - getHourSchedule());
+			setTotalNoBreak(Math.abs(worktime - getBreak()));
+			
+			setTotalDec(Math.abs(parseFloat(worktime).toFixed(2)));
+			setRecupDec(Math.abs(parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2)));
+			setTotalNoBreakDec(getTotalNoBreakDec());
+		}
+
+		function setTotal(time){
+			document.getElementById("total").value = floatToTimeString(time);
+		}
+
+		function setTotalDec(time){
+			if ( time < 0 )
+				document.getElementById("totaldec").value = "";
+			else
+				document.getElementById("totaldec").value = time;
+		}
+
+		function setRecup(time){
+			document.getElementById("recup").value = floatToTimeString(time);
+		}
+
+		function getRecupDec(){
+			var worktime = getEnd() - getStart();
+			return parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2);
+		}
+
+		function setRecupDec(time){
+			if ( time < 0 )
+				document.getElementById("recupdec").value = "";
+			else
+				document.getElementById("recupdec").value = time;
+		}
+
+		function setTotalNoBreak(time){
+			document.getElementById("totalnobreak").value = floatToTimeString(time);
+		}
+
+		function getTotalNoBreakDec(){
+			var worktime = getEnd() - getStart();
+			return Math.abs(parseFloat(worktime - getBreak()).toFixed(2));
+		}
+
+		function setTotalNoBreakDec(time){
+			if ( time < 0 )
+				document.getElementById("totalnobreakdec").value = "";
+			else
+				document.getElementById("totalnobreakdec").value = time;
+		}
+
+		function setHistory(){
+			const reverseDateRepresentation = date => {
+			  let parts = date.split('-');
+			  return `${parts[2]}-${parts[1]}-${parts[0]}`;
+			};
+			
+			var entry = "<span style='float:left;'>Date</span>Time (no break), recup<br>",
+			//var entry = "Date\t\t\t\t\t[Time (no break), recup]\n",
+				keys = Object.keys(localStorage),
+				//revkeys = keys.sort().reverse(),
+				revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
+				i = 0, key;
+				
+			const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
+			
+			for (; key = revkeys[i]; i++) {
+				if ( userKeyRegExp.test(key) ) {
+					entry = entry + "<span class='' style='float:left;'>" + key + "</span>" + localStorage.getItem(key) + "<br>";
+					//entry = entry + key + "\t\t\t" + localStorage.getItem(key) + "\n";
+				}
+			}
+			if ( keys == "" || keys == null )
+				entry = "No previous data yet :("
+			document.getElementById("history").innerHTML = entry;
+			//document.getElementById("history2").value = entry;
+		}
+
+		// Storage functions
+		function cleanLocalStorage() {
+			var today = makeDate(todayDate());
+			for(key in localStorage) {
+				//alert(today.subtractDays(0));
+				//alert(makeDate(key));
+				if ( makeDate(key) < today.subtractDays(30) ) // days to keep data excluding today
+					delete localStorage[key];
+			}
+		}
+
+		function makeDate(date){
+		   var parts = date.split("-");
+		   return new Date(parts[2], parts[1] - 1, parts[0]);
+		}
+
+		// Application functions
+		function now() {
+			var date = new Date();
+			var hour = date.getHours(),
+				min  = date.getMinutes();
+
+			hour = (hour < 10 ? "0" : "") + hour;
+			min = (min < 10 ? "0" : "") + min;
+			
+			var timestamp = hour + ":" + min; 
+			return timeStringToFloat(timestamp);
+		}
+
+		function todayDate() {
+			var date = new Date();
+			
+			var dd = ('0' + date.getDate()).slice(-2),
+				mm = ('0' + (date.getMonth()+1)).slice(-2), //jan is 0
+				yyyy = date.getFullYear();
+			
+			return dd + "-" + mm + "-" + yyyy;
+		}
+
+		function reset() {
+			// Set options to parameters from localstorage
+			var autoend = localStorage.getItem("autoend"),
+				nosave = localStorage.getItem("nosave"),
+				hourschedule = localStorage.getItem("hourschedule"),
+				startmin5 = localStorage.getItem("startmin5");
+			if ( autoend == "true" )
+				document.getElementById("autoend").checked = true;
+			if ( nosave == todayDate() )
+				document.getElementById("nosave").checked = true;
+			document.getElementById("hourschedule").value = hourschedule;
+			
+			if ( startmin5 == "true" ) {
+				document.getElementById("startmin5").checked = true;
+				setStart(now() - 0.08);
+			} else {
+				setStart(now());
+			}
+			setBreak(0);
+			setEnd(0);
+			setTotal(0);
+			setTotalDec(0);
+			setTotalNoBreak(0);
+			setTotalNoBreakDec(0);
+			setHistory();
+			
+			//localStorage.setItem("testparam", "lalala");
+			/*
+			localStorage.setItem("21-8-2019", "2");
+			localStorage.setItem("20-8-2019", "3");
+			localStorage.setItem("19-8-2019", "4");
+			localStorage.setItem("18-8-2019", "5");
+			localStorage.setItem("17-8-2019", "6");
+			localStorage.setItem("16-8-2019", "7");
+			localStorage.setItem("15-8-2019", "8");
+			localStorage.setItem("14-8-2019", "9");
+			localStorage.setItem("13-8-2019", "10");
+			*/
+			cleanLocalStorage();
+			//delete localStorage["testparam"];
+		}
+
+		function end_time() {
+			setEnd(now());
+			getTotal();
+		}
+
+		function add_time(time) {
+			setEnd(getStart() + time + getBreak());
+			getTotal();
+		}
+
+		function add_break(time) {
+			setBreak(time + getBreak());
+			setEnd(time + getEnd());
+			getTotal();
+		}
+
+		function reset_break() {
+			setEnd(getEnd() - getBreak());
+			setBreak(0);
+			getTotal();
+		}
+
+		function runScript(event) {
+			if (event.keyCode == 13) {
+				add_time(7.6);
+				getTotal();
+			}
+		}
+
+		window.onbeforeunload = function(e) {
+			// Set 'dont save today' and 'automatically set end time' parameters in local storage
+			var nosave = document.getElementById("nosave");
+			var autoend = document.getElementById("autoend");
+			if ( nosave.checked == false ) {
+				if (autoend.checked == false ) {
+					var timeinfo = getTotalNoBreakDec() + ", " + getRecupDec();
+					localStorage.setItem("autoend", "false");
+				} else {
+					setEnd(now());
+					var timeinfo = getTotalNoBreakDec() + ", " + getRecupDec();
+					localStorage.setItem("autoend", "true");
+				}
+				localStorage.setItem(todayDate(), timeinfo);
+				localStorage.setItem("nosave", "false");
+			} else {
+				localStorage.setItem("nosave", todayDate());
+			}
+			// Set 'subtract 5 min from start time' parameter in local storage
+			var startmin5 = document.getElementById("startmin5");
+			if ( startmin5.checked == false ) {
+				localStorage.setItem("startmin5", "false");
+			} else {
+				localStorage.setItem("startmin5", "true");
+			}
+			// Set 'hour schedule' parameter in local storage
+			localStorage.setItem("hourschedule", getHourSchedule());
+		};
+	</script>	
+	<!-- Remember to include jQuery :) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<!-- jQuery Modal -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script><!--https://jquerymodal.com/-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+	<script>
+		$.modal.defaults = {
+		  fadeDuration: 200,     // Number of milliseconds the fade transition takes (null means no transition)
+		  fadeDelay: 0.5          // Point during the overlay's fade-in that the modal begins to fade in (.5 = 50%, 1.5 = 150%, etc.)
+		};
+	</script>
+	<style type="text/css" media="screen">
+		body {
+			max-width: 100%;
+			overflow-x: hidden;
+			font-size: 150%;
+			font-family: Lucida Sans Unicode;
+			font-weight: bolder;
+			border: none;
+			color: #333333;
+		}
+		p {
+			margin: 0;
+		}
+		input,select,textarea, #history {
+			font-size: 100%;
+			font-weight: bolder;
+			font-family: Lucida Sans Unicode;
+			padding: 2px;
+			margin: 1%;
+			-moz-border-radius:15px;
+			-webkit-border-radius:15px;
+			border: 1px solid #e6e6e6;
+			color: #333333;
+		}
+		#history {
+			margin-left:auto; 
+			margin-right:0; 
+			font-size: 60%; 
+			font-weight: bolder; 
+			padding: 4px; 
+			background-color: white;
+			max-width: 50%; 
+			height: 180px;
+			overflow-y: scroll;
+		}
+		.button {
+			background-color:#89c403;
+			-moz-border-radius:28px;
+			-webkit-border-radius:28px;
+			border-radius:28px;
+			border:1px solid #74b807;
+			display:inline-block;
+			cursor:pointer;
+			color:#ffffff;
+			font-size:17px;
+			padding:16px 31px;
+			text-decoration:none;
+			text-shadow:0px 1px 0px #528009;
+			margin-top: 5px;
+			margin-bottom: 5px;
+		}
+		.button:hover {
+			background-color:#77a809;
+		}
+		.button:active {
+			position:relative;
+			top:1px;
+		}
+		#blueButton {
+			background-color:#3d94f6;
+			border:1px solid #337fed;
+			text-shadow:0px 1px 0px #1570cd;
+		}
+		#blueButton:hover {
+			background-color:#1e62d0;
+		}
+		#orangeButton {
+			background-color:#fab561;
+			border:1px solid #eeb44f;
+			text-shadow:0px 1px 0px #cc9f52;
+		}
+		#orangeButton:hover {
+			background-color:#fb9e25;
+		}
+		#redButton {
+			background-color:#f24537;
+			border:1px solid #d02718;
+			text-shadow:0px 1px 0px #810e05;
+		}
+		#redButton:hover {
+			background-color:#c62d1f;
+		}
+		.modalbutton {
+			background-color:#ededed;
+			-moz-border-radius:28px;
+			-webkit-border-radius:28px;
+			border-radius:28px;
+			border:1px solid #dcdcdc;
+			display:inline-block;
+			cursor:pointer;
+			color:#777777;
+			font-size:12px;
+			padding:5px 10px;
+			text-decoration:none;
+			text-shadow:0px 1px 0px #ffffff;
+			float: right;
+		}
+		.modalbutton:hover {
+			background-color:#dfdfdf;
+		}
+		.modalbutton:active {
+			position:relative;
+			top:1px;
+		}
+		.modal p {
+			margin-bottom: 1em;
+			color: #595959;
+		}
+		.column {
+			width: 45%;
+			margin-left: auto; 
+			margin-right: auto; 
+		}
+		#column2 p {
+			margin-bottom: 1em;
+		}
+		#column1 {
+			float: left; 
+			text-align: right; 
+			padding: 2% 3% 2% 2%; 
+			background-color: #f2f2f2; 
+			-moz-border-radius: 0 28px 28px 0; 
+			-webkit-border-radius: 0 28px 28px 0;
+		}
+		#column2 {
+			float: right; 
+			text-align: left; 
+			padding: 8% 2% 3% 0;
+		}
+		.footer {
+			position: relative; 
+			font: 15px normal;
+		}
+		#leftfooter {
+			position: fixed; 
+			bottom: 1%; 
+			left: 1%;
+		}
+		#rightfooter {
+			position: fixed; 
+			bottom: 1%; 
+			right: 1%;
+		}
+		.selected{
+			background: red;
+		}
+		@media screen and (max-width: 700px) {
+			.column {
+				width: 95%;
+				-moz-border-radius: unset !important;
+				-webkit-border-radius: unset !important;
+			}
+			input,select,textarea, #history {
+				margin: 1%;
+			}
+			#history {
+				float: right;
+				max-width: 80%; 
+			}
+		}	
+		.switch {
+		  position: relative;
+		  display: inline-block;
+		  width: 30px;
+		  height: 17px;
+		}
+		.switch input { 
+		  opacity: 0;
+		  width: 0;
+		  height: 0;
+		}
+		.slider {
+		  position: absolute;
+		  cursor: pointer;
+		  top: 0;
+		  left: 0;
+		  right: 0;
+		  bottom: 0;
+		  background-color: #ccc;
+		  -webkit-transition: .4s;
+		  transition: .4s;
+		}
+		.slider:before {
+		  position: absolute;
+		  content: "";
+		  height: 13px;
+		  width: 13px;
+		  left: 2px;
+		  bottom: 2px;
+		  background-color: white;
+		  -webkit-transition: .4s;
+		  transition: .4s;
+		}
+		input:checked + .slider {
+		  background-color: #89c403;
+		}
+	
+		input:checked + #checkred {
+		  background-color: red;
+		}
+		input:focus + .slider {
+		  box-shadow: 0 0 1px #2196F3;
+		}
+		input:checked + .slider:before {
+		  -webkit-transform: translateX(13px);
+		  -ms-transform: translateX(13px);
+		  transform: translateX(13px);
+		}
+		/* Rounded sliders */
+		.slider.round {
+		  border-radius: 34px;
+		}
+		.slider.round:before {
+		  border-radius: 50%;
+		}
+	</style>
+</head>
+<body onload="reset(); add_time(7.6);">
+<!-- Modal HTML -->
+<div id="ex1" class="modal" id="fade" style="font-size: 80%; max-width: 90%;">
+	<h2>Info</h2>
+	<p>
+		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a>
+		Version: 20190919.1
+	</p>
+	<p>If you delete your browser data the history will reset.</p>
+	<p>Hitting "ENTER" will add 7.6 hours to the end date (and break time if defined).</p>
+	<h3>Parameters</h3>
+	<p>The value settings are saved. So if you enable something it will still be enabled on the next opening of the page.</p>
+	<p>
+		<i>"Don't save today."</i><br>
+		&emsp;won't save today's date for the remainder of the day (untill timestamp 00:00) or unless disabled again.
+	</p>
+	<p>
+		<i>"Automatically set end time on close."</i><br>
+		&emsp;will change the end time to the timestamp on which you close or refresh the window and thus overwrite any manual changes you made.<br>
+	</p>
+	<p>
+		<i>"Subtract 5 min from time on open."</i><br>
+		&emsp;will subtract 5 min from the time the page was opened (and the start time). This is to take the time to boot your laptop, ... into account.
+	</p>
+	<br>
+	<a href="#" class="modalbutton" rel="modal:close">Close</a>
+</div>
+
+<div style="top: 0; left: 0; width:100%; height:100%; display: table; position: absolute;">
+	<div align="center" style=" max-width: 50%; display: table-cell; vertical-align: middle; margin: 0 5px;">
+		<div class="column" id="column1" style="">
+			<p>Start time : <input name="start_time" id="start_time" type="time" onkeypress="return runScript(event)" onchange="getTotal();"/></p>
+			<p>Break : <input name="break_time" id="break_time" type="time" value="00:00" readonly /></p>
+			<p>Time to go home : <input name="end_time" id="end_time" type="time" onchange="getTotal();" /></p>
+			<p>Total hours (no break) : <input type="time" name="totalnobreak" id="totalnobreak" value="" readonly> <input type="text" name="totalnobreakdec" id="totalnobreakdec" value="" maxlength="4" size="5" readonly></p>
+			<p>Recup@
+				<select name="hourschedule" id="hourschedule" onchange="getTotal();">
+				  <option value="7.6" selected="selected">7,6h</option>
+				  <option value="8">8h</option>
+				</select>
+				: <input type="text" name="recup" id="recup" value="" maxlength="4" size="5" readonly> <input type="text" name="recupdec" id="recupdec" value="" maxlength="4" size="5" readonly></p>
+			<p>Total hours : <input type="time" name="total" id="total" value="" readonly> <input type="text" name="totaldec" id="totaldec" value="" maxlength="4" size="5" readonly></p>
+			<div id="history" style=""></div>
+			<!--<textarea id="history2" rows="6" cols="50" style=""></textarea>-->
+			<div style="font-size: 40%; float: right; clear: both; width: 100%;">
+				<!--<input type="checkbox" id="nosave" name="nosave"/><label>Don't save today.</label>-->
+				<!--<input type="checkbox" id="autoend" name="autoend"/><label>Automatically set end time on close.</label><br>-->
+				<span><label class="switch"><input type="checkbox" id="nosave"><span class="slider round" id="checkred"></span></label> Don't save today.</span>&nbsp;&nbsp;&nbsp;
+				<span><label class="switch"><input type="checkbox" id="autoend"><span class="slider round"></span></label> Automatically set end time on close.</span>&nbsp;&nbsp;&nbsp;
+				<span><label class="switch"><input type="checkbox" id="startmin5"><span class="slider round"></span></label> Subtract 5 min from open.</span>
+			</div>
+		</div>
+		<div class="column" id="column2" style="">
+			<p>
+				<button class="button" id="add_time_76()" onclick="add_time(7.6)">Add 7,6h</button>&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="button" onclick="add_time(8)">Add 8h</button>&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="button" onclick="end_time()">End time now</button>
+			</p>
+			<p>
+				Break<br>
+				<button class="button" id="blueButton" onclick="reset_break()">Reset</button>&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="button" id="blueButton" onclick="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)">+ 5 min</button>&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="button" id="blueButton" onclick="add_break(0.5)">+ 30 min</button>
+			</p>
+			<p>
+				<button class="button" id="orangeButton" onclick="getTotal()">Calculate Total</button>
+			</p>
+			<p>
+				<button class="button" id="redButton" onclick="reset()">Reset</button>
+			</p>
+		</div>
+	</div>
+</div>
+<div class="footer">    
+    <div id="leftfooter">
+		Senne Janssens (C) 2019
+    </div>
+</div>
+<div class="footer">
+	<div id="rightfooter">
+		<a href="#ex1" rel="modal:open" class="modalbutton">Info</a>
+	</div>
+</div>
+</body>
+</html>
