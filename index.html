@@ -5,300 +5,7 @@
 	<link rel="shortcut icon" type="image/png" href="https://www.sclance.com/cliparts/time-png/time-png_8433.png"/>
 	<meta name="robots" content="noindex">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
-	<script>
-		Date.prototype.subtractDays = function(days) {
-			var date = new Date(this.valueOf());
-			date.setDate(date.getDate() - days);
-			return date;
-		}
 
-		// Conversion functions
-		function timeStringToFloat(time) {
-			var hoursMinutes = time.split(/[.:]/);
-			var hours = parseInt(hoursMinutes[0], 10);
-			var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
-			return hours + minutes / 60;
-		}
-
-		function floatToTimeString(timedec){
-			var sign = timedec < 0 ? "-" : "";
-			var hours = Math.floor(Math.abs(timedec));
-			var minutes = Math.floor((Math.abs(timedec) * 60) % 60);
-			return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
-		}
-
-		// Setters & getters
-		function getStart(){
-			var time = document.getElementById("start_time").value;
-			var time_dec = timeStringToFloat(time);
-			if (!time_dec) {
-				time_dec = 0;
-			}
-			return time_dec;
-		}
-
-		function setStart(time){
-			document.getElementById("start_time").value = floatToTimeString(time);
-		}
-
-		function getEnd(){
-			var time = document.getElementById("end_time").value;
-			var time_dec = timeStringToFloat(time);
-			if (!time_dec) {
-				time_dec = now();
-			}
-			return time_dec;
-		}
-
-		function setEnd(time){
-			document.getElementById("end_time").value = floatToTimeString(time);
-		}
-
-		function getBreak(){
-			var time = document.getElementById("break_time").value;
-			var time_dec = timeStringToFloat(time);
-			if (!time_dec) {
-				time_dec = 0;
-			}
-			return time_dec;
-		}
-
-		function setBreak(time){
-			document.getElementById("break_time").value = floatToTimeString(time);
-		}
-
-		function getHourSchedule(){
-			var e = document.getElementById("hourschedule");
-			var time = e.options[e.selectedIndex].value;
-			//var time = document.getElementById("hourschedule").value;
-			if (!time) {
-				time = 0;
-			}
-			return time;
-		}
-
-		function getTotal() {
-			var worktime = getEnd() - getStart();
-			
-			setTotal(worktime);
-			setRecup(worktime - getBreak() - getHourSchedule());
-			setTotalNoBreak(Math.abs(worktime - getBreak()));
-			
-			setTotalDec(Math.abs(parseFloat(worktime).toFixed(2)));
-			setRecupDec(Math.abs(parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2)));
-			setTotalNoBreakDec(getTotalNoBreakDec());
-		}
-
-		function setTotal(time){
-			document.getElementById("total").value = floatToTimeString(time);
-		}
-
-		function setTotalDec(time){
-			if ( time < 0 )
-				document.getElementById("totaldec").value = "";
-			else
-				document.getElementById("totaldec").value = time;
-		}
-
-		function setRecup(time){
-			document.getElementById("recup").value = floatToTimeString(time);
-		}
-
-		function getRecupDec(){
-			var worktime = getEnd() - getStart();
-			return parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2);
-		}
-
-		function setRecupDec(time){
-			if ( time < 0 )
-				document.getElementById("recupdec").value = "";
-			else
-				document.getElementById("recupdec").value = time;
-		}
-
-		function setTotalNoBreak(time){
-			document.getElementById("totalnobreak").value = floatToTimeString(time);
-		}
-
-		function getTotalNoBreakDec(){
-			var worktime = getEnd() - getStart();
-			return Math.abs(parseFloat(worktime - getBreak()).toFixed(2));
-		}
-
-		function setTotalNoBreakDec(time){
-			if ( time < 0 )
-				document.getElementById("totalnobreakdec").value = "";
-			else
-				document.getElementById("totalnobreakdec").value = time;
-		}
-
-		function setHistory(){
-			const reverseDateRepresentation = date => {
-			  let parts = date.split('-');
-			  return `${parts[2]}-${parts[1]}-${parts[0]}`;
-			};
-			
-			var entry = "<span style='float:left;'>Date</span>Time (no break), recup<br>",
-			//var entry = "Date\t\t\t\t\t[Time (no break), recup]\n",
-				keys = Object.keys(localStorage),
-				//revkeys = keys.sort().reverse(),
-				revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
-				i = 0, key;
-				
-			const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
-			
-			for (; key = revkeys[i]; i++) {
-				if ( userKeyRegExp.test(key) ) {
-					entry = entry + "<span class='' style='float:left;'>" + key + "</span>" + localStorage.getItem(key) + "<br>";
-					//entry = entry + key + "\t\t\t" + localStorage.getItem(key) + "\n";
-				}
-			}
-			if ( keys == "" || keys == null )
-				entry = "No previous data yet :("
-			document.getElementById("history").innerHTML = entry;
-			//document.getElementById("history2").value = entry;
-		}
-
-		// Storage functions
-		function cleanLocalStorage() {
-			var today = makeDate(todayDate());
-			for(key in localStorage) {
-				//alert(today.subtractDays(0));
-				//alert(makeDate(key));
-				if ( makeDate(key) < today.subtractDays(30) ) // days to keep data excluding today
-					delete localStorage[key];
-			}
-		}
-
-		function makeDate(date){
-		   var parts = date.split("-");
-		   return new Date(parts[2], parts[1] - 1, parts[0]);
-		}
-
-		// Application functions
-		function now() {
-			var date = new Date();
-			var hour = date.getHours(),
-				min  = date.getMinutes();
-
-			hour = (hour < 10 ? "0" : "") + hour;
-			min = (min < 10 ? "0" : "") + min;
-			
-			var timestamp = hour + ":" + min; 
-			return timeStringToFloat(timestamp);
-		}
-
-		function todayDate() {
-			var date = new Date();
-			
-			var dd = ('0' + date.getDate()).slice(-2),
-				mm = ('0' + (date.getMonth()+1)).slice(-2), //jan is 0
-				yyyy = date.getFullYear();
-			
-			return dd + "-" + mm + "-" + yyyy;
-		}
-
-		function reset() {
-			// Set options to parameters from localstorage
-			var autoend = localStorage.getItem("autoend"),
-				nosave = localStorage.getItem("nosave"),
-				hourschedule = localStorage.getItem("hourschedule"),
-				startmin5 = localStorage.getItem("startmin5");
-			if ( autoend == "true" )
-				document.getElementById("autoend").checked = true;
-			if ( nosave == todayDate() )
-				document.getElementById("nosave").checked = true;
-			document.getElementById("hourschedule").value = hourschedule;
-			
-			if ( startmin5 == "true" ) {
-				document.getElementById("startmin5").checked = true;
-				setStart(now() - 0.08);
-			} else {
-				setStart(now());
-			}
-			setBreak(0);
-			setEnd(0);
-			setTotal(0);
-			setTotalDec(0);
-			setTotalNoBreak(0);
-			setTotalNoBreakDec(0);
-			setHistory();
-			
-			//localStorage.setItem("testparam", "lalala");
-			/*
-			localStorage.setItem("21-8-2019", "2");
-			localStorage.setItem("20-8-2019", "3");
-			localStorage.setItem("19-8-2019", "4");
-			localStorage.setItem("18-8-2019", "5");
-			localStorage.setItem("17-8-2019", "6");
-			localStorage.setItem("16-8-2019", "7");
-			localStorage.setItem("15-8-2019", "8");
-			localStorage.setItem("14-8-2019", "9");
-			localStorage.setItem("13-8-2019", "10");
-			*/
-			cleanLocalStorage();
-			//delete localStorage["testparam"];
-		}
-
-		function end_time() {
-			setEnd(now());
-			getTotal();
-		}
-
-		function add_time(time) {
-			setEnd(getStart() + time + getBreak());
-			getTotal();
-		}
-
-		function add_break(time) {
-			setBreak(time + getBreak());
-			setEnd(time + getEnd());
-			getTotal();
-		}
-
-		function reset_break() {
-			setEnd(getEnd() - getBreak());
-			setBreak(0);
-			getTotal();
-		}
-
-		function runScript(event) {
-			if (event.keyCode == 13) {
-				add_time(7.6);
-				getTotal();
-			}
-		}
-
-		window.onbeforeunload = function(e) {
-			// Set 'dont save today' and 'automatically set end time' parameters in local storage
-			var nosave = document.getElementById("nosave");
-			var autoend = document.getElementById("autoend");
-			if ( nosave.checked == false ) {
-				if (autoend.checked == false ) {
-					var timeinfo = getTotalNoBreakDec() + ", " + getRecupDec();
-					localStorage.setItem("autoend", "false");
-				} else {
-					setEnd(now());
-					var timeinfo = getTotalNoBreakDec() + ", " + getRecupDec();
-					localStorage.setItem("autoend", "true");
-				}
-				localStorage.setItem(todayDate(), timeinfo);
-				localStorage.setItem("nosave", "false");
-			} else {
-				localStorage.setItem("nosave", todayDate());
-			}
-			// Set 'subtract 5 min from start time' parameter in local storage
-			var startmin5 = document.getElementById("startmin5");
-			if ( startmin5.checked == false ) {
-				localStorage.setItem("startmin5", "false");
-			} else {
-				localStorage.setItem("startmin5", "true");
-			}
-			// Set 'hour schedule' parameter in local storage
-			localStorage.setItem("hourschedule", getHourSchedule());
-		};
-	</script>	
 	<!-- Remember to include jQuery :) -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<!-- jQuery Modal -->
@@ -322,6 +29,9 @@
 		}
 		p {
 			margin: 0;
+		}
+		.floatreset {
+			float: initial !important;
 		}
 		input,select,textarea, #history {
 			font-size: 100%;
@@ -535,10 +245,14 @@
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a><br>
 		Version: 20190919.1 <br>
-		Pageview count: <img src="http://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" > 
-                            
+		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
 	</p>
-	<p>If you delete your browser data the history will reset.</p>
+	<p>
+		If you delete your browser data the history will reset. You can export and import your data.
+		<a class="modalbutton floatreset" id="exportHistory" onclick="exportHistory()">Export History</a>
+		<a class="modalbutton floatreset" id="importHistory">Import History</a>
+		<input type="file" id="importFile" accept=".json" style="display:none"/>	
+	</p>
 	<p>Hitting "ENTER" will add 7.6 hours to the end date (and break time if defined).</p>
 	<h3>Parameters</h3>
 	<p>The value settings are saved. So if you enable something it will still be enabled on the next opening of the page.</p>
@@ -614,4 +328,329 @@
 	</div>
 </div>
 </body>
+<script>
+	Date.prototype.subtractDays = function(days) {
+		var date = new Date(this.valueOf());
+		date.setDate(date.getDate() - days);
+		return date;
+	}
+
+	// Conversion functions
+	function timeStringToFloat(time) {
+		var hoursMinutes = time.split(/[.:]/);
+		var hours = parseInt(hoursMinutes[0], 10);
+		var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
+		return hours + minutes / 60;
+	}
+
+	function floatToTimeString(timedec){
+		var sign = timedec < 0 ? "-" : "";
+		var hours = Math.floor(Math.abs(timedec));
+		var minutes = Math.floor((Math.abs(timedec) * 60) % 60);
+		return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+	}
+
+	// Setters & getters
+	function getStart(){
+		var time = document.getElementById("start_time").value;
+		var time_dec = timeStringToFloat(time);
+		if (!time_dec) {
+			time_dec = 0;
+		}
+		return time_dec;
+	}
+
+	function setStart(time){
+		document.getElementById("start_time").value = floatToTimeString(time);
+	}
+
+	function getEnd(){
+		var time = document.getElementById("end_time").value;
+		var time_dec = timeStringToFloat(time);
+		if (!time_dec) {
+			time_dec = now();
+		}
+		return time_dec;
+	}
+
+	function setEnd(time){
+		document.getElementById("end_time").value = floatToTimeString(time);
+	}
+
+	function getBreak(){
+		var time = document.getElementById("break_time").value;
+		var time_dec = timeStringToFloat(time);
+		if (!time_dec) {
+			time_dec = 0;
+		}
+		return time_dec;
+	}
+
+	function setBreak(time){
+		document.getElementById("break_time").value = floatToTimeString(time);
+	}
+
+	function getHourSchedule(){
+		var e = document.getElementById("hourschedule");
+		var time = e.options[e.selectedIndex].value;
+		//var time = document.getElementById("hourschedule").value;
+		if (!time) {
+			time = 0;
+		}
+		return time;
+	}
+
+	function getTotal() {
+		var worktime = getEnd() - getStart();
+		
+		setTotal(worktime);
+		setRecup(worktime - getBreak() - getHourSchedule());
+		setTotalNoBreak(Math.abs(worktime - getBreak()));
+		
+		setTotalDec(Math.abs(parseFloat(worktime).toFixed(2)));
+		setRecupDec(Math.abs(parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2)));
+		setTotalNoBreakDec(getTotalNoBreakDec());
+	}
+
+	function setTotal(time){
+		document.getElementById("total").value = floatToTimeString(time);
+	}
+
+	function setTotalDec(time){
+		if ( time < 0 )
+			document.getElementById("totaldec").value = "";
+		else
+			document.getElementById("totaldec").value = time;
+	}
+
+	function setRecup(time){
+		document.getElementById("recup").value = floatToTimeString(time);
+	}
+
+	function getRecupDec(){
+		var worktime = getEnd() - getStart();
+		return parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2);
+	}
+
+	function setRecupDec(time){
+		if ( time < 0 )
+			document.getElementById("recupdec").value = "";
+		else
+			document.getElementById("recupdec").value = time;
+	}
+
+	function setTotalNoBreak(time){
+		document.getElementById("totalnobreak").value = floatToTimeString(time);
+	}
+
+	function getTotalNoBreakDec(){
+		var worktime = getEnd() - getStart();
+		return Math.abs(parseFloat(worktime - getBreak()).toFixed(2));
+	}
+
+	function setTotalNoBreakDec(time){
+		if ( time < 0 )
+			document.getElementById("totalnobreakdec").value = "";
+		else
+			document.getElementById("totalnobreakdec").value = time;
+	}
+
+	function setHistory(){
+		const reverseDateRepresentation = date => {
+		  let parts = date.split('-');
+		  return `${parts[2]}-${parts[1]}-${parts[0]}`;
+		};
+		
+		var entry = "<span style='float:left;'>Date</span>Time (no break), recup<br>",
+		//var entry = "Date\t\t\t\t\t[Time (no break), recup]\n",
+			keys = Object.keys(localStorage),
+			//revkeys = keys.sort().reverse(),
+			revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
+			i = 0, key;
+			
+		const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
+		
+		for (; key = revkeys[i]; i++) {
+			if ( userKeyRegExp.test(key) ) {
+				entry = entry + "<span class='' style='float:left;'>" + key + "</span>" + localStorage.getItem(key) + "<br>";
+				//entry = entry + key + "\t\t\t" + localStorage.getItem(key) + "\n";
+			}
+		}
+		if ( keys == "" || keys == null )
+			entry = "No previous data yet :("
+		document.getElementById("history").innerHTML = entry;
+		//document.getElementById("history2").value = entry;
+	}
+
+	// Storage functions
+	function cleanLocalStorage() {
+		var today = makeDate(todayDate());
+		for(key in localStorage) {
+			//alert(today.subtractDays(0));
+			//alert(makeDate(key));
+			if ( makeDate(key) < today.subtractDays(30) ) // days to keep data excluding today
+				delete localStorage[key];
+		}
+	}
+
+	function makeDate(date){
+	   var parts = date.split("-");
+	   return new Date(parts[2], parts[1] - 1, parts[0]);
+	}
+
+	// Application functions
+	function now() {
+		var date = new Date();
+		var hour = date.getHours(),
+			min  = date.getMinutes();
+
+		hour = (hour < 10 ? "0" : "") + hour;
+		min = (min < 10 ? "0" : "") + min;
+		
+		var timestamp = hour + ":" + min; 
+		return timeStringToFloat(timestamp);
+	}
+
+	function todayDate() {
+		var date = new Date();
+		
+		var dd = ('0' + date.getDate()).slice(-2),
+			mm = ('0' + (date.getMonth()+1)).slice(-2), //jan is 0
+			yyyy = date.getFullYear();
+		
+		return dd + "-" + mm + "-" + yyyy;
+	}
+
+	function reset() {
+		// Set options to parameters from localStorage
+		var autoend = localStorage.getItem("autoend"),
+			nosave = localStorage.getItem("nosave"),
+			hourschedule = localStorage.getItem("hourschedule"),
+			startmin5 = localStorage.getItem("startmin5");
+		if ( autoend == "true" )
+			document.getElementById("autoend").checked = true;
+		if ( nosave == todayDate() )
+			document.getElementById("nosave").checked = true;
+		document.getElementById("hourschedule").value = hourschedule;
+		
+		if ( startmin5 == "true" ) {
+			document.getElementById("startmin5").checked = true;
+			setStart(now() - 0.08);
+		} else {
+			setStart(now());
+		}
+		setBreak(0);
+		setEnd(0);
+		setTotal(0);
+		setTotalDec(0);
+		setTotalNoBreak(0);
+		setTotalNoBreakDec(0);
+		setHistory();
+		
+		//localStorage.setItem("testparam", "lalala");
+		/*
+		localStorage.setItem("21-8-2019", "2");
+		localStorage.setItem("20-8-2019", "3");
+		localStorage.setItem("19-8-2019", "4");
+		localStorage.setItem("18-8-2019", "5");
+		localStorage.setItem("17-8-2019", "6");
+		localStorage.setItem("16-8-2019", "7");
+		localStorage.setItem("15-8-2019", "8");
+		localStorage.setItem("14-8-2019", "9");
+		localStorage.setItem("13-8-2019", "10");
+		*/
+		cleanLocalStorage();
+		//delete localStorage["testparam"];
+	}
+
+	function end_time() {
+		setEnd(now());
+		getTotal();
+	}
+
+	function add_time(time) {
+		setEnd(getStart() + time + getBreak());
+		getTotal();
+	}
+
+	function add_break(time) {
+		setBreak(time + getBreak());
+		setEnd(time + getEnd());
+		getTotal();
+	}
+
+	function reset_break() {
+		setEnd(getEnd() - getBreak());
+		setBreak(0);
+		getTotal();
+	}
+
+	function runScript(event) {
+		if (event.keyCode == 13) {
+			add_time(7.6);
+			getTotal();
+		}
+	}
+
+	function exportHistory() {		
+		var _myArray = JSON.stringify(localStorage , null, 4); //indentation in json format, human readable
+
+		var vLink = document.getElementById('exportHistory'),
+		vBlob = new Blob([_myArray], {type: "octet/stream"}),
+		vName = 'working_history_' + todayDate() + '.json',
+		vUrl = window.URL.createObjectURL(vBlob);
+		vLink.setAttribute('href', vUrl);
+		vLink.setAttribute('download', vName );
+	}
+		
+	var importHistory = document.getElementById('importHistory'),
+		importFile = document.getElementById('importFile');
+	importFile.addEventListener("change", importHistoryData, false);
+	importHistory.onclick = function () {importFile.click()}
+	function importHistoryData(e) {
+		var files = e.target.files, reader = new FileReader();
+		//reader.onload = _imp();
+		//reader.readAsText(file,'UTF-8');
+		reader.onload = readerEvent => {
+			var content = JSON.parse(readerEvent.target.result); // this is the content!
+			Object.keys(content).forEach(function (k) {
+				localStorage.setItem(k, content[k]);
+			});
+			importFile.value = ''; //clear input value after every import
+			setHistory();
+			console.log( content );
+		}
+		reader.readAsText(files[0]);
+		importFile.click();
+	}
+
+	window.onbeforeunload = function(e) {
+		// Set 'dont save today' and 'automatically set end time' parameters in local storage
+		var nosave = document.getElementById("nosave");
+		var autoend = document.getElementById("autoend");
+		if ( nosave.checked == false ) {
+			if (autoend.checked == false ) {
+				var timeinfo = getTotalNoBreakDec() + ", " + getRecupDec();
+				localStorage.setItem("autoend", "false");
+			} else {
+				setEnd(now());
+				var timeinfo = getTotalNoBreakDec() + ", " + getRecupDec();
+				localStorage.setItem("autoend", "true");
+			}
+			localStorage.setItem(todayDate(), timeinfo);
+			localStorage.setItem("nosave", "false");
+		} else {
+			localStorage.setItem("nosave", todayDate());
+		}
+		// Set 'subtract 5 min from start time' parameter in local storage
+		var startmin5 = document.getElementById("startmin5");
+		if ( startmin5.checked == false ) {
+			localStorage.setItem("startmin5", "false");
+		} else {
+			localStorage.setItem("startmin5", "true");
+		}
+		// Set 'hour schedule' parameter in local storage
+		localStorage.setItem("hourschedule", getHourSchedule());
+	};
+</script>
 </html>
