@@ -248,7 +248,7 @@
 		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
 	</p>
 	<p>
-		If you delete your browser data the history will reset. You can export and import your data.
+		If you delete your browser data the history will reset. You can export and import your data.<br>
 		<a class="modalbutton floatreset" id="exportHistory" onclick="exportHistory()">Export History</a>
 		<a class="modalbutton floatreset" id="importHistory">Import History</a>
 		<input type="file" id="importFile" accept=".json" style="display:none"/>	
@@ -618,10 +618,9 @@
 			});
 			importFile.value = ''; //clear input value after every import
 			setHistory();
-			console.log( content );
 		}
 		reader.readAsText(files[0]);
-		importFile.click();
+		alert("Import successful!");
 	}
 
 	window.onbeforeunload = function(e) {
