@@ -13,8 +13,8 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 	<script>
 		$.modal.defaults = {
-		  fadeDuration: 200,     // Number of milliseconds the fade transition takes (null means no transition)
-		  fadeDelay: 0.5          // Point during the overlay's fade-in that the modal begins to fade in (.5 = 50%, 1.5 = 150%, etc.)
+			fadeDuration: 200,		// Number of milliseconds the fade transition takes (null means no transition)
+			fadeDelay: 0.5			// Point during the overlay's fade-in that the modal begins to fade in (.5 = 50%, 1.5 = 150%, etc.)
 		};
 	</script>
 	<style type="text/css" media="screen">
@@ -240,11 +240,11 @@
 </head>
 <body onload="reset(); add_time(7.6);">
 <!-- Modal HTML -->
-<div id="ex1" class="modal" id="fade" style="font-size: 80%; max-width: 90%;">
+<div id="ex1" class="modal" style="font-size: 80%; max-width: 90%;">
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a><br>
-		Version: 20190919.1 <br>
+		Version: 20190930.2 <br>
 		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
 	</p>
 	<p>
@@ -276,7 +276,7 @@
 	<div align="center" style=" max-width: 50%; display: table-cell; vertical-align: middle; margin: 0 5px;">
 		<div class="column" id="column1" style="">
 			<p>Start time : <input name="start_time" id="start_time" type="time" onkeypress="return runScript(event)" onchange="getTotal();"/></p>
-			<p>Break : <input name="break_time" id="break_time" type="time" value="00:00" readonly /></p>
+			<p>Break : <input name="break_time" id="break_time" type="time" value="00:00" onchange="getTotal();" /></p>
 			<p>Time to go home : <input name="end_time" id="end_time" type="time" onchange="getTotal();" /></p>
 			<p>Total hours (no break) : <input type="time" name="totalnobreak" id="totalnobreak" value="" readonly> <input type="text" name="totalnobreakdec" id="totalnobreakdec" value="" maxlength="4" size="5" readonly></p>
 			<p>Recup@
@@ -321,8 +321,6 @@
     <div id="leftfooter">
 		Senne Janssens (C) 2019
     </div>
-</div>
-<div class="footer">
 	<div id="rightfooter">
 		<a href="#ex1" rel="modal:open" class="modalbutton">Info</a>
 	</div>
@@ -620,6 +618,7 @@
 			setHistory();
 		}
 		reader.readAsText(files[0]);
+		//importFile.click();
 		alert("Import successful!");
 	}
 
