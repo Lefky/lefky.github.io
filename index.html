@@ -244,7 +244,7 @@
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-		Version: 20191003.1 <br>
+		Version: 20191009.5 <br>
 		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
 	</p>
 	<p>
@@ -253,7 +253,7 @@
 		<a class="modalbutton floatreset" id="importHistory">Import History</a>
 		<input type="file" id="importFile" accept=".json" style="display:none"/>	
 	</p>
-	<p>Hitting "ENTER" will add 7.6 hours to the end date (and break time if defined).</p>
+	<p>Hitting "ENTER" will add the time corresponding to the selected value next to 'Recup' to the end date (and break time if defined).</p>
 	<h3>Parameters</h3>
 	<p>The value settings are saved. So if you enable something it will still be enabled on the next opening of the page.</p>
 	<p>
@@ -268,8 +268,11 @@
 		<i>"Subtract 5 min from time on open."</i><br>
 		&emsp;will subtract 5 min from the time the page was opened (and the start time). This is to take the time to boot your laptop, ... into account.
 	</p>
+	<p>
+		Days to keep history: <input type="number" name="historyretain" id="historyretain" value="30" min="0" max="999" style="width: 70px">
+	</p>
 	<br>
-	<a href="#" class="modalbutton" rel="modal:close">Close</a>
+	<a href="#" class="modalbutton" id="modalclosebutton" rel="modal:close">Close</a>
 </div>
 
 <div style="top: 0; left: 0; width:100%; height:100%; display: table; position: absolute;">
@@ -281,7 +284,7 @@
 				I've implemented a new way to store time data in the background.<br>
 				As a result having a field with all the recup added together into 1 value might be an option.<br>
 				Please notify my if you encounter any bugs.
-				</div> 
+			</div> 
 		</p>
 		<div class="column" id="column1" style="">
 			<p>Start time : <input name="start_time" id="start_time" type="time" onchange="calculateTotal();"/></p>
@@ -400,7 +403,6 @@
 	function getHourSchedule(){
 		var e = document.getElementById("hourschedule");
 		var time = e.options[e.selectedIndex].value;
-		//var time = document.getElementById("hourschedule").value;
 		if (!time) {
 			time = 0;
 		}
@@ -467,6 +469,17 @@
 			document.getElementById("totalnobreakdec").value = time;
 	}
 
+	function getHistoryRetain(){
+		var days = document.getElementById("historyretain").value;
+		if (!days) {
+			days = 30;
+		}
+		if ( days > 999 ) {
+			days = 999;
+		}
+		return days;
+	}
+	
 	function setHistory(){
 		const reverseDateRepresentation = date => {
 		  let parts = date.split('-');
@@ -505,7 +518,7 @@
 		for(key in localStorage) {
 			//alert(today.subtractDays(0));
 			//alert(makeDate(key));
-			if ( makeDate(key) < today.subtractDays(30) ) // days to keep data excluding today
+			if ( makeDate(key) < today.subtractDays(getHistoryRetain()) ) // days to keep data excluding today
 				delete localStorage[key];
 		}
 	}
@@ -543,7 +556,8 @@
 		var autoend = localStorage.getItem("autoend"),
 			nosave = localStorage.getItem("nosave"),
 			hourschedule = localStorage.getItem("hourschedule"),
-			startmin5 = localStorage.getItem("startmin5");
+			startmin5 = localStorage.getItem("startmin5")
+			historyretain = localStorage.getItem("historyretain");
 
 		if ( autoend == "true" )
 			document.getElementById("autoend").checked = true;
@@ -552,6 +566,8 @@
 		document.getElementById("hourschedule").value = "7.6";
 		if ( hourschedule)
 			document.getElementById("hourschedule").value = hourschedule;
+		if ( historyretain)
+			document.getElementById("historyretain").value = historyretain;
 		
 		if ( startmin5 == "true" ) {
 			document.getElementById("startmin5").checked = true;
@@ -613,9 +629,12 @@
 	}*/
 	
 	$( document ).on( 'keydown', function ( e ) {
-      if ( e.keyCode === 13 ) { //ENTER key code
-		add_time(7.6);
-      }
+		if ( e.keyCode === 13 ) { //ENTER key code
+			add_time(parseFloat(getHourSchedule()));
+		}
+		if ( e.key === "Escape" ) {
+			document.getElementById("modalclosebutton").click();
+		}
     });
 
 	function exportHistory() {		
@@ -677,6 +696,8 @@
 		}
 		// Set 'hour schedule' parameter in local storage
 		localStorage.setItem("hourschedule", getHourSchedule());
+		// Set 'history retain time' parameter in local storage
+		localStorage.setItem("historyretain", getHistoryRetain());
 	};
 </script>
 </html>
