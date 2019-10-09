@@ -275,12 +275,12 @@
 <div style="top: 0; left: 0; width:100%; height:100%; display: table; position: absolute;">
 	<div align="center" style=" max-width: 50%; display: table-cell; vertical-align: middle; margin: 0 5px;">
 		<div class="column" id="column1" style="">
-			<p>Start time : <input name="start_time" id="start_time" type="time" onchange="getTotal();"/></p>
-			<p>Break : <input name="break_time" id="break_time" type="time" value="00:00" onchange="getTotal();" /></p>
-			<p>Time to go home : <input name="end_time" id="end_time" type="time" onchange="getTotal();" /></p>
+			<p>Start time : <input name="start_time" id="start_time" type="time" onchange="calculateTotal();"/></p>
+			<p>Break : <input name="break_time" id="break_time" type="time" value="00:00" onchange="calculateTotal();" /></p>
+			<p>Time to go home : <input name="end_time" id="end_time" type="time" onchange="calculateTotal();" /></p>
 			<p>Total hours (no break) : <input type="time" name="totalnobreak" id="totalnobreak" value="" readonly> <input type="text" name="totalnobreakdec" id="totalnobreakdec" value="" maxlength="4" size="5" readonly></p>
 			<p>Recup@
-				<select name="hourschedule" id="hourschedule" onchange="getTotal();">
+				<select name="hourschedule" id="hourschedule" onchange="calculateTotal();">
 					<option value="7.6">7,6h</option>
 					<option value="8">8h</option>
 				</select>
@@ -309,7 +309,7 @@
 				<button class="button" id="blueButton" onclick="add_break(0.5)">+ 30 min</button>
 			</p>
 			<p>
-				<button class="button" id="orangeButton" onclick="getTotal()">Calculate Total</button>
+				<button class="button" id="orangeButton" onclick="calculateTotal()">Calculate Total</button>
 			</p>
 			<p>
 				<button class="button" id="redButton" onclick="reset()">Reset</button>
@@ -398,7 +398,7 @@
 		return time;
 	}
 
-	function getTotal() {
+	function calculateTotal() {
 		var worktime = getEnd() - getStart();
 		
 		setTotal(worktime);
@@ -409,9 +409,14 @@
 		setRecupDec(Math.abs(parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2)));
 		setTotalNoBreakDec(getTotalNoBreakDec());
 	}
-
+	
 	function setTotal(time){
 		document.getElementById("total").value = floatToTimeString(time);
+	}
+
+	function getTotalDec(){
+		var worktime = getEnd() - getStart();
+		return parseFloat(worktime).toFixed(2);
 	}
 
 	function setTotalDec(time){
@@ -460,9 +465,7 @@
 		};
 		
 		var entry = "<span style='float:left;'>Date</span>Time (no break), recup<br>",
-		//var entry = "Date\t\t\t\t\t[Time (no break), recup]\n",
 			keys = Object.keys(localStorage),
-			//revkeys = keys.sort().reverse(),
 			revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
 			i = 0, key;
 			
@@ -470,14 +473,21 @@
 		
 		for (; key = revkeys[i]; i++) {
 			if ( userKeyRegExp.test(key) ) {
-				entry = entry + "<span class='' style='float:left;'>" + key + "</span>" + localStorage.getItem(key) + "<br>";
-				//entry = entry + key + "\t\t\t" + localStorage.getItem(key) + "\n";
+
+				// Temporary functionality to parse json and non-json time values
+				try {
+					var timeinfo = JSON.parse(localStorage.getItem(key));
+					entry = entry + "<span class='' style='float:left;'>" + key + "</span>" + timeinfo['TotalNoBreakDec'] + ", " + timeinfo['RecupDec'] + "<br>";
+					console.log(timeinfo);
+				} catch (e) {
+					entry = entry + "<span class='' style='float:left;'>" + key + "</span>" + localStorage.getItem(key) + "<br>";
+				}
+				///////////
 			}
 		}
 		if ( keys == "" || keys == null )
 			entry = "No previous data yet :("
 		document.getElementById("history").innerHTML = entry;
-		//document.getElementById("history2").value = entry;
 	}
 
 	// Storage functions
@@ -566,30 +576,30 @@
 
 	function end_time() {
 		setEnd(now());
-		getTotal();
+		calculateTotal();
 	}
 
 	function add_time(time) {
 		setEnd(getStart() + time + getBreak());
-		getTotal();
+		calculateTotal();
 	}
 
 	function add_break(time) {
 		setBreak(time + getBreak());
 		setEnd(time + getEnd());
-		getTotal();
+		calculateTotal();
 	}
 
 	function reset_break() {
 		setEnd(getEnd() - getBreak());
 		setBreak(0);
-		getTotal();
+		calculateTotal();
 	}
 
 	/*function keypress(event) {
 		if (event.keyCode == 13) {
 			add_time(7.6);
-			getTotal();
+			calculateTotal();
 		}
 	}*/
 	
@@ -637,11 +647,11 @@
 		var autoend = document.getElementById("autoend");
 		if ( nosave.checked == false ) {
 			if (autoend.checked == false ) {
-				var timeinfo = getTotalNoBreakDec() + ", " + getRecupDec();
+				var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "RecupDec": "' + getRecupDec() + '", "TotalDec": "' + getTotalDec() + '"}';
 				localStorage.setItem("autoend", "false");
 			} else {
 				setEnd(now());
-				var timeinfo = getTotalNoBreakDec() + ", " + getRecupDec();
+				var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "RecupDec": "' + getRecupDec() + '", "TotalDec": "' + getTotalDec() + '"}';
 				localStorage.setItem("autoend", "true");
 			}
 			localStorage.setItem(todayDate(), timeinfo);
