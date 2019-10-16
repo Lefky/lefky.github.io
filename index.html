@@ -33,6 +33,39 @@
 		.floatreset {
 			float: initial !important;
 		}
+		
+		[tooltip]:before {
+			/* needed - do not touch */
+			content: attr(tooltip);
+			position: absolute;
+			opacity: 0;
+			
+			/* customizable */
+			transition: all 0.15s ease;
+			padding: 10px;
+			color: white;
+			border-radius: 10px;
+			box-shadow: 2px 2px 1px silver;    
+		}
+		[tooltip]:hover:before {
+			/* needed - do not touch */
+			opacity: 1;
+			
+			/* customizable */
+			background: grey;
+			margin-top: -50px;
+			margin-left: 20px;    
+		}
+		[tooltip]:not([tooltip-persistent]):before {
+			pointer-events: none;
+		}
+		.tooltip {
+			font-size: 70%;
+			font-weight: normal;
+			margin-right: 1%;
+			margin-left: 1%;
+		}
+		
 		input,select,textarea, #history {
 			font-size: 100%;
 			font-weight: bolder;
@@ -56,6 +89,7 @@
 			height: 180px;
 			overflow-y: scroll;
 		}
+		
 		.button {
 			background-color:#89c403;
 			-moz-border-radius:28px;
@@ -103,6 +137,7 @@
 		#redButton:hover {
 			background-color:#c62d1f;
 		}
+		
 		.modalbutton {
 			background-color:#ededed;
 			-moz-border-radius:28px;
@@ -129,6 +164,7 @@
 			margin-bottom: 1em;
 			color: #595959;
 		}
+		
 		.column {
 			width: 45%;
 			margin-left: auto; 
@@ -150,6 +186,7 @@
 			text-align: left; 
 			padding: 8% 2% 3% 0;
 		}
+		
 		.footer {
 			position: relative; 
 			font: 15px normal;
@@ -164,9 +201,7 @@
 			bottom: 1%; 
 			right: 1%;
 		}
-		.selected{
-			background: red;
-		}
+		
 		.switch {
 		  position: relative;
 		  display: inline-block;
@@ -222,6 +257,7 @@
 		.slider.round:before {
 		  border-radius: 50%;
 		}
+		
 		@media only screen and (max-width: 700px) {
 			.column {
 				width: 95%;
@@ -244,7 +280,7 @@
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-		Version: 20191009.5 <br>
+		Version: 20191016.1 <br>
 		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
 	</p>
 	<p>
@@ -282,7 +318,6 @@
 			<div style="width:75%; float: right; text-align: left; padding: 2% 1% 1% 2%; font-size: 60%;">
 				Spread the word!!!<br>
 				I've implemented a new way to store time data in the background.<br>
-				As a result having a field with all the recup added together into 1 value might be an option.<br>
 				Please notify my if you encounter any bugs.
 			</div> 
 		</p>
@@ -298,6 +333,7 @@
 				</select>
 				: <input type="text" name="recup" id="recup" value="" maxlength="4" size="5" readonly> <input type="text" name="recupdec" id="recupdec" value="" maxlength="4" size="5" readonly></p>
 			<p>Total hours : <input type="time" name="total" id="total" value="" readonly> <input type="text" name="totaldec" id="totaldec" value="" maxlength="4" size="5" readonly></p>
+			<p><span class="tooltip" tooltip="Time data from before the storage changes won't be taken into consideration. So anything prior to version 20191009.5 doesn't count towards recup.">&#128712;</span>Total recup : <input type="text" name="recuptotal" id="recuptotal" maxlength="4" size="5" readonly></p>
 			<div id="history" style=""></div>
 			<!--<textarea id="history2" rows="6" cols="50" style=""></textarea>-->
 			<div style="font-size: 40%; float: right; clear: both; width: 100%;">
@@ -452,6 +488,10 @@
 		else
 			document.getElementById("recupdec").value = time;
 	}
+	
+	function setRecupTotal(time){
+		document.getElementById("recuptotal").value = floatToTimeString(time);
+	}
 
 	function setTotalNoBreak(time){
 		document.getElementById("totalnobreak").value = floatToTimeString(time);
@@ -489,18 +529,19 @@
 		var entry = "<span style='float:left;'>Date</span>Time (no break), recup<br>",
 			keys = Object.keys(localStorage),
 			revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
-			i = 0, key;
+			recuptotal = 0,
+			i = 0, 
+			key;
 			
 		const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 		
 		for (; key = revkeys[i]; i++) {
 			if ( userKeyRegExp.test(key) ) {
-
 				// Temporary functionality to parse json and non-json time values
 				try {
 					var timeinfo = JSON.parse(localStorage.getItem(key));
 					entry = entry + "<span class='' style='float:left;'>" + key + "</span>" + timeinfo['TotalNoBreakDec'] + ", " + timeinfo['RecupDec'] + "<br>";
-					console.log(timeinfo);
+					recuptotal = recuptotal + parseFloat(timeinfo['RecupDec']);
 				} catch (e) {
 					entry = entry + "<span class='' style='float:left;'>" + key + "</span>" + localStorage.getItem(key) + "<br>";
 				}
@@ -509,7 +550,8 @@
 		}
 		if ( keys == "" || keys == null )
 			entry = "No previous data yet :("
-		document.getElementById("history").innerHTML = entry;
+		document.getElementById("history").innerHTML = entry;		
+		setRecupTotal(recuptotal);
 	}
 
 	// Storage functions
