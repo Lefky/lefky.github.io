@@ -526,7 +526,7 @@
 		  return `${parts[2]}-${parts[1]}-${parts[0]}`;
 		};
 		
-		var entry = "<span style='float:left;'>Date</span>Time (no break), recup<br>",
+		var entry = "<span style='float: left; width:40%; text-align: left;'>Date</span><span style='width: 30%;'>Time (no break)</span><span style='width: 30%; float: right;'>Recup</span><br>",
 			keys = Object.keys(localStorage),
 			revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
 			recuptotal = 0,
@@ -540,10 +540,10 @@
 				// Temporary functionality to parse json and non-json time values
 				try {
 					var timeinfo = JSON.parse(localStorage.getItem(key));
-					entry = entry + "<span class='' style='float:left;'>" + key + "</span>" + timeinfo['TotalNoBreakDec'] + ", " + timeinfo['RecupDec'] + "<br>";
+					entry = entry + "<span class='' style='float:left; width:40%; text-align: left;'>" + key + "</span><span style='width: 30%;'>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['RecupDec'] + "</span><br>";
 					recuptotal = recuptotal + parseFloat(timeinfo['RecupDec']);
 				} catch (e) {
-					entry = entry + "<span class='' style='float:left;'>" + key + "</span>" + localStorage.getItem(key) + "<br>";
+					entry = entry + "<span class='' style='float:left;'>" + key + "</span><span style='width: 30%; float: right;'>" + localStorage.getItem(key) + "</span><br>";
 				}
 				///////////
 			}
