@@ -3,7 +3,7 @@
 <head>
 	<title>Working hours</title>
 	<link rel="shortcut icon" type="image/png" href="images/time-png_favicon.png"/>
-	<meta name="robots" content="noindex">
+	<meta name="robots" content="index">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!-- Remember to include jQuery :) -->
@@ -543,7 +543,10 @@
 					entry = entry + "<span class='' style='float:left; width:40%; text-align: left;'>" + key + "</span><span style='width: 30%;'>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['RecupDec'] + "</span><br>";
 					recuptotal = recuptotal + parseFloat(timeinfo['RecupDec']);
 				} catch (e) {
-					entry = entry + "<span class='' style='float:left;'>" + key + "</span><span style='width: 30%; float: right;'>" + localStorage.getItem(key) + "</span><br>";
+					//entry = entry + "<span class='' style='float:left;'>" + key + "</span><span style='width: 30%; float: right;'>" + localStorage.getItem(key) + "</span><br>";
+					entryjson = localStorage.getItem(key).split(", ");
+					timeinfo = '{"TotalNoBreakDec": "' + entryjson[0] + '", "RecupDec": "' + entryjson[1] + '"}';
+					localStorage.setItem(key, timeinfo);
 				}
 				///////////
 			}
