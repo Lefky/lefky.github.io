@@ -547,8 +547,6 @@
 					entryjson = localStorage.getItem(key).split(", ");
 					timeinfo = '{"TotalNoBreakDec": "' + entryjson[0] + '", "RecupDec": "' + entryjson[1] + '"}';
 					localStorage.setItem(key, timeinfo);
-					setHistory();
-					break;
 				}
 				///////////
 			}
@@ -616,12 +614,18 @@
 		if ( historyretain)
 			document.getElementById("historyretain").value = historyretain;
 		
-		if ( startmin5 == "true" ) {
-			document.getElementById("startmin5").checked = true;
-			setStart(now() - 0.08);
-		} else {
-			setStart(now());
+		try {
+			var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
+			setStart(timeinfo['StartDec']);
+		} catch(e) {
+			if ( startmin5 == "true" ) {
+				document.getElementById("startmin5").checked = true;
+				setStart(now() - 0.08);
+			} else {
+				setStart(now());
+			}	
 		}
+		
 		setBreak(0);
 		setEnd(0);
 		setTotal(0);
@@ -630,19 +634,8 @@
 		setTotalNoBreakDec(0);
 		setHistory();
 		
-		//localStorage.setItem("testparam", "lalala");
-		/*
-		localStorage.setItem("21-8-2019", "2");
-		localStorage.setItem("20-8-2019", "3");
-		localStorage.setItem("19-8-2019", "4");
-		localStorage.setItem("18-8-2019", "5");
-		localStorage.setItem("17-8-2019", "6");
-		localStorage.setItem("16-8-2019", "7");
-		localStorage.setItem("15-8-2019", "8");
-		localStorage.setItem("14-8-2019", "9");
-		localStorage.setItem("13-8-2019", "10");
-		*/
 		cleanLocalStorage();
+		//localStorage.setItem("testparam", "lalala");
 		//delete localStorage["testparam"];
 	}
 
@@ -722,11 +715,11 @@
 		var autoend = document.getElementById("autoend");
 		if ( nosave.checked == false ) {
 			if (autoend.checked == false ) {
-				var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "RecupDec": "' + getRecupDec() + '", "TotalDec": "' + getTotalDec() + '"}';
+				var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "RecupDec": "' + getRecupDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '"}';
 				localStorage.setItem("autoend", "false");
 			} else {
 				setEnd(now());
-				var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "RecupDec": "' + getRecupDec() + '", "TotalDec": "' + getTotalDec() + '"}';
+				var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "RecupDec": "' + getRecupDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '"}';
 				localStorage.setItem("autoend", "true");
 			}
 			localStorage.setItem(todayDate(), timeinfo);
