@@ -547,6 +547,8 @@
 					entryjson = localStorage.getItem(key).split(", ");
 					timeinfo = '{"TotalNoBreakDec": "' + entryjson[0] + '", "RecupDec": "' + entryjson[1] + '"}';
 					localStorage.setItem(key, timeinfo);
+					setHistory();
+					break;
 				}
 				///////////
 			}
