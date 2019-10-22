@@ -280,7 +280,7 @@
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-		Version: 20191016.1 <br>
+		Version: 20191021.4 <br>
 		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
 	</p>
 	<p>
@@ -617,6 +617,8 @@
 		try {
 			var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
 			setStart(timeinfo['StartDec']);
+			if ( startmin5 == "true" )
+				document.getElementById("startmin5").checked = true;
 		} catch(e) {
 			if ( startmin5 == "true" ) {
 				document.getElementById("startmin5").checked = true;
