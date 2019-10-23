@@ -189,7 +189,7 @@
 		
 		.footer {
 			position: relative; 
-			font: 15px normal;
+			font: 15px Lucida Sans Unicode;;
 		}
 		#leftfooter {
 			position: fixed; 
@@ -290,6 +290,7 @@
 		<a class="modalbutton floatreset" id="deleteHistory" onclick="deleteHistory()">Delete History</a>
 		<input type="file" id="importFile" accept=".json" style="display:none"/>	
 	</p>
+	<p>Set this page as your browser startup page or pin the tab to automatically start counting when you open your browser.</p>
 	<p>Hitting "ENTER" will add the time corresponding to the selected value next to 'Recup' to the end date (and break time if defined).</p>
 	<h3>Parameters</h3>
 	<p>The value settings are saved. So if you enable something it will still be enabled on the next opening of the page.</p>
@@ -357,9 +358,9 @@
 				<button class="button" id="blueButton" onclick="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)">+ 5 min</button>&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="button" id="blueButton" onclick="add_break(0.5)">+ 30 min</button>
 			</p>
-			<p>
+			<!--<p>
 				<button class="button" id="orangeButton" onclick="calculateTotal()">Calculate Total</button>
-			</p>
+			</p>-->
 			<p>
 				<button class="button" id="redButton" onclick="reset()">Reset</button>
 			</p>
@@ -371,7 +372,7 @@
 		Senne Janssens (C) 2019
     </div>
 	<div id="rightfooter">
-		<a href="#modalbox" rel="modal:open" class="modalbutton">Info</a>
+		<a href="#modalbox" rel="modal:open" class="modalbutton" style="background-color: #f24537; color: white;">&#128712; Info &#128712;</a>
 	</div>
 </div>
 </body>
