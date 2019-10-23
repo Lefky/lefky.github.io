@@ -276,11 +276,11 @@
 </head>
 <body onload="reset(); add_time(7.6);">
 <!-- Modal HTML -->
-<div id="ex1" class="modal" style="font-size: 80%; max-width: 90%;">
+<div id="modalbox" class="modal" style="font-size: 80%; max-width: 90%;">
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-		Version: 20191021.4 <br>
+		Version: 20191022.2 <br>
 		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
 	</p>
 	<p>
@@ -334,7 +334,7 @@
 				</select>
 				: <input type="text" name="recup" id="recup" value="" maxlength="4" size="5" readonly> <input type="text" name="recupdec" id="recupdec" value="" maxlength="4" size="5" readonly></p>
 			<p>Total hours : <input type="time" name="total" id="total" value="" readonly> <input type="text" name="totaldec" id="totaldec" value="" maxlength="4" size="5" readonly></p>
-			<p><span class="tooltip" tooltip="Time data from before the storage changes won't be taken into consideration. So anything prior to version 20191009.5 doesn't count towards recup.">&#128712;</span>Total recup : <input type="text" name="recuptotal" id="recuptotal" maxlength="4" size="5" readonly></p>
+			<p><span class="tooltip" tooltip="Time data from before the storage changes (version 20191009.5) need to be converted. Refresh the page to do so.">&#128712;</span>Total recup : <input type="text" name="recuptotal" id="recuptotal" maxlength="4" size="5" readonly></p>
 			<div id="history" style=""></div>
 			<!--<textarea id="history2" rows="6" cols="50" style=""></textarea>-->
 			<div style="font-size: 40%; float: right; clear: both; width: 100%;">
@@ -371,7 +371,7 @@
 		Senne Janssens (C) 2019
     </div>
 	<div id="rightfooter">
-		<a href="#ex1" rel="modal:open" class="modalbutton">Info</a>
+		<a href="#modalbox" rel="modal:open" class="modalbutton">Info</a>
 	</div>
 </div>
 </body>
