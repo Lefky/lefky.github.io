@@ -77,6 +77,12 @@
 			border: 1px solid #e6e6e6;
 			color: #333333;
 		}
+		input:-moz-read-only { /* For Firefox */
+			background-color: #F5F5F5;
+		}
+		input:read-only {
+			background-color: #F5F5F5;
+		}
 		#history {
 			margin-left:auto; 
 			margin-right:0; 
@@ -280,7 +286,7 @@
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-		Version: 20191022.2 <br>
+		Version: 20191029.1 <br>
 		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
 	</p>
 	<p>
@@ -325,7 +331,17 @@
 		</p>
 		<div class="column" id="column1" style="">
 			<p>Start time : <input name="start_time" id="start_time" type="time" onchange="calculateTotal();"/></p>
-			<p>Break : <input name="break_time" id="break_time" type="time" value="00:00" onchange="calculateTotal();" /></p>
+			<p>Break 
+				(default 
+				<select name="break_time_default" id="break_time_default" onchange="addBreakDefault();">
+					<option value="0">0 min</option>
+					<option value="0.25">15 min</option>
+					<option value="0.5">30 min</option>
+					<option value="0.75">45 min</option>
+					<option value="1">1h</option>
+				</select>) : 
+				<input name="break_time" id="break_time" type="time" value="00:00" onchange="calculateTotal();" />
+			</p>
 			<p>Time to go home : <input name="end_time" id="end_time" type="time" onchange="calculateTotal();" /></p>
 			<p>Total hours (no break) : <input type="time" name="totalnobreak" id="totalnobreak" value="" readonly> <input type="text" name="totalnobreakdec" id="totalnobreakdec" value="" maxlength="4" size="5" readonly></p>
 			<p>Recup@
@@ -437,7 +453,34 @@
 	function setBreak(time){
 		document.getElementById("break_time").value = floatToTimeString(time);
 	}
+	
+	function getBreakDefault(){
+		var e = document.getElementById("break_time_default");
+		var time = e.options[e.selectedIndex].value;
+		if (!time) {
+			time = 0;
+		}
+		return time;
+	}
 
+	function setBreakDefault(time){
+		document.getElementById("break_time_default").value = floatToTimeString(time);
+	}
+
+	function addBreakDefault(){
+		var break_time_default_init = localStorage.getItem("break_time_default");
+		var new_break_dec = getBreak() - break_time_default_init + getBreakDefault();
+		
+		if ( new_break_dec > 0 ) {
+			setBreak(new_break_dec);
+		} else {
+			setBreak(0);
+		}
+		
+		localStorage.setItem("break_time_default", getBreakDefault());
+		calculateTotal();
+	}
+	
 	function getHourSchedule(){
 		var e = document.getElementById("hourschedule");
 		var time = e.options[e.selectedIndex].value;
@@ -454,8 +497,8 @@
 		setRecup(worktime - getBreak() - getHourSchedule());
 		setTotalNoBreak(Math.abs(worktime - getBreak()));
 		
-		setTotalDec(Math.abs(parseFloat(worktime).toFixed(2)));
-		setRecupDec(Math.abs(parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2)));
+		setTotalDec((parseFloat(worktime).toFixed(2)));
+		setRecupDec(parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2));
 		setTotalNoBreakDec(getTotalNoBreakDec());
 	}
 	
@@ -485,14 +528,16 @@
 	}
 
 	function setRecupDec(time){
-		if ( time < 0 )
-			document.getElementById("recupdec").value = "";
-		else
-			document.getElementById("recupdec").value = time;
+		document.getElementById("recupdec").value = time;
 	}
 	
 	function setRecupTotal(time){
 		document.getElementById("recuptotal").value = floatToTimeString(time);
+		if ( time > 0 ) {
+			document.getElementById("recuptotal").setAttribute("style", "color:green;");
+		} else {
+			document.getElementById("recuptotal").setAttribute("style", "color:red;");
+		}
 	}
 
 	function setTotalNoBreak(time){
@@ -645,6 +690,7 @@
 		var autoend = localStorage.getItem("autoend"),
 			nosave = localStorage.getItem("nosave"),
 			hourschedule = localStorage.getItem("hourschedule"),
+			break_time_default = localStorage.getItem("break_time_default"),
 			startmin5 = localStorage.getItem("startmin5")
 			historyretain = localStorage.getItem("historyretain");
 
@@ -653,9 +699,11 @@
 		if ( nosave == todayDate() )
 			document.getElementById("nosave").checked = true;
 		document.getElementById("hourschedule").value = "7.6";
-		if ( hourschedule)
+		if ( hourschedule )
 			document.getElementById("hourschedule").value = hourschedule;
-		if ( historyretain)
+		if ( break_time_default )
+			document.getElementById("break_time_default").value = break_time_default;
+		if ( historyretain )
 			document.getElementById("historyretain").value = historyretain;
 		
 		try {
@@ -672,7 +720,7 @@
 			}	
 		}
 		
-		setBreak(0);
+		setBreak(break_time_default);
 		setEnd(0);
 		setTotal(0);
 		setTotalDec(0);
@@ -750,6 +798,8 @@
 		}
 		// Set 'hour schedule' parameter in local storage
 		localStorage.setItem("hourschedule", getHourSchedule());
+		// Set 'default break time' parameter in local storage
+		localStorage.setItem("break_time_default", getBreakDefault());
 		// Set 'history retain time' parameter in local storage
 		localStorage.setItem("historyretain", getHistoryRetain());
 	};
