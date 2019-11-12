@@ -54,7 +54,7 @@
 			/* customizable */
 			background: grey;
 			margin-top: -50px;
-			margin-left: 20px;    
+			margin-left: 0px;    
 		}
 		[tooltip]:not([tooltip-persistent]):before {
 			pointer-events: none;
@@ -62,8 +62,10 @@
 		.tooltip {
 			font-size: 70%;
 			font-weight: normal;
+			text-align: left;
 			margin-right: 1%;
 			margin-left: 1%;
+			white-space: pre-line;
 		}
 		
 		input, select, textarea, #history {
@@ -286,7 +288,7 @@
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-		Version: 20191105.1 <br>
+		Version: 20191112.1 <br>
 		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
 	</p>
 	<p>
@@ -302,7 +304,7 @@
 	<p>The value settings are saved. So if you enable something it will still be enabled on the next opening of the page.</p>
 	<p>
 		<i>"Don't save today."</i><br>
-		&emsp;won't save today's date for the remainder of the day (untill timestamp 00:00) or unless disabled again.
+		&emsp;won't save today's date for the remainder of the day (until timestamp 00:00) or unless disabled again.
 	</p>
 	<p>
 		<i>"Automatically set end time on close."</i><br>
@@ -330,9 +332,17 @@
 			</div> 
 		</p>
 		<div class="column" id="column1" style="">
-			<p>Start time : <input name="start_time" id="start_time" type="time" onchange="calculateTotal();"/></p>
-			<p>Break 
-				(default 
+			<p>
+				<span class="tooltip" tooltip="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. 
+											Set this page as your starting page when opening your browser to make it easy for yourself.">&#128712;</span>
+				Start time : <input name="start_time" id="start_time" type="time" onchange="calculateTotal();"/>
+			</p>
+			<p>
+				<span class="tooltip" tooltip="Choose a default break you take every day. 
+												Eg: You're deducted 30 min every day. 
+												This value will be saved for the next time the window is opened.
+												You can enter a seperate value manually or by using the buttons too.">&#128712;</span>
+				Break (default 
 				<select name="break_time_default" id="break_time_default" onchange="addBreakDefault();">
 					<option value="0">0 min</option>
 					<option value="0.25">15 min</option>
@@ -342,16 +352,33 @@
 				</select>) : 
 				<input name="break_time" id="break_time" type="time" value="00:00" onchange="calculateTotal();" />
 			</p>
-			<p>Time to go home : <input name="end_time" id="end_time" type="time" onchange="calculateTotal();" /></p>
-			<p>Total hours (no break) : <input type="time" name="totalnobreak" id="totalnobreak" value="" readonly> <input type="text" name="totalnobreakdec" id="totalnobreakdec" value="" maxlength="4" size="5" readonly></p>
-			<p>Recup@
+			<p>
+				<span class="tooltip" tooltip="You can have this automatically filled in by setting the parameter at the bottom of the box.
+												You can manually enter a value.">&#128712;</span>
+				Time to go home : <input name="end_time" id="end_time" type="time" onchange="calculateTotal();" />
+			</p>
+			<p>
+				<span class="tooltip" tooltip="These hours are your actual working hours.">&#128712;</span>
+				Total hours (no break) : <input type="time" name="totalnobreak" id="totalnobreak" value="" readonly> <input type="text" name="totalnobreakdec" id="totalnobreakdec" value="" maxlength="4" size="5" readonly>
+			</p>
+			<p>
+				<span class="tooltip" tooltip="Select howmany hours you need to perform on avarage each day.
+												The application will calculate howmuch recup you built up / used today.">&#128712;</span>
+				Recup@
 				<select name="hourschedule" id="hourschedule" onchange="calculateTotal();">
 					<option value="7.6">7,6h</option>
 					<option value="8">8h</option>
 				</select>
 				: <input type="text" name="recup" id="recup" value="" maxlength="4" size="5" readonly> <input type="text" name="recupdec" id="recupdec" value="" maxlength="4" size="5" readonly></p>
-			<p>Total hours : <input type="time" name="total" id="total" value="" readonly> <input type="text" name="totaldec" id="totaldec" value="" maxlength="4" size="5" readonly></p>
-			<p><span class="tooltip" tooltip="Time data from before the storage changes (version 20191009.5) needs to be converted. Refresh the page to do so.">&#128712;</span>Total recup : <input type="text" name="recuptotal" id="recuptotal" maxlength="4" size="5" readonly></p>
+			<p>
+				<span class="tooltip" tooltip="These hours are howmuch time you spent being at your workplace.">&#128712;</span>
+				Total hours : <input type="time" name="total" id="total" value="" readonly> <input type="text" name="totaldec" id="totaldec" value="" maxlength="4" size="5" readonly>
+			</p>
+			<p>
+				<span class="tooltip" tooltip="Here you can find howmuch recup you've built up / used during the period you defined in the 'Info' box.
+												This value doesn't include today yet.">&#128712;</span>
+				Total recup : <input type="text" name="recuptotal" id="recuptotal" maxlength="4" size="5" readonly>
+			</p>
 			<div id="history" style=""></div>
 			<!--<textarea id="history2" rows="6" cols="50" style=""></textarea>-->
 			<div style="font-size: 40%; float: right; clear: both; width: 100%;">
@@ -386,7 +413,7 @@
 		Senne Janssens (C) 2019
     </div>
 	<div id="rightfooter">
-		<a href="#modalbox" rel="modal:open" class="modalbutton" style="background-color: #f24537; color: white;">&#128712; Info &#128712;</a>
+		<a href="#modalbox" rel="modal:open" style="text-decoration: none; padding: 5px 15px; -moz-border-radius: 50px; -webkit-border-radius: 50px; border-radius: 50px; font-size: 200%; background-color: #f24537; color: white;">&#128712;</a>
 	</div>
 </div>
 </body>
