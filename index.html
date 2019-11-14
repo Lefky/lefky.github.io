@@ -6,17 +6,20 @@
 	<meta name="robots" content="index">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<!-- Remember to include jQuery :) -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<!-- jQuery -->
+	<script src="js/jquery.min.js"></script>
 	<!-- jQuery Modal -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script><!--https://jquerymodal.com/-->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+	<script src="js/jquery.modal.min.js"></script><!--https://jquerymodal.com/-->
+	<link rel="stylesheet" href="css/jquery.modal.min.css" />
 	<script>
 		$.modal.defaults = {
 			fadeDuration: 200,		// Number of milliseconds the fade transition takes (null means no transition)
 			fadeDelay: 0.5			// Point during the overlay's fade-in that the modal begins to fade in (.5 = 50%, 1.5 = 150%, etc.)
 		};
 	</script>
+	<!-- Font Awsome -->
+	<link href="css/all.min.css" rel="stylesheet">
+	<!-- Custom Styles -->
 	<style type="text/css" media="screen">
 		body {
 			max-width: 100%;
@@ -288,7 +291,7 @@
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-		Version: 20191112.1 <br>
+		Version: 20191114.1 <br>
 		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
 	</p>
 	<p>
@@ -324,7 +327,7 @@
 <div style="top: 0; left: 0; width:100%; height:100%; display: table; position: absolute;">
 	<div align="center" style="max-width: 50%; display: table-cell; vertical-align: middle; margin: 0 5px;">
 		<p>
-			<div style="width:15%; float: left; text-align: right; padding: 2% 1% 1% 2%; font-size: 60%;">Notification:</div> 
+			<div style="width:15%; float: left; text-align: right; padding: 2% 1% 1% 2%; font-size: 60%;"><i class="far fa-exclamation-triangle fa-2x" style="color: orange;"></i> Notification:</div> 
 			<div style="width:75%; float: right; text-align: left; padding: 2% 1% 1% 2%; font-size: 60%;">
 				Spread the word!!!<br>
 				I've implemented a new way to store time data in the background.<br>
@@ -334,14 +337,14 @@
 		<div class="column" id="column1" style="">
 			<p>
 				<span class="tooltip" tooltip="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. 
-											Set this page as your starting page when opening your browser to make it easy for yourself.">&#128712;</span>
+											Set this page as your starting page when opening your browser to make it easy for yourself."><i class="far fa-info-circle"></i></span>
 				Start time : <input name="start_time" id="start_time" type="time" onchange="calculateTotal();"/>
 			</p>
 			<p>
 				<span class="tooltip" tooltip="Choose a default break you take every day. 
 												Eg: You're deducted 30 min every day. 
 												This value will be saved for the next time the window is opened.
-												You can enter a seperate value manually or by using the buttons too.">&#128712;</span>
+												You can enter a seperate value manually or by using the buttons too."><i class="far fa-info-circle"></i></span>
 				Break (default 
 				<select name="break_time_default" id="break_time_default" onchange="addBreakDefault();">
 					<option value="0">0 min</option>
@@ -354,30 +357,30 @@
 			</p>
 			<p>
 				<span class="tooltip" tooltip="You can have this automatically filled in by setting the parameter at the bottom of the box.
-												You can manually enter a value.">&#128712;</span>
+												You can manually enter a value."><i class="far fa-info-circle"></i></span>
 				Time to go home : <input name="end_time" id="end_time" type="time" onchange="calculateTotal();" />
 			</p>
 			<p>
-				<span class="tooltip" tooltip="These hours are your actual working hours.">&#128712;</span>
+				<span class="tooltip" tooltip="These hours are your actual working hours."><i class="far fa-info-circle"></i></span>
 				Total hours (no break) : <input type="time" name="totalnobreak" id="totalnobreak" value="" readonly> <input type="text" name="totalnobreakdec" id="totalnobreakdec" value="" maxlength="4" size="5" readonly>
 			</p>
 			<p>
 				<span class="tooltip" tooltip="Select howmany hours you need to perform on avarage each day.
-												The application will calculate howmuch recup you built up / used today.">&#128712;</span>
+												The application will calculate howmuch overtime you built up / used today."><i class="far fa-info-circle"></i></span>
 				Recup@
 				<select name="hourschedule" id="hourschedule" onchange="calculateTotal();">
 					<option value="7.6">7,6h</option>
 					<option value="8">8h</option>
 				</select>
-				: <input type="text" name="recup" id="recup" value="" maxlength="4" size="5" readonly> <input type="text" name="recupdec" id="recupdec" value="" maxlength="4" size="5" readonly></p>
+				: <input type="text" name="overtime" id="overtime" value="" maxlength="4" size="5" readonly> <input type="text" name="overtimedec" id="overtimedec" value="" maxlength="4" size="5" readonly></p>
 			<p>
-				<span class="tooltip" tooltip="These hours are howmuch time you spent being at your workplace.">&#128712;</span>
+				<span class="tooltip" tooltip="These hours are howmuch time you spent being at your workplace."><i class="far fa-info-circle"></i></span>
 				Total hours : <input type="time" name="total" id="total" value="" readonly> <input type="text" name="totaldec" id="totaldec" value="" maxlength="4" size="5" readonly>
 			</p>
 			<p>
-				<span class="tooltip" tooltip="Here you can find howmuch recup you've built up / used during the period you defined in the 'Info' box.
-												This value doesn't include today yet.">&#128712;</span>
-				Total recup : <input type="text" name="recuptotal" id="recuptotal" maxlength="4" size="5" readonly>
+				<span class="tooltip" tooltip="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box.
+												This value doesn't include today yet."><i class="far fa-info-circle"></i></span>
+				Total overtime : <input type="text" name="overtimetotal" id="overtimetotal" maxlength="4" size="5" readonly>
 			</p>
 			<div id="history" style=""></div>
 			<!--<textarea id="history2" rows="6" cols="50" style=""></textarea>-->
@@ -413,7 +416,7 @@
 		Senne Janssens (C) 2019
     </div>
 	<div id="rightfooter">
-		<a href="#modalbox" rel="modal:open" style="text-decoration: none; padding: 5px 15px; -moz-border-radius: 50px; -webkit-border-radius: 50px; border-radius: 50px; font-size: 200%; background-color: #f24537; color: white;">&#128712;</a>
+		<a href="#modalbox" rel="modal:open" style="text-decoration: none;"><i class="fas fa-info-circle" style="font-size:48px;color:red"></i></a>
 	</div>
 </div>
 </body>
@@ -519,11 +522,11 @@
 		var worktime = getEnd() - getStart();
 		
 		setTotal(worktime);
-		setRecup(worktime - getBreak() - getHourSchedule());
+		setOvertime(worktime - getBreak() - getHourSchedule());
 		setTotalNoBreak(Math.abs(worktime - getBreak()));
 		
 		setTotalDec((parseFloat(worktime).toFixed(2)));
-		setRecupDec(parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2));
+		setOvertimeDec(parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2));
 		setTotalNoBreakDec(getTotalNoBreakDec());
 	}
 	
@@ -543,25 +546,25 @@
 			document.getElementById("totaldec").value = time;
 	}
 
-	function setRecup(time){
-		document.getElementById("recup").value = floatToTimeString(time);
+	function setOvertime(time){
+		document.getElementById("overtime").value = floatToTimeString(time);
 	}
 
-	function getRecupDec(){
+	function getOvertimeDec(){
 		var worktime = getEnd() - getStart();
 		return parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2);
 	}
 
-	function setRecupDec(time){
-		document.getElementById("recupdec").value = time;
+	function setOvertimeDec(time){
+		document.getElementById("overtimedec").value = time;
 	}
 	
-	function setRecupTotal(time){
-		document.getElementById("recuptotal").value = floatToTimeString(time);
+	function setOvertimeTotal(time){
+		document.getElementById("overtimetotal").value = floatToTimeString(time);
 		if ( time > 0 ) {
-			document.getElementById("recuptotal").setAttribute("style", "color:green;");
+			document.getElementById("overtimetotal").setAttribute("style", "color:green;");
 		} else {
-			document.getElementById("recuptotal").setAttribute("style", "color:red;");
+			document.getElementById("overtimetotal").setAttribute("style", "color:red;");
 		}
 	}
 
@@ -601,7 +604,7 @@
 		var entry = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Recup</span><br>",
 			keys = Object.keys(localStorage),
 			revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
-			recuptotal = 0,
+			overtimetotal = 0,
 			i = 0, 
 			key;
 			
@@ -610,23 +613,31 @@
 		for (; key = revkeys[i]; i++) {
 			if ( userKeyRegExp.test(key) ) {
 				// Temporary functionality to parse json and non-json time values
-				try {
+				//try {
 					var timeinfo = JSON.parse(localStorage.getItem(key));
-					entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['RecupDec'] + "</span><br>";
-					recuptotal = recuptotal + parseFloat(timeinfo['RecupDec']);
-				} catch (e) {
+					if (timeinfo.hasOwnProperty('OvertimeDec')){
+						entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['OvertimeDec'] + "</span><br>";
+						overtimetotal = overtimetotal + parseFloat(timeinfo['OvertimeDec']);
+					} else {
+						entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['RecupDec'] + "</span><br>";
+						overtimetotal = overtimetotal + parseFloat(timeinfo['RecupDec']);
+						// convert to noew json key
+						timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['RecupDec'] + '"}';
+						localStorage.setItem(key, timeinfo);
+					}
+				/*} catch (e) {
 					//entry = entry + "<span class='' style='float:left;'>" + key + "</span><span style='width: 30%; float: right;'>" + localStorage.getItem(key) + "</span><br>";
 					entryjson = localStorage.getItem(key).split(", ");
-					timeinfo = '{"TotalNoBreakDec": "' + entryjson[0] + '", "RecupDec": "' + entryjson[1] + '"}';
+					timeinfo = '{"TotalNoBreakDec": "' + entryjson[0] + '", "OvertimeDec": "' + entryjson[1] + '"}';
 					localStorage.setItem(key, timeinfo);
-				}
+				}*/
 				///////////
 			}
 		}
 		if ( keys == "" || keys == null )
 			entry = "No previous data yet :("
 		document.getElementById("history").innerHTML = entry;		
-		setRecupTotal(recuptotal);
+		setOvertimeTotal(overtimetotal);
 	}
 
 	// Storage functions
@@ -802,11 +813,11 @@
 		var autoend = document.getElementById("autoend");
 		if ( nosave.checked == false ) {
 			if (autoend.checked == false ) {
-				var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "RecupDec": "' + getRecupDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '"}';
+				var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '"}';
 				localStorage.setItem("autoend", "false");
 			} else {
 				setEnd(now());
-				var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "RecupDec": "' + getRecupDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '"}';
+				var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '"}';
 				localStorage.setItem("autoend", "true");
 			}
 			localStorage.setItem(todayDate(), timeinfo);
