@@ -398,15 +398,15 @@
 			</p>
 			<p>
 				Break<br>
-				<button class="button" id="blueButton" onclick="reset_break()">Reset</button>&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="button" id="blueButton" onclick="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"><i class="fal fa-plus"></i> 5 min</button>&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="button" id="blueButton" onclick="add_break(0.5)"><i class="fal fa-plus"></i> 30 min</button>
+				<button class="button" id="blueButton" onclick="reset_break()"><i class="fal fa-redo"></i></button>&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="button" id="blueButton" onclick="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"><i class="fal fa-plus"></i> 5min</button>&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="button" id="blueButton" onclick="add_break(0.5)"><i class="fal fa-plus"></i> 30min</button>
 			</p>
 			<!--<p>
 				<button class="button" id="orangeButton" onclick="calculateTotal()">Calculate Total</button>
 			</p>-->
 			<p>
-				<button class="button" id="redButton" onclick="reset()">Reset</button>
+				<button class="button" id="redButton" onclick="reset()"><i class="fal fa-redo"></i></button>
 			</p>
 		</div>
 	</div>
@@ -622,7 +622,11 @@
 						entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['RecupDec'] + "</span><br>";
 						overtimetotal = overtimetotal + parseFloat(timeinfo['RecupDec']);
 						// convert to noew json key
-						timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['RecupDec'] + '"}';
+						if (timeinfo.hasOwnProperty('StartDec')){
+							timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['RecupDec'] + '", "TotalDec": "' + timeinfo['TotalDec'] + '", "StartDec": "' + timeinfo['StartDec'] + '"}';
+						} else {
+							timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['RecupDec'] + '"}';
+						}
 						localStorage.setItem(key, timeinfo);
 					}
 				/*} catch (e) {
@@ -687,6 +691,7 @@
 			});
 			importFile.value = ''; //clear input value after every import
 			setHistory();
+			setParameters();
 		}
 		reader.readAsText(files[0]);
 		document.getElementById("modalclosebutton").click();
@@ -722,6 +727,21 @@
 	}
 
 	function reset() {
+		setParameters();
+		
+		setEnd(0);
+		setTotal(0);
+		setTotalDec(0);
+		setTotalNoBreak(0);
+		setTotalNoBreakDec(0);
+		setHistory();
+		
+		cleanLocalStorage();
+		//localStorage.setItem("testparam", "lalala");
+		//delete localStorage["testparam"];
+	}
+	
+	function setParameters() {
 		// Set options to parameters from localStorage
 		var autoend = localStorage.getItem("autoend"),
 			nosave = localStorage.getItem("nosave"),
@@ -737,8 +757,11 @@
 		document.getElementById("hourschedule").value = "7.6";
 		if ( hourschedule )
 			document.getElementById("hourschedule").value = hourschedule;
-		if ( break_time_default )
+		if ( break_time_default ) {
 			document.getElementById("break_time_default").value = break_time_default;
+		} else {
+			document.getElementById("break_time_default").value = 0;
+		}
 		if ( historyretain )
 			document.getElementById("historyretain").value = historyretain;
 		
@@ -755,18 +778,6 @@
 				setStart(now());
 			}	
 		}
-		
-		setBreak(break_time_default);
-		setEnd(0);
-		setTotal(0);
-		setTotalDec(0);
-		setTotalNoBreak(0);
-		setTotalNoBreakDec(0);
-		setHistory();
-		
-		cleanLocalStorage();
-		//localStorage.setItem("testparam", "lalala");
-		//delete localStorage["testparam"];
 	}
 
 	function end_time() {
