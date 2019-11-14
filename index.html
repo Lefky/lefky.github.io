@@ -291,7 +291,7 @@
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-		Version: 20191114.1 <br>
+		Version: 20191114.2 <br>
 		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
 	</p>
 	<p>
@@ -302,7 +302,7 @@
 		<input type="file" id="importFile" accept=".json" style="display:none"/>	
 	</p>
 	<p>Set this page as your browser startup page or pin the tab to automatically start counting when you open your browser.</p>
-	<p>Hitting "ENTER" will add the time corresponding to the selected value next to 'Recup' to the end date (and break time if defined).</p>
+	<p>Hitting "ENTER" will add the time corresponding to the selected value next to 'Overtime' to the end date (and break time if defined).</p>
 	<h3>Parameters</h3>
 	<p>The value settings are saved. So if you enable something it will still be enabled on the next opening of the page.</p>
 	<p>
@@ -367,7 +367,7 @@
 			<p>
 				<span class="tooltip" tooltip="Select howmany hours you need to perform on avarage each day.
 												The application will calculate howmuch overtime you built up / used today."><i class="far fa-info-circle"></i></span>
-				Recup@
+				Overtime@
 				<select name="hourschedule" id="hourschedule" onchange="calculateTotal();">
 					<option value="7.6">7,6h</option>
 					<option value="8">8h</option>
@@ -392,15 +392,15 @@
 		</div>
 		<div class="column" id="column2" style="">
 			<p>
-				<button class="button" id="add_time_76()" onclick="add_time(7.6)">Add 7,6h</button>&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="button" onclick="add_time(8)">Add 8h</button>&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="button" id="add_time_76()" onclick="add_time(7.6)"><i class="fal fa-plus"></i> 7,6h</button>&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="button" onclick="add_time(8)"><i class="fal fa-plus"></i> 8h</button>&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="button" onclick="end_time()">End time now</button>
 			</p>
 			<p>
 				Break<br>
 				<button class="button" id="blueButton" onclick="reset_break()">Reset</button>&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="button" id="blueButton" onclick="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)">+ 5 min</button>&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="button" id="blueButton" onclick="add_break(0.5)">+ 30 min</button>
+				<button class="button" id="blueButton" onclick="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"><i class="fal fa-plus"></i> 5 min</button>&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="button" id="blueButton" onclick="add_break(0.5)"><i class="fal fa-plus"></i> 30 min</button>
 			</p>
 			<!--<p>
 				<button class="button" id="orangeButton" onclick="calculateTotal()">Calculate Total</button>
@@ -601,7 +601,7 @@
 		  return `${parts[2]}-${parts[1]}-${parts[0]}`;
 		};
 		
-		var entry = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Recup</span><br>",
+		var entry = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Overtime</span><br>",
 			keys = Object.keys(localStorage),
 			revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
 			overtimetotal = 0,
