@@ -175,6 +175,22 @@
 			margin-bottom: 1em;
 			color: #595959;
 		}
+		.pulsate {
+			-webkit-animation: pulsate 3s ease-out;
+			-webkit-animation-iteration-count: infinite; 
+			opacity: 0.5;
+		}
+		@-webkit-keyframes pulsate {
+			0% { 
+				opacity: 0.5;
+			}
+			50% { 
+				opacity: 1.0;
+			}
+			100% { 
+				opacity: 0.5;
+			}
+		}
 		
 		.column {
 			width: 45%;
@@ -291,7 +307,7 @@
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-		Version: 20191114.2 <br>
+		Version: 20191115.1 <br>
 		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
 	</p>
 	<p>
@@ -416,7 +432,7 @@
 		Senne Janssens (C) 2019
     </div>
 	<div id="rightfooter">
-		<a href="#modalbox" rel="modal:open" style="text-decoration: none;"><i class="fas fa-info-circle" style="font-size:48px;color:red"></i></a>
+		<a href="#modalbox" rel="modal:open" style="text-decoration: none;"><i class="fas fa-info-circle pulsate" style="font-size:48px;color:red"></i></a>
 	</div>
 </div>
 </body>
