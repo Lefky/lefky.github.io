@@ -70,6 +70,10 @@
 			margin-left: 1%;
 			white-space: pre-line;
 		}
+		.greyed {
+			opacity: 40%;
+			font-size: smaller;
+		}
 		
 		input, select, textarea, #history {
 			font-size: 100%;
@@ -307,7 +311,7 @@
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-		Version: 20191115.1 <br>
+		Version: 20191129.1 <br>
 		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
 	</p>
 	<p>
@@ -353,14 +357,14 @@
 		<div class="column" id="column1" style="">
 			<p>
 				<span class="tooltip" tooltip="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. 
-											Set this page as your starting page when opening your browser to make it easy for yourself."><i class="far fa-info-circle"></i></span>
+											Set this page as your starting page when opening your browser to make it easy for yourself."><i class="far fa-info-circle greyed"></i></span>
 				Start time : <input name="start_time" id="start_time" type="time" onchange="calculateTotal();"/>
 			</p>
 			<p>
 				<span class="tooltip" tooltip="Choose a default break you take every day. 
 												Eg: You're deducted 30 min every day. 
 												This value will be saved for the next time the window is opened.
-												You can enter a seperate value manually or by using the buttons too."><i class="far fa-info-circle"></i></span>
+												You can enter a seperate value manually or by using the buttons too."><i class="far fa-info-circle greyed"></i></span>
 				Break (default 
 				<select name="break_time_default" id="break_time_default" onchange="addBreakDefault();">
 					<option value="0">0 min</option>
@@ -373,16 +377,16 @@
 			</p>
 			<p>
 				<span class="tooltip" tooltip="You can have this automatically filled in by setting the parameter at the bottom of the box.
-												You can manually enter a value."><i class="far fa-info-circle"></i></span>
+												You can manually enter a value."><i class="far fa-info-circle greyed"></i></span>
 				Time to go home : <input name="end_time" id="end_time" type="time" onchange="calculateTotal();" />
 			</p>
 			<p>
-				<span class="tooltip" tooltip="These hours are your actual working hours."><i class="far fa-info-circle"></i></span>
+				<span class="tooltip" tooltip="These hours are your actual working hours."><i class="far fa-info-circle greyed"></i></span>
 				Total hours (no break) : <input type="time" name="totalnobreak" id="totalnobreak" value="" readonly> <input type="text" name="totalnobreakdec" id="totalnobreakdec" value="" maxlength="4" size="5" readonly>
 			</p>
 			<p>
 				<span class="tooltip" tooltip="Select howmany hours you need to perform on avarage each day.
-												The application will calculate howmuch overtime you built up / used today."><i class="far fa-info-circle"></i></span>
+												The application will calculate howmuch overtime you built up / used today."><i class="far fa-info-circle greyed"></i></span>
 				Overtime@
 				<select name="hourschedule" id="hourschedule" onchange="calculateTotal();">
 					<option value="7.6">7,6h</option>
@@ -390,12 +394,12 @@
 				</select>
 				: <input type="text" name="overtime" id="overtime" value="" maxlength="4" size="5" readonly> <input type="text" name="overtimedec" id="overtimedec" value="" maxlength="4" size="5" readonly></p>
 			<p>
-				<span class="tooltip" tooltip="These hours are howmuch time you spent being at your workplace."><i class="far fa-info-circle"></i></span>
+				<span class="tooltip" tooltip="These hours are howmuch time you spent being at your workplace."><i class="far fa-info-circle greyed"></i></span>
 				Total hours : <input type="time" name="total" id="total" value="" readonly> <input type="text" name="totaldec" id="totaldec" value="" maxlength="4" size="5" readonly>
 			</p>
 			<p>
 				<span class="tooltip" tooltip="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box.
-												This value doesn't include today yet."><i class="far fa-info-circle"></i></span>
+												This value doesn't include today yet."><i class="far fa-info-circle greyed"></i></span>
 				Total overtime : <input type="text" name="overtimetotal" id="overtimetotal" maxlength="4" size="5" readonly>
 			</p>
 			<div id="history" style=""></div>
@@ -617,7 +621,7 @@
 		  return `${parts[2]}-${parts[1]}-${parts[0]}`;
 		};
 		
-		var entry = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Overtime</span><br>",
+		var entry = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Overtime</span><br><div class='greyed' style='border-bottom: 1px solid black; width: 100%;'></div>",
 			keys = Object.keys(localStorage),
 			revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
 			overtimetotal = 0,
