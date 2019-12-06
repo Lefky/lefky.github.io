@@ -756,11 +756,17 @@
 
 	// Storage functions
 	function cleanLocalStorage() {
-		var today = makeDate(todayDate());
-		for(key in localStorage) {
-			if ( makeDate(key) < today.subtractDays(getHistoryRetain()) ) // days to keep data excluding today
-				delete localStorage[key];
-		}
+		var today = makeDate(todayDate()),
+			deleteoption = localStorage.getItem("historydeleteoption");
+		
+		if ( deleteoption == "days" ) {
+			for(key in localStorage) {
+				if ( makeDate(key) < today.subtractDays(getHistoryRetain()) ) // days to keep data excluding today
+					delete localStorage[key];
+			}	
+		} else if (deleteoption == "period") {
+			
+		}		
 	}
 
 	function deleteHistory() {
@@ -879,11 +885,11 @@
 		}
 		if ( historydeleteoption == "days" ) {
 			document.getElementById("historydeleteoptiondays").checked = true;
-			greyOutHistoryDeleteOption();
 		} else if (historydeleteoption == "period") {
 			document.getElementById("historydeleteoptionperiod").checked = true;
-			greyOutHistoryDeleteOption();
 		}
+		greyOutHistoryDeleteOption();
+
 		if ( historyretain )
 			document.getElementById("historyretain").value = historyretain;
 		if ( historyresetday )
