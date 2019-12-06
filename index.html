@@ -288,6 +288,28 @@
 		.slider.round:before {
 		  border-radius: 50%;
 		}
+		input[type="radio"] {
+			/* Base Styles aka unchecked */
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			
+			border-radius: 50%;
+			width: 16px;
+			height: 16px;
+			
+			border: 2px solid #999;
+			transition: 0.2s all linear;
+			margin: 0;
+			margin-right: 5px;
+			
+			position: relative;
+			top: 1px;
+		}
+		input[type="radio"]:checked {
+			/* Checked Styles */
+			border: 6px solid black;
+		}
 		
 		@media only screen and (max-width: 700px) {
 			.column {
@@ -338,13 +360,13 @@
 		&emsp;will subtract 5 min from the time the page was opened (and the start time). This is to take the time to boot your laptop, ... into account.
 	</p>
 	<p>
-		<input type="radio" name="historydeleteoption" id="historydeleteoptiondays" value="days" checked="checked">Max days to keep history: <input type="number" name="historyretain" id="historyretain" value="30" min="0" max="999" style="width: 70px"><br>
-		<input type="radio" name="historydeleteoption" id="historydeleteoptionperiod" value="period">Reset history on day <input type="number" name="historyresetday" id="historyresetday" value="1" min="1" max="31" style="width: 70px"> of every <input type="number" name="historyresetperiod" id="historyresetperiod" value="4" min="1" max="12" style="width: 70px">
-			<select name="historyresetperiodunit" id="historyresetperiodunit" onchange="">
+		<input type="radio" name="historydeleteoption" id="historydeleteoptiondays" value="days" onchange="greyOutHistoryDeleteOption()" checked="checked"><label for="historydeleteoptiondays" id="historydeleteoptiondayslabel">Max days to keep history: <input type="number" name="historyretain" id="historyretain" value="30" min="0" max="999" style="width: 70px; margin: 2px 0;"><br></label>
+		<input type="radio" name="historydeleteoption" id="historydeleteoptionperiod" value="period" onchange="greyOutHistoryDeleteOption()"><label for="historydeleteoptionperiod" id="historydeleteoptionperiodlabel">Reset history on day <input type="number" name="historyresetday" id="historyresetday" value="1" min="1" max="31" style="width: 70px; margin: 2px 0;"> of every <input type="number" name="historyresetperiod" id="historyresetperiod" value="4" min="1" max="12" style="width: 70px; margin: 2px 0;">
+			<select name="historyresetperiodunit" id="historyresetperiodunit" style="margin: 2px 0;">
 				<option value="days">days</option>
 				<option value="weeks">weeks</option>
 				<option value="months">months</option>
-			</select>
+			</select></label>
 	</p>
 	<br>
 	<a href="#" class="modalbutton" id="modalclosebutton" rel="modal:close">Close</a>
@@ -664,6 +686,25 @@
 		return unit;
 	}
 	
+	function greyOutHistoryDeleteOption() {
+		if(document.getElementById("historydeleteoptiondays").checked) {
+			document.getElementById("historydeleteoptiondayslabel").style.opacity = "100%";
+			document.getElementById("historydeleteoptionperiodlabel").style.opacity = "40%";
+			document.getElementById("historyretain").disabled = false;
+			document.getElementById("historyresetday").disabled = true;
+			document.getElementById("historyresetperiod").disabled = true;
+			document.getElementById("historyresetperiodunit").disabled = true;
+
+		} else {
+			document.getElementById("historydeleteoptionperiodlabel").style.opacity = "100%";
+			document.getElementById("historydeleteoptiondayslabel").style.opacity = "40%";
+			document.getElementById("historyretain").disabled = true;
+			document.getElementById("historyresetday").disabled = false;
+			document.getElementById("historyresetperiod").disabled = false;
+			document.getElementById("historyresetperiodunit").disabled = false;
+		}
+	}
+	
 	function setHistory(){
 		const reverseDateRepresentation = date => {
 		  let parts = date.split('-');
@@ -838,8 +879,10 @@
 		}
 		if ( historydeleteoption == "days" ) {
 			document.getElementById("historydeleteoptiondays").checked = true;
+			greyOutHistoryDeleteOption();
 		} else if (historydeleteoption == "period") {
 			document.getElementById("historydeleteoptionperiod").checked = true;
+			greyOutHistoryDeleteOption();
 		}
 		if ( historyretain )
 			document.getElementById("historyretain").value = historyretain;
