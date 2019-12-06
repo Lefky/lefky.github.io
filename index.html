@@ -311,7 +311,7 @@
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-		Version: 20191129.1 <br>
+		Version: 20191112.1 <br>
 		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
 	</p>
 	<p>
@@ -338,7 +338,13 @@
 		&emsp;will subtract 5 min from the time the page was opened (and the start time). This is to take the time to boot your laptop, ... into account.
 	</p>
 	<p>
-		Days to keep history: <input type="number" name="historyretain" id="historyretain" value="30" min="0" max="999" style="width: 70px">
+		Max days to keep history: <input type="number" name="historyretain" id="historyretain" value="30" min="0" max="999" style="width: 70px"><br>
+		Reset history on day <input type="number" name="historyresetday" id="historyresetday" value="1" min="1" max="31" style="width: 70px"> of every <input type="number" name="historyresetperiod" id="historyresetperiod" value="4" min="1" max="12" style="width: 70px">
+			<select name="historyresetperiodunit" id="historyresetperiodunit" onchange="">
+				<option value="days">days</option>
+				<option value="weeks">weeks</option>
+				<option value="months">months</option>
+			</select>
 	</p>
 	<br>
 	<a href="#" class="modalbutton" id="modalclosebutton" rel="modal:close">Close</a>
@@ -614,6 +620,38 @@
 		return days;
 	}
 	
+	function getHistoryResetDay(){
+		var day = document.getElementById("historyresetday").value;
+		if (!day) {
+			day = 31;
+		}
+		if ( day > 31 ) {
+			day = 31;
+		}
+		return day;
+	}
+	
+	function getHistoryResetPeriod(){
+		var period = document.getElementById("historyresetperiod").value;
+		if (!period) {
+			period = 4;
+		}
+		if ( period > 12 ) {
+			period = 12;
+		}
+		return period;
+	}
+	
+	function getHistoryResetPeriodUnit(){
+		var e = document.getElementById("historyresetperiodunit");
+		var unit = e.options[e.selectedIndex].value;
+
+		/*if ( unit != "days" || unit != "weeks" || unit != "months" ) {
+			unit = "weeks";
+		}*/
+		return unit;
+	}
+	
 	function setHistory(){
 		const reverseDateRepresentation = date => {
 		  let parts = date.split('-');
@@ -766,8 +804,11 @@
 			nosave = localStorage.getItem("nosave"),
 			hourschedule = localStorage.getItem("hourschedule"),
 			break_time_default = localStorage.getItem("break_time_default"),
-			startmin5 = localStorage.getItem("startmin5")
-			historyretain = localStorage.getItem("historyretain");
+			startmin5 = localStorage.getItem("startmin5"),
+			historyretain = localStorage.getItem("historyretain"),
+			historyresetday = localStorage.getItem("historyresetday"),
+			historyresetperiod = localStorage.getItem("historyresetperiod"),
+			historyresetperiodunit = localStorage.getItem("historyresetperiodunit");
 
 		if ( autoend == "true" )
 			document.getElementById("autoend").checked = true;
@@ -784,6 +825,12 @@
 		}
 		if ( historyretain )
 			document.getElementById("historyretain").value = historyretain;
+		if ( historyresetday )
+			document.getElementById("historyresetday").value = historyresetday;
+		if ( historyresetperiod )
+			document.getElementById("historyresetperiod").value = historyresetperiod;
+		if ( historyresetperiodunit )
+			document.getElementById("historyresetperiodunit").value = historyresetperiodunit;
 		
 		try {
 			var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
@@ -869,6 +916,9 @@
 		localStorage.setItem("break_time_default", getBreakDefault());
 		// Set 'history retain time' parameter in local storage
 		localStorage.setItem("historyretain", getHistoryRetain());
+		localStorage.setItem("historyresetday", getHistoryResetDay());
+		localStorage.setItem("historyresetperiod", getHistoryResetPeriod());
+		localStorage.setItem("historyresetperiodunit", getHistoryResetPeriodUnit());
 	};
 </script>
 </html>
