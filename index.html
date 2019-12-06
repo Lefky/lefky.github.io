@@ -338,8 +338,8 @@
 		&emsp;will subtract 5 min from the time the page was opened (and the start time). This is to take the time to boot your laptop, ... into account.
 	</p>
 	<p>
-		Max days to keep history: <input type="number" name="historyretain" id="historyretain" value="30" min="0" max="999" style="width: 70px"><br>
-		Reset history on day <input type="number" name="historyresetday" id="historyresetday" value="1" min="1" max="31" style="width: 70px"> of every <input type="number" name="historyresetperiod" id="historyresetperiod" value="4" min="1" max="12" style="width: 70px">
+		<input type="radio" name="historydeleteoption" id="historydeleteoptiondays" value="days" checked="checked">Max days to keep history: <input type="number" name="historyretain" id="historyretain" value="30" min="0" max="999" style="width: 70px"><br>
+		<input type="radio" name="historydeleteoption" id="historydeleteoptionperiod" value="period">Reset history on day <input type="number" name="historyresetday" id="historyresetday" value="1" min="1" max="31" style="width: 70px"> of every <input type="number" name="historyresetperiod" id="historyresetperiod" value="4" min="1" max="12" style="width: 70px">
 			<select name="historyresetperiodunit" id="historyresetperiodunit" onchange="">
 				<option value="days">days</option>
 				<option value="weeks">weeks</option>
@@ -609,6 +609,18 @@
 			document.getElementById("totalnobreakdec").value = time;
 	}
 
+	function getHistoryDeleteOption(){
+		if (document.getElementById('historydeleteoptionperiod').checked) {
+			var option = document.getElementById('historydeleteoptionperiod').value;
+		} else if (document.getElementById('historydeleteoptiondays').checked) {
+			var option = document.getElementById('historydeleteoptiondays').value;
+		}
+		if (!option) {
+			option = "days";
+		}
+		return option;
+	}
+	
 	function getHistoryRetain(){
 		var days = document.getElementById("historyretain").value;
 		if (!days) {
@@ -805,6 +817,7 @@
 			hourschedule = localStorage.getItem("hourschedule"),
 			break_time_default = localStorage.getItem("break_time_default"),
 			startmin5 = localStorage.getItem("startmin5"),
+			historydeleteoption = localStorage.getItem("historydeleteoption"),
 			historyretain = localStorage.getItem("historyretain"),
 			historyresetday = localStorage.getItem("historyresetday"),
 			historyresetperiod = localStorage.getItem("historyresetperiod"),
@@ -822,6 +835,11 @@
 			setBreak(break_time_default);
 		} else {
 			document.getElementById("break_time_default").value = 0;
+		}
+		if ( historydeleteoption == "days" ) {
+			document.getElementById("historydeleteoptiondays").checked = true;
+		} else if (historydeleteoption == "period") {
+			document.getElementById("historydeleteoptionperiod").checked = true;
 		}
 		if ( historyretain )
 			document.getElementById("historyretain").value = historyretain;
@@ -915,6 +933,7 @@
 		// Set 'default break time' parameter in local storage
 		localStorage.setItem("break_time_default", getBreakDefault());
 		// Set 'history retain time' parameter in local storage
+		localStorage.setItem("historydeleteoption", getHistoryDeleteOption());
 		localStorage.setItem("historyretain", getHistoryRetain());
 		localStorage.setItem("historyresetday", getHistoryResetDay());
 		localStorage.setItem("historyresetperiod", getHistoryResetPeriod());
