@@ -361,8 +361,8 @@
 	</p>
 	<p>
 		<input type="radio" name="historydeleteoption" id="historydeleteoptiondays" value="days" onchange="greyOutHistoryDeleteOption()" checked="checked"><label for="historydeleteoptiondays" id="historydeleteoptiondayslabel">Max days to keep history: <input type="number" name="historyretain" id="historyretain" value="30" min="0" max="999" style="width: 70px; margin: 2px 0;"><br></label>
-		<input type="radio" name="historydeleteoption" id="historydeleteoptionperiod" value="period" onchange="greyOutHistoryDeleteOption()"><label for="historydeleteoptionperiod" id="historydeleteoptionperiodlabel">Reset history on day <input type="number" name="historyresetday" id="historyresetday" value="1" min="1" max="31" style="width: 70px; margin: 2px 0;"> of every <input type="number" name="historyresetperiod" id="historyresetperiod" value="4" min="1" max="12" style="width: 70px; margin: 2px 0;">
-			<select name="historyresetperiodunit" id="historyresetperiodunit" style="margin: 2px 0;">
+		<input type="radio" name="historydeleteoption" id="historydeleteoptionperiod" value="period" onchange="greyOutHistoryDeleteOption()"><label for="historydeleteoptionperiod" id="historydeleteoptionperiodlabel">Reset history on day <input type="number" name="historyresetday" id="historyresetday" value="1" min="1" max="31" style="width: 70px; margin: 2px 0;"> of every <input type="number" name="historyresetperiod" id="historyresetperiod" value="4" min="1" style="width: 70px; margin: 2px 0;">
+			<select name="historyresetperiodunit" id="historyresetperiodunit" onchange="maxValuesDeleteOption()" style="margin: 2px 0;">
 				<option value="days">days</option>
 				<option value="weeks">weeks</option>
 				<option value="months">months</option>
@@ -471,6 +471,12 @@
 	Date.prototype.subtractDays = function(days) {
 		var date = new Date(this.valueOf());
 		date.setDate(date.getDate() - days);
+		return date;
+	}
+	
+	Date.prototype.addDays = function(days) {
+		var date = new Date(this.valueOf());
+		date.setDate(date.getDate() + days);
 		return date;
 	}
 
@@ -666,13 +672,23 @@
 	}
 	
 	function getHistoryResetPeriod(){
-		var period = document.getElementById("historyresetperiod").value;
+		var period = document.getElementById("historyresetperiod").value,
+			historyresetperiodunit = getHistoryResetPeriodUnit();
 		if (!period) {
 			period = 4;
 		}
-		if ( period > 12 ) {
-			period = 12;
+		
+		if ( historyresetperiodunit == "days" ) {
+			if ( period > 31 )
+				period = 31;
+		} else if ( historyresetperiodunit == "weeks" ) {
+			if ( period > 4 )
+				period = 4; 
+		} else if ( historyresetperiodunit == "months" ) {
+			if ( period > 48 )
+				period = 48; 
 		}
+		
 		return period;
 	}
 	
@@ -694,14 +710,25 @@
 			document.getElementById("historyresetday").disabled = true;
 			document.getElementById("historyresetperiod").disabled = true;
 			document.getElementById("historyresetperiodunit").disabled = true;
-
 		} else {
 			document.getElementById("historydeleteoptionperiodlabel").style.opacity = "100%";
 			document.getElementById("historydeleteoptiondayslabel").style.opacity = "40%";
 			document.getElementById("historyretain").disabled = true;
 			document.getElementById("historyresetday").disabled = false;
 			document.getElementById("historyresetperiod").disabled = false;
-			document.getElementById("historyresetperiodunit").disabled = false;
+			document.getElementById("historyresetperiodunit").disabled = false;		
+			maxValuesDeleteOption();
+		}
+	}
+
+	function maxValuesDeleteOption() {
+		var historyresetperiodunit = getHistoryResetPeriodUnit();
+		if ( historyresetperiodunit == "days" ) {
+			document.getElementById("historyresetperiod").setAttribute("max", "31"); 
+		} else if ( historyresetperiodunit == "weeks" ) {
+			document.getElementById("historyresetperiod").setAttribute("max", "4"); 
+		} else if ( historyresetperiodunit == "months" ) {
+			document.getElementById("historyresetperiod").setAttribute("max", "48"); 
 		}
 	}
 	
@@ -722,30 +749,21 @@
 		
 		for (; key = revkeys[i]; i++) {
 			if ( userKeyRegExp.test(key) ) {
-				// Temporary functionality to parse json and non-json time values
-				//try {
-					var timeinfo = JSON.parse(localStorage.getItem(key));
-					if (timeinfo.hasOwnProperty('OvertimeDec')){
-						entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['OvertimeDec'] + "</span><br>";
-						overtimetotal = overtimetotal + parseFloat(timeinfo['OvertimeDec']);
+				var timeinfo = JSON.parse(localStorage.getItem(key));
+				if (timeinfo.hasOwnProperty('OvertimeDec')){
+					entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['OvertimeDec'] + "</span><br>";
+					overtimetotal = overtimetotal + parseFloat(timeinfo['OvertimeDec']);
+				} else {
+					entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['RecupDec'] + "</span><br>";
+					overtimetotal = overtimetotal + parseFloat(timeinfo['RecupDec']);
+					// convert to noew json key
+					if (timeinfo.hasOwnProperty('StartDec')){
+						timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['RecupDec'] + '", "TotalDec": "' + timeinfo['TotalDec'] + '", "StartDec": "' + timeinfo['StartDec'] + '"}';
 					} else {
-						entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['RecupDec'] + "</span><br>";
-						overtimetotal = overtimetotal + parseFloat(timeinfo['RecupDec']);
-						// convert to noew json key
-						if (timeinfo.hasOwnProperty('StartDec')){
-							timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['RecupDec'] + '", "TotalDec": "' + timeinfo['TotalDec'] + '", "StartDec": "' + timeinfo['StartDec'] + '"}';
-						} else {
-							timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['RecupDec'] + '"}';
-						}
-						localStorage.setItem(key, timeinfo);
+						timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['RecupDec'] + '"}';
 					}
-				/*} catch (e) {
-					//entry = entry + "<span class='' style='float:left;'>" + key + "</span><span style='width: 30%; float: right;'>" + localStorage.getItem(key) + "</span><br>";
-					entryjson = localStorage.getItem(key).split(", ");
-					timeinfo = '{"TotalNoBreakDec": "' + entryjson[0] + '", "OvertimeDec": "' + entryjson[1] + '"}';
 					localStorage.setItem(key, timeinfo);
-				}*/
-				///////////
+				}
 			}
 		}
 		if ( keys == "" || keys == null )
@@ -757,7 +775,8 @@
 	// Storage functions
 	function cleanLocalStorage() {
 		var today = makeDate(todayDate()),
-			deleteoption = localStorage.getItem("historydeleteoption");
+			deleteoption = localStorage.getItem("historydeleteoption"),
+			lasthistoryclean = makeDate(localStorage.getItem("lasthistoryclean"));
 		
 		if ( deleteoption == "days" ) {
 			for(key in localStorage) {
@@ -765,8 +784,24 @@
 					delete localStorage[key];
 			}	
 		} else if (deleteoption == "period") {
-			
-		}		
+			var historyretain = localStorage.getItem("historyretain"),
+				historyresetday = localStorage.getItem("historyresetday"),
+				historyresetperiod = localStorage.getItem("historyresetperiod"),
+				historyresetperiodunit = localStorage.getItem("historyresetperiodunit"),
+				cleaningday = "";
+				 
+			if ( historyresetperiodunit == "days" ) {
+				
+			} else if ( historyresetperiodunit == "weeks" ) {
+				
+				var cleaningday = lasthistoryclean + (historyresetperiod * 7);
+			} else if ( historyresetperiodunit == "months" ) {
+				
+				var cleaningday = new Date(lasthistoryclean.setMonth(lasthistoryclean.getMonth() + historyresetperiod));
+			}
+				alert("period: " + historyresetperiod + " last clean: " + lasthistoryclean + " cleanday: " + cleaningday);
+		}
+		localStorage.setItem("lasthistoryclean", todayDate());
 	}
 
 	function deleteHistory() {
@@ -843,8 +878,6 @@
 	}
 
 	function reset() {
-		setParameters();
-		
 		setEnd(0);
 		setTotal(0);
 		setTotalDec(0);
@@ -852,9 +885,9 @@
 		setTotalNoBreakDec(0);
 		setHistory();
 		
+		// 'lazy' loading
+		setParameters();
 		cleanLocalStorage();
-		//localStorage.setItem("testparam", "lalala");
-		//delete localStorage["testparam"];
 	}
 	
 	function setParameters() {
@@ -935,13 +968,6 @@
 		setBreak(0);
 		calculateTotal();
 	}
-
-	/*function keypress(event) {
-		if (event.keyCode == 13) {
-			add_time(7.6);
-			calculateTotal();
-		}
-	}*/
 	
 	$( document ).on( 'keydown', function ( e ) {
 		if ( e.keyCode === 13 ) { //ENTER key code
@@ -954,8 +980,8 @@
 
 	window.onbeforeunload = function(e) {
 		// Set 'dont save today' and 'automatically set end time' parameters in local storage
-		var nosave = document.getElementById("nosave");
-		var autoend = document.getElementById("autoend");
+		var nosave = document.getElementById("nosave"),
+			autoend = document.getElementById("autoend");
 		if ( nosave.checked == false ) {
 			if (autoend.checked == false ) {
 				var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '"}';
