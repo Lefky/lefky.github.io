@@ -9,13 +9,18 @@
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
 	<!-- jQuery Modal -->
-	<script src="js/jquery.modal.min.js"></script><!--https://jquerymodal.com/-->
+	<script src="js/jquery.modal.min.js"></script><!-- https://jquerymodal.com/ -->
 	<link rel="stylesheet" href="css/jquery.modal.min.css" />
 	<script>
 		$.modal.defaults = {
 			fadeDuration: 200,		// Number of milliseconds the fade transition takes (null means no transition)
 			fadeDelay: 0.5			// Point during the overlay's fade-in that the modal begins to fade in (.5 = 50%, 1.5 = 150%, etc.)
 		};
+	</script>
+	<!-- Moment.js -->
+	<script src="js/moment.js"></script><!-- https://momentjs.com/docs -->
+	<script>
+		moment().format();
 	</script>
 	<!-- Font Awsome -->
 	<link href="css/all.min.css" rel="stylesheet">
@@ -334,7 +339,7 @@
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
 		Version: 20191112.1 <br>
-		Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >             
+		<!--Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >-->
 	</p>
 	<p>
 		If you delete your browser data the history will reset. You can export and import your data.<br>
@@ -694,12 +699,7 @@
 	
 	function getHistoryResetPeriodUnit(){
 		var e = document.getElementById("historyresetperiodunit");
-		var unit = e.options[e.selectedIndex].value;
-
-		/*if ( unit != "days" || unit != "weeks" || unit != "months" ) {
-			unit = "weeks";
-		}*/
-		return unit;
+		return e.options[e.selectedIndex].value;
 	}
 	
 	function greyOutHistoryDeleteOption() {
@@ -718,6 +718,7 @@
 			document.getElementById("historyresetperiod").disabled = false;
 			document.getElementById("historyresetperiodunit").disabled = false;		
 			maxValuesDeleteOption();
+			localStorage.setItem("lasthistoryclean", moment());
 		}
 	}
 
@@ -756,7 +757,7 @@
 				} else {
 					entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['RecupDec'] + "</span><br>";
 					overtimetotal = overtimetotal + parseFloat(timeinfo['RecupDec']);
-					// convert to noew json key
+					// convert to new json key
 					if (timeinfo.hasOwnProperty('StartDec')){
 						timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['RecupDec'] + '", "TotalDec": "' + timeinfo['TotalDec'] + '", "StartDec": "' + timeinfo['StartDec'] + '"}';
 					} else {
@@ -774,34 +775,43 @@
 
 	// Storage functions
 	function cleanLocalStorage() {
-		var today = makeDate(todayDate()),
+		var keys = Object.keys(localStorage),
+			i = 0,
+			today = moment(),
+			//today2 = new Date(todayDate()),
 			deleteoption = localStorage.getItem("historydeleteoption"),
-			lasthistoryclean = makeDate(localStorage.getItem("lasthistoryclean"));
+			lasthistoryclean = moment(localStorage.getItem("lasthistoryclean"));
+		const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 		
 		if ( deleteoption == "days" ) {
-			for(key in localStorage) {
-				if ( makeDate(key) < today.subtractDays(getHistoryRetain()) ) // days to keep data excluding today
+			const expiredate = today.subtract(getHistoryRetain(), "days")
+			for(; key = keys[i]; i++) {
+				if ( moment(key, "DD-MM-YYYY") < expiredate && userKeyRegExp.test(key)) { // days to keep data excluding today
 					delete localStorage[key];
+				}
 			}	
-		} else if (deleteoption == "period") {
+		} else if (deleteoption == "period"){// && lasthistoryclean < today) {
 			var historyretain = localStorage.getItem("historyretain"),
 				historyresetday = localStorage.getItem("historyresetday"),
 				historyresetperiod = localStorage.getItem("historyresetperiod"),
 				historyresetperiodunit = localStorage.getItem("historyresetperiodunit"),
-				cleaningday = "";
+				cleaningday = moment();
 				 
 			if ( historyresetperiodunit == "days" ) {
-				
+				cleaningday = cleaningday.add(historyresetperiod, 'days');
 			} else if ( historyresetperiodunit == "weeks" ) {
-				
-				var cleaningday = lasthistoryclean + (historyresetperiod * 7);
+				cleaningday = cleaningday.add(historyresetperiod, 'weeks');
 			} else if ( historyresetperiodunit == "months" ) {
-				
-				var cleaningday = new Date(lasthistoryclean.setMonth(lasthistoryclean.getMonth() + historyresetperiod));
+				cleaningday = cleaningday.add(historyresetperiod, 'months');
 			}
-				alert("period: " + historyresetperiod + " last clean: " + lasthistoryclean + " cleanday: " + cleaningday);
+			
+			if (cleaningday.format("DD-MM-YYYY") == today.format("DD-MM-YYYY")) {
+				alert('gelukt!');
+			}
+			localStorage.setItem("cleaningday", cleaningday);
+			
+			console.log("today: " + today.format("DD-MM-YYYY") + " period: " + historyresetperiod + " last clean: " + lasthistoryclean.format("DD-MM-YYYY") + " cleanday: " + cleaningday.format("DD-MM-YYYY"));
 		}
-		localStorage.setItem("lasthistoryclean", todayDate());
 	}
 
 	function deleteHistory() {
