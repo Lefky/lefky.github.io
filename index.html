@@ -954,7 +954,7 @@
 		setHistory();
 		
 		// 'lazy' loading
-		setParameters(); // needs to be first in order for the clean storage to work properly (it get values from certain ui fields) => not applicable anymore
+		setParameters();
 		cleanLocalStorage();
 	}
 	
@@ -969,7 +969,8 @@
 			historyretain = localStorage.getItem("historyretain"),
 			historyresetday = localStorage.getItem("historyresetday"),
 			historyresetperiod = localStorage.getItem("historyresetperiod"),
-			historyresetperiodunit = localStorage.getItem("historyresetperiodunit");
+			historyresetperiodunit = localStorage.getItem("historyresetperiodunit"),
+			cleaningday = localStorage.getItem("cleaningday");
 
 		if ( autoend == "true" )
 			document.getElementById("autoend").checked = true;
@@ -989,8 +990,6 @@
 		} else if (historydeleteoption == "period") {
 			document.getElementById("historydeleteoptionperiod").checked = true;
 		}
-		greyOutHistoryDeleteOption();
-
 		if ( historyretain )
 			document.getElementById("historyretain").value = historyretain;
 		if ( historyresetday )
@@ -999,6 +998,8 @@
 			document.getElementById("historyresetperiod").value = historyresetperiod;
 		if ( historyresetperiodunit )
 			document.getElementById("historyresetperiodunit").value = historyresetperiodunit;
+
+		greyOutHistoryDeleteOption();
 		
 		try {
 			var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
