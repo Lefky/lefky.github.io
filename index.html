@@ -366,8 +366,8 @@
 		&emsp;will subtract 5 min from the time the page was opened (and the start time). This is to take the time to boot your laptop, ... into account.
 	</p>
 	<p>
-		<input type="radio" name="historydeleteoption" id="historydeleteoptiondays" value="days" onchange="greyOutHistoryDeleteOption()" checked="checked"><label for="historydeleteoptiondays" id="historydeleteoptiondayslabel">Max days to keep history: <input type="number" name="historyretain" id="historyretain" value="30" min="0" max="999" style="width: 70px; margin: 2px 0;"></label><span class="tooltip" tooltip="This will keep XXX days of data."><i class="far fa-info-circle greyed"></i></span><br>
-		<input type="radio" name="historydeleteoption" id="historydeleteoptionperiod" value="period" onchange="greyOutHistoryDeleteOption()"><label for="historydeleteoptionperiod" id="historydeleteoptionperiodlabel">Reset history on day <input type="number" name="historyresetday" id="historyresetday" value="1" min="1" max="31" onchange="maxValuesDeleteOption()" style="width: 70px; margin: 2px 0;"> of every <input type="number" name="historyresetperiod" id="historyresetperiod" value="4" min="1" onchange="maxValuesDeleteOption()" style="width: 70px; margin: 2px 0;">
+		<input type="radio" name="historydeleteoption" id="historydeleteoptiondays" value="days" onchange="greyOutHistoryDeleteOption()" checked="checked"><label for="historydeleteoptiondays" id="historydeleteoptiondayslabel">Max days to keep history: <input type="number" name="historyretain" id="historyretain" min="0" max="999" style="width: 70px; margin: 2px 0;"></label><span class="tooltip" tooltip="This will keep XXX days of data."><i class="far fa-info-circle greyed"></i></span><br>
+		<input type="radio" name="historydeleteoption" id="historydeleteoptionperiod" value="period" onchange="greyOutHistoryDeleteOption()"><label for="historydeleteoptionperiod" id="historydeleteoptionperiodlabel">Reset history on day <input type="number" name="historyresetday" id="historyresetday" min="1" max="31" onchange="maxValuesDeleteOption()" style="width: 70px; margin: 2px 0;"> of every <input type="number" name="historyresetperiod" id="historyresetperiod" min="1" onchange="maxValuesDeleteOption()" style="width: 70px; margin: 2px 0;">
 			<select name="historyresetperiodunit" id="historyresetperiodunit" onchange="maxValuesDeleteOption()" style="margin: 2px 0;">
 				<option value="days">days</option>
 				<option value="weeks">weeks</option>
@@ -681,9 +681,6 @@
 	function getHistoryResetPeriod(){
 		var period = document.getElementById("historyresetperiod").value,
 			historyresetperiodunit = getHistoryResetPeriodUnit();
-		if (!period) {
-			period = 4;
-		}
 		
 		if ( historyresetperiodunit == "days" ) {
 			if ( period > 31 )
@@ -752,7 +749,7 @@
 		setResetDate(cleaningday.format("dddd, DD-MM-YYYY"));
 	}
 	
-	function calculateCleaningDay() {
+	function calculateCleaningDayInit() {
 		var historyretain = localStorage.getItem("historyretain"),
 			historyresetday = localStorage.getItem("historyresetday"),
 			historyresetperiod = localStorage.getItem("historyresetperiod"),
@@ -761,7 +758,6 @@
 			 
 		if ( historyresetperiodunit == "days" ) {
 			cleaningday = cleaningday.add(historyresetperiod, 'days');
-			console.log("cleaningday: " + cleaningday.format() + " /// period: " + historyresetperiod);
 		} else if ( historyresetperiodunit == "weeks" ) {
 			cleaningday = cleaningday.add(historyresetperiod, 'weeks');
 			cleaningday = cleaningday.day(historyresetday);
@@ -774,10 +770,33 @@
 		localStorage.setItem("historyresetperiod", getHistoryResetPeriod());
 		localStorage.setItem("historyresetperiodunit", getHistoryResetPeriodUnit());
 		
-		cleaningday.hour(0);
-		cleaningday.minute(0);
-		cleaningday.second(0);
-		cleaningday.millisecond(0);
+		console.log("cleaningday: " + cleaningday.format() + " /// period: " + historyresetperiod);
+		
+		return cleaningday;
+	}
+	
+	function calculateCleaningDay() {
+		var historyretain = getHistoryRetain(),
+			historyresetday = getHistoryResetDay(),
+			historyresetperiod = getHistoryResetPeriod(),
+			historyresetperiodunit = getHistoryResetPeriodUnit(),
+			cleaningday = moment();
+			 
+		if ( historyresetperiodunit == "days" ) {
+			cleaningday = cleaningday.add(historyresetperiod, 'days');
+		} else if ( historyresetperiodunit == "weeks" ) {
+			cleaningday = cleaningday.add(historyresetperiod, 'weeks');
+			cleaningday = cleaningday.day(historyresetday);
+		} else if ( historyresetperiodunit == "months" ) {
+			cleaningday = cleaningday.add(historyresetperiod, 'months');
+			cleaningday = cleaningday.date(historyresetday);
+		}
+		localStorage.setItem("historyretain", historyretain);
+		localStorage.setItem("historyresetday", historyresetday);
+		localStorage.setItem("historyresetperiod", historyresetperiod);
+		localStorage.setItem("historyresetperiodunit", historyresetperiodunit);
+		
+		console.log("cleaningday: " + cleaningday.format() + " /// period: " + historyresetperiod);
 		
 		return cleaningday;
 	}
@@ -848,8 +867,8 @@
 				//localStorage.setItem("lasthistoryclean", today);
 				localStorage.setItem("cleaningday", cleaningday);
 			}
-			
 			console.log("today: " + today.format("dddd, DD-MM-YYYY") + " /// period: " + getHistoryResetPeriod() +  " /// cleanday: " + cleaningday.format("dddd, DD-MM-YYYY"));
+			
 		}
 	}
 
