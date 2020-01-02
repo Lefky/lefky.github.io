@@ -163,7 +163,7 @@
 			-moz-border-radius:28px;
 			-webkit-border-radius:28px;
 			border-radius:28px;
-			border:1px solid #dcdcdc;
+			/*border:1px solid #dcdcdc;*/
 			display:inline-block;
 			cursor:pointer;
 			color:#777777;
@@ -338,7 +338,7 @@
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-		Version: 20191220.1 <br>
+		Version: 20200102.1 <br>
 		<!--Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >-->
 		Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"target="_blank">Check the master branch on Github</a>
 	</p>
@@ -372,7 +372,7 @@
 				<option value="days">days</option>
 				<option value="weeks">weeks</option>
 				<option value="months">months</option>
-			</select></label><span class="tooltip" tooltip="This will delete the entire history that's displayed next to 'Reset date'."><i class="far fa-info-circle greyed"></i></span><br>
+			</select></label><a class="modalbutton" id="modalsavebutton" onclick="saveCleaningDay()" style="float: none; margin-left: 5px; vertical-align: middle;">Save</a><span class="tooltip" tooltip="This will delete the entire history on the day that's displayed next to 'Reset date'."><i class="far fa-info-circle greyed"></i></span><br>
 			<label for="resetdate" id="resetdatelabel" style="margin-left: 21px;">Reset date: <input type="text" name="resetdate" id="resetdate" size="20" style="padding-left: 5px;" readonly></label>
 	</p>
 	<br>
@@ -385,7 +385,8 @@
 			<div style="width:15%; float: left; text-align: right; padding: 2% 1% 1% 2%; font-size: 60%;"><i class="far fa-exclamation-triangle fa-2x" style="color: orange;"></i> Notification:</div> 
 			<div style="width:75%; float: right; text-align: left; padding: 2% 1% 1% 2%; font-size: 60%;">
 				Spread the word!!!<br>
-				<i class="fas fa-hat-santa fa-2x" style="color: red;"></i> Happy holidays everyone :) <i class="fas fa-hat-santa fa-2x" style="color: red;"></i>
+				New feature introduced! You can now have the history completely reset every X days/weeks/month on the Nth day.<br>
+				Find it in the <i class="fas fa-info-circle" style="color:red"></i> panel.
 			</div> 
 		</p>
 		<div class="column" id="column1" style="">
@@ -705,6 +706,10 @@
 		document.getElementById("resetdate").value = date;
 	}
 	
+	function getResetDate(){
+		return document.getElementById("resetdate").value;
+	}
+	
 	function greyOutHistoryDeleteOption() {
 		if(document.getElementById("historydeleteoptiondays").checked) {
 			document.getElementById("historydeleteoptiondayslabel").style.opacity = "100%";
@@ -745,34 +750,16 @@
 			document.getElementById("historyresetday").setAttribute("max", "31"); 
 			document.getElementById("historyresetday").disabled = false;
 		}
-		localStorage.setItem("cleaningday", cleaningday);
+		//localStorage.setItem("cleaningday", cleaningday);
 		setResetDate(cleaningday.format("dddd, DD-MM-YYYY"));
 	}
 	
-	function calculateCleaningDayInit() {
-		var historyretain = localStorage.getItem("historyretain"),
-			historyresetday = localStorage.getItem("historyresetday"),
-			historyresetperiod = localStorage.getItem("historyresetperiod"),
-			historyresetperiodunit = localStorage.getItem("historyresetperiodunit"),
-			cleaningday = moment();
-			 
-		if ( historyresetperiodunit == "days" ) {
-			cleaningday = cleaningday.add(historyresetperiod, 'days');
-		} else if ( historyresetperiodunit == "weeks" ) {
-			cleaningday = cleaningday.add(historyresetperiod, 'weeks');
-			cleaningday = cleaningday.day(historyresetday);
-		} else if ( historyresetperiodunit == "months" ) {
-			cleaningday = cleaningday.add(historyresetperiod, 'months');
-			cleaningday = cleaningday.date(historyresetday);
-		}
-		localStorage.setItem("historyretain", getHistoryRetain());
-		localStorage.setItem("historyresetday", getHistoryResetDay());
-		localStorage.setItem("historyresetperiod", getHistoryResetPeriod());
-		localStorage.setItem("historyresetperiodunit", getHistoryResetPeriodUnit());
-		
-		console.log("cleaningday: " + cleaningday.format() + " /// period: " + historyresetperiod);
-		
-		return cleaningday;
+	function saveCleaningDay() {
+		console.log(getResetDate());
+		localStorage.setItem("cleaningday", moment(getResetDate(),"dddd, DD-MM-YYYY"));
+		document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 1s linear; color: white; background-color: #89c403;");
+		document.getElementById("modalsavebutton").innerHTML = "SAVED!"; 
+		setTimeout('document.getElementById("modalsavebutton").innerHTML = "Save"; document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 1s linear;");', 5000);
 	}
 	
 	function calculateCleaningDay() {
@@ -797,6 +784,7 @@
 		localStorage.setItem("historyresetperiodunit", historyresetperiodunit);
 		
 		console.log("cleaningday: " + cleaningday.format() + " /// period: " + historyresetperiod);
+		console.log("set to reset on 13/1. day 1 of every 2 weeks");
 		
 		return cleaningday;
 	}
@@ -969,8 +957,7 @@
 			historyretain = localStorage.getItem("historyretain"),
 			historyresetday = localStorage.getItem("historyresetday"),
 			historyresetperiod = localStorage.getItem("historyresetperiod"),
-			historyresetperiodunit = localStorage.getItem("historyresetperiodunit"),
-			cleaningday = localStorage.getItem("cleaningday");
+			historyresetperiodunit = localStorage.getItem("historyresetperiodunit");
 
 		if ( autoend == "true" )
 			document.getElementById("autoend").checked = true;
