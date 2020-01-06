@@ -338,7 +338,7 @@
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-		Version: 20200102.1 <br>
+		Version: 20200106.1 <br>
 		<!--Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >-->
 		Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"target="_blank">Check the master branch on Github</a>
 	</p>
@@ -758,7 +758,7 @@
 		console.log(getResetDate());
 		localStorage.setItem("cleaningday", moment(getResetDate(),"dddd, DD-MM-YYYY"));
 		document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 1s linear; color: white; background-color: #89c403;");
-		document.getElementById("modalsavebutton").innerHTML = "SAVED!"; 
+		document.getElementById("modalsavebutton").innerHTML = '<i class="fas fa-check"></i>'; 
 		setTimeout('document.getElementById("modalsavebutton").innerHTML = "Save"; document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 1s linear;");', 5000);
 	}
 	
@@ -846,14 +846,14 @@
 				}
 			}	
 		} else if ( deleteoption == "period" ) {
-			var cleaningday = calculateCleaningDay();
+			var cleaningday = moment(localStorage.getItem("cleaningday"));
 			
 			if ( cleaningday <= today ) {
-				//console.log("gelukt!");
+				console.log("gelukt!");
 
 				deleteHistory();
 				//localStorage.setItem("lasthistoryclean", today);
-				localStorage.setItem("cleaningday", cleaningday);
+				localStorage.setItem("cleaningday", calculateCleaningDay());
 			}
 			console.log("today: " + today.format("dddd, DD-MM-YYYY") + " /// period: " + getHistoryResetPeriod() +  " /// cleanday: " + cleaningday.format("dddd, DD-MM-YYYY"));
 			
@@ -862,7 +862,7 @@
 
 	function deleteHistory() {
 		const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
-		if ( confirm("Are you sure you wish to delete your history?") ) {
+		if ( confirm("Are you sure you wish to delete your history?\nIf you choose not to then your data will be saved untill the next cleaning time.") ) {
 			for(key in localStorage) {
 				if ( userKeyRegExp.test(key) ) {
 					delete localStorage[key];
