@@ -158,6 +158,28 @@
 			background-color:#c62d1f;
 		}
 		
+		.alert {
+			padding: 10px 20px;
+			margin-bottom: 5px;
+			background-color: #f24537;
+			color: white;
+			font-weight: normal;
+			font-size: 60%;
+		}
+		.alertclosebtn {
+			margin-left: 15px;
+			color: white;
+			font-weight: bold;
+			float: right;
+			font-size: 22px;
+			line-height: 20px;
+			cursor: pointer;
+			transition: 0.3s;
+		}
+		.alertclosebtn:hover {
+			color: black;
+		}		
+		
 		.modalbutton {
 			background-color:#ededed;
 			-moz-border-radius:28px;
@@ -338,8 +360,7 @@
 	<h2>Info</h2>
 	<p>
 		Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-		Version: 20200106.1 <br>
-		<!--Pageview count: <img src="https://hitwebcounter.com/counter/counter.php?page=7138684&style=0024&nbdigits=5&type=page&initCount=0" title="Pageview counter" Alt="Pageview counter" border="0" >-->
+		Version: <span id="currentappversion">20200115.3</span> <br>
 		Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"target="_blank">Check the master branch on Github</a>
 	</p>
 	<p>
@@ -381,14 +402,21 @@
 
 <div style="top: 0; left: 0; width:100%; height:100%; display: table; position: absolute;">
 	<div align="center" style="max-width: 50%; display: table-cell; vertical-align: middle; margin: 0 5px;">
-		<p>
-			<div style="width:15%; float: left; text-align: right; padding: 2% 1% 1% 2%; font-size: 60%;"><i class="far fa-exclamation-triangle fa-2x" style="color: orange;"></i> Notification:</div> 
-			<div style="width:75%; float: right; text-align: left; padding: 2% 1% 1% 2%; font-size: 60%;">
-				Spread the word!!!<br>
-				New feature introduced! You can now have the history completely reset every X days/weeks/month on the Nth day.<br>
-				Find it in the <i class="fas fa-info-circle" style="color:red"></i> panel.
-			</div> 
-		</p>
+		<div class="alert" id="alertnotification">
+			<span class="alertclosebtn" onclick="notificationClosed('click');;">&times;</span> 
+			<table>
+				<tr>
+					<td style="width:15%; text-align: right; padding: 2% 1% 1% 2%;">
+						<i class="far fa-exclamation-triangle fa-4x pulsate" style="color: orange;"></i>
+					</td>
+					<td style="width:75%; text-align: left; padding: 2% 1% 1% 2%;">
+						This notification bar will now only appear when a new version is released! AND you can make it disappear until the next version allowing you to have a screen that looks cleaner :)<br><br><br>
+						You can now have the history completely reset every X days/weeks/month on the Nth day.<br>
+						Find it in the <i class="fas fa-info-circle" style="color:white"></i> panel.
+					</td>
+				</tr>
+			</table>
+		</div>
 		<div class="column" id="column1" style="">
 			<p>
 				<span class="tooltip" tooltip="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. 
@@ -471,7 +499,7 @@
 		Senne Janssens (C) 2019
     </div>
 	<div id="rightfooter">
-		<a href="#modalbox" rel="modal:open" style="text-decoration: none;"><i class="fas fa-info-circle pulsate" style="font-size:48px;color:red"></i></a>
+		<a href="#modalbox" rel="modal:open" style="text-decoration: none;"><i class="fas fa-info-circle pulsate" style="font-size:48px;color:#f24537"></i></a>
 	</div>
 </div>
 </body>
@@ -710,6 +738,7 @@
 		return document.getElementById("resetdate").value;
 	}
 	
+	// UI
 	function greyOutHistoryDeleteOption() {
 		if(document.getElementById("historydeleteoptiondays").checked) {
 			document.getElementById("historydeleteoptiondayslabel").style.opacity = "100%";
@@ -783,9 +812,6 @@
 		localStorage.setItem("historyresetperiod", historyresetperiod);
 		localStorage.setItem("historyresetperiodunit", historyresetperiodunit);
 		
-		console.log("cleaningday: " + cleaningday.format() + " /// period: " + historyresetperiod);
-		console.log("set to reset on 13/1. day 1 of every 2 weeks");
-		
 		return cleaningday;
 	}
 	
@@ -829,6 +855,20 @@
 		setOvertimeTotal(overtimetotal);
 	}
 
+	function notificationClosed(event){
+		var version = document.getElementById("currentappversion").innerHTML,
+			lastnotifversion = localStorage.getItem("lastnotifversion");
+		
+		if ( event == "click" ){
+			localStorage.setItem("lastnotifversion", version);
+			document.getElementById("alertnotification").style.display='none';
+		} 
+		
+		if ( event == "onload" && version == lastnotifversion ){
+			document.getElementById("alertnotification").style.display='none';
+		}
+	}
+
 	// Storage functions
 	function cleanLocalStorage() {
 		var keys = Object.keys(localStorage),
@@ -855,8 +895,6 @@
 				//localStorage.setItem("lasthistoryclean", today);
 				localStorage.setItem("cleaningday", calculateCleaningDay());
 			}
-			console.log("today: " + today.format("dddd, DD-MM-YYYY") + " /// period: " + getHistoryResetPeriod() +  " /// cleanday: " + cleaningday.format("dddd, DD-MM-YYYY"));
-			
 		}
 	}
 
@@ -934,6 +972,7 @@
 	}
 
 	function reset() {
+		notificationClosed("onload");
 		setEnd(0);
 		setTotal(0);
 		setTotalDec(0);
@@ -948,7 +987,8 @@
 	
 	function setParameters() {
 		// Set options to parameters from localStorage
-		var autoend = localStorage.getItem("autoend"),
+		var alertnotification = localStorage.getItem("alertnotification"),
+			autoend = localStorage.getItem("autoend"),
 			nosave = localStorage.getItem("nosave"),
 			hourschedule = localStorage.getItem("hourschedule"),
 			break_time_default = localStorage.getItem("break_time_default"),
