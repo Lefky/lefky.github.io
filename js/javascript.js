@@ -358,8 +358,8 @@ function notificationClosed(event){
 		document.getElementById("alertnotification").style.display='none';
 	} 
 	
-	if ( event == "onload" && version == lastnotifversion ){
-		document.getElementById("alertnotification").style.display='none';
+	if ( event == "onload" && version != lastnotifversion ){
+		document.getElementById("alertnotification").style.display='block';
 	}
 }
 
