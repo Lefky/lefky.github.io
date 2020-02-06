@@ -9,7 +9,18 @@
 	<!-- Font Awsome -->
 	<link href="css/all.min.css" rel="stylesheet">
 	<!-- Custom Styles -->
-	<link href="css/style.css" rel="stylesheet">
+	<link href="css/bootstrap_specific_style.css" rel="stylesheet">
+	
+	<!-- BOOTSTRAP -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	<script>
+		$(document).ready(function(){
+		  $('[data-toggle="tooltip"]').tooltip();
+		});
+	</script>
 </head>
 <body onload="reset(); add_time(7.6);">
 <!-- Modal HTML -->
@@ -151,12 +162,85 @@
 		</div>
 	</div>
 </div>
-<div class="footer">    
-    <div id="leftfooter">
-		Senne Janssens (C) 2019
-    </div>
-	<div id="rightfooter">
-		<a href="#modalbox" rel="modal:open" style="text-decoration: none;"><i class="fas fa-info-circle pulsate" style="font-size:48px;color:#f24537"></i></a>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col text-right">
+			<p>
+				<span class="tooltip" tooltip="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. 
+											Set this page as your starting page when opening your browser to make it easy for yourself."><i class="far fa-info-circle greyed"></i></span>
+			</p>
+			
+			<div class="form-group">
+				<label for="start_time" data-toggle="tooltip" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time :</label>
+				<input name="start_time" id="start_time" type="time" class="form-control" onchange="calculateTotal();"/>
+			</div>
+			
+			
+			
+			
+			<p>
+				<span class="tooltip" tooltip="Choose a default break you take every day. 
+												Eg: You're deducted 30 min every day. 
+												This value will be saved for the next time the window is opened.
+												You can enter a seperate value manually or by using the buttons too."><i class="far fa-info-circle greyed"></i></span>
+				Break (default 
+				<select name="break_time_default" id="break_time_default" onchange="addBreakDefault();">
+					<option value="0">0 min</option>
+					<option value="0.25">15 min</option>
+					<option value="0.5">30 min</option>
+					<option value="0.75">45 min</option>
+					<option value="1">1h</option>
+				</select>) : 
+				<input name="break_time" id="break_time" type="time" value="00:00" onchange="calculateTotal();" />
+			</p>
+			<p>
+				<span class="tooltip" tooltip="You can have this automatically filled in by setting the parameter at the bottom of the box.
+												You can manually enter a value."><i class="far fa-info-circle greyed"></i></span>
+				Time to go home : <input name="end_time" id="end_time" type="time" onchange="calculateTotal();" />
+			</p>
+			<p>
+				<span class="tooltip" tooltip="These hours are your actual working hours."><i class="far fa-info-circle greyed"></i></span>
+				Total hours (no break) : <input type="time" name="totalnobreak" id="totalnobreak" value="" readonly> <input type="text" name="totalnobreakdec" id="totalnobreakdec" value="" maxlength="4" size="5" readonly>
+			</p>
+			<p>
+				<span class="tooltip" tooltip="Select howmany hours you need to perform on avarage each day.
+												The application will calculate howmuch overtime you built up / used today."><i class="far fa-info-circle greyed"></i></span>
+				Overtime@
+				<select name="hourschedule" id="hourschedule" onchange="calculateTotal();">
+					<option value="7.6">7,6h</option>
+					<option value="8">8h</option>
+				</select>
+				: <input type="text" name="overtime" id="overtime" value="" maxlength="4" size="5" readonly> <input type="text" name="overtimedec" id="overtimedec" value="" maxlength="4" size="5" readonly></p>
+			<p>
+				<span class="tooltip" tooltip="These hours are howmuch time you spent being at your workplace."><i class="far fa-info-circle greyed"></i></span>
+				Total hours : <input type="time" name="total" id="total" value="" readonly> <input type="text" name="totaldec" id="totaldec" value="" maxlength="4" size="5" readonly>
+			</p>
+			<p>
+				<span class="tooltip" tooltip="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box.
+												This value doesn't include today yet."><i class="far fa-info-circle greyed"></i></span>
+				Total overtime : <input type="text" name="overtimetotal" id="overtimetotal" maxlength="4" size="5" readonly>
+			</p>
+			<div id="history" style=""></div>
+		</div>
+		<div class="col">
+		
+		rhtrzrjr
+		</div>
+	</div>
+</div>
+
+
+
+<div class="container-fluid fixed-bottom px-3 py-1">
+    <div class="row">
+		<div class="col">
+			Senne Janssens (C) 2020
+		</div>
+		<div class="col text-right">
+			<a href="#modalbox" rel="modal:open" style="text-decoration: none;"><i class="fas fa-info-circle pulsate" style="font-size:48px;color:#f24537"></i></a>
+		</div>
 	</div>
 </div>
 </body>
