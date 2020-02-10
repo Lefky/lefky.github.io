@@ -6,11 +6,6 @@
 	<meta name="robots" content="index">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<!-- Font Awsome -->
-	<link href="css/all.min.css" rel="stylesheet">
-	<!-- Custom Styles -->
-	<link href="css/bootstrap_specific_style.css" rel="stylesheet">
-	
 	<!-- BOOTSTRAP -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -21,6 +16,11 @@
 		  $('[data-toggle="tooltip"]').tooltip();
 		});
 	</script>
+	
+	<!-- Font Awsome -->
+	<link href="css/all.min.css" rel="stylesheet">
+	<!-- Custom Styles -->
+	<link href="css/bootstrap_specific_style.css" rel="stylesheet">
 </head>
 <body onload="reset(); add_time(7.6);">
 <!-- Modal HTML -->
@@ -141,7 +141,7 @@
 				<span><label class="switch"><input type="checkbox" id="startmin5"><span class="slider round"></span></label> Subtract 5 min from open.</span>
 			</div>-->
 		</div>
-		<div class="column" id="column2" style="">
+		<!--<div class="column" id="column2" style="">
 			<p>
 				<button class="button" id="add_time_76()" onclick="add_time(7.6)"><i class="fal fa-plus"></i> 7,6h</button>&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="button" onclick="add_time(8)"><i class="fal fa-plus"></i> 8h</button>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -153,12 +153,9 @@
 				<button class="button" id="blueButton" onclick="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"><i class="fal fa-plus"></i> 5min</button>&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="button" id="blueButton" onclick="add_break(0.5)"><i class="fal fa-plus"></i> 30min</button>
 			</p>
-			<!--<p>
-				<button class="button" id="orangeButton" onclick="calculateTotal()">Calculate Total</button>
-			</p>-->
 			<p>
 				<button class="button" id="redButton" onclick="reset()"><i class="fal fa-redo"></i></button>
-			</p>
+			</p>-->
 		</div>
 	</div>
 </div>
@@ -169,21 +166,27 @@
 		<div class="col col-sm-2 bg-light"></div>
 		<div class="col col-sm-4 rounded-right bg-light text-right">
 			<div class="form-group">
-				<div class="input-group my-3">
-					<label for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time : </label>
-					<input name="start_time" id="start_time" type="time" class="form-control col-sm-2 mx-1" onchange="calculateTotal();"/>
+				
+				<div class="row">
+					<div class="col">
+						<div class="input-group my-1">
+							<label for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time : </label>
+							<input name="start_time" id="start_time" type="time" class="form-control col-sm-2 mx-1" onchange="calculateTotal();"/>
+						</div>
+					</div>
 				</div>
+				
 				<div class="input-group my-3">
 					<label for="break_time" data-toggle="tooltip"data-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
-						Break (default 
-						<select name="break_time_default" id="break_time_default" class="form-control mx-1" onchange="addBreakDefault();">
-							<option value="0">0 min</option>
-							<option value="0.25">15 min</option>
-							<option value="0.5">30 min</option>
-							<option value="0.75">45 min</option>
-							<option value="1">1h</option>
-						</select>) : 				
+						Break (default
 					</label>
+					<select name="break_time_default" id="break_time_default" class="form-control col-sm-2 mx-1" onchange="addBreakDefault();">
+						<option value="0">0 min</option>
+						<option value="0.25">15 min</option>
+						<option value="0.5">30 min</option>
+						<option value="0.75">45 min</option>
+						<option value="1">1h</option>
+					</select>) : 				
 					<input name="break_time" id="break_time" type="time" value="00:00" class="form-control col-sm-2 mx-1" onchange="calculateTotal();"/>
 				</div>
 				<div class="input-group my-3">
@@ -197,11 +200,11 @@
 				<div class="input-group my-3">
 					<label for="overtime" data-toggle="tooltip"data-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
 						Overtime@
-						<select name="hourschedule" id="hourschedule" class="form-control mx-1" onchange="calculateTotal();">
-							<option value="7.6">7,6h</option>
-							<option value="8">8h</option>
-						</select>: 
 					</label>
+					<select name="hourschedule" id="hourschedule" class="form-control col-sm-2 mx-1" onchange="calculateTotal();">
+						<option value="7.6">7,6h</option>
+						<option value="8">8h</option>
+					</select>: 
 					<input name="overtime" id="overtime" type="text" class="form-control col-sm-2 mx-1" readonly> <input name="overtimedec" id="overtimedec" type="text" class="form-control col-sm-2 mx-1" readonly>
 				</div>
 				<div class="input-group my-3">
@@ -219,8 +222,8 @@
 				<div class="col">
 					<div class="input-group">
 					<div class="custom-control custom-switch mx-1">
-						<input type="checkbox" class="custom-control-input checkred bg-danger" id="nosave">
-						<label class="custom-control-label font-sm" for="nosave">Don't save today</label>
+						<input type="checkbox" class="custom-control-input" id="nosave">
+						<label class="custom-control-label font-sm checkred" for="nosave">Don't save today</label>
 					</div>
 					<div class="custom-control custom-switch mx-1">
 						<input type="checkbox" class="custom-control-input" id="autoend">
@@ -236,7 +239,29 @@
 
 		</div>
 		<div class="col col-sm-4">	
-			rhtrzrjr
+			<div class="row">
+				<div class="col col-sm-1"></div>
+				<div class="col my-3">
+					<button type="button" class="btn btn-lg btn-success" id="add_time_76()" onclick="add_time(7.6)"><i class="fal fa-plus"></i> 7,6h</button>
+					<button type="button" class="btn btn-lg btn-success" onclick="add_time(8)"><i class="fal fa-plus"></i> 8h</button>
+					<button type="button" class="btn btn-lg btn-success" onclick="end_time()">End time now</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col col-sm-1"></div>
+				<div class="col my-3">
+					Break<br>
+					<button type="button" class="btn btn-lg btn-primary" id="add_time_76()" onclick="reset_break()"><i class="fal fa-redo"></i></button>
+					<button type="button" class="btn btn-lg btn-primary" onclick="add_time(8)"><i class="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"></i> 5min</button>
+					<button type="button" class="btn btn-lg btn-primary" onclick="add_break(0.5)"><i class="fal fa-plus"></i> 30min</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col col-sm-1"></div>
+				<div class="col my-3">
+					<button type="button" class="btn btn-lg btn-danger" onclick="reset()"><i class="fal fa-redo"></i></button>
+				</div>
+			</div>
 		</div>
 		<div class="col col-sm-2"></div>
 	</div>
