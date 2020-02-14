@@ -354,13 +354,11 @@ function notificationClosed(event){
 		lastnotifversion = localStorage.getItem("lastnotifversion");
 	
 	if ( event == "click" ){
-		document.getElementById("alertnotification").setAttribute('class', 'alert slide-out');
 		localStorage.setItem("lastnotifversion", version);
-		//document.getElementById("alertnotification").style.display='none';
 	} 
 	
 	if ( event == "onload" && version != lastnotifversion ){
-		document.getElementById("alertnotification").style.display='block';
+		$("#alertnotification").show();
 	}
 }
 

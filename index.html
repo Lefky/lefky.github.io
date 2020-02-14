@@ -4,7 +4,7 @@
 	<title>Working hours</title>
 	<link rel="shortcut icon" type="image/png" href="images/time-png_favicon.png"/>
 	<meta name="robots" content="index">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!-- BOOTSTRAP -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -33,7 +33,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20200120.1</span> <br>
+					Version: <span id="currentappversion">20200220.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"target="_blank">Check the master branch on Github</a>
 				</p>
 				<p>
@@ -96,25 +96,26 @@
 	</div>
 </div>
 
-<div style="top: 0; left: 0; width:100%; height:100%; display: table; position: absolute;">
-	<div align="center" style="max-width: 50%; display: table-cell; vertical-align: middle; margin: 0 5px;">
-		<div class="alert slide-in" id="alertnotification" style="display: none;">
-			<span class="alertclosebtn" onclick="notificationClosed('click');">&times;</span> 
-			<table>
-				<tr>
-					<td style="width:15%; text-align: right; padding: 2% 1% 1% 2%;">
-						<i class="far fa-exclamation-triangle fa-4x pulsate" style="color: orange;"></i>
-					</td>
-					<td style="width:75%; text-align: left; padding: 2% 1% 1% 2%;">
-						This notification bar will now only appear when a new version is released! AND you can make it disappear until the next version allowing you to have a screen that looks cleaner :)<br><br><br>
-						You can now have the history completely reset every X days/weeks/month on the Nth day.<br>
-						Find it in the <i class="fas fa-info-circle" style="color:white"></i> panel.
-					</td>
-				</tr>
-			</table>
-		</div>
+<div class="row d-flex justify-content-center">
+	<div id="alertnotification" class="alert alert-danger alert-dismissible fade show" role="alert" style="display:none;">
+		<table>
+			<tr>
+				<td style="width:15%; text-align: right; padding: 2% 1% 1% 2%;">
+					<i class="far fa-exclamation-triangle fa-4x pulsate" style="color: orange;"></i>
+				</td>
+				<td style="width:75%; text-align: left; padding: 2% 1% 1% 2%;">
+					This notification bar will now only appear when a new version is released! AND you can make it disappear until the next version allowing you to have a screen that looks cleaner :)<br><br><br>
+					You can now have the history completely reset every X days/weeks/month on the Nth day.<br>
+					Find it in the <i class="fas fa-info-circle" style="color:white"></i> panel.
+				</td>
+			</tr>
+		</table>
+		<button type="button" class="close" onclick="notificationClosed('click');" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
 	</div>
 </div>
+
 
 <div class="container-fluid">
 	<div class="row">
