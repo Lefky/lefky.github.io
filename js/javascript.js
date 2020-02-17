@@ -315,7 +315,8 @@ function setHistory(){
 	  return `${parts[2]}-${parts[1]}-${parts[0]}`;
 	};
 	
-	var entry = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Overtime</span><br><div class='greyed' style='border-bottom: 1px solid black; width: 100%;'></div>",
+	var //entry = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Overtime</span><br><div class='greyed' style='border-bottom: 1px solid black; width: 100%;'></div>",
+		entry = "<table width='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;'>Time (no break)</th><th style='width: 33%;'>Overtime</th></tr>",
 		keys = Object.keys(localStorage),
 		revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
 		overtimetotal = 0,
@@ -328,10 +329,12 @@ function setHistory(){
 		if ( userKeyRegExp.test(key) ) {
 			var timeinfo = JSON.parse(localStorage.getItem(key));
 			if (timeinfo.hasOwnProperty('OvertimeDec')){
-				entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['OvertimeDec'] + "</span><br>";
+				//entry = entry + "<span style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['OvertimeDec'] + "</span><br>";
+				entry = entry + "<tr><td>" + key + "</td><td>" + timeinfo['TotalNoBreakDec'] + "</td><td>" + timeinfo['OvertimeDec'] + "</td></tr>"
 				overtimetotal = overtimetotal + parseFloat(timeinfo['OvertimeDec']);
 			} else {
-				entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['RecupDec'] + "</span><br>";
+				//entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['RecupDec'] + "</span><br>";
+				entry = entry + "<tr><td>" + key + "</td><td>" + timeinfo['TotalNoBreakDec'] + "</td><td>" + timeinfo['RecupDec'] + "</td></tr>"
 				overtimetotal = overtimetotal + parseFloat(timeinfo['RecupDec']);
 				// convert to new json key
 				if (timeinfo.hasOwnProperty('StartDec')){
@@ -343,8 +346,11 @@ function setHistory(){
 			}
 		}
 	}
-	if ( keys == "" || keys == null )
+	if ( keys == "" || keys == null ) {
 		entry = "No previous data yet :("
+	} else {
+		entry = entry + "</table>"
+	}
 	document.getElementById("history").innerHTML = entry;		
 	setOvertimeTotal(overtimetotal);
 }

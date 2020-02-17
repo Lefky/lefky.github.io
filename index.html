@@ -26,14 +26,14 @@
 <!-- Modal HTML -->
 <div id="modalsettings" class="modal fade">
 	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
+		<div class="modal-content px-2">
 			<div class="modal-header">
 				<h2>Info</h2>
 			</div>
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20200220.1</span> <br>
+					Version: <span id="currentappversion">20200217.2</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"target="_blank">Check the master branch on Github</a>
 				</p>
 				<p>
@@ -62,7 +62,7 @@
 				
 				<form>
 					<div class="form-group">
-						<div class="input-group my-3">
+						<div class="input-group">
 							<input type="radio" name="historydeleteoption" id="historydeleteoptiondays" class="form-control col-sm-2 mx-1" value="days" onchange="greyOutHistoryDeleteOption()" checked="checked" data-toggle="tooltip" data-placement="right" title="This will keep XXX days of data.">
 							<label for="historydeleteoptiondays" id="historydeleteoptiondayslabel" data-toggle="tooltip" data-placement="right" title="This will keep XXX days of data.">Max days to keep history: </label>
 							<input type="number" name="historyretain" id="historyretain" class="form-control col-sm-2 mx-1" min="0" max="999">
@@ -70,7 +70,7 @@
 					</div>
 					<div class="form-group">
 						<div class="input-group my-3">
-							<input type="radio" name="historydeleteoption" id="historydeleteoptionperiod" class="form-control col-sm-2" value="period" onchange="greyOutHistoryDeleteOption()" data-toggle="tooltip" data-placement="right" title="This will delete the entire history on the day that's displayed next to 'Reset date'.">
+							<input type="radio" name="historydeleteoption" id="historydeleteoptionperiod" class="form-control" value="period" onchange="greyOutHistoryDeleteOption()" data-toggle="tooltip" data-placement="right" title="This will delete the entire history on the day that's displayed next to 'Reset date'.">
 							<label for="historydeleteoptionperiod" id="historydeleteoptionperiodlabel" data-toggle="tooltip" data-placement="right" title="This will delete the entire history on the day that's displayed next to 'Reset date'.">Reset history on day </label>
 							<input type="number" name="historyresetday" id="historyresetday" class="form-control col-sm-2 mx-1" min="1" max="31" onchange="maxValuesDeleteOption()"> of every 
 							<input type="number" name="historyresetperiod" id="historyresetperiod" class="form-control col-sm-2 mx-1" min="1" onchange="maxValuesDeleteOption()">
@@ -96,20 +96,18 @@
 	</div>
 </div>
 
-<div class="row d-flex justify-content-center">
-	<div id="alertnotification" class="alert alert-danger alert-dismissible fade show" role="alert" style="display:none;">
-		<table>
-			<tr>
-				<td style="width:15%; text-align: right; padding: 2% 1% 1% 2%;">
-					<i class="far fa-exclamation-triangle fa-4x pulsate" style="color: orange;"></i>
-				</td>
-				<td style="width:75%; text-align: left; padding: 2% 1% 1% 2%;">
-					This notification bar will now only appear when a new version is released! AND you can make it disappear until the next version allowing you to have a screen that looks cleaner :)<br><br><br>
-					You can now have the history completely reset every X days/weeks/month on the Nth day.<br>
-					Find it in the <i class="fas fa-info-circle" style="color:white"></i> panel.
-				</td>
-			</tr>
-		</table>
+<div class="row d-flex justify-content-center my-4">
+	<div id="alertnotification" class="alert alert-danger alert-dismissible fade show" role="alert" style="display:none; position: absolute; z-index: 1;">
+		<div class="row">
+			<div class="col-lg-2 text-center py-1 px-4">
+				<i class="far fa-exclamation-triangle fa-4x pulsate" style="color: orange; font-size: 48px;"></i>
+			</div>
+			<div class="col-lg-10 py-1 px-4">
+				This notification bar will now only appear when a new version is released! AND you can make it disappear until the next version allowing you to have a screen that looks cleaner :)<br><br><br>
+				You can now have the history completely reset every X days/weeks/month on the Nth day.<br>
+				Find it in the <i class="fas fa-info-circle" style="color:white"></i> panel.
+			</div>
+		</div>
 		<button type="button" class="close" onclick="notificationClosed('click');" data-dismiss="alert" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
@@ -117,24 +115,18 @@
 </div>
 
 
-<div class="container-fluid">
-	<div class="row">
-		<div class="col col-sm-2 bg-light"></div>
-		<div class="col col-sm-4 rounded-right bg-light text-right">
+<div class="container-fluid h-100">
+	<div class="row d-flex">
+		<div class="col col-lg-2 bg-light"></div>
+		<div class="col col-lg-4 py-3 rounded-right bg-light">
 			<form>
 				<div class="form-group">
-					
-					<div class="row">
-						<div class="col">
-							<div class="input-group my-1">
-								<label for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time : </label>
-								<input name="start_time" id="start_time" type="time" class="form-control col-sm-2 mx-1" onchange="calculateTotal();"/>
-							</div>
-						</div>
-					</div>
-					
+					<div class="input-group my-1">
+						<label class="col-form-label" for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time : </label>
+						<input name="start_time" id="start_time" type="time" class="form-control col-sm-2 mx-1" onchange="calculateTotal();"/>
+					</div>				
 					<div class="input-group my-3">
-						<label for="break_time" data-toggle="tooltip" data-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
+						<label class="col-form-label" for="break_time" data-toggle="tooltip" data-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
 							Break (default
 						</label>
 						<select name="break_time_default" id="break_time_default" class="form-control col-sm-2 mx-1" onchange="addBreakDefault();">
@@ -143,99 +135,102 @@
 							<option value="0.5">30 min</option>
 							<option value="0.75">45 min</option>
 							<option value="1">1h</option>
-						</select>) : 				
+						</select><span class="col-form-label">) :</span>
 						<input name="break_time" id="break_time" type="time" value="00:00" class="form-control col-sm-2 mx-1" onchange="calculateTotal();"/>
 					</div>
 					<div class="input-group my-3">
-						<label for="end_time" data-toggle="tooltip" data-placement="left" title="You can have this automatically filled in by setting the parameter at the bottom of the box. You can manually enter a value.">Time to go home : </label>
+						<label class="col-form-label" for="end_time" data-toggle="tooltip" data-placement="left" title="You can have this automatically filled in by setting the parameter at the bottom of the box. You can manually enter a value.">Time to go home : </label>
 						<input name="end_time" id="end_time" type="time" class="form-control col-sm-2 mx-1" onchange="calculateTotal();"/>
 					</div>
 					<div class="input-group my-3">
-						<label for="totalnobreak" data-toggle="tooltip" data-placement="left" title="These hours are your actual working hours.">Total hours (no break) : </label>
+						<label class="col-form-label" for="totalnobreak" data-toggle="tooltip" data-placement="left" title="These hours are your actual working hours.">Total hours (no break) : </label>
 						<input name="totalnobreak" id="totalnobreak" type="time" class="form-control col-sm-2 mx-1" value="" readonly> <input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control col-sm-2 mx-1" readonly>
 					</div>
 					<div class="input-group my-3">
-						<label for="overtime" data-toggle="tooltip" data-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
+						<label class="col-form-label" for="overtime" data-toggle="tooltip" data-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
 							Overtime@
 						</label>
 						<select name="hourschedule" id="hourschedule" class="form-control col-sm-2 mx-1" onchange="calculateTotal();">
 							<option value="7.6">7,6h</option>
 							<option value="8">8h</option>
-						</select>: 
+						</select><span class="col-form-label">:</span>
 						<input name="overtime" id="overtime" type="text" class="form-control col-sm-2 mx-1" readonly> <input name="overtimedec" id="overtimedec" type="text" class="form-control col-sm-2 mx-1" readonly>
 					</div>
 					<div class="input-group my-3">
-						<label for="total" data-toggle="tooltip" data-placement="left" title="These hours are howmuch time you spent being at your workplace.">Total hours : </label>
+						<label class="col-form-label" for="total" data-toggle="tooltip" data-placement="left" title="These hours are howmuch time you spent being at your workplace.">Total hours : </label>
 						<input name="total" id="total" type="time" class="form-control col-sm-2 mx-1" readonly><input name="totaldec" id="totaldec" type="text" class="form-control col-sm-2 mx-1" readonly>
 					</div>
 					<div class="input-group my-3">
-						<label for="overtimetotal" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime : </label>
+						<label class="col-form-label" for="overtimetotal" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime : </label>
 						<input name="overtimetotal" id="overtimetotal" type="text" class="form-control col-sm-2 mx-1" readonly>
 					</div>
-					
-					<div id="historycontainer" class="my-3">
+					<div id="historycontainer" class="my-3 mr-5">
 						<div id="history" ></div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col">
 						<div class="input-group">
-						<div class="custom-control custom-switch mx-1">
-							<input type="checkbox" class="custom-control-input" id="nosave">
-							<label class="custom-control-label font-sm checkred" for="nosave">Don't save today</label>
-						</div>
-						<div class="custom-control custom-switch mx-1">
-							<input type="checkbox" class="custom-control-input" id="autoend">
-							<label class="custom-control-label font-sm" for="autoend">Automatically set end time on close</label>
-						</div>
-						<div class="custom-control custom-switch mx-1">
-							<input type="checkbox" class="custom-control-input" id="startmin5">
-							<label class="custom-control-label font-sm" for="startmin5">Subtract 5 min from open</label>
-						</div>
+							<div class="custom-control custom-switch mx-1">
+								<input type="checkbox" class="custom-control-input" id="nosave">
+								<label class="custom-control-label font-sm checkred" for="nosave">Don't save today</label>
+							</div>
+							<div class="custom-control custom-switch mx-1">
+								<input type="checkbox" class="custom-control-input" id="autoend">
+								<label class="custom-control-label font-sm" for="autoend">Automatically set end time on close</label>
+							</div>
+							<div class="custom-control custom-switch mx-1">
+								<input type="checkbox" class="custom-control-input" id="startmin5">
+								<label class="custom-control-label font-sm" for="startmin5">Subtract 5 min from open</label>
+							</div>
 						</div>
 					</div>
 				</div>
 			</form>
 		</div>
-		<div class="col col-sm-4">	
+		<div class="col col-sm-4 align-self-center">	
 			<div class="row">
 				<div class="col col-sm-1"></div>
-				<div class="col my-3">
-					<button type="button" class="btn btn-lg btn-success" id="add_time_76()" onclick="add_time(7.6)"><i class="fal fa-plus"></i> 7,6h</button>
-					<button type="button" class="btn btn-lg btn-success" onclick="add_time(8)"><i class="fal fa-plus"></i> 8h</button>
-					<button type="button" class="btn btn-lg btn-success" onclick="end_time()">End time now</button>
+				<div class="col">
+					<button type="button" class="btn btn-lg btn-success m-3" id="add_time_76()" onclick="add_time(7.6)"><i class="fal fa-plus"></i> 7,6h</button>
+					<button type="button" class="btn btn-lg btn-success m-3" onclick="add_time(8)"><i class="fal fa-plus"></i> 8h</button>
+					<button type="button" class="btn btn-lg btn-success m-3" onclick="end_time()">End time now</button>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col col-sm-1"></div>
-				<div class="col my-3">
+				<div class="col">
 					Break<br>
-					<button type="button" class="btn btn-lg btn-primary" id="add_time_76()" onclick="reset_break()"><i class="fal fa-redo"></i></button>
-					<button type="button" class="btn btn-lg btn-primary" onclick="add_time(8)"><i class="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"></i> 5min</button>
-					<button type="button" class="btn btn-lg btn-primary" onclick="add_break(0.5)"><i class="fal fa-plus"></i> 30min</button>
+					<button type="button" class="btn btn-lg btn-primary m-3" id="add_time_76()" onclick="reset_break()"><i class="fal fa-redo"></i></button>
+					<button type="button" class="btn btn-lg btn-primary m-3" onclick="add_time(8)"><i class="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"></i> 5min</button>
+					<button type="button" class="btn btn-lg btn-primary m-3" onclick="add_break(0.5)"><i class="fal fa-plus"></i> 30min</button>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col col-sm-1"></div>
 				<div class="col my-3">
-					<button type="button" class="btn btn-lg btn-danger" onclick="reset()"><i class="fal fa-redo"></i></button>
+					<button type="button" class="btn btn-lg btn-danger m-3" onclick="reset()"><i class="fal fa-redo"></i></button>
 				</div>
 			</div>
 		</div>
 		<div class="col col-sm-2"></div>
 	</div>
-</div>
-
-<div class="container-fluid fixed-bottom px-3 py-1">
-    <div class="row">
+	
+    <div class="row d-flex align-items-center fixed-bottom px-3 py-1">
 		<div class="col">
-			Senne Janssens (C) 2020
+			<p class="mx-2">Senne Janssens (C) 2020</p>
 		</div>
-		<button type="button" class="btn" data-toggle="modal" data-target="#modalsettings">
-			<i class="fas fa-info-circle pulsate"></i>
-		</button>
+		<div class="col d-flex justify-content-end">
+			<button type="button" class="btn btn-dark py-2 px-4 my-3 mx-3" style="font-size: 1.2rem;" data-toggle="modal" data-target="#modalsettings">
+				<i class="fas fa-info pulsate"></i>
+			</button>
+			<button type="button" class="btn btn-dark py-2 px-3 my-3 mx-3" style="font-size: 1.2rem;" data-toggle="modal" data-target="#modalsettings">
+				<i class="fas fa-cog pulsate"></i>
+			</button>
+		</div>
 	</div>
 </div>
+
 </body>
 <!-- Moment.js -->
 <script src="js/moment.min.js"></script><!-- https://momentjs.com/docs -->
