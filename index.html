@@ -6,6 +6,15 @@
 	<meta name="robots" content="index">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-160200625-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-160200625-1');
+	</script>
 	<!-- BOOTSTRAP -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -121,60 +130,60 @@
 		<div class="col col-lg-2 bg-light"></div>
 		<div class="col col-lg-4 py-3 rounded-right bg-light">
 			<form>
-				<div class="form-group">
-					<div class="input-group my-1">
+				<div class="form-group mr-5">
+					<div class="input-group justify-content-end my-1">
 						<label class="col-form-label" for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time : </label>
-						<input name="start_time" id="start_time" type="time" class="form-control col-sm-2 mx-1" onchange="calculateTotal();"/>
+						<input name="start_time" id="start_time" type="time" class="form-control col-sm-3-custom mx-1" onchange="calculateTotal();"/>
 					</div>				
-					<div class="input-group my-3">
+					<div class="input-group justify-content-end my-3">
 						<label class="col-form-label" for="break_time" data-toggle="tooltip" data-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
 							Break (default
 						</label>
-						<select name="break_time_default" id="break_time_default" class="form-control col-sm-2 mx-1" onchange="addBreakDefault();">
+						<select name="break_time_default" id="break_time_default" class="form-control col-sm-3-custom mx-1" onchange="addBreakDefault();">
 							<option value="0">0 min</option>
 							<option value="0.25">15 min</option>
 							<option value="0.5">30 min</option>
 							<option value="0.75">45 min</option>
 							<option value="1">1h</option>
 						</select><span class="col-form-label">) :</span>
-						<input name="break_time" id="break_time" type="time" value="00:00" class="form-control col-sm-2 mx-1" onchange="calculateTotal();"/>
+						<input name="break_time" id="break_time" type="time" value="00:00" class="form-control col-sm-3-custom mx-1" onchange="calculateTotal();"/>
 					</div>
-					<div class="input-group my-3">
+					<div class="input-group justify-content-end my-3">
 						<label class="col-form-label" for="end_time" data-toggle="tooltip" data-placement="left" title="You can have this automatically filled in by setting the parameter at the bottom of the box. You can manually enter a value.">Time to go home : </label>
-						<input name="end_time" id="end_time" type="time" class="form-control col-sm-2 mx-1" onchange="calculateTotal();"/>
+						<input name="end_time" id="end_time" type="time" class="form-control col-sm-3-custom mx-1" onchange="calculateTotal();"/>
 					</div>
-					<div class="input-group my-3">
+					<div class="input-group justify-content-end my-3">
 						<label class="col-form-label" for="totalnobreak" data-toggle="tooltip" data-placement="left" title="These hours are your actual working hours.">Total hours (no break) : </label>
-						<input name="totalnobreak" id="totalnobreak" type="time" class="form-control col-sm-2 mx-1" value="" readonly> <input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control col-sm-2 mx-1" readonly>
+						<input name="totalnobreak" id="totalnobreak" type="time" class="form-control col-sm-3-custom mx-1" value="" readonly> <input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control col-sm-3-custom mx-1" readonly>
 					</div>
-					<div class="input-group my-3">
+					<div class="input-group justify-content-end my-3">
 						<label class="col-form-label" for="overtime" data-toggle="tooltip" data-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
 							Overtime@
 						</label>
-						<select name="hourschedule" id="hourschedule" class="form-control col-sm-2 mx-1" onchange="calculateTotal();">
+						<select name="hourschedule" id="hourschedule" class="form-control col-sm-3-custom mx-1" onchange="calculateTotal();">
 							<option value="7.6">7,6h</option>
 							<option value="8">8h</option>
 						</select><span class="col-form-label">:</span>
-						<input name="overtime" id="overtime" type="text" class="form-control col-sm-2 mx-1" readonly> <input name="overtimedec" id="overtimedec" type="text" class="form-control col-sm-2 mx-1" readonly>
+						<input name="overtime" id="overtime" type="text" class="form-control col-sm-3-custom mx-1" readonly> <input name="overtimedec" id="overtimedec" type="text" class="form-control col-sm-3-custom mx-1" readonly>
 					</div>
-					<div class="input-group my-3">
+					<div class="input-group justify-content-end my-3">
 						<label class="col-form-label" for="total" data-toggle="tooltip" data-placement="left" title="These hours are howmuch time you spent being at your workplace.">Total hours : </label>
-						<input name="total" id="total" type="time" class="form-control col-sm-2 mx-1" readonly><input name="totaldec" id="totaldec" type="text" class="form-control col-sm-2 mx-1" readonly>
+						<input name="total" id="total" type="time" class="form-control col-sm-3-custom mx-1" readonly><input name="totaldec" id="totaldec" type="text" class="form-control col-sm-3-custom mx-1" readonly>
 					</div>
-					<div class="input-group my-3">
+					<div class="input-group justify-content-end my-3">
 						<label class="col-form-label" for="overtimetotal" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime : </label>
-						<input name="overtimetotal" id="overtimetotal" type="text" class="form-control col-sm-2 mx-1" readonly>
+						<input name="overtimetotal" id="overtimetotal" type="text" class="form-control col-sm-3-custom mx-1" readonly>
 					</div>
-					<div id="historycontainer" class="my-3 mr-5">
+					<div id="historycontainer" class="justify-content-end my-3 mr-2">
 						<div id="history" ></div>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col">
-						<div class="input-group">
+					<div class="col mr-5">
+						<div class="input-group justify-content-end">
 							<div class="custom-control custom-switch mx-1">
 								<input type="checkbox" class="custom-control-input" id="nosave">
-								<label class="custom-control-label font-sm checkred" for="nosave">Don't save today</label>
+								<label class="custom-control-label font-sm checkred align-self-center" for="nosave">Don't save today</label>
 							</div>
 							<div class="custom-control custom-switch mx-1">
 								<input type="checkbox" class="custom-control-input" id="autoend">

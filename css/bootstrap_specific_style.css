@@ -52,6 +52,14 @@ html, body {
 	font-size: 70%;
 }
 
+
+.col-sm-3-custom {
+    -ms-flex: 0 0 20% !important;
+    flex: 0 0 20% !important;
+    max-width: 20% !important;
+	min-width: 20% !important;
+}
+
 .custom-control-input:checked~.custom-control-label::before.checkred {
   background-color: red;
   border-color: red;
