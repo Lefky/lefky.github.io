@@ -233,25 +233,13 @@ function getResetDate(){
 }
 
 // UI
-function greyOutHistoryDeleteOption() {
+function showHistorydeleteoptionContent() {
 	if(document.getElementById("historydeleteoptiondays").checked) {
-		document.getElementById("historydeleteoptiondayslabel").style.opacity = "100%";
-		document.getElementById("historydeleteoptionperiodlabel").style.opacity = "40%";
-		document.getElementById("historyretain").disabled = false;
-		document.getElementById("historyresetday").disabled = true;
-		document.getElementById("historyresetperiod").disabled = true;
-		document.getElementById("historyresetperiodunit").disabled = true;
-		document.getElementById("resetdatelabel").style.opacity = "40%";
-		document.getElementById("resetdate").disabled = true;
+		$("#historydeleteoptiondayscontent").show();
+		$("#historydeleteoptionperiodscontent").hide();
 	} else {
-		document.getElementById("historydeleteoptionperiodlabel").style.opacity = "100%";
-		document.getElementById("historydeleteoptiondayslabel").style.opacity = "40%";
-		document.getElementById("historyretain").disabled = true;
-		document.getElementById("historyresetday").disabled = false;
-		document.getElementById("historyresetperiod").disabled = false;
-		document.getElementById("historyresetperiodunit").disabled = false;		
-		document.getElementById("resetdatelabel").style.opacity = "100%";
-		document.getElementById("resetdate").disabled = false;
+		$("#historydeleteoptionperiodscontent").show();
+		$("#historydeleteoptiondayscontent").hide();
 		maxValuesDeleteOption();
 		//localStorage.setItem("lasthistoryclean", moment());
 	}
@@ -280,7 +268,7 @@ function maxValuesDeleteOption() {
 function saveCleaningDay() {
 	console.log(getResetDate());
 	localStorage.setItem("cleaningday", moment(getResetDate(),"dddd, DD-MM-YYYY"));
-	document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 1s linear; color: white; background-color: #89c403;");
+	document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 1s linear; color: white; background-color: #28a745;");
 	document.getElementById("modalsavebutton").innerHTML = '<i class="fas fa-check"></i>'; 
 	setTimeout('document.getElementById("modalsavebutton").innerHTML = "Save"; document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 1s linear;");', 5000);
 }
@@ -525,7 +513,7 @@ function setParameters() {
 	if ( historyresetperiodunit )
 		document.getElementById("historyresetperiodunit").value = historyresetperiodunit;
 
-	greyOutHistoryDeleteOption();
+	showHistorydeleteoptionContent();
 	
 	try {
 		var timeinfo = JSON.parse(localStorage.getItem(todayDate()));

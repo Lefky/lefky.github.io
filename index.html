@@ -42,7 +42,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20200221.2</span> <br>
+					Version: <span id="currentappversion">20200317.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"target="_blank">Check the master branch on Github</a>
 				</p>
 				<p>
@@ -69,34 +69,57 @@
 					&emsp;will subtract 5 min from the time the page was opened (and the start time). This is to take the time to boot your laptop, ... into account.
 				</p>
 				
-				<form>
-					<div class="form-group">
-						<div class="input-group">
-							<input type="radio" name="historydeleteoption" id="historydeleteoptiondays" class="form-control col-sm-2 mx-1" value="days" onchange="greyOutHistoryDeleteOption()" checked="checked" data-toggle="tooltip" data-placement="right" title="This will keep XXX days of data.">
-							<label for="historydeleteoptiondays" id="historydeleteoptiondayslabel" data-toggle="tooltip" data-placement="right" title="This will keep XXX days of data.">Max days to keep history: </label>
-							<input type="number" name="historyretain" id="historyretain" class="form-control col-sm-2 mx-1" min="0" max="999">
+				<div class="form-group">
+					<div class="input-group mb-2">
+						<div class="row w-100">
+							<div class="col-sm">
+								<div class="custom-control custom-radio">
+									<input type="radio" id="historydeleteoptiondays" name="historydeleteoption" class="custom-control-input" value="days" checked="checked" onchange="showHistorydeleteoptionContent()">
+									<label class="custom-control-label" for="historydeleteoptiondays" data-toggle="tooltip" data-placement="right" title="This will keep XXX days of data.">Max days to keep history</label>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="custom-control custom-radio">
+									<input type="radio" id="historydeleteoptionperiod" name="historydeleteoption" class="custom-control-input" value="period" onchange="showHistorydeleteoptionContent()">
+									<label class="custom-control-label" for="historydeleteoptionperiod" data-toggle="tooltip" data-placement="right" title="This will delete the entire history on the day that's displayed next to 'Reset date'.">Reset history on day</label>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="form-group">
-						<div class="input-group my-3">
-							<input type="radio" name="historydeleteoption" id="historydeleteoptionperiod" class="form-control" value="period" onchange="greyOutHistoryDeleteOption()" data-toggle="tooltip" data-placement="right" title="This will delete the entire history on the day that's displayed next to 'Reset date'.">
-							<label for="historydeleteoptionperiod" id="historydeleteoptionperiodlabel" data-toggle="tooltip" data-placement="right" title="This will delete the entire history on the day that's displayed next to 'Reset date'.">Reset history on day </label>
-							<input type="number" name="historyresetday" id="historyresetday" class="form-control col-sm-2 mx-1" min="1" max="31" onchange="maxValuesDeleteOption()"> of every 
-							<input type="number" name="historyresetperiod" id="historyresetperiod" class="form-control col-sm-2 mx-1" min="1" onchange="maxValuesDeleteOption()">
-							<select name="historyresetperiodunit" id="historyresetperiodunit" class="form-control col-sm-2 mx-1" onchange="maxValuesDeleteOption()">
-								<option value="days">days</option>
-								<option value="weeks">weeks</option>
-								<option value="months">months</option>
-							</select>
-							<button type="button" id="modalsavebutton" class="btn btn-secondary" onclick="saveCleaningDay()">Save</button>
-						</div>
-						<div class="input-group my-3">
-							<label for="resetdate" id="resetdatelabel" style="margin-left: 21px;">Reset date: </label>
-							<input type="text" name="resetdate" id="resetdate" class="form-control col-sm-2 mx-1" size="20" readonly>
+
+					<div id="historydeleteoptiondayscontent" style="display: none;">
+						<div class="form-group">
+							<div class="input-group">
+								<label class="col-form-label" for="historyretain">Days to keep: </label>
+								<input type="number" name="historyretain" id="historyretain" class="form-control col-sm-2 mx-1" min="0" max="999">
+							</div>
 						</div>
 					</div>
-				</form>
-				
+										
+					<div id="historydeleteoptionperiodscontent" style="display: none;">
+						<div class="form-group">
+							<div class="input-group">
+								<label class="col-form-label" for="historyresetday">Day </label>
+								<input type="number" name="historyresetday" id="historyresetday" class="form-control col-sm-2 mx-1" min="1" max="31" onchange="maxValuesDeleteOption()">
+								<label class="col-form-label" for="historyresetperiod"> of every </label>
+								<input type="number" name="historyresetperiod" id="historyresetperiod" class="form-control col-sm-2 mx-1" min="1" onchange="maxValuesDeleteOption()">
+								<select name="historyresetperiodunit" id="historyresetperiodunit" class="form-control col-sm-2 mx-1" onchange="maxValuesDeleteOption()">
+									<option value="days">days</option>
+									<option value="weeks">weeks</option>
+									<option value="months">months</option>
+								</select>
+								<button type="button" id="modalsavebutton" class="btn btn-secondary" onclick="saveCleaningDay()">Save</button>
+								
+								<div class="input-group my-3">
+									<label class="col-form-label" for="resetdate" id="resetdatelabel">Reset date: </label>
+									<input type="text" name="resetdate" id="resetdate" class="form-control col-sm-5 mx-1" size="20" readonly>
+								</div>
+							</div>
+						</div>
+					</div>
+						
+				</div>
+							
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -105,12 +128,9 @@
 	</div>
 </div>
 
-
-
-
 <div class="container-fluid h-100">
 	<div class="row d-flex justify-content-center">
-		<div id="alertnotification" class="alert alert-danger alert-dismissible fade show my-4" role="alert" style="display:none; position: absolute; z-index: 1;">
+		<div id="alertnotification" class="alert alert-danger alert-dismissible fade show my-4" role="alert" style="display: none; position: absolute; z-index: 1;">
 			<div class="row">
 				<div class="col-lg-2 text-center py-1 px-4 my-auto">
 					<i class="far fa-exclamation-triangle fa-4x pulsate" style="color: orange; font-size: 60px;"></i>
@@ -126,124 +146,127 @@
 			</button>
 		</div>
 	</div>
-	<div class="row bg-danger align-self-center">
-		<div class="col col-sm-2 d-none d-lg-block bg-light"></div>
-		<div class="col col-sm-4 rounded-right bg-light">
-			<form>
-				<div class="form-group pt-3 mr-5">
-					<div class="input-group justify-content-end my-1">
-						<label class="col-form-label" for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time</label>
-						<div class="col-sm-3">
-							<input name="start_time" id="start_time" type="time" class="form-control mx-1" onchange="calculateTotal();"/>
-						</div>
-					</div>				
-					<div class="input-group justify-content-end my-3">
-						<label class="col-form-label" for="break_time" data-toggle="tooltip" data-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
-							Break with default
-						</label>
-						<div class="col-sm-3">
-							<select name="break_time_default" id="break_time_default" class="form-control mb-1 mb-md-0" onchange="addBreakDefault();" data-toggle="tooltip" data-placement="left" title="">
-								<option value="0">0 min</option>
-								<option value="0.25">15 min</option>
-								<option value="0.5">30 min</option>
-								<option value="0.75">45 min</option>
-								<option value="1">1h</option>
-							</select>
-						</div>
-						<div class="col-sm-3">
-							<input name="break_time" id="break_time" type="time" value="00:00" class="form-control mx-1" onchange="calculateTotal();"/>
-						</div>
-					</div>
-					<div class="input-group justify-content-end my-3">
-						<label class="col-form-label" for="end_time" data-toggle="tooltip" data-placement="left" title="You can have this automatically filled in by setting the parameter at the bottom of the box. You can manually enter a value.">Time to go home</label>
-						<div class="col-sm-3">
-							<input name="end_time" id="end_time" type="time" class="form-control mx-1" onchange="calculateTotal();"/>
-						</div>
-					</div>
-					<div class="input-group justify-content-end my-3">
-						<label class="col-form-label" for="totalnobreak" data-toggle="tooltip" data-placement="left" title="These hours are your actual working hours.">Total hours (no break)</label>
-						<div class="col-sm-3">
-							<input name="totalnobreak" id="totalnobreak" type="time" class="form-control mx-1" value="" readonly>
-							<input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control mx-1 mt-1" readonly>
-						</div>
-					</div>
-					<div class="input-group justify-content-end my-3">
-						<label class="col-form-label" for="overtime" data-toggle="tooltip" data-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
-							Overtime@
-						</label>
-						<div class="col-sm-3">
-							<select name="hourschedule" id="hourschedule" class="form-control mb-1 mb-md-0" onchange="calculateTotal();" data-toggle="tooltip" data-placement="left" title="">
-								<option value="7.6">7,6h</option>
-								<option value="8">8h</option>
-							</select>
-						</div>
-						<div class="col-sm-3">
-							<input name="overtime" id="overtime" type="text" class="form-control mx-1" readonly>
-							<input name="overtimedec" id="overtimedec" type="text" class="form-control mx-1 mt-1" readonly>
-						</div>
-					</div>
-					<div class="input-group justify-content-end my-3">
-						<label class="col-form-label" for="total" data-toggle="tooltip" data-placement="left" title="These hours are howmuch time you spent being at your workplace.">Total hours</label>
-						<div class="col-sm-3">
-							<input name="total" id="total" type="time" class="form-control mx-1" readonly>
-							<input name="totaldec" id="totaldec" type="text" class="form-control mx-1 mt-1" readonly>
-						</div>
-					</div>
-					<div class="input-group justify-content-end my-3">
-						<label class="col-form-label" for="overtimetotal" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime</label>
-						<div class="col-sm-3">
-							<input name="overtimetotal" id="overtimetotal" type="text" class="form-control mx-1" readonly>
-						</div>
-					</div>
-					<div id="historycontainer" class="float-right my-3 mr-2">
-						<div id="history"></div>
-					</div>
-					
-					<div class="col mr-5">
-						<div class="input-group justify-content-end">
-							<div class="custom-control custom-switch mx-1">
-								<input type="checkbox" class="custom-control-input" id="nosave">
-								<label class="custom-control-label font-sm checkred align-self-center" for="nosave">Don't save today</label>
+	
+	<div class="row h-100">
+		<div class="row w-100 align-self-center">
+			<div class="col-sm-2 d-none d-lg-block bg-light"></div>
+			<div class="col-sm-4 rounded-right bg-light">
+				<form>
+					<div class="form-group pt-3 mr-5">
+						<div class="input-group justify-content-end my-1">
+							<label class="col-form-label" for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time</label>
+							<div class="col-sm-3">
+								<input name="start_time" id="start_time" type="time" class="form-control mx-1" onchange="calculateTotal();"/>
 							</div>
-							<div class="custom-control custom-switch mx-1">
-								<input type="checkbox" class="custom-control-input" id="autoend">
-								<label class="custom-control-label font-sm" for="autoend">Automatically set end time on close</label>
+						</div>				
+						<div class="input-group justify-content-end my-3">
+							<label class="col-form-label" for="break_time" data-toggle="tooltip" data-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
+								Break with default
+							</label>
+							<div class="col-sm-3">
+								<select name="break_time_default" id="break_time_default" class="form-control mb-1 mb-md-0" onchange="addBreakDefault();" data-toggle="tooltip" data-placement="left" title="">
+									<option value="0">0 min</option>
+									<option value="0.25">15 min</option>
+									<option value="0.5">30 min</option>
+									<option value="0.75">45 min</option>
+									<option value="1">1h</option>
+								</select>
 							</div>
-							<div class="custom-control custom-switch mx-1">
-								<input type="checkbox" class="custom-control-input" id="startmin5">
-								<label class="custom-control-label font-sm" for="startmin5">Subtract 5 min from open</label>
+							<div class="col-sm-3">
+								<input name="break_time" id="break_time" type="time" value="00:00" class="form-control mx-1" onchange="calculateTotal();"/>
 							</div>
 						</div>
+						<div class="input-group justify-content-end my-3">
+							<label class="col-form-label" for="end_time" data-toggle="tooltip" data-placement="left" title="You can have this automatically filled in by setting the parameter at the bottom of the box. You can manually enter a value.">Time to go home</label>
+							<div class="col-sm-3">
+								<input name="end_time" id="end_time" type="time" class="form-control mx-1" onchange="calculateTotal();"/>
+							</div>
+						</div>
+						<div class="input-group justify-content-end my-3">
+							<label class="col-form-label" for="totalnobreak" data-toggle="tooltip" data-placement="left" title="These hours are your actual working hours.">Total hours (no break)</label>
+							<div class="col-sm-3">
+								<input name="totalnobreak" id="totalnobreak" type="time" class="form-control mx-1" value="" readonly>
+								<input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control mx-1 mt-1" readonly>
+							</div>
+						</div>
+						<div class="input-group justify-content-end my-3">
+							<label class="col-form-label" for="overtime" data-toggle="tooltip" data-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
+								Overtime@
+							</label>
+							<div class="col-sm-3">
+								<select name="hourschedule" id="hourschedule" class="form-control mb-1 mb-md-0" onchange="calculateTotal();" data-toggle="tooltip" data-placement="left" title="">
+									<option value="7.6">7,6h</option>
+									<option value="8">8h</option>
+								</select>
+							</div>
+							<div class="col-sm-3">
+								<input name="overtime" id="overtime" type="text" class="form-control mx-1" readonly>
+								<input name="overtimedec" id="overtimedec" type="text" class="form-control mx-1 mt-1" readonly>
+							</div>
+						</div>
+						<div class="input-group justify-content-end my-3">
+							<label class="col-form-label" for="total" data-toggle="tooltip" data-placement="left" title="These hours are howmuch time you spent being at your workplace.">Total hours</label>
+							<div class="col-sm-3">
+								<input name="total" id="total" type="time" class="form-control mx-1" readonly>
+								<input name="totaldec" id="totaldec" type="text" class="form-control mx-1 mt-1" readonly>
+							</div>
+						</div>
+						<div class="input-group justify-content-end my-3">
+							<label class="col-form-label" for="overtimetotal" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime</label>
+							<div class="col-sm-3">
+								<input name="overtimetotal" id="overtimetotal" type="text" class="form-control mx-1" readonly>
+							</div>
+						</div>
+						<div id="historycontainer" class="float-right my-3 mr-2">
+							<div id="history"></div>
+						</div>
+						
+						<div class="col mr-5">
+							<div class="input-group justify-content-end">
+								<div class="custom-control custom-switch mx-1">
+									<input type="checkbox" class="custom-control-input" id="nosave">
+									<label class="custom-control-label font-sm checkred align-self-center" for="nosave">Don't save today</label>
+								</div>
+								<div class="custom-control custom-switch mx-1">
+									<input type="checkbox" class="custom-control-input" id="autoend">
+									<label class="custom-control-label font-sm" for="autoend">Automatically set end time on close</label>
+								</div>
+								<div class="custom-control custom-switch mx-1">
+									<input type="checkbox" class="custom-control-input" id="startmin5">
+									<label class="custom-control-label font-sm" for="startmin5">Subtract 5 min from open</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-sm-4 align-self-center">	
+				<div class="row">
+					<div class="col col-sm-1 d-none d-lg-block"></div>
+					<div class="col">
+						<button type="button" class="btn btn-lg btn-success m-3" id="add_time_76()" onclick="add_time(7.6)"><i class="fal fa-plus"></i> 7,6h</button>
+						<button type="button" class="btn btn-lg btn-success m-3" onclick="add_time(8)"><i class="fal fa-plus"></i> 8h</button>
+						<button type="button" class="btn btn-lg btn-success m-3" onclick="end_time()">End time now</button>
 					</div>
 				</div>
-			</form>
+				<div class="row">
+					<div class="col col-sm-1 d-none d-lg-block"></div>
+					<div class="col">
+						Break<br>
+						<button type="button" class="btn btn-lg btn-primary m-3" id="add_time_76()" onclick="reset_break()"><i class="fal fa-redo"></i></button>
+						<button type="button" class="btn btn-lg btn-primary m-3" onclick="add_time(8)"><i class="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"></i> 5min</button>
+						<button type="button" class="btn btn-lg btn-primary m-3" onclick="add_break(0.5)"><i class="fal fa-plus"></i> 30min</button>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col col-sm-1 d-none d-lg-block"></div>
+					<div class="col my-3">
+						<button type="button" class="btn btn-lg btn-danger m-3" onclick="reset()"><i class="fal fa-redo"></i></button>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2 d-none d-lg-block"></div>
 		</div>
-		<div class="col col-sm-4 align-self-center">	
-			<div class="row">
-				<div class="col col-sm-1 d-none d-lg-block"></div>
-				<div class="col">
-					<button type="button" class="btn btn-lg btn-success m-3" id="add_time_76()" onclick="add_time(7.6)"><i class="fal fa-plus"></i> 7,6h</button>
-					<button type="button" class="btn btn-lg btn-success m-3" onclick="add_time(8)"><i class="fal fa-plus"></i> 8h</button>
-					<button type="button" class="btn btn-lg btn-success m-3" onclick="end_time()">End time now</button>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col col-sm-1 d-none d-lg-block"></div>
-				<div class="col">
-					Break<br>
-					<button type="button" class="btn btn-lg btn-primary m-3" id="add_time_76()" onclick="reset_break()"><i class="fal fa-redo"></i></button>
-					<button type="button" class="btn btn-lg btn-primary m-3" onclick="add_time(8)"><i class="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"></i> 5min</button>
-					<button type="button" class="btn btn-lg btn-primary m-3" onclick="add_break(0.5)"><i class="fal fa-plus"></i> 30min</button>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col col-sm-1 d-none d-lg-block"></div>
-				<div class="col my-3">
-					<button type="button" class="btn btn-lg btn-danger m-3" onclick="reset()"><i class="fal fa-redo"></i></button>
-				</div>
-			</div>
-		</div>
-		<div class="col col-sm-2 d-none d-lg-block"></div>
 	</div>
 	
     <div class="row fixed-bottom px-3 py-1">

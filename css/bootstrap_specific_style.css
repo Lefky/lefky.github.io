@@ -58,6 +58,13 @@ html, body {
   border-color: red;
 }
 
+.form-group label> .description{
+    display: none;
+}
+.form-group input[type="radio"]:checked ~ .description{
+    display: block;
+}
+
 .pulsate {
 	-webkit-animation: pulsate 3s ease-out;
 	-webkit-animation-iteration-count: infinite; 
