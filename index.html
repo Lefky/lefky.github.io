@@ -126,59 +126,79 @@
 			</button>
 		</div>
 	</div>
-	<div class="row bg-danger my-auto">
-		<div class="col col-lg-2 bg-light"></div>
-		<div class="col col-lg-4 py-3 rounded-right bg-light">
+	<div class="row bg-danger align-self-center">
+		<div class="col col-sm-2 d-none d-lg-block bg-light"></div>
+		<div class="col col-sm-4 rounded-right bg-light">
 			<form>
-				<div class="form-group mr-5">
+				<div class="form-group pt-3 mr-5">
 					<div class="input-group justify-content-end my-1">
-						<label class="col-form-label" for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time : </label>
-						<input name="start_time" id="start_time" type="time" class="form-control col-sm-3-custom mx-1" onchange="calculateTotal();"/>
+						<label class="col-form-label" for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time</label>
+						<div class="col-sm-3">
+							<input name="start_time" id="start_time" type="time" class="form-control mx-1" onchange="calculateTotal();"/>
+						</div>
 					</div>				
 					<div class="input-group justify-content-end my-3">
 						<label class="col-form-label" for="break_time" data-toggle="tooltip" data-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
-							Break (default
+							Break with default
 						</label>
-						<select name="break_time_default" id="break_time_default" class="form-control col-sm-3-custom mx-1" onchange="addBreakDefault();">
-							<option value="0">0 min</option>
-							<option value="0.25">15 min</option>
-							<option value="0.5">30 min</option>
-							<option value="0.75">45 min</option>
-							<option value="1">1h</option>
-						</select><span class="col-form-label">) :</span>
-						<input name="break_time" id="break_time" type="time" value="00:00" class="form-control col-sm-3-custom mx-1" onchange="calculateTotal();"/>
+						<div class="col-sm-3">
+							<select name="break_time_default" id="break_time_default" class="form-control mb-1 mb-md-0" onchange="addBreakDefault();" data-toggle="tooltip" data-placement="left" title="">
+								<option value="0">0 min</option>
+								<option value="0.25">15 min</option>
+								<option value="0.5">30 min</option>
+								<option value="0.75">45 min</option>
+								<option value="1">1h</option>
+							</select>
+						</div>
+						<div class="col-sm-3">
+							<input name="break_time" id="break_time" type="time" value="00:00" class="form-control mx-1" onchange="calculateTotal();"/>
+						</div>
 					</div>
 					<div class="input-group justify-content-end my-3">
-						<label class="col-form-label" for="end_time" data-toggle="tooltip" data-placement="left" title="You can have this automatically filled in by setting the parameter at the bottom of the box. You can manually enter a value.">Time to go home : </label>
-						<input name="end_time" id="end_time" type="time" class="form-control col-sm-3-custom mx-1" onchange="calculateTotal();"/>
+						<label class="col-form-label" for="end_time" data-toggle="tooltip" data-placement="left" title="You can have this automatically filled in by setting the parameter at the bottom of the box. You can manually enter a value.">Time to go home</label>
+						<div class="col-sm-3">
+							<input name="end_time" id="end_time" type="time" class="form-control mx-1" onchange="calculateTotal();"/>
+						</div>
 					</div>
 					<div class="input-group justify-content-end my-3">
-						<label class="col-form-label" for="totalnobreak" data-toggle="tooltip" data-placement="left" title="These hours are your actual working hours.">Total hours (no break) : </label>
-						<input name="totalnobreak" id="totalnobreak" type="time" class="form-control col-sm-3-custom mx-1" value="" readonly> <input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control col-sm-3-custom mx-1" readonly>
+						<label class="col-form-label" for="totalnobreak" data-toggle="tooltip" data-placement="left" title="These hours are your actual working hours.">Total hours (no break)</label>
+						<div class="col-sm-3">
+							<input name="totalnobreak" id="totalnobreak" type="time" class="form-control mx-1" value="" readonly>
+							<input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control mx-1 mt-1" readonly>
+						</div>
 					</div>
 					<div class="input-group justify-content-end my-3">
 						<label class="col-form-label" for="overtime" data-toggle="tooltip" data-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
 							Overtime@
 						</label>
-						<select name="hourschedule" id="hourschedule" class="form-control col-sm-3-custom mx-1" onchange="calculateTotal();">
-							<option value="7.6">7,6h</option>
-							<option value="8">8h</option>
-						</select><span class="col-form-label">:</span>
-						<input name="overtime" id="overtime" type="text" class="form-control col-sm-3-custom mx-1" readonly> <input name="overtimedec" id="overtimedec" type="text" class="form-control col-sm-3-custom mx-1" readonly>
+						<div class="col-sm-3">
+							<select name="hourschedule" id="hourschedule" class="form-control mb-1 mb-md-0" onchange="calculateTotal();" data-toggle="tooltip" data-placement="left" title="">
+								<option value="7.6">7,6h</option>
+								<option value="8">8h</option>
+							</select>
+						</div>
+						<div class="col-sm-3">
+							<input name="overtime" id="overtime" type="text" class="form-control mx-1" readonly>
+							<input name="overtimedec" id="overtimedec" type="text" class="form-control mx-1 mt-1" readonly>
+						</div>
 					</div>
 					<div class="input-group justify-content-end my-3">
-						<label class="col-form-label" for="total" data-toggle="tooltip" data-placement="left" title="These hours are howmuch time you spent being at your workplace.">Total hours : </label>
-						<input name="total" id="total" type="time" class="form-control col-sm-3-custom mx-1" readonly><input name="totaldec" id="totaldec" type="text" class="form-control col-sm-3-custom mx-1" readonly>
+						<label class="col-form-label" for="total" data-toggle="tooltip" data-placement="left" title="These hours are howmuch time you spent being at your workplace.">Total hours</label>
+						<div class="col-sm-3">
+							<input name="total" id="total" type="time" class="form-control mx-1" readonly>
+							<input name="totaldec" id="totaldec" type="text" class="form-control mx-1 mt-1" readonly>
+						</div>
 					</div>
 					<div class="input-group justify-content-end my-3">
-						<label class="col-form-label" for="overtimetotal" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime : </label>
-						<input name="overtimetotal" id="overtimetotal" type="text" class="form-control col-sm-3-custom mx-1" readonly>
+						<label class="col-form-label" for="overtimetotal" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime</label>
+						<div class="col-sm-3">
+							<input name="overtimetotal" id="overtimetotal" type="text" class="form-control mx-1" readonly>
+						</div>
 					</div>
-					<div id="historycontainer" class="justify-content-end my-3 mr-2">
-						<div id="history" ></div>
+					<div id="historycontainer" class="float-right my-3 mr-2">
+						<div id="history"></div>
 					</div>
-				</div>
-				<div class="row">
+					
 					<div class="col mr-5">
 						<div class="input-group justify-content-end">
 							<div class="custom-control custom-switch mx-1">
@@ -200,7 +220,7 @@
 		</div>
 		<div class="col col-sm-4 align-self-center">	
 			<div class="row">
-				<div class="col col-sm-1"></div>
+				<div class="col col-sm-1 d-none d-lg-block"></div>
 				<div class="col">
 					<button type="button" class="btn btn-lg btn-success m-3" id="add_time_76()" onclick="add_time(7.6)"><i class="fal fa-plus"></i> 7,6h</button>
 					<button type="button" class="btn btn-lg btn-success m-3" onclick="add_time(8)"><i class="fal fa-plus"></i> 8h</button>
@@ -208,7 +228,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col col-sm-1"></div>
+				<div class="col col-sm-1 d-none d-lg-block"></div>
 				<div class="col">
 					Break<br>
 					<button type="button" class="btn btn-lg btn-primary m-3" id="add_time_76()" onclick="reset_break()"><i class="fal fa-redo"></i></button>
@@ -217,13 +237,13 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col col-sm-1"></div>
+				<div class="col col-sm-1 d-none d-lg-block"></div>
 				<div class="col my-3">
 					<button type="button" class="btn btn-lg btn-danger m-3" onclick="reset()"><i class="fal fa-redo"></i></button>
 				</div>
 			</div>
 		</div>
-		<div class="col col-sm-2"></div>
+		<div class="col col-sm-2 d-none d-lg-block"></div>
 	</div>
 	
     <div class="row fixed-bottom px-3 py-1">

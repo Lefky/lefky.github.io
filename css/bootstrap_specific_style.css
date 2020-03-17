@@ -26,6 +26,7 @@ html, body {
 	overflow: hidden;
 	border: 1px solid #ced4da;
 	border-radius: .75rem;
+	width: 80%
 }
 
 #history {
@@ -50,14 +51,6 @@ html, body {
 
 .font-sm {
 	font-size: 70%;
-}
-
-
-.col-sm-3-custom {
-    -ms-flex: 0 0 20% !important;
-    flex: 0 0 20% !important;
-    max-width: 20% !important;
-	min-width: 20% !important;
 }
 
 .custom-control-input:checked~.custom-control-label::before.checkred {
