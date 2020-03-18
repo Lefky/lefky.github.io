@@ -41,8 +41,6 @@ html, body {
     line-height: 1.5;
     color: #495057;
     background-clip: padding-box;
-    
-    
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 	height: 180px;
 	margin-left:auto; 
@@ -53,9 +51,9 @@ html, body {
 	font-size: 70%;
 }
 
-.custom-control-input:checked~.custom-control-label::before.checkred {
-  background-color: red;
-  border-color: red;
+.custom-control-input:checked~.custom-control-label.checkred::before {
+	border-color: red;
+	background-color: red;
 }
 
 .form-group label> .description{
