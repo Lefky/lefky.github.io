@@ -394,7 +394,7 @@ function deleteHistory() {
 			}
 		}
 		setHistory();
-		document.getElementById("modalclosebutton").click();
+		document.getElementById("settingsmodalclosebutton").click();
 		alert("History deleted!");
 	}
 }
@@ -426,7 +426,7 @@ function importHistoryData(e) {
 		setParameters();
 	}
 	reader.readAsText(files[0]);
-	document.getElementById("modalclosebutton").click();
+	document.getElementById("settingsmodalclosebutton").click();
 	alert("Import successful!");
 }
 
@@ -516,7 +516,7 @@ function setParameters() {
 
 	showHistorydeleteoptionContent();
 	
-	try {
+	/*try {
 		var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
 		setStart(timeinfo['StartDec']);
 		if ( startmin5 == "true" )
@@ -528,6 +528,19 @@ function setParameters() {
 		} else {
 			setStart(now());
 		}	
+	}*/
+	var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
+	if ( timeinfo == null ) {
+		if ( startmin5 == "true" ) {
+			document.getElementById("startmin5").checked = true;
+			setStart(now() - 0.08);
+		} else {
+			setStart(now());
+		}
+	} else {
+		setStart(timeinfo['StartDec']);
+		if ( startmin5 == "true" )
+			document.getElementById("startmin5").checked = true;
 	}
 }
 
@@ -556,9 +569,6 @@ function reset_break() {
 $( document ).on( 'keydown', function ( e ) {
 	if ( e.keyCode === 13 ) { //ENTER key code
 		add_time(parseFloat(getHourSchedule()));
-	}
-	if ( e.key === "Escape" ) {
-		document.getElementById("modalclosebutton").click();
 	}
 });
 
