@@ -215,7 +215,6 @@ function getHistoryResetPeriod(){
 		if ( period > 48 )
 			period = 48; 
 	}
-	
 	return period;
 }
 
@@ -247,30 +246,31 @@ function showHistorydeleteoptionContent() {
 
 function maxValuesDeleteOption() {
 	var historyresetperiodunit = getHistoryResetPeriodUnit(),
-		cleaningday = calculateCleaningDay();
+		cleaningday = calculateCleaningDay(),
+		historyresetperiod = document.getElementById("historyresetperiod"),
+		historyresetday = document.getElementById("historyresetday");
 	if ( historyresetperiodunit == "days" ) {
-		document.getElementById("historyresetperiod").setAttribute("max", "31"); 
-		document.getElementById("historyresetday").value = "1"; 
-		document.getElementById("historyresetday").disabled = true;
+		historyresetperiod.setAttribute("max", "31"); 
+		historyresetday.value = "1"; 
+		historyresetday.disabled = true;
 	} else if ( historyresetperiodunit == "weeks" ) {
-		document.getElementById("historyresetperiod").setAttribute("max", "4"); 
-		document.getElementById("historyresetday").setAttribute("max", "7"); 
-		document.getElementById("historyresetday").disabled = false;
+		historyresetperiod.setAttribute("max", "4"); 
+		historyresetday.setAttribute("max", "7"); 
+		historyresetday.disabled = false;
 	} else if ( historyresetperiodunit == "months" ) {
-		document.getElementById("historyresetperiod").setAttribute("max", "48"); 
-		document.getElementById("historyresetday").setAttribute("max", "31"); 
-		document.getElementById("historyresetday").disabled = false;
+		historyresetperiod.setAttribute("max", "48"); 
+		historyresetday.setAttribute("max", "31"); 
+		historyresetday.disabled = false;		
 	}
 	//localStorage.setItem("cleaningday", cleaningday);
 	setResetDate(cleaningday.format("dddd, DD-MM-YYYY"));
 }
 
 function saveCleaningDay() {
-	console.log(getResetDate());
 	localStorage.setItem("cleaningday", moment(getResetDate(),"dddd, DD-MM-YYYY"));
-	document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 1s linear; color: white; background-color: #28a745;");
+	document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: #28a745;");
 	document.getElementById("modalsavebutton").innerHTML = '<i class="fas fa-check"></i>'; 
-	setTimeout('document.getElementById("modalsavebutton").innerHTML = "Save"; document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 1s linear;");', 5000);
+	setTimeout('document.getElementById("modalsavebutton").innerHTML = "Save"; document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear;");', 5000);
 }
 
 function calculateCleaningDay() {
@@ -304,7 +304,7 @@ function setHistory(){
 	};
 	
 	var //entry = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Overtime</span><br><div class='greyed' style='border-bottom: 1px solid black; width: 100%;'></div>",
-		entry = "<table width='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;'>Time (no break)</th><th style='width: 33%;'>Overtime</th></tr>",
+		entry = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;'>Time (no break)</th><th style='width: 33%;'>Overtime</th></tr>",
 		keys = Object.keys(localStorage),
 		revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
 		overtimetotal = 0,
@@ -455,7 +455,8 @@ function todayDate() {
 		mm = ('0' + (date.getMonth()+1)).slice(-2), //jan is 0
 		yyyy = date.getFullYear();
 	
-	return dd + "-" + mm + "-" + yyyy;
+	//return dd + "-" + mm + "-" + yyyy;
+	return moment().format("DD-MM-YYYY");
 }
 
 function reset() {

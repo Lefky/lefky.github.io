@@ -61,16 +61,21 @@
 			</div>
 			<div class="modal-body">
 				<p>
-					If you delete your browser data the history will reset. You can export and import your data.<br>
-					<a class="modalbutton floatreset" id="exportHistory" onclick="exportHistory()">Export History</a>
-					<a class="modalbutton floatreset" id="importHistory">Import History</a>
-					<a class="modalbutton floatreset" id="deleteHistory" onclick="deleteHistory()">Delete History</a>
-					<input type="file" id="importFile" accept=".json" style="display:none"/>	
+					Set this page as your browser startup page or pin the tab to automatically start counting when you open your browser.<br><br>
+					Hitting "ENTER" will add the time corresponding to the selected value next to 'Overtime' to the end date (and break time if defined).
 				</p>
-				<p>Set this page as your browser startup page or pin the tab to automatically start counting when you open your browser.</p>
-				<p>Hitting "ENTER" will add the time corresponding to the selected value next to 'Overtime' to the end date (and break time if defined).</p>
-				<h3>Parameters</h3>
-				<p>The value settings are saved. So if you enable something it will still be enabled on the next opening of the page.</p>
+				<p>
+					<h4>Import / export / delete</h4>
+					If you delete your browser data the history will reset. You can export and import your data.<br><br>
+					<button class="btn btn-outline-secondary btn-sm" id="exportHistory" onclick="exportHistory()">Export History</button >
+					<button class="btn btn-outline-secondary btn-sm" id="importHistory">Import History</button >
+					<button class="btn btn-outline-secondary btn-sm" id="deleteHistory" onclick="deleteHistory()">Delete History</button >
+					<input type="file" id="importFile" accept=".json" style="display:none"/>
+				</p>
+				<p>
+					<h4>Parameters</h4>
+					The value settings are saved. So if you enable something it will still be enabled on the next opening of the page.
+				</p>
 				<p>
 					<i>"Don't save today."</i><br>
 					&emsp;won't save today's date for the remainder of the day (until timestamp 00:00) or unless disabled again.
@@ -83,58 +88,56 @@
 					<i>"Subtract 5 min from time on open."</i><br>
 					&emsp;will subtract 5 min from the time the page was opened (and the start time). This is to take the time to boot your laptop, ... into account.
 				</p>
-				
-				<div class="form-group">
-					<div class="input-group mb-2">
-						<div class="row w-100">
-							<div class="col-sm">
-								<div class="custom-control custom-radio">
-									<input type="radio" id="historydeleteoptiondays" name="historydeleteoption" class="custom-control-input" value="days" checked="checked" onchange="showHistorydeleteoptionContent()">
-									<label class="custom-control-label" for="historydeleteoptiondays" data-toggle="tooltip" data-placement="right" title="This will keep XXX days of data.">Max days to keep history</label>
+				<p>
+					<h4>History deletion policy</h4>
+					<div class="form-group">
+						<div class="input-group mb-2">
+							<div class="row w-100">
+								<div class="col-sm">
+									<div class="custom-control custom-radio">
+										<input type="radio" id="historydeleteoptiondays" name="historydeleteoption" class="custom-control-input" value="days" checked="checked" onchange="showHistorydeleteoptionContent()">
+										<label class="custom-control-label" for="historydeleteoptiondays" data-toggle="tooltip" data-placement="right" title="This will keep XXX days of data.">Max days to keep history</label>
+									</div>
+								</div>
+								<div class="col-sm">
+									<div class="custom-control custom-radio">
+										<input type="radio" id="historydeleteoptionperiod" name="historydeleteoption" class="custom-control-input" value="period" onchange="showHistorydeleteoptionContent()">
+										<label class="custom-control-label" for="historydeleteoptionperiod" data-toggle="tooltip" data-placement="right" title="This will delete the entire history on the day that's displayed next to 'Reset date'.">Reset history on specific day</label>
+									</div>
 								</div>
 							</div>
-							<div class="col-sm">
-								<div class="custom-control custom-radio">
-									<input type="radio" id="historydeleteoptionperiod" name="historydeleteoption" class="custom-control-input" value="period" onchange="showHistorydeleteoptionContent()">
-									<label class="custom-control-label" for="historydeleteoptionperiod" data-toggle="tooltip" data-placement="right" title="This will delete the entire history on the day that's displayed next to 'Reset date'.">Reset history on specific day</label>
+						</div>
+						<div id="historydeleteoptiondayscontent" style="display: none;">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-form-label" for="historyretain">Days to keep: </label>
+									<input type="number" name="historyretain" id="historyretain" class="form-control col-sm-2 mx-1" min="0" max="999">
+								</div>
+							</div>
+						</div>
+						<div id="historydeleteoptionperiodscontent" style="display: none;">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-form-label" for="historyresetday">Reset on day </label>
+									<input type="number" name="historyresetday" id="historyresetday" class="form-control col-sm-2 mx-1" min="1" max="31" onchange="maxValuesDeleteOption()">
+									<label class="col-form-label" for="historyresetperiod"> of every </label>
+									<input type="number" name="historyresetperiod" id="historyresetperiod" class="form-control col-sm-2 mx-1" min="1" onchange="maxValuesDeleteOption()">
+									<select name="historyresetperiodunit" id="historyresetperiodunit" class="form-control col-sm-2 mx-1" onchange="maxValuesDeleteOption()">
+										<option value="days">days</option>
+										<option value="weeks">weeks</option>
+										<option value="months">months</option>
+									</select>
+									<button type="button" id="modalsavebutton" class="btn btn-outline-secondary" onclick="saveCleaningDay()">Save</button>
+									
+									<div class="input-group my-3">
+										<label class="col-form-label" for="resetdate" id="resetdatelabel">Reset date: </label>
+										<input type="text" name="resetdate" id="resetdate" class="form-control col-sm-5 mx-1" size="20" readonly>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
-					<div id="historydeleteoptiondayscontent" style="display: none;">
-						<div class="form-group">
-							<div class="input-group">
-								<label class="col-form-label" for="historyretain">Days to keep: </label>
-								<input type="number" name="historyretain" id="historyretain" class="form-control col-sm-2 mx-1" min="0" max="999">
-							</div>
-						</div>
-					</div>
-										
-					<div id="historydeleteoptionperiodscontent" style="display: none;">
-						<div class="form-group">
-							<div class="input-group">
-								<label class="col-form-label" for="historyresetday">Reset on day </label>
-								<input type="number" name="historyresetday" id="historyresetday" class="form-control col-sm-2 mx-1" min="1" max="31" onchange="maxValuesDeleteOption()">
-								<label class="col-form-label" for="historyresetperiod"> of every </label>
-								<input type="number" name="historyresetperiod" id="historyresetperiod" class="form-control col-sm-2 mx-1" min="1" onchange="maxValuesDeleteOption()">
-								<select name="historyresetperiodunit" id="historyresetperiodunit" class="form-control col-sm-2 mx-1" onchange="maxValuesDeleteOption()">
-									<option value="days">days</option>
-									<option value="weeks">weeks</option>
-									<option value="months">months</option>
-								</select>
-								<button type="button" id="modalsavebutton" class="btn btn-secondary" onclick="saveCleaningDay()">Save</button>
-								
-								<div class="input-group my-3">
-									<label class="col-form-label" for="resetdate" id="resetdatelabel">Reset date: </label>
-									<input type="text" name="resetdate" id="resetdate" class="form-control col-sm-5 mx-1" size="20" readonly>
-								</div>
-							</div>
-						</div>
-					</div>
-						
-				</div>
-							
+				</p>			
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -161,7 +164,7 @@
 					You can for example have 3 outlook inboxes and 2 google calendars opened up in the same application!<br>
 					Furthermore, the amount of services, as they call it, you can add are unlimited. And if something isn't premade you can just <a href="https://github.com/ramboxapp/community-edition/wiki/Add-a-Custom-Service" target="_blank" >add a custom service</a>.<br>
 					<br>
-					<a class="btn btn-success btn-sm" href="https://rambox.pro/" target="_blank" role="button">Rambox website</a>
+					<a class="btn btn-outline-success btn-sm" href="https://rambox.pro/" target="_blank" role="button">Rambox website</a>
 				</p>		
 				<p>
 					<h4>Tasker</h4>
@@ -171,9 +174,20 @@
 					Some of the things I'm able to do are setting my phone to silent when I'm at the office, reading my texts out loud when I'm at home or in the car, automatically setting my alarm in the morning (different ones when I work from home or not), remind me of birthdays and send random birthday texts by the push of a button, have my phone go out of vibrating mode make lots of noise when I lost it somewhere and it receives a certain text, ...<br>
 					You see the possibilities are really endless!<br>
 					<br>
-					<a class="btn btn-success btn-sm" href="https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm" target="_blank" role="button">Tasker in the Google playstore</a>
+					<a class="btn btn-outline-success btn-sm" href="https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm" target="_blank" role="button">Tasker in the Google playstore</a>
+				</p>	
+				<p>
+					<h4>Rainmeter</h4>
+					Rainmeter is a tool to customize your desktop.<br>
+					You can add different 'skins' to add buttons or displays to your computers desktop.<br>
+					Some of these include the weather forecast, quick launch buttons for applications or folders, monitoring displays (for CPU, GPU, RAM, disk size, ...), music player info and controls, time clocks, ... And all of this in different flavours.<br>
+					And the most cool aspect about it: it moves! Skins get updated every X seconds making it possible to display animations and update your weather etc.<br>
+					<br>
+					<img class="rounded mx-auto d-block" src="https://media1.tenor.com/images/c2f0bcdc67b7417d7e74b53b8f8aefb9/tenor.gif?itemid=15613840"/><br>
+					You can make your own, but you can also just download skins and even entire layouts. Check the <a href="https://www.rainmeter.net/discover/" target ="_blank">rainmeter discover page</a> to find links to libraries of great skins.<br>
+					<br>
+					<a class="btn btn-outline-success btn-sm" href="https://www.rainmeter.net/" target="_blank" role="button">Rainmeter website</a>
 				</p>
-				
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -192,7 +206,8 @@
 				<div class="col-lg-10 py-1 px-4">
 					As you can see the UI got an overhaul.<br>
 					The UI has been coded with Bootstrap 4 resulting in a more standardized way of displaying stuff.<br>
-					This does make it for me personally a little harder to maintain as I didn't write these definitions myself. But hey... It's standerdized!
+					This does make it for me personally a little harder to maintain as I didn't write these definitions myself.<br>
+					But hey... It's standardized!
 				</div>
 			</div>
 			<button type="button" class="close" onclick="notificationClosed('click');" data-dismiss="alert" aria-label="Close">
