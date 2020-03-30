@@ -98,7 +98,7 @@ function getHourSchedule(){
 	if (!time) {
 		time = 0;
 	}
-	return time;
+	return parseFloat(time);
 }
 
 function calculateTotal() {
@@ -215,7 +215,6 @@ function getHistoryResetPeriod(){
 		if ( period > 48 )
 			period = 48; 
 	}
-	
 	return period;
 }
 
@@ -233,25 +232,13 @@ function getResetDate(){
 }
 
 // UI
-function greyOutHistoryDeleteOption() {
+function showHistorydeleteoptionContent() {
 	if(document.getElementById("historydeleteoptiondays").checked) {
-		document.getElementById("historydeleteoptiondayslabel").style.opacity = "100%";
-		document.getElementById("historydeleteoptionperiodlabel").style.opacity = "40%";
-		document.getElementById("historyretain").disabled = false;
-		document.getElementById("historyresetday").disabled = true;
-		document.getElementById("historyresetperiod").disabled = true;
-		document.getElementById("historyresetperiodunit").disabled = true;
-		document.getElementById("resetdatelabel").style.opacity = "40%";
-		document.getElementById("resetdate").disabled = true;
+		$("#historydeleteoptiondayscontent").show();
+		$("#historydeleteoptionperiodscontent").hide();
 	} else {
-		document.getElementById("historydeleteoptionperiodlabel").style.opacity = "100%";
-		document.getElementById("historydeleteoptiondayslabel").style.opacity = "40%";
-		document.getElementById("historyretain").disabled = true;
-		document.getElementById("historyresetday").disabled = false;
-		document.getElementById("historyresetperiod").disabled = false;
-		document.getElementById("historyresetperiodunit").disabled = false;		
-		document.getElementById("resetdatelabel").style.opacity = "100%";
-		document.getElementById("resetdate").disabled = false;
+		$("#historydeleteoptionperiodscontent").show();
+		$("#historydeleteoptiondayscontent").hide();
 		maxValuesDeleteOption();
 		//localStorage.setItem("lasthistoryclean", moment());
 	}
@@ -259,30 +246,30 @@ function greyOutHistoryDeleteOption() {
 
 function maxValuesDeleteOption() {
 	var historyresetperiodunit = getHistoryResetPeriodUnit(),
-		cleaningday = calculateCleaningDay();
+		cleaningday = calculateCleaningDay(),
+		historyresetperiod = document.getElementById("historyresetperiod"),
+		historyresetday = document.getElementById("historyresetday");
 	if ( historyresetperiodunit == "days" ) {
-		document.getElementById("historyresetperiod").setAttribute("max", "31"); 
-		document.getElementById("historyresetday").value = "1"; 
-		document.getElementById("historyresetday").disabled = true;
+		historyresetperiod.setAttribute("max", "31"); 
+		historyresetday.value = "1"; 
+		historyresetday.disabled = true;
 	} else if ( historyresetperiodunit == "weeks" ) {
-		document.getElementById("historyresetperiod").setAttribute("max", "4"); 
-		document.getElementById("historyresetday").setAttribute("max", "7"); 
-		document.getElementById("historyresetday").disabled = false;
+		historyresetperiod.setAttribute("max", "4"); 
+		historyresetday.setAttribute("max", "7"); 
+		historyresetday.disabled = false;
 	} else if ( historyresetperiodunit == "months" ) {
-		document.getElementById("historyresetperiod").setAttribute("max", "48"); 
-		document.getElementById("historyresetday").setAttribute("max", "31"); 
-		document.getElementById("historyresetday").disabled = false;
+		historyresetperiod.setAttribute("max", "48"); 
+		historyresetday.setAttribute("max", "31"); 
+		historyresetday.disabled = false;		
 	}
-	//localStorage.setItem("cleaningday", cleaningday);
 	setResetDate(cleaningday.format("dddd, DD-MM-YYYY"));
 }
 
 function saveCleaningDay() {
-	console.log(getResetDate());
 	localStorage.setItem("cleaningday", moment(getResetDate(),"dddd, DD-MM-YYYY"));
-	document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 1s linear; color: white; background-color: #89c403;");
+	document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: #28a745;");
 	document.getElementById("modalsavebutton").innerHTML = '<i class="fas fa-check"></i>'; 
-	setTimeout('document.getElementById("modalsavebutton").innerHTML = "Save"; document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 1s linear;");', 5000);
+	setTimeout('document.getElementById("modalsavebutton").innerHTML = "Save"; document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear;");', 5000);
 }
 
 function calculateCleaningDay() {
@@ -315,7 +302,8 @@ function setHistory(){
 	  return `${parts[2]}-${parts[1]}-${parts[0]}`;
 	};
 	
-	var entry = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Overtime</span><br><div class='greyed' style='border-bottom: 1px solid black; width: 100%;'></div>",
+	var //entry = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Overtime</span><br><div class='greyed' style='border-bottom: 1px solid black; width: 100%;'></div>",
+		entry = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;'>Time (no break)</th><th style='width: 33%;'>Overtime</th></tr>",
 		keys = Object.keys(localStorage),
 		revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
 		overtimetotal = 0,
@@ -328,10 +316,12 @@ function setHistory(){
 		if ( userKeyRegExp.test(key) ) {
 			var timeinfo = JSON.parse(localStorage.getItem(key));
 			if (timeinfo.hasOwnProperty('OvertimeDec')){
-				entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['OvertimeDec'] + "</span><br>";
+				//entry = entry + "<span style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['OvertimeDec'] + "</span><br>";
+				entry = entry + "<tr><td>" + key + "</td><td>" + timeinfo['TotalNoBreakDec'] + "</td><td>" + timeinfo['OvertimeDec'] + "</td></tr>"
 				overtimetotal = overtimetotal + parseFloat(timeinfo['OvertimeDec']);
 			} else {
-				entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['RecupDec'] + "</span><br>";
+				//entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['RecupDec'] + "</span><br>";
+				entry = entry + "<tr><td>" + key + "</td><td>" + timeinfo['TotalNoBreakDec'] + "</td><td>" + timeinfo['RecupDec'] + "</td></tr>"
 				overtimetotal = overtimetotal + parseFloat(timeinfo['RecupDec']);
 				// convert to new json key
 				if (timeinfo.hasOwnProperty('StartDec')){
@@ -343,8 +333,11 @@ function setHistory(){
 			}
 		}
 	}
-	if ( keys == "" || keys == null )
+	if ( keys == "" || keys == null ) {
 		entry = "No previous data yet :("
+	} else {
+		entry = entry + "</table>"
+	}
 	document.getElementById("history").innerHTML = entry;		
 	setOvertimeTotal(overtimetotal);
 }
@@ -354,13 +347,11 @@ function notificationClosed(event){
 		lastnotifversion = localStorage.getItem("lastnotifversion");
 	
 	if ( event == "click" ){
-		document.getElementById("alertnotification").setAttribute('class', 'alert slide-out');
 		localStorage.setItem("lastnotifversion", version);
-		//document.getElementById("alertnotification").style.display='none';
 	} 
 	
 	if ( event == "onload" && version != lastnotifversion ){
-		document.getElementById("alertnotification").style.display='block';
+		$("#alertnotification").show();
 	}
 }
 
@@ -381,7 +372,8 @@ function cleanLocalStorage() {
 			}
 		}	
 	} else if ( deleteoption == "period" ) {
-		var cleaningday = moment(localStorage.getItem("cleaningday"));
+		var cleaningdaystored = localStorage.getItem("cleaningday"),
+			cleaningday = moment(new Date(cleaningdaystored)).format; //momentjs somehow can't parse dates from localstorage
 		
 		if ( cleaningday <= today ) {
 			console.log("gelukt!");
@@ -402,7 +394,7 @@ function deleteHistory() {
 			}
 		}
 		setHistory();
-		document.getElementById("modalclosebutton").click();
+		document.getElementById("settingsmodalclosebutton").click();
 		alert("History deleted!");
 	}
 }
@@ -434,7 +426,7 @@ function importHistoryData(e) {
 		setParameters();
 	}
 	reader.readAsText(files[0]);
-	document.getElementById("modalclosebutton").click();
+	document.getElementById("settingsmodalclosebutton").click();
 	alert("Import successful!");
 }
 
@@ -463,7 +455,8 @@ function todayDate() {
 		mm = ('0' + (date.getMonth()+1)).slice(-2), //jan is 0
 		yyyy = date.getFullYear();
 	
-	return dd + "-" + mm + "-" + yyyy;
+	//return dd + "-" + mm + "-" + yyyy;
+	return moment().format("DD-MM-YYYY");
 }
 
 function reset() {
@@ -477,6 +470,7 @@ function reset() {
 	
 	// 'lazy' loading
 	setParameters();
+	add_time(getHourSchedule());
 	cleanLocalStorage();
 }
 
@@ -521,9 +515,9 @@ function setParameters() {
 	if ( historyresetperiodunit )
 		document.getElementById("historyresetperiodunit").value = historyresetperiodunit;
 
-	greyOutHistoryDeleteOption();
+	showHistorydeleteoptionContent();
 	
-	try {
+	/*try {
 		var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
 		setStart(timeinfo['StartDec']);
 		if ( startmin5 == "true" )
@@ -535,6 +529,19 @@ function setParameters() {
 		} else {
 			setStart(now());
 		}	
+	}*/
+	var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
+	if ( timeinfo == null ) {
+		if ( startmin5 == "true" ) {
+			document.getElementById("startmin5").checked = true;
+			setStart(now() - 0.08);
+		} else {
+			setStart(now());
+		}
+	} else {
+		setStart(timeinfo['StartDec']);
+		if ( startmin5 == "true" )
+			document.getElementById("startmin5").checked = true;
 	}
 }
 
@@ -562,10 +569,7 @@ function reset_break() {
 
 $( document ).on( 'keydown', function ( e ) {
 	if ( e.keyCode === 13 ) { //ENTER key code
-		add_time(parseFloat(getHourSchedule()));
-	}
-	if ( e.key === "Escape" ) {
-		document.getElementById("modalclosebutton").click();
+		add_time(getHourSchedule());
 	}
 });
 
