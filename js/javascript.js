@@ -98,7 +98,7 @@ function getHourSchedule(){
 	if (!time) {
 		time = 0;
 	}
-	return time;
+	return parseFloat(time);
 }
 
 function calculateTotal() {
@@ -262,7 +262,6 @@ function maxValuesDeleteOption() {
 		historyresetday.setAttribute("max", "31"); 
 		historyresetday.disabled = false;		
 	}
-	//localStorage.setItem("cleaningday", cleaningday);
 	setResetDate(cleaningday.format("dddd, DD-MM-YYYY"));
 }
 
@@ -373,7 +372,8 @@ function cleanLocalStorage() {
 			}
 		}	
 	} else if ( deleteoption == "period" ) {
-		var cleaningday = moment(localStorage.getItem("cleaningday"));
+		var cleaningdaystored = localStorage.getItem("cleaningday"),
+			cleaningday = moment(new Date(cleaningdaystored)).format; //momentjs somehow can't parse dates from localstorage
 		
 		if ( cleaningday <= today ) {
 			console.log("gelukt!");
@@ -470,6 +470,7 @@ function reset() {
 	
 	// 'lazy' loading
 	setParameters();
+	add_time(getHourSchedule());
 	cleanLocalStorage();
 }
 
@@ -568,7 +569,7 @@ function reset_break() {
 
 $( document ).on( 'keydown', function ( e ) {
 	if ( e.keyCode === 13 ) { //ENTER key code
-		add_time(parseFloat(getHourSchedule()));
+		add_time(getHourSchedule());
 	}
 });
 

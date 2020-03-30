@@ -31,7 +31,7 @@
 	<!-- Custom Styles -->
 	<link href="css/bootstrap_specific_style.css" rel="stylesheet">
 </head>
-<body onload="reset(); add_time(7.6);">
+<body onload="reset();">
 <!-- Modal HTML -->
 <div id="modalabout" class="modal fade">
 	<div class="modal-dialog modal-lg">
@@ -42,7 +42,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20200317.1</span> <br>
+					Version: <span id="currentappversion">20200330.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -263,9 +263,12 @@
 								Overtime@
 							</label>
 							<div class="col-sm-3">
-								<select name="hourschedule" id="hourschedule" class="form-control mb-1 mb-md-0" onchange="calculateTotal();" data-toggle="tooltip" data-placement="left" title="">
-									<option value="7.6">7,6h</option>
-									<option value="8">8h</option>
+								<select name="hourschedule" id="hourschedule" class="form-control mb-1 mb-md-0" onchange="calculateTotal();" data-toggle="tooltip" data-placement="left" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
+									<option value="3.04">3,04h (part-time 2/5, 38h week)</option>
+									<option value="3.8">3,8h (half-time, 38h week)</option>
+									<option value="4">4h (half-time, 40h week</option>
+									<option value="7.6">7,6h (full-time, 38h week)</option>
+									<option value="8">8h (full-time, 40h week)</option>
 								</select>
 							</div>
 							<div class="col-sm-3">
