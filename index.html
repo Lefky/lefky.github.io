@@ -197,7 +197,7 @@
 
 <div class="container-fluid h-100">
 	<div class="row d-flex justify-content-center">
-		<div id="alertnotification" class="alert alert-danger alert-dismissible fade show my-4" role="alert" style="display: none; position: absolute; z-index: 1;">
+		<div id="alertnotification" class="alert alert-danger alert-dismissible fade show my-4 mr-1" role="alert" style="display: none; position: absolute; z-index: 1;">
 			<div class="row">
 				<div class="col-lg-2 text-center py-1 px-4 my-auto">
 					<i class="far fa-exclamation-triangle fa-4x pulsate" style="color: orange; font-size: 60px;"></i>
@@ -264,8 +264,13 @@
 							<div class="col-sm-3">
 								<select name="hourschedule" id="hourschedule" class="form-control mb-1 mb-md-0" onchange="calculateTotal();" data-toggle="tooltip" data-placement="left" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
 									<option value="3.04">3,04h (part-time 2/5, 38h week)</option>
+									<option value="3.2">3,2h (part-time 2/5, 40h week)</option>
 									<option value="3.8">3,8h (half-time, 38h week)</option>
-									<option value="4">4h (half-time, 40h week</option>
+									<option value="4">4h (half-time, 40h week)</option>
+									<option value="4.56">4,56h (part-time 3/5, 38h week)</option>
+									<option value="4.8">4,8h (part-time 3/5, 40h week)</option>
+									<option value="6.08">6,08h (part-time 4/5, 38h week)</option>
+									<option value="6.4">6,4h (part-time 4/5, 40h week)</option>
 									<option value="7.6">7,6h (full-time, 38h week)</option>
 									<option value="8">8h (full-time, 40h week)</option>
 								</select>
@@ -296,15 +301,15 @@
 							<div class="input-group justify-content-end">
 								<div class="custom-control custom-switch mx-1">
 									<input type="checkbox" class="custom-control-input" id="nosave">
-									<label class="custom-control-label font-sm checkred align-self-center" for="nosave">Don't save today</label>
+									<label class="custom-control-label font-sm checkred" for="nosave">Don't save today</label>
 								</div>
 								<div class="custom-control custom-switch mx-1">
 									<input type="checkbox" class="custom-control-input" id="autoend">
-									<label class="custom-control-label font-sm" for="autoend">Automatically set end time on close</label>
+									<label class="custom-control-label font-sm checkgreen" for="autoend">Automatically set end time on close</label>
 								</div>
 								<div class="custom-control custom-switch mx-1">
 									<input type="checkbox" class="custom-control-input" id="startmin5">
-									<label class="custom-control-label font-sm" for="startmin5">Subtract 5 min from open</label>
+									<label class="custom-control-label font-sm checkgreen" for="startmin5">Subtract 5 min from open</label>
 								</div>
 							</div>
 						</div>
