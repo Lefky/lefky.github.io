@@ -52,8 +52,13 @@ html, body {
 }
 
 .custom-control-input:checked~.custom-control-label.checkred::before {
-	border-color: red;
-	background-color: red;
+	border-color: #dc3545;
+	background-color: #dc3545;
+}
+
+.custom-control-input:checked~.custom-control-label.checkgreen::before {
+	border-color: #28a745;
+	background-color: #28a745;
 }
 
 .form-group label> .description{
