@@ -41,8 +41,8 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20200330.1</span> <br>
-					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"target="_blank">Check the master branch on Github</a>
+					Version: <span id="currentappversion">20200504.1</span> <br>
+					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
 			<div class="modal-footer">
@@ -69,7 +69,8 @@
 					<button class="btn btn-outline-secondary btn-sm" id="exportHistory" onclick="exportHistory()">Export History</button >
 					<button class="btn btn-outline-secondary btn-sm" id="importHistory">Import History</button >
 					<button class="btn btn-outline-secondary btn-sm" id="deleteHistory" onclick="deleteHistory()">Delete History</button >
-					<input type="file" id="importFile" accept=".json" style="display:none"/>
+					<a id="exportHistoryLink" style="display: none;">Export</a>
+					<input type="file" id="importFile" accept=".json" style="display:none" />
 				</p>
 				<p>
 					<h4>Parameters</h4>
@@ -203,10 +204,15 @@
 					<i class="far fa-exclamation-triangle fa-4x pulsate" style="color: orange; font-size: 60px;"></i>
 				</div>
 				<div class="col-lg-10 py-1 px-4">
-					As you can see the UI got an overhaul.<br>
-					The UI has been coded with Bootstrap 4 resulting in a more standardized way of displaying stuff.<br>
-					This does make it for me personally a little harder to maintain as I didn't write these definitions myself.<br>
-					But hey... It's standardized!
+					<p>
+						Use Google Chrome or Firefox for optimal results. Lets be honest here... Edge or IE are crap.
+					</p>
+					<p>
+						As you can see the UI got an overhaul.<br>
+						The UI has been coded with Bootstrap 4 resulting in a more standardized way of displaying stuff.<br>
+						This does make it for me personally a little harder to maintain as I didn't write these definitions myself.<br>
+						But hey... It's standardized!
+					</p>
 				</div>
 			</div>
 			<button type="button" class="close" onclick="notificationClosed('click');" data-dismiss="alert" aria-label="Close">
@@ -271,7 +277,7 @@
 									<option value="4.8">4,8h 	&ensp;&emsp;&emsp;(part-time 3/5, 40h week)</option>
 									<option value="6.08">6,08h 	&emsp;&emsp;(part-time 4/5, 38h week)</option>
 									<option value="6.4">6,4h 	&ensp;&emsp;&emsp;(part-time 4/5, 40h week)</option>
-									<option value="7.6">7,6h 	&ensp;&emsp;&emsp;(full-time, 38h week)</option>
+									<option value="7.6" selected>7,6h 	&ensp;&emsp;&emsp;(full-time, 38h week)</option>
 									<option value="8">8h 		&nbsp;&emsp;&emsp;&emsp;(full-time, 40h week)</option>
 									<!--
 										&nbsp; (adds a single space)
@@ -325,11 +331,6 @@
 				<div class="row">
 					<div class="col col-sm-1 d-none d-lg-block"></div>
 					<div class="col my-3 ml-sm-1">
-						<!--
-						<button type="button" class="btn btn-lg btn-success m-3" onclick="add_time(7.6)"><i class="fal fa-plus"></i> 7,6h</button>
-						<button type="button" class="btn btn-lg btn-success m-3" onclick="add_time(8)"><i class="fal fa-plus"></i> 8h</button>
-						<button type="button" class="btn btn-lg btn-success m-3" onclick="end_time()">End time now</button>
-						-->
 						<div class="btn-group" role="group">
 							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(7.6)" style="border-radius: 1.5rem 0 0 1.5rem !important;"><i class="fal fa-plus"></i> 7,6h</button>
 							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(8)" style="border-radius: 0 !important;"><i class="fal fa-plus"></i> 8h</button>
@@ -340,11 +341,6 @@
 				<div class="row">
 					<div class="col col-sm-1 d-none d-lg-block"></div>
 					<div class="col my-3">
-						<!--
-						<button type="button" class="btn btn-lg btn-primary m-3" onclick="reset_break()"><i class="fal fa-redo"></i></button>
-						<button type="button" class="btn btn-lg btn-primary m-3" onclick="add_time(8)"><i class="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"></i> 5min</button>
-						<button type="button" class="btn btn-lg btn-primary m-3" onclick="add_break(0.5)"><i class="fal fa-plus"></i> 30min</button>
-						-->
 						<div class="btn-group" role="group" data-toggle="tooltip" data-placement="right" title="This is to add break time.">
 							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="reset_break()" style="border-radius: 1.5rem 0 0 1.5rem !important;"><i class="fal fa-redo"></i></button>
 							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_time(8)" style="border-radius: 0 !important;"><i class="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"></i> 5min</button>
@@ -355,9 +351,6 @@
 				<div class="row">
 					<div class="col col-sm-1 d-none d-lg-block"></div>
 					<div class="col my-3">
-						<!--
-						<button type="button" class="btn btn-lg btn-danger m-3" onclick="reset()"><i class="fal fa-redo"></i></button>
-						-->
 						<div class="btn-group" role="group">
 							<button type="button" class="btn btn-lg btn-danger px-4 py-3" onclick="reset()"><i class="fal fa-redo"></i></button>
 						</div>
