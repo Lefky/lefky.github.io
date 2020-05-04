@@ -400,14 +400,37 @@ function deleteHistory() {
 }
 
 function exportHistory() {		
+	/*
 	var _myArray = JSON.stringify(localStorage , null, 4); //indentation in json format, human readable
-
-	var vLink = document.getElementById('exportHistory'),
-	vBlob = new Blob([_myArray], {type: "octet/stream"}),
-	vName = 'working_history_' + todayDate() + '.json',
+	
+	var vLink = document.getElementById('exportHistory');
+	var vBlob = new Blob([_myArray], {type: "octet/stream"});
+	vName = 'working_history_' + todayDate() + '.json';
 	vUrl = window.URL.createObjectURL(vBlob);
+	
 	vLink.setAttribute('href', vUrl);
-	vLink.setAttribute('download', vName );
+	vLink.setAttribute('download', vName);
+	console.log(_myArray);
+	console.log(vLink);
+	console.log(vBlob);
+	console.log(vName);
+	console.log(vUrl);
+	*/
+	
+    var _myArray = JSON.stringify(localStorage , null, 4); //indentation in json format, human readable
+
+    //Note: We use the anchor tag here instead button.
+    var vLink = document.getElementById('exportHistoryLink');
+	
+    var vBlob = new Blob([_myArray], {type: "octet/stream"});
+    vName = 'working_history_' + todayDate() + '.json';
+    vUrl = window.URL.createObjectURL(vBlob);
+
+    vLink.setAttribute('href', vUrl);
+    vLink.setAttribute('download', vName );
+
+    //Note: Programmatically click the link to download the file
+    vLink.click();
 }
 	
 var importHistory = document.getElementById('importHistory'),
