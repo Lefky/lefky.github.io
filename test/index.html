@@ -6,14 +6,24 @@
 
   <title>test</title>
 
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
-
 </head>
 
 <body>
-  <h1>loaded!</h1>
-  <script type="text/javascript">
-   alert(document.referrer);
-</script>
+	<h1>Loaded!</h1>
+	
+	<p>
+		<span id="referrer"></<span>
+	</p>
+	
+	
+	<script type="text/javascript">
+		alert(document.referrer);
+		var ref = document.referrer;
+		if ( ref == "" ){
+			document.getElementById("referrer").innerHTML = "No referrer detected.";
+		} else {
+			document.getElementById("referrer").innerHTML = "Referred by: " + ref;
+		}
+	</script>
 </body>
 </html>
