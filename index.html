@@ -89,6 +89,15 @@
 					&emsp;will subtract 5 min from the time the page was opened (and the start time). This is to take the time to boot your laptop, ... into account.
 				</p>
 				<p>
+					<h4>User interface</h4>
+					<form>
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="weeklyovertimeoption" name="weeklyovertimeoption" data-toggle="collapse" data-target="#divovertimeweekly">
+							<label class="custom-control-label" for="weeklyovertimeoption">Show weekly overtime saldo</label>
+						</div>
+					</form>
+				</p>
+				<p>
 					<h4>History deletion policy</h4>
 					<div class="form-group">
 						<div class="input-group mb-2">
@@ -299,6 +308,12 @@
 							</div>
 						</div>
 						<div class="input-group justify-content-end my-3">
+							<div id="divovertimeweekly" class="collapse input-group justify-content-end my-3">
+								<label class="col-form-label" for="overtimeweekly" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the current week. This value doesn't include today yet.">Weekly overtime</label>
+								<div class="col-sm-3">
+									<input name="overtimeweekly" id="overtimeweekly" type="text" class="font-weight-bold form-control mx-1" disabled>
+								</div>
+							</div>
 							<label class="col-form-label" for="overtimetotal" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime</label>
 							<div class="col-sm-3">
 								<input name="overtimetotal" id="overtimetotal" type="text" class="font-weight-bold form-control mx-1" disabled>
