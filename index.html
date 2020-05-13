@@ -41,7 +41,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20200504.1</span> <br>
+					Version: <span id="currentappversion">20200513.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -59,6 +59,9 @@
 				<h2>Settings</h2>
 			</div>
 			<div class="modal-body">
+				<p>
+					Use Google Chrome or Firefox for optimal results. Lets be honest here... Edge or IE are crap.
+				</<p>
 				<p>
 					Set this page as your browser startup page or pin the tab to automatically start counting when you open your browser.<br><br>
 					Hitting "ENTER" will add the time corresponding to the selected value next to 'Overtime' to the end date (and break time if defined).
@@ -87,6 +90,38 @@
 				<p>
 					<i>"Subtract 5 min from time on open."</i><br>
 					&emsp;will subtract 5 min from the time the page was opened (and the start time). This is to take the time to boot your laptop, ... into account.
+				</p>
+				<p>
+					<h4>User interface</h4>
+					<p>
+						Select which different stats and options should be visible in the UI.
+					</p>
+					<form>
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="overtimeoption" name="overtimeoption" data-toggle="collapse" data-target="#divovertime">
+							<label class="custom-control-label" for="overtimeoption">Show overtime count</label>
+						</div>
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="totalhoursoption" name="totalhoursoption" data-toggle="collapse" data-target="#divtotalhours">
+							<label class="custom-control-label" for="totalhoursoption">Show total hours count</label>
+						</div>
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="weeklyovertimeoption" name="weeklyovertimeoption" data-toggle="collapse" data-target="#divovertimeweekly">
+							<label class="custom-control-label" for="weeklyovertimeoption">Show weekly overtime saldo</label>
+						</div>
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="totalovertimeoption" name="totalovertimeoption" data-toggle="collapse" data-target="#divovertimetotal">
+							<label class="custom-control-label" for="totalovertimeoption">Show total overtime saldo</label>
+						</div>
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="historyoption" name="historyoption" data-toggle="collapse" data-target="#historycontainer">
+							<label class="custom-control-label" for="historyoption">Show history</label>
+						</div>
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="parametersoption" name="parametersoption" data-toggle="collapse" data-target="#divparameters">
+							<label class="custom-control-label" for="parametersoption">Show parameters</label>
+						</div>
+					</form>
 				</p>
 				<p>
 					<h4>History deletion policy</h4>
@@ -205,13 +240,7 @@
 				</div>
 				<div class="col-lg-10 py-1 px-4">
 					<p>
-						Use Google Chrome or Firefox for optimal results. Lets be honest here... Edge or IE are crap.
-					</p>
-					<p>
-						As you can see the UI got an overhaul.<br>
-						The UI has been coded with Bootstrap 4 resulting in a more standardized way of displaying stuff.<br>
-						This does make it for me personally a little harder to maintain as I didn't write these definitions myself.<br>
-						But hey... It's standardized!
+						Added UI display options. You can now select which stats you want to see. Head to the settings tab to try it out!
 					</p>
 				</div>
 			</div>
@@ -263,7 +292,7 @@
 								<input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control mx-1 mt-1" disabled>
 							</div>
 						</div>
-						<div class="input-group justify-content-end my-3">
+						<div id="divovertime" class="collapse input-group justify-content-end my-3">
 							<label class="col-form-label" for="overtime" data-toggle="tooltip" data-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
 								Overtime@
 							</label>
@@ -291,7 +320,7 @@
 								<input name="overtimedec" id="overtimedec" type="text" class="form-control mx-1 mt-1" disabled>
 							</div>
 						</div>
-						<div class="input-group justify-content-end my-3">
+						<div id="divtotalhours" class="collapse input-group justify-content-end my-3">
 							<label class="col-form-label" for="total" data-toggle="tooltip" data-placement="left" title="These hours are howmuch time you spent being at your workplace.">Total hours</label>
 							<div class="col-sm-3">
 								<input name="total" id="total" type="time" class="form-control mx-1" disabled>
@@ -299,16 +328,24 @@
 							</div>
 						</div>
 						<div class="input-group justify-content-end my-3">
-							<label class="col-form-label" for="overtimetotal" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime</label>
-							<div class="col-sm-3">
-								<input name="overtimetotal" id="overtimetotal" type="text" class="font-weight-bold form-control mx-1" disabled>
+							<div id="divovertimeweekly" class="collapse input-group justify-content-end mb-1">
+								<label class="col-form-label" for="overtimeweekly" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the current week. This value doesn't include today yet.">Weekly overtime</label>
+								<div class="col-sm-3">
+									<input name="overtimeweekly" id="overtimeweekly" type="text" class="font-weight-bold form-control mx-1" disabled>
+								</div>
+							</div>
+							<div id="divovertimetotal" class="collapse input-group justify-content-end mt-1">
+								<label class="col-form-label" for="overtimetotal" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime</label>
+								<div class="col-sm-3">
+									<input name="overtimetotal" id="overtimetotal" type="text" class="font-weight-bold form-control mx-1" disabled>
+								</div>
 							</div>
 						</div>
-						<div id="historycontainer" class="ml-auto my-3 mr-2">
+						<div id="historycontainer" class="collapse ml-auto my-3 mr-2">
 							<div id="history"></div>
 						</div>
 						
-						<div class="col mr-5">
+						<div id="divparameters" class="collapse col mr-5">
 							<div class="input-group justify-content-end">
 								<div class="custom-control custom-switch mx-1">
 									<input type="checkbox" class="custom-control-input" id="nosave">
@@ -368,7 +405,7 @@
 		<div class="col d-flex justify-content-end">
 			<div class="btn-group align-self-center" role="group">
 				<button type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="modal" data-target="#modalabout"><i class="fas fa-info"></i></button>
-				<button type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 0 !important;" data-toggle="modal" data-target="#modalinfo"><i class="fas fa-lightbulb pulsate"></i></button>
+				<button type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 0 !important;" data-toggle="modal" data-target="#modalinfo"><i class="fas fa-lightbulb"></i></button>
 				<button type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="modal" data-target="#modalsettings"><i class="fas fa-cog"></i></button>
 			</div>			
 		</div>

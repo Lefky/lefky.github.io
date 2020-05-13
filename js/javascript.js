@@ -151,6 +151,15 @@ function setOvertimeTotal(time){
 	}
 }
 
+function setOvertimeWeekly(time){
+	document.getElementById("overtimeweekly").value = floatToTimeString(time);
+	if ( time > 0 ) {
+		document.getElementById("overtimeweekly").setAttribute("style", "color:green;");
+	} else {
+		document.getElementById("overtimeweekly").setAttribute("style", "color:red;");
+	}
+}
+
 function setTotalNoBreak(time){
 	document.getElementById("totalnobreak").value = floatToTimeString(time);
 }
@@ -233,7 +242,7 @@ function getResetDate(){
 
 // UI
 function showHistorydeleteoptionContent() {
-	if(document.getElementById("historydeleteoptiondays").checked) {
+	if( document.getElementById("historydeleteoptiondays").checked ) {
 		$("#historydeleteoptiondayscontent").show();
 		$("#historydeleteoptionperiodscontent").hide();
 	} else {
@@ -307,6 +316,7 @@ function setHistory(){
 		keys = Object.keys(localStorage),
 		revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
 		overtimetotal = 0,
+		overtimeweekly = 0,
 		i = 0, 
 		key;
 		
@@ -319,6 +329,10 @@ function setHistory(){
 				//entry = entry + "<span style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['OvertimeDec'] + "</span><br>";
 				entry = entry + "<tr><td>" + key + "</td><td>" + timeinfo['TotalNoBreakDec'] + "</td><td>" + timeinfo['OvertimeDec'] + "</td></tr>"
 				overtimetotal = overtimetotal + parseFloat(timeinfo['OvertimeDec']);
+				
+				if ( moment(key, "DD-MM-YYYY") >= moment().startOf('week') ) {
+					overtimeweekly = overtimeweekly + parseFloat(timeinfo['OvertimeDec']);
+				}
 			} else {
 				//entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['RecupDec'] + "</span><br>";
 				entry = entry + "<tr><td>" + key + "</td><td>" + timeinfo['TotalNoBreakDec'] + "</td><td>" + timeinfo['RecupDec'] + "</td></tr>"
@@ -340,6 +354,7 @@ function setHistory(){
 	}
 	document.getElementById("history").innerHTML = entry;		
 	setOvertimeTotal(overtimetotal);
+	setOvertimeWeekly(overtimeweekly);
 }
 
 function notificationClosed(event){
@@ -509,7 +524,13 @@ function setParameters() {
 		historyretain = localStorage.getItem("historyretain"),
 		historyresetday = localStorage.getItem("historyresetday"),
 		historyresetperiod = localStorage.getItem("historyresetperiod"),
-		historyresetperiodunit = localStorage.getItem("historyresetperiodunit");
+		historyresetperiodunit = localStorage.getItem("historyresetperiodunit"),
+		overtimeoption = localStorage.getItem("overtimeoption"),
+		totalhoursoption = localStorage.getItem("totalhoursoption"),
+		historyoption = localStorage.getItem("historyoption"),
+		weeklyovertimeoption = localStorage.getItem("weeklyovertimeoption"),
+		totalovertimeoption = localStorage.getItem("totalovertimeoption"),
+		parametersoption = localStorage.getItem("parametersoption");
 
 	if ( autoend == "true" )
 		document.getElementById("autoend").checked = true;
@@ -537,6 +558,31 @@ function setParameters() {
 		document.getElementById("historyresetperiod").value = historyresetperiod;
 	if ( historyresetperiodunit )
 		document.getElementById("historyresetperiodunit").value = historyresetperiodunit;
+	// Set UI visibility options
+	if ( overtimeoption == "true" || overtimeoption === null ) {
+		document.getElementById("overtimeoption").checked = true;
+		document.getElementById("divovertime").classList.add("show");
+	}
+	if ( totalhoursoption == "true" || totalhoursoption === null ) {
+		document.getElementById("totalhoursoption").checked = true;
+		document.getElementById("divtotalhours").classList.add("show");
+	}
+	if ( weeklyovertimeoption == "true" || weeklyovertimeoption === null ) {
+		document.getElementById("weeklyovertimeoption").checked = true;
+		document.getElementById("divovertimeweekly").classList.add("show");
+	}
+	if ( totalovertimeoption == "true" || totalovertimeoption === null ) {
+		document.getElementById("totalovertimeoption").checked = true;
+		document.getElementById("divovertimetotal").classList.add("show");
+	}
+	if ( historyoption == "true" || historyoption === null ) {
+		document.getElementById("historyoption").checked = true;
+		document.getElementById("historycontainer").classList.add("show");
+	}
+	if ( parametersoption == "true" || parametersoption === null ) {
+		document.getElementById("parametersoption").checked = true;
+		document.getElementById("divparameters").classList.add("show");
+	}
 
 	showHistorydeleteoptionContent();
 	
@@ -631,4 +677,35 @@ window.onbeforeunload = function(e) {
 	localStorage.setItem("historyresetday", getHistoryResetDay());
 	localStorage.setItem("historyresetperiod", getHistoryResetPeriod());
 	localStorage.setItem("historyresetperiodunit", getHistoryResetPeriodUnit());
+	// Set UI visibility options
+	if ( document.getElementById("overtimeoption").checked == false ) {
+		localStorage.setItem("overtimeoption", "false");
+	} else {
+		localStorage.setItem("overtimeoption", "true");
+	}
+	if ( document.getElementById("totalhoursoption").checked == false ) {
+		localStorage.setItem("totalhoursoption", "false");
+	} else {
+		localStorage.setItem("totalhoursoption", "true");
+	}
+	if ( document.getElementById("weeklyovertimeoption").checked == false ) {
+		localStorage.setItem("weeklyovertimeoption", "false");
+	} else {
+		localStorage.setItem("weeklyovertimeoption", "true");
+	}
+	if ( document.getElementById("totalovertimeoption").checked == false ) {
+		localStorage.setItem("totalovertimeoption", "false");
+	} else {
+		localStorage.setItem("totalovertimeoption", "true");
+	}
+	if ( document.getElementById("historyoption").checked == false ) {
+		localStorage.setItem("historyoption", "false");
+	} else {
+		localStorage.setItem("historyoption", "true");
+	}
+	if ( document.getElementById("parametersoption").checked == false ) {
+		localStorage.setItem("parametersoption", "false");
+	} else {
+		localStorage.setItem("parametersoption", "true");
+	}
 };
