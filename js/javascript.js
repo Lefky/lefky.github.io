@@ -525,7 +525,12 @@ function setParameters() {
 		historyresetday = localStorage.getItem("historyresetday"),
 		historyresetperiod = localStorage.getItem("historyresetperiod"),
 		historyresetperiodunit = localStorage.getItem("historyresetperiodunit"),
-		weeklyovertimeoption = localStorage.getItem("weeklyovertimeoption");
+		overtimeoption = localStorage.getItem("overtimeoption"),
+		totalhoursoption = localStorage.getItem("totalhoursoption"),
+		historyoption = localStorage.getItem("historyoption"),
+		weeklyovertimeoption = localStorage.getItem("weeklyovertimeoption"),
+		totalovertimeoption = localStorage.getItem("totalovertimeoption"),
+		parametersoption = localStorage.getItem("parametersoption");
 
 	if ( autoend == "true" )
 		document.getElementById("autoend").checked = true;
@@ -553,9 +558,30 @@ function setParameters() {
 		document.getElementById("historyresetperiod").value = historyresetperiod;
 	if ( historyresetperiodunit )
 		document.getElementById("historyresetperiodunit").value = historyresetperiodunit;
-	if ( weeklyovertimeoption == "true" ) {
+	// Set UI visibility options
+	if ( overtimeoption == "true" || overtimeoption === null ) {
+		document.getElementById("overtimeoption").checked = true;
+		document.getElementById("divovertime").classList.add("show");
+	}
+	if ( totalhoursoption == "true" || totalhoursoption === null ) {
+		document.getElementById("totalhoursoption").checked = true;
+		document.getElementById("divtotalhours").classList.add("show");
+	}
+	if ( weeklyovertimeoption == "true" || weeklyovertimeoption === null ) {
 		document.getElementById("weeklyovertimeoption").checked = true;
 		document.getElementById("divovertimeweekly").classList.add("show");
+	}
+	if ( totalovertimeoption == "true" || totalovertimeoption === null ) {
+		document.getElementById("totalovertimeoption").checked = true;
+		document.getElementById("divovertimetotal").classList.add("show");
+	}
+	if ( historyoption == "true" || historyoption === null ) {
+		document.getElementById("historyoption").checked = true;
+		document.getElementById("historycontainer").classList.add("show");
+	}
+	if ( parametersoption == "true" || parametersoption === null ) {
+		document.getElementById("parametersoption").checked = true;
+		document.getElementById("divparameters").classList.add("show");
 	}
 
 	showHistorydeleteoptionContent();
@@ -652,9 +678,34 @@ window.onbeforeunload = function(e) {
 	localStorage.setItem("historyresetperiod", getHistoryResetPeriod());
 	localStorage.setItem("historyresetperiodunit", getHistoryResetPeriodUnit());
 	// Set UI visibility options
+	if ( document.getElementById("overtimeoption").checked == false ) {
+		localStorage.setItem("overtimeoption", "false");
+	} else {
+		localStorage.setItem("overtimeoption", "true");
+	}
+	if ( document.getElementById("totalhoursoption").checked == false ) {
+		localStorage.setItem("totalhoursoption", "false");
+	} else {
+		localStorage.setItem("totalhoursoption", "true");
+	}
 	if ( document.getElementById("weeklyovertimeoption").checked == false ) {
 		localStorage.setItem("weeklyovertimeoption", "false");
 	} else {
 		localStorage.setItem("weeklyovertimeoption", "true");
+	}
+	if ( document.getElementById("totalovertimeoption").checked == false ) {
+		localStorage.setItem("totalovertimeoption", "false");
+	} else {
+		localStorage.setItem("totalovertimeoption", "true");
+	}
+	if ( document.getElementById("historyoption").checked == false ) {
+		localStorage.setItem("historyoption", "false");
+	} else {
+		localStorage.setItem("historyoption", "true");
+	}
+	if ( document.getElementById("parametersoption").checked == false ) {
+		localStorage.setItem("parametersoption", "false");
+	} else {
+		localStorage.setItem("parametersoption", "true");
 	}
 };
