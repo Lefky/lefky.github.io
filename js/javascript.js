@@ -144,7 +144,7 @@ function setOvertimeDec(time){
 
 function setOvertimeTotal(time){
 	document.getElementById("overtimetotal").value = floatToTimeString(time);
-	if ( time > 0 ) {
+	if ( time >= 0 ) {
 		document.getElementById("overtimetotal").setAttribute("style", "color:green;");
 	} else {
 		document.getElementById("overtimetotal").setAttribute("style", "color:red;");
@@ -153,7 +153,7 @@ function setOvertimeTotal(time){
 
 function setOvertimeWeekly(time){
 	document.getElementById("overtimeweekly").value = floatToTimeString(time);
-	if ( time > 0 ) {
+	if ( time >= 0 ) {
 		document.getElementById("overtimeweekly").setAttribute("style", "color:green;");
 	} else {
 		document.getElementById("overtimeweekly").setAttribute("style", "color:red;");
