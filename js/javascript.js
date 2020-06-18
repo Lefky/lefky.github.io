@@ -312,7 +312,7 @@ function setHistory(){
 	};
 	
 	var //entry = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Overtime</span><br><div class='greyed' style='border-bottom: 1px solid black; width: 100%;'></div>",
-		entry = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;'>Time (no break)</th><th style='width: 33%;'>Overtime</th></tr>",
+		entry = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
 		keys = Object.keys(localStorage),
 		revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
 		overtimetotal = 0,
@@ -327,23 +327,16 @@ function setHistory(){
 			var timeinfo = JSON.parse(localStorage.getItem(key));
 			if (timeinfo.hasOwnProperty('OvertimeDec')){
 				//entry = entry + "<span style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['OvertimeDec'] + "</span><br>";
-				entry = entry + "<tr><td>" + key + "</td><td>" + timeinfo['TotalNoBreakDec'] + "</td><td>" + timeinfo['OvertimeDec'] + "</td></tr>"
+				if (timeinfo['OvertimeDec'].startsWith("-")){
+					entry = entry + "<tr style='color:red;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
+				} else {
+					entry = entry + "<tr style='color:green;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
+				}
 				overtimetotal = overtimetotal + parseFloat(timeinfo['OvertimeDec']);
 				
 				if ( moment(key, "DD-MM-YYYY") >= moment().startOf('week') ) {
 					overtimeweekly = overtimeweekly + parseFloat(timeinfo['OvertimeDec']);
 				}
-			} else {
-				//entry = entry + "<span class='' style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['RecupDec'] + "</span><br>";
-				entry = entry + "<tr><td>" + key + "</td><td>" + timeinfo['TotalNoBreakDec'] + "</td><td>" + timeinfo['RecupDec'] + "</td></tr>"
-				overtimetotal = overtimetotal + parseFloat(timeinfo['RecupDec']);
-				// convert to new json key
-				if (timeinfo.hasOwnProperty('StartDec')){
-					timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['RecupDec'] + '", "TotalDec": "' + timeinfo['TotalDec'] + '", "StartDec": "' + timeinfo['StartDec'] + '"}';
-				} else {
-					timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['RecupDec'] + '"}';
-				}
-				localStorage.setItem(key, timeinfo);
 			}
 		}
 	}
@@ -636,6 +629,35 @@ function reset_break() {
 	calculateTotal();
 }
 
+function break_counter() {
+	var break_counter_started = localStorage.getItem("break_counter_started"),
+		break_counter_btn = document.getElementById("break_counter_btn");	
+	if (break_counter_started == "true") {
+		var break_counter_stop_time = moment(),
+			break_counter_start_time = moment(localStorage.getItem("break_counter_start_time"), "HH:mm"),
+			break_time = break_counter_stop_time.diff(break_counter_start_time, 'minutes'),
+			interval = moment().hour(0).minute(break_time),
+			decimal_time = timeStringToFloat(interval.format("HH:mm"));
+		localStorage.setItem("break_counter_started", "false");
+		setBreak(decimal_time);
+		add_time(getHourSchedule());
+		
+		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Start";
+		break_counter_btn.classList.remove("btn-warning");
+		break_counter_btn.classList.add("btn-primary");
+		break_counter_btn.classList.remove("pulsate");
+	} else {
+		localStorage.setItem("break_counter_start_time", moment().format("HH:mm"));
+		localStorage.setItem("break_counter_started", "true");
+		
+		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Stop";
+		break_counter_btn.classList.remove("btn-primary");
+		break_counter_btn.classList.add("btn-warning");
+		break_counter_btn.classList.add("pulsate");
+	}
+	
+}
+
 $( document ).on( 'keydown', function ( e ) {
 	if ( e.keyCode === 13 ) { //ENTER key code
 		add_time(getHourSchedule());
@@ -671,6 +693,8 @@ window.onbeforeunload = function(e) {
 	localStorage.setItem("hourschedule", getHourSchedule());
 	// Set 'default break time' parameter in local storage
 	localStorage.setItem("break_time_default", getBreakDefault());
+	// Clear break counter
+	///////////////////////////////////////////////////////////////////////////////////////localStorage.setItem("break_counter_started", "false");
 	// Set 'history retain time' parameter in local storage
 	localStorage.setItem("historydeleteoption", getHistoryDeleteOption());
 	localStorage.setItem("historyretain", getHistoryRetain());

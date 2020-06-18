@@ -370,19 +370,20 @@
 					<div class="col col-sm-1 d-none d-lg-block"></div>
 					<div class="col my-3 ml-sm-1">
 						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(7.6)" style="border-radius: 1.5rem 0 0 1.5rem !important;"><i class="fal fa-plus"></i> 7,6h</button>
-							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(8)" style="border-radius: 0 !important;"><i class="fal fa-plus"></i> 8h</button>
-							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="end_time()" style="border-radius: 0 1.5rem 1.5rem 0 !important;">End time now</button>
+							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(7.6)" style="border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 7.6h of work time to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> 7,6h</button>
+							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(8)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 8h of work time to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> 8h</button>
+							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="end_time()" style="border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Sets the 'Time to go home' field to the current time.">End time now</button>
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col col-sm-1 d-none d-lg-block"></div>
 					<div class="col my-3">
-						<div class="btn-group" role="group" data-toggle="tooltip" data-placement="right" title="This is to add break time.">
-							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="reset_break()" style="border-radius: 1.5rem 0 0 1.5rem !important;"><i class="fal fa-redo"></i></button>
-							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_time(8)" style="border-radius: 0 !important;"><i class="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"></i> 5min</button>
-							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_break(0.5)" style="border-radius: 0 1.5rem 1.5rem 0 !important;"><i class="fal fa-plus"></i> 30min</button>
+						<div class="btn-group" role="group">
+							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="reset_break()" style="border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="tooltip" data-placement="bottom" title="Resets the break time."><i class="fal fa-redo"></i></button>
+							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_time(8)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 5min of break time."><i class="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"></i> 5min</button>
+							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_break(0.5)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 30min of break time."><i class="fal fa-plus"></i> 30min</button>
+							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="break_counter()" id="break_counter_btn" style="border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Click once to start the break time counter. Click again to stop it and add the break time. If you don't click the button a second time, no time will be added."><i class="fal fa-stopwatch"></i> Start</button>
 						</div>						
 					</div>
 				</div>
@@ -390,7 +391,7 @@
 					<div class="col col-sm-1 d-none d-lg-block"></div>
 					<div class="col my-3">
 						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-lg btn-danger px-4 py-3" onclick="reset()"><i class="fal fa-redo"></i></button>
+							<button type="button" class="btn btn-lg btn-danger px-4 py-3" onclick="reset()" data-toggle="tooltip" data-placement="bottom" title="Resets all the timestamps."><i class="fal fa-redo"></i></button>
 						</div>
 					</div>
 				</div>
