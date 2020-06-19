@@ -363,6 +363,13 @@ function notificationClosed(event){
 	}
 }
 
+function startminsubtract(){
+	var startminsubtract_value = document.getElementById("startminsubtract_value").value,
+		startminsubtract_span = document.getElementById("startminsubtract_span");
+	localStorage.setItem("startminsubtract_value", startminsubtract_value);
+	startminsubtract_span.innerHTML = startminsubtract_value; 
+}
+
 // Storage functions
 function cleanLocalStorage() {
 	var keys = Object.keys(localStorage),
@@ -512,7 +519,8 @@ function setParameters() {
 		nosave = localStorage.getItem("nosave"),
 		hourschedule = localStorage.getItem("hourschedule"),
 		break_time_default = localStorage.getItem("break_time_default"),
-		startmin5 = localStorage.getItem("startmin5"),
+		startminsubtract = localStorage.getItem("startminsubtract"),
+		startminsubtract_value = localStorage.getItem("startminsubtract_value"),
 		historydeleteoption = localStorage.getItem("historydeleteoption"),
 		historyretain = localStorage.getItem("historyretain"),
 		historyresetday = localStorage.getItem("historyresetday"),
@@ -579,31 +587,26 @@ function setParameters() {
 
 	showHistorydeleteoptionContent();
 	
-	/*try {
-		var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
-		setStart(timeinfo['StartDec']);
-		if ( startmin5 == "true" )
-			document.getElementById("startmin5").checked = true;
-	} catch(e) {
-		if ( startmin5 == "true" ) {
-			document.getElementById("startmin5").checked = true;
-			setStart(now() - 0.08);
-		} else {
-			setStart(now());
-		}	
-	}*/
+	// If subtract from start is checked set UI and deduct the amount of time stored in localstorage
+	// If the page was already opened today, fill in that start time
 	var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
 	if ( timeinfo == null ) {
-		if ( startmin5 == "true" ) {
-			document.getElementById("startmin5").checked = true;
-			setStart(now() - 0.08);
+		if ( startminsubtract == "true" ) {
+			document.getElementById("startminsubtract").checked = true;
+			setStart(now() - startminsubtract_value);
 		} else {
 			setStart(now());
 		}
 	} else {
 		setStart(timeinfo['StartDec']);
-		if ( startmin5 == "true" )
-			document.getElementById("startmin5").checked = true;
+		if ( startminsubtract == "true" )
+			document.getElementById("startminsubtract").checked = true;
+	}
+	document.getElementById("startminsubtract_value").value = startminsubtract_value;
+	if ( startminsubtract_value == "" ) {
+		document.getElementById("startminsubtract_span").innerHTML = startminsubtract_value; 
+	} else {
+		document.getElementById("startminsubtract_span").innerHTML = "5";
 	}
 }
 
@@ -683,18 +686,18 @@ window.onbeforeunload = function(e) {
 		localStorage.setItem("nosave", todayDate());
 	}
 	// Set 'subtract 5 min from start time' parameter in local storage
-	var startmin5 = document.getElementById("startmin5");
-	if ( startmin5.checked == false ) {
-		localStorage.setItem("startmin5", "false");
+	var startminsubtract = document.getElementById("startminsubtract");
+	if ( startminsubtract.checked == false ) {
+		localStorage.setItem("startminsubtract", "false");
 	} else {
-		localStorage.setItem("startmin5", "true");
+		localStorage.setItem("startminsubtract", "true");
 	}
 	// Set 'hour schedule' parameter in local storage
 	localStorage.setItem("hourschedule", getHourSchedule());
 	// Set 'default break time' parameter in local storage
 	localStorage.setItem("break_time_default", getBreakDefault());
 	// Clear break counter
-	///////////////////////////////////////////////////////////////////////////////////////localStorage.setItem("break_counter_started", "false");
+	localStorage.setItem("break_counter_started", "false");
 	// Set 'history retain time' parameter in local storage
 	localStorage.setItem("historydeleteoption", getHistoryDeleteOption());
 	localStorage.setItem("historyretain", getHistoryRetain());
