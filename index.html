@@ -41,7 +41,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20200618.1</span> <br>
+					Version: <span id="currentappversion">20200619.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -88,8 +88,14 @@
 					&emsp;will change the end time to the timestamp on which you close or refresh the window and thus overwrite any manual changes you made.<br>
 				</p>
 				<p>
-					<i>"Subtract 5 min from time on open."</i><br>
-					&emsp;will subtract 5 min from the time the page was opened (and the start time). This is to take the time to boot your laptop, ... into account.
+					<i>"Subtract X min from time on open."</i><br>
+					&emsp;will subtract X min from the time the page was opened NEXT DAY YOU OPEN THE PAGE. This is to take the time to boot your laptop, ... into account.
+					<div class="form-group">
+						<div class="input-group">
+							<label class="col-form-label" for="startminsubtract_value">Minutes to subtract: </label>
+							<input type="number" name="startminsubtract_value" id="startminsubtract_value" class="form-control col-sm-2 mx-1" placeholder="5" min="0" max="60" onchange="startminsubtract()">
+						</div>
+					</div>
 				</p>
 				<p>
 					<h4>User interface</h4>
@@ -240,9 +246,7 @@
 				</div>
 				<div class="col-lg-10 py-1 px-4">
 					<p>
-						The history now displays positive or negative overtime more clearly.<br>
-						<br>
-						A stopwatch for break time has been introduced! Just click the start button when going on a break and click the button again afterwards. Don't wory, you can still edit it ;)
+						You can now change howmany minutes are being subtracted when you open the page. Head to the settings to change it :)<br>
 					</p>
 				</div>
 			</div>
@@ -352,15 +356,15 @@
 							<div class="input-group justify-content-end">
 								<div class="custom-control custom-switch mx-1">
 									<input type="checkbox" class="custom-control-input" id="nosave">
-									<label class="custom-control-label font-sm checkred" for="nosave">Don't save today</label>
+									<label class="custom-control-label font-sm checkred" for="nosave" data-toggle="tooltip" data-placement="bottom" title="Won't save today's date for the remainder of the day (until timestamp 00:00) or unless disabled again.">Don't save today</label>
 								</div>
 								<div class="custom-control custom-switch mx-1">
 									<input type="checkbox" class="custom-control-input" id="autoend">
-									<label class="custom-control-label font-sm checkgreen" for="autoend">Automatically set end time on close</label>
+									<label class="custom-control-label font-sm checkgreen" for="autoend" data-toggle="tooltip" data-placement="bottom" title="Will change the end time to the timestamp on which you close or refresh the window and thus overwrite any manual changes you made.">Automatically set end time on close</label>
 								</div>
 								<div class="custom-control custom-switch mx-1">
-									<input type="checkbox" class="custom-control-input" id="startmin5">
-									<label class="custom-control-label font-sm checkgreen" for="startmin5">Subtract 5 min from open</label>
+									<input type="checkbox" class="custom-control-input" id="startminsubtract">
+									<label class="custom-control-label font-sm checkgreen" for="startminsubtract" data-toggle="tooltip" data-placement="bottom" title="Will subtract X min (set in the settings) from the time the page was opened NEXT DAY YOU OPEN THE PAGE. This is to take the time to boot your laptop, ... into account.">Subtract <span id="startminsubtract_span"></span> min from open</label>
 								</div>
 							</div>
 						</div>
@@ -383,7 +387,7 @@
 					<div class="col my-3">
 						<div class="btn-group" role="group">
 							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="reset_break()" style="border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="tooltip" data-placement="bottom" title="Resets the break time."><i class="fal fa-redo"></i></button>
-							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_time(8)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 5min of break time."><i class="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"></i> 5min</button>
+							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_break(0.08)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 5min of break time."><i class="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"></i> 5min</button>
 							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_break(0.5)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 30min of break time."><i class="fal fa-plus"></i> 30min</button>
 							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="break_counter()" id="break_counter_btn" style="border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Click once to start the break time counter. Click again to stop it and add the break time. If you don't click the button a second time, no time will be added."><i class="fal fa-stopwatch"></i> Start</button>
 						</div>						
