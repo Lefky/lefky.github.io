@@ -101,9 +101,17 @@ function getHourSchedule(){
 	return parseFloat(time);
 }
 
-function calculateTotal() {
+function getWorktime() {
 	var worktime = getEnd() - getStart();
-	
+	if (worktime <= (getHourSchedule()+0.02) && worktime >= (getHourSchedule()-0.02)) {
+		worktime = getHourSchedule();
+	}
+	return worktime;
+}
+
+function calculateTotal() {
+	var worktime = getWorktime();
+
 	setTotal(worktime);
 	setOvertime(worktime - getBreak() - getHourSchedule());
 	setTotalNoBreak(Math.abs(worktime - getBreak()));
@@ -118,7 +126,7 @@ function setTotal(time){
 }
 
 function getTotalDec(){
-	var worktime = getEnd() - getStart();
+	var worktime = getWorktime();
 	return parseFloat(worktime).toFixed(2);
 }
 
@@ -134,7 +142,7 @@ function setOvertime(time){
 }
 
 function getOvertimeDec(){
-	var worktime = getEnd() - getStart();
+	var worktime = getWorktime();
 	return parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2);
 }
 
@@ -165,7 +173,7 @@ function setTotalNoBreak(time){
 }
 
 function getTotalNoBreakDec(){
-	var worktime = getEnd() - getStart();
+	var worktime = getWorktime();
 	return Math.abs(parseFloat(worktime - getBreak()).toFixed(2));
 }
 
