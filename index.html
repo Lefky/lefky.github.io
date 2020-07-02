@@ -376,8 +376,7 @@
 					<div class="col col-sm-1 d-none d-lg-block"></div>
 					<div class="col my-3 ml-sm-1">
 						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(7.6)" style="border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 7.6h of work time to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> 7,6h</button>
-							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(8)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 8h of work time to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> 8h</button>
+							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(getHourSchedule())" style="border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="tooltip" data-placement="bottom" title="Adds the time selected in the hour schedule to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> <span id="addtimebutton_span"></span>h</button>
 							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="end_time()" style="border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Sets the 'Time to go home' field to the current time.">End time now</button>
 						</div>
 					</div>
