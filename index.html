@@ -41,7 +41,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20200619.1</span> <br>
+					Version: <span id="currentappversion">20200702.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -247,6 +247,8 @@
 				<div class="col-lg-10 py-1 px-4">
 					<p>
 						You can now change howmany minutes are being subtracted when you open the page. Head to the settings to change it :)<br>
+						<br>
+						The add time button now adds the time specified in the hourschedule dropdown next to the overtime.
 					</p>
 				</div>
 			</div>
@@ -376,8 +378,7 @@
 					<div class="col col-sm-1 d-none d-lg-block"></div>
 					<div class="col my-3 ml-sm-1">
 						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(7.6)" style="border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 7.6h of work time to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> 7,6h</button>
-							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(8)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 8h of work time to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> 8h</button>
+							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(getHourSchedule())" style="border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="tooltip" data-placement="bottom" title="Adds the time selected in the hour schedule to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> <span id="addtimebutton_span"></span>h</button>
 							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="end_time()" style="border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Sets the 'Time to go home' field to the current time.">End time now</button>
 						</div>
 					</div>

@@ -15,7 +15,8 @@ function timeStringToFloat(time) {
 	var hoursMinutes = time.split(/[.:]/);
 	var hours = parseInt(hoursMinutes[0], 10);
 	var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
-	return hours + minutes / 60;
+	var time = hours + minutes / 60;
+	return Math.round((time + Number.EPSILON) * 100) / 100;
 }
 
 function floatToTimeString(timedec){
@@ -101,6 +102,15 @@ function getHourSchedule(){
 	return parseFloat(time);
 }
 
+function setHourSchedule(time){
+	if ( time ) {
+		document.getElementById("hourschedule").value = time;
+	} else {
+		document.getElementById("hourschedule").value = "7.6";
+	}
+	hourscheduleAddTimeButton();
+}
+
 function getWorktime() {
 	var worktime = getEnd() - getStart();
 	if (worktime <= (getHourSchedule()+0.02) && worktime >= (getHourSchedule()-0.02)) {
@@ -119,6 +129,8 @@ function calculateTotal() {
 	setTotalDec((parseFloat(worktime).toFixed(2)));
 	setOvertimeDec(parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2));
 	setTotalNoBreakDec(getTotalNoBreakDec());
+	
+	hourscheduleAddTimeButton();
 }
 
 function setTotal(time){
@@ -378,6 +390,13 @@ function startminsubtract(){
 	startminsubtract_span.innerHTML = startminsubtract_value; 
 }
 
+function hourscheduleAddTimeButton(){
+	var hourschedule = getHourSchedule(),
+		addtimebutton_span = document.getElementById("addtimebutton_span");
+	localStorage.setItem("hourschedule", hourschedule);
+	addtimebutton_span.innerHTML = hourschedule; 
+}
+
 // Storage functions
 function cleanLocalStorage() {
 	var keys = Object.keys(localStorage),
@@ -545,9 +564,7 @@ function setParameters() {
 		document.getElementById("autoend").checked = true;
 	if ( nosave == todayDate() )
 		document.getElementById("nosave").checked = true;
-	document.getElementById("hourschedule").value = "7.6";
-	if ( hourschedule )
-		document.getElementById("hourschedule").value = hourschedule;
+	setHourSchedule(hourschedule);
 	if ( break_time_default ) {
 		document.getElementById("break_time_default").value = break_time_default;
 		setBreak(break_time_default);
