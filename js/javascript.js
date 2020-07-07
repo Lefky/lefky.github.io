@@ -121,14 +121,20 @@ function getWorktime() {
 }
 
 function calculateTotal() {
-	var worktime = getWorktime();
+	var worktime = getWorktime(),
+		overtime = worktime - getBreak() - getHourSchedule();
+		
+	if (overtime <= (0.02) && overtime >= (-0.02)) {
+		overtime = 0;
+	}
+	console.log("overtime in calculatetotal: " + overtime);
 
 	setTotal(worktime);
-	setOvertime(worktime - getBreak() - getHourSchedule());
+	setOvertime(overtime);
 	setTotalNoBreak(Math.abs(worktime - getBreak()));
 	
 	setTotalDec((parseFloat(worktime).toFixed(2)));
-	setOvertimeDec(parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2));
+	setOvertimeDec(parseFloat(overtime).toFixed(2));
 	setTotalNoBreakDec(getTotalNoBreakDec());
 	
 	hourscheduleAddTimeButton();
@@ -152,7 +158,7 @@ function setTotalDec(time){
 
 function setOvertime(time){
 	/*if (time <= (0.02) && time >= (-0.02)) {
-		time = 0
+		time = 0;
 	}*/
 	document.getElementById("overtime").value = floatToTimeString(time);
 	console.log("overtime: " + time);
