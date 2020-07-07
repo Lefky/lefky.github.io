@@ -117,6 +117,7 @@ function getWorktime() {
 		worktime = getHourSchedule();
 	}
 	return worktime;
+	console.log("worktime: " + worktime);
 }
 
 function calculateTotal() {
@@ -150,7 +151,11 @@ function setTotalDec(time){
 }
 
 function setOvertime(time){
+	/*if (time <= (0.02) && time >= (-0.02)) {
+		time = 0
+	}*/
 	document.getElementById("overtime").value = floatToTimeString(time);
+	console.log("overtime: " + time);
 }
 
 function getOvertimeDec(){
@@ -160,6 +165,7 @@ function getOvertimeDec(){
 
 function setOvertimeDec(time){
 	document.getElementById("overtimedec").value = time;
+	console.log("overtimedec: " + time);
 }
 
 function setOvertimeTotal(time){
