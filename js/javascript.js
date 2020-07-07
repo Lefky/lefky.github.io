@@ -129,6 +129,8 @@ function calculateTotal() {
 	var worktime = getWorktime(),
 		overtime = worktime - getBreak() - getHourSchedule();
 
+	console.log("worktime: " + worktime + " getbreak: " + getBreak() + " gethourschedule: " + getHourSchedule());
+	
 	console.log("overtime in calculatetotal: " + overtime);
 	console.log("overtime in calculatetotal with offset fix: " + roundTimeOffset(overtime));
 
