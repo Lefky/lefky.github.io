@@ -113,9 +113,9 @@ function setHourSchedule(time){
 
 function getWorktime() {
 	var worktime = getEnd() - getStart();
-	if (worktime <= (getHourSchedule()+0.02) && worktime >= (getHourSchedule()-0.02)) {
+	/*if (worktime <= (getHourSchedule()+0.02) && worktime >= (getHourSchedule()-0.02)) {
 		worktime = getHourSchedule();
-	}
+	}*/
 	return worktime;
 	console.log("worktime: " + worktime);
 }
@@ -157,16 +157,18 @@ function setTotalDec(time){
 }
 
 function setOvertime(time){
-	/*if (time <= (0.02) && time >= (-0.02)) {
-		time = 0;
-	}*/
 	document.getElementById("overtime").value = floatToTimeString(time);
 	console.log("overtime: " + time);
 }
 
 function getOvertimeDec(){
-	var worktime = getWorktime();
-	return parseFloat(worktime - getBreak() - getHourSchedule()).toFixed(2);
+	var worktime = getWorktime(),
+		overtime = worktime - getBreak() - getHourSchedule();
+		
+	if (overtime <= (0.02) && overtime >= (-0.02)) {
+		overtime = 0;
+	}
+	return parseFloat(overtime).toFixed(2);
 }
 
 function setOvertimeDec(time){
