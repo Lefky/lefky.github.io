@@ -26,6 +26,13 @@ function floatToTimeString(timedec){
 	return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
 }
 
+function roundTimeOffset(time){
+	if (time <= (0.02) && time >= (-0.02)) {
+		time = 0;
+	}
+	return time;
+}
+
 // Setters & getters
 function getStart(){
 	var time = document.getElementById("start_time").value;
@@ -113,9 +120,7 @@ function setHourSchedule(time){
 
 function getWorktime() {
 	var worktime = getEnd() - getStart();
-	/*if (worktime <= (getHourSchedule()+0.02) && worktime >= (getHourSchedule()-0.02)) {
-		worktime = getHourSchedule();
-	}*/
+
 	return worktime;
 	console.log("worktime: " + worktime);
 }
@@ -123,18 +128,16 @@ function getWorktime() {
 function calculateTotal() {
 	var worktime = getWorktime(),
 		overtime = worktime - getBreak() - getHourSchedule();
-		
-	if (overtime <= (0.02) && overtime >= (-0.02)) {
-		overtime = 0;
-	}
+
 	console.log("overtime in calculatetotal: " + overtime);
+	console.log("overtime in calculatetotal with offset fix: " + roundTimeOffset(overtime));
 
 	setTotal(worktime);
-	setOvertime(overtime);
+	setOvertime(roundTimeOffset(overtime));
 	setTotalNoBreak(Math.abs(worktime - getBreak()));
 	
 	setTotalDec((parseFloat(worktime).toFixed(2)));
-	setOvertimeDec(parseFloat(overtime).toFixed(2));
+	setOvertimeDec(parseFloat(roundTimeOffset(overtime)).toFixed(2));
 	setTotalNoBreakDec(getTotalNoBreakDec());
 	
 	hourscheduleAddTimeButton();
@@ -164,11 +167,8 @@ function setOvertime(time){
 function getOvertimeDec(){
 	var worktime = getWorktime(),
 		overtime = worktime - getBreak() - getHourSchedule();
-		
-	if (overtime <= (0.02) && overtime >= (-0.02)) {
-		overtime = 0;
-	}
-	return parseFloat(overtime).toFixed(2);
+
+	return parseFloat(roundTimeOffset(overtime)).toFixed(2);
 }
 
 function setOvertimeDec(time){
