@@ -122,6 +122,7 @@ function getWorktime() {
 	var worktime = getEnd() - getStart();
 
 	return worktime;
+	//return Math.round((worktime + Number.EPSILON) * 100) / 100;
 	console.log("worktime: " + worktime);
 }
 
@@ -129,6 +130,10 @@ function calculateTotal() {
 	var worktime = getWorktime(),
 		overtime = worktime - getBreak() - getHourSchedule();
 
+<<<<<<< Updated upstream
+=======
+	console.log("worktime: " + worktime + " getbreak: " + getBreak() + " gethourschedule: " + getHourSchedule());
+>>>>>>> Stashed changes
 	console.log("overtime in calculatetotal: " + overtime);
 	console.log("overtime in calculatetotal with offset fix: " + roundTimeOffset(overtime));
 
@@ -398,10 +403,9 @@ function notificationClosed(event){
 }
 
 function startminsubtract(){
-	var startminsubtract_value = document.getElementById("startminsubtract_value").value,
-		startminsubtract_span = document.getElementById("startminsubtract_span");
+	var startminsubtract_value = document.getElementById("startminsubtract_value").value;
 	localStorage.setItem("startminsubtract_value", startminsubtract_value);
-	startminsubtract_span.innerHTML = startminsubtract_value; 
+	document.getElementById("startminsubtract_span").innerHTML = startminsubtract_value; 
 }
 
 function hourscheduleAddTimeButton(){
@@ -574,78 +578,83 @@ function setParameters() {
 		totalovertimeoption = localStorage.getItem("totalovertimeoption"),
 		parametersoption = localStorage.getItem("parametersoption");
 
-	if ( autoend == "true" )
+	if (autoend == "true")
 		document.getElementById("autoend").checked = true;
-	if ( nosave == todayDate() )
+	if (nosave == todayDate())
 		document.getElementById("nosave").checked = true;
 	setHourSchedule(hourschedule);
-	if ( break_time_default ) {
+	if (break_time_default) {
 		document.getElementById("break_time_default").value = break_time_default;
 		setBreak(break_time_default);
 	} else {
 		document.getElementById("break_time_default").value = 0;
 	}
-	if ( historydeleteoption == "days" ) {
+	if (historydeleteoption == "days" ) {
 		document.getElementById("historydeleteoptiondays").checked = true;
 	} else if (historydeleteoption == "period") {
 		document.getElementById("historydeleteoptionperiod").checked = true;
 	}
-	if ( historyretain )
+	if (historyretain)
 		document.getElementById("historyretain").value = historyretain;
-	if ( historyresetday )
+	if (historyresetday)
 		document.getElementById("historyresetday").value = historyresetday;
-	if ( historyresetperiod )
+	if (historyresetperiod)
 		document.getElementById("historyresetperiod").value = historyresetperiod;
-	if ( historyresetperiodunit )
+	if (historyresetperiodunit)
 		document.getElementById("historyresetperiodunit").value = historyresetperiodunit;
 	// Set UI visibility options
-	if ( overtimeoption == "true" || overtimeoption === null ) {
+	if (overtimeoption == "true" || overtimeoption === null) {
 		document.getElementById("overtimeoption").checked = true;
 		document.getElementById("divovertime").classList.add("show");
 	}
-	if ( totalhoursoption == "true" || totalhoursoption === null ) {
+	if (totalhoursoption == "true" || totalhoursoption === null) {
 		document.getElementById("totalhoursoption").checked = true;
 		document.getElementById("divtotalhours").classList.add("show");
 	}
-	if ( weeklyovertimeoption == "true" || weeklyovertimeoption === null ) {
+	if (weeklyovertimeoption == "true" || weeklyovertimeoption === null) {
 		document.getElementById("weeklyovertimeoption").checked = true;
 		document.getElementById("divovertimeweekly").classList.add("show");
 	}
-	if ( totalovertimeoption == "true" || totalovertimeoption === null ) {
+	if (totalovertimeoption == "true" || totalovertimeoption === null) {
 		document.getElementById("totalovertimeoption").checked = true;
 		document.getElementById("divovertimetotal").classList.add("show");
 	}
-	if ( historyoption == "true" || historyoption === null ) {
+	if (historyoption == "true" || historyoption === null) {
 		document.getElementById("historyoption").checked = true;
 		document.getElementById("historycontainer").classList.add("show");
 	}
-	if ( parametersoption == "true" || parametersoption === null ) {
+	if (parametersoption == "true" || parametersoption === null) {
 		document.getElementById("parametersoption").checked = true;
 		document.getElementById("divparameters").classList.add("show");
 	}
 
 	showHistorydeleteoptionContent();
 	
+	// Check if custom time to subtract from start is stored, if not take 5 min as default
+	if (!startminsubtract_value) {
+		document.getElementById("startminsubtract_span").innerHTML = "5";
+		document.getElementById("startminsubtract_value").value = "5";
+	} else {
+		document.getElementById("startminsubtract_span").innerHTML = startminsubtract_value;
+		document.getElementById("startminsubtract_value").value = startminsubtract_value;
+	}
 	// If subtract from start is checked set UI and deduct the amount of time stored in localstorage
 	// If the page was already opened today, fill in that start time
 	var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
-	if ( timeinfo == null ) {
-		if ( startminsubtract == "true" ) {
+	if (timeinfo == null) {
+		if (startminsubtract == "true") {
 			document.getElementById("startminsubtract").checked = true;
-			setStart(now() - startminsubtract_value);
+			
+			// Fix convert minutes to subtract to decimal
+			var startminsubtract_value_decimal = timeStringToFloat("00:"+startminsubtract_value);
+			setStart(now() - startminsubtract_value_decimal);
 		} else {
 			setStart(now());
 		}
 	} else {
 		setStart(timeinfo['StartDec']);
-		if ( startminsubtract == "true" )
+		if (startminsubtract == "true")
 			document.getElementById("startminsubtract").checked = true;
-	}
-	document.getElementById("startminsubtract_value").value = startminsubtract_value;
-	if ( startminsubtract_value == "" ) {
-		document.getElementById("startminsubtract_span").innerHTML = startminsubtract_value; 
-	} else {
-		document.getElementById("startminsubtract_span").innerHTML = "5";
 	}
 }
 
@@ -700,7 +709,7 @@ function break_counter() {
 	
 }
 
-$( document ).on( 'keydown', function ( e ) {
+$(document).on('keydown', function (e) {
 	if ( e.keyCode === 13 ) { //ENTER key code
 		add_time(getHourSchedule());
 	}
