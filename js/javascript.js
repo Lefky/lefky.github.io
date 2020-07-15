@@ -130,10 +130,7 @@ function calculateTotal() {
 	var worktime = getWorktime(),
 		overtime = worktime - getBreak() - getHourSchedule();
 
-<<<<<<< Updated upstream
-=======
 	console.log("worktime: " + worktime + " getbreak: " + getBreak() + " gethourschedule: " + getHourSchedule());
->>>>>>> Stashed changes
 	console.log("overtime in calculatetotal: " + overtime);
 	console.log("overtime in calculatetotal with offset fix: " + roundTimeOffset(overtime));
 
