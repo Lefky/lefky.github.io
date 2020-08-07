@@ -130,10 +130,6 @@ function calculateTotal() {
 	var worktime = getWorktime(),
 		overtime = worktime - getBreak() - getHourSchedule();
 
-	console.log("worktime: " + worktime + " getbreak: " + getBreak() + " gethourschedule: " + getHourSchedule());
-	console.log("overtime in calculatetotal: " + overtime);
-	console.log("overtime in calculatetotal with offset fix: " + roundTimeOffset(overtime));
-
 	setTotal(worktime);
 	setOvertime(roundTimeOffset(overtime));
 	setTotalNoBreak(Math.abs(worktime - getBreak()));
@@ -163,7 +159,6 @@ function setTotalDec(time){
 
 function setOvertime(time){
 	document.getElementById("overtime").value = floatToTimeString(time);
-	console.log("overtime: " + time);
 }
 
 function getOvertimeDec(){
@@ -175,7 +170,6 @@ function getOvertimeDec(){
 
 function setOvertimeDec(time){
 	document.getElementById("overtimedec").value = time;
-	console.log("overtimedec: " + time);
 }
 
 function setOvertimeTotal(time){
@@ -781,3 +775,17 @@ window.onbeforeunload = function(e) {
 		localStorage.setItem("parametersoption", "true");
 	}
 };
+
+$(document).ready(function() {
+
+  if(window.location.href.indexOf('#modalabout') != -1) {
+    $('#modalabout').modal('show');
+  }
+  if(window.location.href.indexOf('#modalsettings') != -1) {
+    $('#modalsettings').modal('show');
+  }
+  if(window.location.href.indexOf('#modalinfo') != -1) {
+    $('#modalinfo').modal('show');
+  }
+
+});
