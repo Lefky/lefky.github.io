@@ -41,7 +41,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20200807.1</span> <br>
+					Version: <span id="currentappversion">20200825.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -248,7 +248,9 @@
 					<p>
 						You can now change howmany minutes are being subtracted when you open the page. Head to the settings to change it :)<br>
 						<br>
-						The add time button now adds the time specified in the hourschedule dropdown next to the overtime.
+						The add time button now adds the time specified in the hourschedule dropdown next to the overtime.<br>
+						<br>
+						UPDATE: the lay-out is now more responsive!
 					</p>
 				</div>
 			</div>
@@ -260,13 +262,13 @@
 	
 	<div class="row h-100">
 		<div class="row w-100 align-self-center">
-			<div class="col-sm-2 d-none d-lg-block bg-light"></div>
-			<div class="col-sm-4 rounded-right bg-light">
+			<div class="col-lg-2 d-none d-lg-block bg-light"></div>
+			<div class="col-lg-4 rounded-right bg-light">
 				<form>
 					<div class="form-group pt-3 mr-5">
 						<div class="input-group justify-content-end my-1">
 							<label class="col-form-label" for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time</label>
-							<div class="col-sm-3">
+							<div style="min-width: 140px; max-width: 140px; padding-right: 15px; padding-left: 15px;">
 								<input name="start_time" id="start_time" type="time" class="form-control mx-1" onchange="calculateTotal();"/>
 							</div>
 						</div>				
@@ -274,8 +276,8 @@
 							<label class="col-form-label" for="break_time" data-toggle="tooltip" data-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
 								Break with default
 							</label>
-							<div class="col-sm-3">
-								<select name="break_time_default" id="break_time_default" class="form-control mb-1 mb-md-0" onchange="addBreakDefault();" data-toggle="tooltip" data-placement="left" title="">
+							<div style="max-width: 110px; padding-right: 15px; padding-left: 15px;">
+								<select name="break_time_default" id="break_time_default" class="form-control mb-md-0" style="min-width: 100px; max-width: 100px;" onchange="addBreakDefault();" data-toggle="tooltip" data-placement="left" title="">
 									<option value="0">0 min</option>
 									<option value="0.25">15 min</option>
 									<option value="0.5">30 min</option>
@@ -283,29 +285,29 @@
 									<option value="1">1h</option>
 								</select>
 							</div>
-							<div class="col-sm-3">
+							<div style="min-width: 140px; max-width: 140px; padding-right: 15px; padding-left: 15px;">
 								<input name="break_time" id="break_time" type="time" value="00:00" class="form-control mx-1" onchange="calculateTotal();"/>
 							</div>
 						</div>
 						<div class="input-group justify-content-end my-3">
 							<label class="col-form-label" for="end_time" data-toggle="tooltip" data-placement="left" title="You can have this automatically filled in by setting the parameter at the bottom of the box. You can manually enter a value.">Time to go home</label>
-							<div class="col-sm-3">
+							<div style="min-width: 140px; max-width: 140px; padding-right: 15px; padding-left: 15px;">
 								<input name="end_time" id="end_time" type="time" class="form-control mx-1" onchange="calculateTotal();"/>
 							</div>
 						</div>
 						<div class="input-group justify-content-end my-3">
 							<label class="col-form-label" for="totalnobreak" data-toggle="tooltip" data-placement="left" title="These hours are your actual working hours.">Total hours (no break)</label>
-							<div class="col-sm-3">
+							<div class="col-sm-4" style="min-width: 140px; max-width: 140px;">
 								<input name="totalnobreak" id="totalnobreak" type="time" class="form-control mx-1" value="" disabled>
 								<input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control mx-1 mt-1" disabled>
 							</div>
 						</div>
 						<div id="divovertime" class="collapse input-group justify-content-end my-3">
 							<label class="col-form-label" for="overtime" data-toggle="tooltip" data-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
-								Overtime@
+								Overtime @
 							</label>
-							<div class="col-sm-3">
-								<select name="hourschedule" id="hourschedule" class="form-control mb-1 mb-md-0" onchange="calculateTotal();" data-toggle="tooltip" data-placement="left" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
+							<div style="max-width: 110px; padding-right: 15px; padding-left: 15px;">
+								<select name="hourschedule" id="hourschedule" class="form-control mb-md-0" style="min-width: 100px; max-width: 100px;" onchange="calculateTotal();" data-toggle="tooltip" data-placement="left" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
 									<option value="0">0h		&nbsp;&emsp;&emsp;&emsp;(working overtime)</option>
 									<option value="3.04">3,04h 	&emsp;&emsp;(part-time 2/5, 38h week)</option>
 									<option value="3.2">3,2h 	&ensp;&emsp;&emsp;(part-time 2/5, 40h week)</option>
@@ -324,14 +326,14 @@
 									-->
 								</select>
 							</div>
-							<div class="col-sm-3">
+							<div style="min-width: 140px; max-width: 140px; padding-right: 15px; padding-left: 15px;">
 								<input name="overtime" id="overtime" type="text" class="form-control mx-1" disabled>
 								<input name="overtimedec" id="overtimedec" type="text" class="form-control mx-1 mt-1" disabled>
 							</div>
 						</div>
 						<div id="divtotalhours" class="collapse input-group justify-content-end my-3">
 							<label class="col-form-label" for="total" data-toggle="tooltip" data-placement="left" title="These hours are howmuch time you spent being at your workplace.">Total hours</label>
-							<div class="col-sm-3">
+							<div style="min-width: 140px; max-width: 140px; padding-right: 15px; padding-left: 15px;">
 								<input name="total" id="total" type="time" class="form-control mx-1" disabled>
 								<input name="totaldec" id="totaldec" type="text" class="form-control mx-1 mt-1" disabled>
 							</div>
@@ -339,13 +341,13 @@
 						<div class="input-group justify-content-end my-3">
 							<div id="divovertimeweekly" class="collapse input-group justify-content-end mb-1">
 								<label class="col-form-label" for="overtimeweekly" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the current week. This value doesn't include today yet.">Weekly overtime</label>
-								<div class="col-sm-3">
+							<div style="min-width: 140px; max-width: 140px; padding-right: 15px;padding-left: 15px;">
 									<input name="overtimeweekly" id="overtimeweekly" type="text" class="font-weight-bold form-control mx-1" disabled>
 								</div>
 							</div>
 							<div id="divovertimetotal" class="collapse input-group justify-content-end mt-1">
 								<label class="col-form-label" for="overtimetotal" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime</label>
-								<div class="col-sm-3">
+							<div style="min-width: 140px; max-width: 140px; padding-right: 15px;padding-left: 15px;">
 									<input name="overtimetotal" id="overtimetotal" type="text" class="font-weight-bold form-control mx-1" disabled>
 								</div>
 							</div>
@@ -373,37 +375,39 @@
 					</div>
 				</form>
 			</div>
-			<div class="col-sm-4 align-self-center">	
+			<div class="col-lg-4 align-self-center text-lg-left text-center">	
 				<div class="row">
-					<div class="col col-sm-1 d-none d-lg-block"></div>
-					<div class="col my-3 ml-sm-1">
-						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(getHourSchedule())" style="border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="tooltip" data-placement="bottom" title="Adds the time selected in the hour schedule to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> <span id="addtimebutton_span"></span>h</button>
-							<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="end_time()" style="border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Sets the 'Time to go home' field to the current time.">End time now</button>
+					<div class="col col-sm-1 d-none d-xs-block d-sm-block d-md-block d-lg-block"></div>
+					<div class="col">
+						<div class="row">
+							<div class="col my-3 ml-sm-1">
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(getHourSchedule())" style="border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="tooltip" data-placement="bottom" title="Adds the time selected in the hour schedule to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> <span id="addtimebutton_span"></span>h</button>
+									<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="end_time()" style="border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Sets the 'Time to go home' field to the current time.">End time now</button>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col my-3">
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="reset_break()" style="border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="tooltip" data-placement="bottom" title="Resets the break time."><i class="fal fa-redo"></i></button>
+									<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_break(0.08)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 5min of break time."><i class="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"></i> 5min</button>
+									<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_break(0.5)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 30min of break time."><i class="fal fa-plus"></i> 30min</button>
+									<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="break_counter()" id="break_counter_btn" style="border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Click once to start the break time counter. Click again to stop it and add the break time. If you don't click the button a second time, no time will be added."><i class="fal fa-stopwatch"></i> Start</button>
+								</div>						
+							</div>
+						</div>
+						<div class="row">
+							<div class="col my-3">
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-lg btn-danger px-4 py-3" onclick="reset()" data-toggle="tooltip" data-placement="bottom" title="Resets all the timestamps."><i class="fal fa-redo"></i></button>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col col-sm-1 d-none d-lg-block"></div>
-					<div class="col my-3">
-						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="reset_break()" style="border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="tooltip" data-placement="bottom" title="Resets the break time."><i class="fal fa-redo"></i></button>
-							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_break(0.08)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 5min of break time."><i class="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"></i> 5min</button>
-							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_break(0.5)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 30min of break time."><i class="fal fa-plus"></i> 30min</button>
-							<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="break_counter()" id="break_counter_btn" style="border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Click once to start the break time counter. Click again to stop it and add the break time. If you don't click the button a second time, no time will be added."><i class="fal fa-stopwatch"></i> Start</button>
-						</div>						
-					</div>
-				</div>
-				<div class="row">
-					<div class="col col-sm-1 d-none d-lg-block"></div>
-					<div class="col my-3">
-						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-lg btn-danger px-4 py-3" onclick="reset()" data-toggle="tooltip" data-placement="bottom" title="Resets all the timestamps."><i class="fal fa-redo"></i></button>
-						</div>
-					</div>
+					<div class="col-sm-2 d-none d-xs-block d-sm-block d-md-block d-lg-block"></div>
 				</div>
 			</div>
-			<div class="col-sm-2 d-none d-lg-block"></div>
 		</div>
 	</div>
 	
