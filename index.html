@@ -27,7 +27,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20200825.1</span> <br>
+					Version: <span id="currentappversion">20200901.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -262,7 +262,7 @@
 							<label class="col-form-label" for="break_time" data-toggle="tooltip" data-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
 								Break with default
 							</label>
-							<div class="mb-1 mb-md-0" style="max-width: 110px; margin-right: 15px; margin-left: 15px;">
+							<div class="mb-1 mb-md-0 mx-3 mr-sm-0" style="max-width: 110px;">
 								<select name="break_time_default" id="break_time_default" class="form-control mb-md-0" style="min-width: 100px; max-width: 100px;" onchange="addBreakDefault();" data-toggle="tooltip" data-placement="left" title="">
 									<option value="0">0 min</option>
 									<option value="0.25">15 min</option>
@@ -292,7 +292,7 @@
 							<label class="col-form-label" for="overtime" data-toggle="tooltip" data-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
 								Overtime @
 							</label>
-							<div class="mb-1 mb-md-0" style="max-width: 110px; margin-right: 15px; margin-left: 15px;">
+							<div class="mb-1 mb-md-0 mx-3 mr-sm-0" style="max-width: 110px;">
 								<select name="hourschedule" id="hourschedule" class="form-control" style="min-width: 100px; max-width: 100px;" onchange="calculateTotal();" data-toggle="tooltip" data-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
 									<option value="0">0h		&nbsp;&emsp;&emsp;&emsp;(working overtime)</option>
 									<option value="3.04">3,04h 	&emsp;&emsp;(part-time 2/5, 38h week)</option>
