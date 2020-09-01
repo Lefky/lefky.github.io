@@ -251,7 +251,7 @@
 			<div class="col-lg-2 d-none d-lg-block bg-light"></div>
 			<div class="col-lg-4 rounded-right bg-light">
 				<form>
-					<div class="form-group pt-3 mr-5">
+					<div class="form-group pt-3 mr-xs-2 mr-lg-5">
 						<div class="input-group justify-content-end my-1">
 							<label class="col-form-label" for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time</label>
 							<div style="min-width: 140px; max-width: 140px; padding-right: 15px; padding-left: 15px;">
@@ -262,7 +262,7 @@
 							<label class="col-form-label" for="break_time" data-toggle="tooltip" data-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
 								Break with default
 							</label>
-							<div style="max-width: 110px; padding-right: 15px; padding-left: 15px;">
+							<div class="mb-1 mb-md-0" style="max-width: 110px; margin-right: 15px; margin-left: 15px;">
 								<select name="break_time_default" id="break_time_default" class="form-control mb-md-0" style="min-width: 100px; max-width: 100px;" onchange="addBreakDefault();" data-toggle="tooltip" data-placement="left" title="">
 									<option value="0">0 min</option>
 									<option value="0.25">15 min</option>
@@ -292,8 +292,8 @@
 							<label class="col-form-label" for="overtime" data-toggle="tooltip" data-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
 								Overtime @
 							</label>
-							<div style="max-width: 110px; padding-right: 15px; padding-left: 15px;">
-								<select name="hourschedule" id="hourschedule" class="form-control mb-md-0" style="min-width: 100px; max-width: 100px;" onchange="calculateTotal();" data-toggle="tooltip" data-placement="left" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
+							<div class="mb-1 mb-md-0" style="max-width: 110px; margin-right: 15px; margin-left: 15px;">
+								<select name="hourschedule" id="hourschedule" class="form-control" style="min-width: 100px; max-width: 100px;" onchange="calculateTotal();" data-toggle="tooltip" data-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
 									<option value="0">0h		&nbsp;&emsp;&emsp;&emsp;(working overtime)</option>
 									<option value="3.04">3,04h 	&emsp;&emsp;(part-time 2/5, 38h week)</option>
 									<option value="3.2">3,2h 	&ensp;&emsp;&emsp;(part-time 2/5, 40h week)</option>
@@ -410,8 +410,8 @@
 		</div>
 	</div>
 </div>
-
 </body>
+
 <!-- BOOTSTRAP -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
