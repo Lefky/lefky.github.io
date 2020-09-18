@@ -335,32 +335,34 @@ function calculateCleaningDay() {
 	return cleaningday;
 }
 
-function setHistory(){
+function setHistory(refresh_edit_table){
 	const reverseDateRepresentation = date => {
 	  let parts = date.split('-');
 	  return `${parts[2]}-${parts[1]}-${parts[0]}`;
 	};
 	
-	var //entry = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Overtime</span><br><div class='greyed' style='border-bottom: 1px solid black; width: 100%;'></div>",
-		entry = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
+	var //entry_history = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Overtime</span><br><div class='greyed' style='border-bottom: 1px solid black; width: 100%;'></div>",
+		entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
+		entry_edit_history = "",
 		keys = Object.keys(localStorage),
 		revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
 		overtimetotal = 0,
 		overtimeweekly = 0,
 		i = 0, 
-		key;
-		
+		key;	
 	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 	
 	for (; key = revkeys[i]; i++) {
-		if ( userKeyRegExp.test(key) ) {
+		if (userKeyRegExp.test(key)) {
 			var timeinfo = JSON.parse(localStorage.getItem(key));
 			if (timeinfo.hasOwnProperty('OvertimeDec')){
-				//entry = entry + "<span style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['OvertimeDec'] + "</span><br>";
+				//entry_history = entry_history + "<span style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['OvertimeDec'] + "</span><br>";
 				if (timeinfo['OvertimeDec'].startsWith("-")){
-					entry = entry + "<tr style='color:red;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
+					entry_history = entry_history + "<tr style='color:red;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
+					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:red;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td></tr>"
 				} else {
-					entry = entry + "<tr style='color:green;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
+					entry_history = entry_history + "<tr style='color:green;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
+					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td>"
 				}
 				overtimetotal = overtimetotal + parseFloat(timeinfo['OvertimeDec']);
 				
@@ -370,12 +372,16 @@ function setHistory(){
 			}
 		}
 	}
-	if ( keys == "" || keys == null ) {
-		entry = "No previous data yet :("
+	if (keys == "" || keys == null) {
+		entry_history = "No previous data yet :(";
+		entry_edit_history = entry_history;
 	} else {
-		entry = entry + "</table>"
+		entry_history = entry_history + "</table>";
 	}
-	document.getElementById("history").innerHTML = entry;		
+	document.getElementById("history").innerHTML = entry_history;	
+	if(refresh_edit_table){
+		document.getElementById("edit_history_table_body").innerHTML = entry_edit_history;
+	}
 	setOvertimeTotal(overtimetotal);
 	setOvertimeWeekly(overtimeweekly);
 }
@@ -444,7 +450,7 @@ function deleteHistory() {
 				delete localStorage[key];
 			}
 		}
-		setHistory();
+		setHistory(true);
 		document.getElementById("settingsmodalclosebutton").click();
 		alert("History deleted!");
 	}
@@ -496,7 +502,7 @@ function importHistoryData(e) {
 			localStorage.setItem(k, content[k]);
 		});
 		importFile.value = ''; //clear input value after every import
-		setHistory();
+		setHistory(true);
 		setParameters();
 	}
 	reader.readAsText(files[0]);
@@ -540,7 +546,7 @@ function reset() {
 	setTotalDec(0);
 	setTotalNoBreak(0);
 	setTotalNoBreakDec(0);
-	setHistory();
+	setHistory(true);
 	
 	// 'lazy' loading
 	setParameters();
@@ -777,7 +783,6 @@ window.onbeforeunload = function(e) {
 };
 
 $(document).ready(function() {
-
   if(window.location.href.indexOf('#modalabout') != -1) {
     $('#modalabout').modal('show');
   }
@@ -787,5 +792,7 @@ $(document).ready(function() {
   if(window.location.href.indexOf('#modalinfo') != -1) {
     $('#modalinfo').modal('show');
   }
-
+  if(window.location.href.indexOf('#modaledithistory') != -1) {
+    $('#modaledithistory').modal('show');
+  }
 });

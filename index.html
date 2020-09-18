@@ -23,11 +23,12 @@
 		<div class="modal-content px-2">
 			<div class="modal-header">
 				<h2>About</h2>
+				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
 			</div>
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20200901.1</span> <br>
+					Version: <span id="currentappversion">20200918.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -43,6 +44,7 @@
 		<div class="modal-content px-2">
 			<div class="modal-header">
 				<h2>Settings</h2>
+				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
 			</div>
 			<div class="modal-body">
 				<p>
@@ -178,6 +180,7 @@
 		<div class="modal-content px-2">
 			<div class="modal-header">
 				<h2>Info</h2>
+				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
 			</div>
 			<div class="modal-body">
 				<p>
@@ -223,6 +226,46 @@
 	</div>
 </div>
 
+<div id="modaledithistory" class="modal fade">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content px-2">
+			<div class="modal-header">
+				<h2>Edit time history</h2>
+				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
+			</div>
+			<div class="modal-body">
+				<div id="edit_history_table">
+					<p>
+						All times displayed are in decimal hour units. You should edit them in the same way/units!!!<br>
+						Visit <a href="https://www.timecalculator.net/time-to-decimal" target="_blank">timecalculator.net</a> to help you converting.
+					</p>
+					<p style="color: red;">
+						To save an entry you need to click the save button! If you add a date that already exists it'll be overwritten!
+					</p>
+				  <span class="table-add float-right mb-3 mr-2"><a href="#!" class="text-success"><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
+				  <table class="table table-bordered table-responsive-md table-striped text-center">
+					<thead>
+					  <tr>
+						<th class="text-center px-5">Date</th>
+						<th class="text-center">Total Time No Break</th>
+						<th class="text-center">Overtime</th>
+						<th class="text-center">Total Work Time</th>
+						<th class="text-center">Start Time</th>
+						<th class="text-center px-5">Edit</th>
+					  </tr>
+					</thead>
+					<tbody id="edit_history_table_body">
+					</tbody>
+				  </table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="container-fluid h-100">
 	<div class="row d-flex justify-content-center">
 		<div id="alertnotification" class="alert alert-danger alert-dismissible fade show my-4 mr-1" role="alert" style="display: none; position: absolute; z-index: 1;">
@@ -232,11 +275,10 @@
 				</div>
 				<div class="col-lg-10 py-1 px-4">
 					<p>
-						You can now change howmany minutes are being subtracted when you open the page. Head to the settings to change it :)<br>
+						Did some optimization and small UI fixes.<br>
 						<br>
-						The add time button now adds the time specified in the hourschedule dropdown next to the overtime.<br>
-						<br>
-						UPDATE: the lay-out is now more responsive!
+						<b>A new feature is introduced.</b><br>
+						Click the edit button next to your time history to discover it!
 					</p>
 				</div>
 			</div>
@@ -338,8 +380,11 @@
 								</div>
 							</div>
 						</div>
-						<div id="historycontainer" class="collapse ml-auto my-3 mr-2">
-							<div id="history"></div>
+						<div class="form-inline">
+							<button type="button" class="btn btn-outline-secondary ml-auto mr-2 py-1 px-2" style="font-size: 0.5rem;" data-toggle="modal" data-target="#modaledithistory"><i class="fas fa-edit"></i></button>
+							<div id="historycontainer" class="collapse my-3 mr-2">
+								<div id="history" class="w-100"></div>
+							</div>
 						</div>
 						
 						<div id="divparameters" class="collapse col mr-5">
@@ -432,4 +477,5 @@
 	moment().format();
 </script>
 <script src="js/javascript.js"></script>
+<script src="js/editable_table.js"></script>
 </html>
