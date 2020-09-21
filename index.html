@@ -15,20 +15,6 @@
 
 	  gtag('config', 'UA-160200625-1');
 	</script>
-	<!-- BOOTSTRAP -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-	<script>
-		$(document).ready(function(){
-		  $('[data-toggle="tooltip"]').tooltip();
-		});
-	</script>
-	<!-- Font Awsome -->
-	<link href="css/all.min.css" rel="stylesheet">
-	<!-- Custom Styles -->
-	<link href="css/bootstrap_specific_style.css" rel="stylesheet">
 </head>
 <body onload="reset();">
 <!-- Modal HTML -->
@@ -37,11 +23,12 @@
 		<div class="modal-content px-2">
 			<div class="modal-header">
 				<h2>About</h2>
+				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
 			</div>
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20200825.1</span> <br>
+					Version: <span id="currentappversion">20200918.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -57,6 +44,7 @@
 		<div class="modal-content px-2">
 			<div class="modal-header">
 				<h2>Settings</h2>
+				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
 			</div>
 			<div class="modal-body">
 				<p>
@@ -192,6 +180,7 @@
 		<div class="modal-content px-2">
 			<div class="modal-header">
 				<h2>Info</h2>
+				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
 			</div>
 			<div class="modal-body">
 				<p>
@@ -224,11 +213,51 @@
 					Some of these include the weather forecast, quick launch buttons for applications or folders, monitoring displays (for CPU, GPU, RAM, disk size, ...), music player info and controls, time clocks, ... And all of this in different flavours.<br>
 					And the most cool aspect about it: it moves! Skins get updated every X seconds making it possible to display animations and update your weather etc.<br>
 					<br>
-					<img class="rounded mx-auto d-block" style="width: 85%" src="https://media1.tenor.com/images/c2f0bcdc67b7417d7e74b53b8f8aefb9/tenor.gif?itemid=15613840"/><br>
+					<img class="rounded mx-auto d-block" width="85%" src="https://media1.tenor.com/images/c2f0bcdc67b7417d7e74b53b8f8aefb9/tenor.gif?itemid=15613840"/><br>
 					You can make your own, but you can also just download skins and even entire layouts. Check the <a href="https://www.rainmeter.net/discover/" target ="_blank">rainmeter discover page</a> to find links to libraries of great skins.<br>
 					<br>
 					<a class="btn btn-outline-success btn-sm" href="https://www.rainmeter.net/" target="_blank" role="button">Rainmeter website</a>
 				</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="modaledithistory" class="modal fade">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content px-2">
+			<div class="modal-header">
+				<h2>Edit time history</h2>
+				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
+			</div>
+			<div class="modal-body">
+				<div id="edit_history_table">
+					<p>
+						All times displayed are in decimal hour units. You should edit them in the same way/units!!!<br>
+						Visit <a href="https://www.timecalculator.net/time-to-decimal" target="_blank">timecalculator.net</a> to help you converting.
+					</p>
+					<p style="color: red;">
+						To save an entry you need to click the save button! If you add a date that already exists it'll be overwritten!
+					</p>
+				  <span class="table-add float-right mb-3 mr-2"><a href="#!" class="text-success"><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
+				  <table class="table table-bordered table-responsive-md table-striped text-center">
+					<thead>
+					  <tr>
+						<th class="text-center px-5">Date</th>
+						<th class="text-center">Total Time No Break</th>
+						<th class="text-center">Overtime</th>
+						<th class="text-center">Total Work Time</th>
+						<th class="text-center">Start Time</th>
+						<th class="text-center px-5">Edit</th>
+					  </tr>
+					</thead>
+					<tbody id="edit_history_table_body">
+					</tbody>
+				  </table>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -246,11 +275,10 @@
 				</div>
 				<div class="col-lg-10 py-1 px-4">
 					<p>
-						You can now change howmany minutes are being subtracted when you open the page. Head to the settings to change it :)<br>
+						Did some optimization and small UI fixes.<br>
 						<br>
-						The add time button now adds the time specified in the hourschedule dropdown next to the overtime.<br>
-						<br>
-						UPDATE: the lay-out is now more responsive!
+						<b>A new feature is introduced.</b><br>
+						Click the edit button next to your time history to discover it!
 					</p>
 				</div>
 			</div>
@@ -265,7 +293,7 @@
 			<div class="col-lg-2 d-none d-lg-block bg-light"></div>
 			<div class="col-lg-4 rounded-right bg-light">
 				<form>
-					<div class="form-group pt-3 mr-5">
+					<div class="form-group pt-3 mr-xs-2 mr-lg-5">
 						<div class="input-group justify-content-end my-1">
 							<label class="col-form-label" for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time</label>
 							<div style="min-width: 140px; max-width: 140px; padding-right: 15px; padding-left: 15px;">
@@ -276,7 +304,7 @@
 							<label class="col-form-label" for="break_time" data-toggle="tooltip" data-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
 								Break with default
 							</label>
-							<div style="max-width: 110px; padding-right: 15px; padding-left: 15px;">
+							<div class="mb-1 mb-md-0 mx-3 mr-sm-0" style="max-width: 110px;">
 								<select name="break_time_default" id="break_time_default" class="form-control mb-md-0" style="min-width: 100px; max-width: 100px;" onchange="addBreakDefault();" data-toggle="tooltip" data-placement="left" title="">
 									<option value="0">0 min</option>
 									<option value="0.25">15 min</option>
@@ -306,8 +334,8 @@
 							<label class="col-form-label" for="overtime" data-toggle="tooltip" data-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
 								Overtime @
 							</label>
-							<div style="max-width: 110px; padding-right: 15px; padding-left: 15px;">
-								<select name="hourschedule" id="hourschedule" class="form-control mb-md-0" style="min-width: 100px; max-width: 100px;" onchange="calculateTotal();" data-toggle="tooltip" data-placement="left" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
+							<div class="mb-1 mb-md-0 mx-3 mr-sm-0" style="max-width: 110px;">
+								<select name="hourschedule" id="hourschedule" class="form-control" style="min-width: 100px; max-width: 100px;" onchange="calculateTotal();" data-toggle="tooltip" data-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
 									<option value="0">0h		&nbsp;&emsp;&emsp;&emsp;(working overtime)</option>
 									<option value="3.04">3,04h 	&emsp;&emsp;(part-time 2/5, 38h week)</option>
 									<option value="3.2">3,2h 	&ensp;&emsp;&emsp;(part-time 2/5, 40h week)</option>
@@ -352,8 +380,11 @@
 								</div>
 							</div>
 						</div>
-						<div id="historycontainer" class="collapse ml-auto my-3 mr-2">
-							<div id="history"></div>
+						<div class="form-inline">
+							<button type="button" class="btn btn-outline-secondary ml-auto mr-2 py-1 px-2" style="font-size: 0.5rem;" data-toggle="modal" data-target="#modaledithistory"><i class="fas fa-edit"></i></button>
+							<div id="historycontainer" class="collapse my-3 mr-2">
+								<div id="history" class="w-100"></div>
+							</div>
 						</div>
 						
 						<div id="divparameters" class="collapse col mr-5">
@@ -391,7 +422,7 @@
 							<div class="col my-3">
 								<div class="btn-group" role="group">
 									<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="reset_break()" style="border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="tooltip" data-placement="bottom" title="Resets the break time."><i class="fal fa-redo"></i></button>
-									<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_break(0.08)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 5min of break time."><i class="add_break(0.096666666666666666666666666666666666666666666666666666666666666666666666666666666666666666)"></i> 5min</button>
+									<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_break(0.083)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 5min of break time."><i class="fal fa-plus"></i> 5min</button>
 									<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_break(0.5)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 30min of break time."><i class="fal fa-plus"></i> 30min</button>
 									<button type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="break_counter()" id="break_counter_btn" style="border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Click once to start the break time counter. Click again to stop it and add the break time. If you don't click the button a second time, no time will be added."><i class="fal fa-stopwatch"></i> Start</button>
 								</div>						
@@ -424,12 +455,27 @@
 		</div>
 	</div>
 </div>
-
 </body>
+
+<!-- BOOTSTRAP -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script>
+	$(document).ready(function(){
+	  $('[data-toggle="tooltip"]').tooltip();
+	});
+</script>
+<!-- Font Awsome -->
+<link href="css/all.min.css" rel="stylesheet">
+<!-- Custom Styles -->
+<link href="css/bootstrap_specific_style.css" rel="stylesheet">
 <!-- Moment.js -->
 <script src="js/moment.min.js"></script><!-- https://momentjs.com/docs -->
 <script>
 	moment().format();
 </script>
 <script src="js/javascript.js"></script>
+<script src="js/editable_table.js"></script>
 </html>
