@@ -11,6 +11,7 @@ Date.prototype.addDays = function(days) {
 }
 
 // Conversion functions
+/*
 function timeStringToFloat(time) {
 	var hoursMinutes = time.split(/[.:]/);
 	var hours = parseInt(hoursMinutes[0], 10);
@@ -18,7 +19,7 @@ function timeStringToFloat(time) {
 	var time = hours + minutes / 60;
 	return Math.round((time + Number.EPSILON) * 100) / 100;
 }
-
+*/
 function floatToTimeString(timedec){
 	var sign = timedec < 0 ? "-" : "";
 	var hours = Math.floor(Math.abs(timedec));
@@ -36,7 +37,8 @@ function roundTimeOffset(time){
 // Setters & getters
 function getStart(){
 	var time = document.getElementById("start_time").value;
-	var time_dec = timeStringToFloat(time);
+	//var time_dec = timeStringToFloat(time);
+	var time_dec = moment.duration(time).asHours();
 	if (!time_dec) {
 		time_dec = 0;
 	}
@@ -49,7 +51,8 @@ function setStart(time){
 
 function getEnd(){
 	var time = document.getElementById("end_time").value;
-	var time_dec = timeStringToFloat(time);
+	//var time_dec = timeStringToFloat(time);
+	var time_dec = moment.duration(time).asHours();
 	if (!time_dec) {
 		time_dec = now();
 	}
@@ -62,7 +65,7 @@ function setEnd(time){
 
 function getBreak(){
 	var time = document.getElementById("break_time").value;
-	var time_dec = timeStringToFloat(time);
+	var time_dec = moment.duration(time).asHours();
 	if (!time_dec) {
 		time_dec = 0;
 	}
@@ -525,7 +528,8 @@ function now() {
 	min = (min < 10 ? "0" : "") + min;
 	
 	var timestamp = hour + ":" + min; 
-	return timeStringToFloat(timestamp);
+	//return timeStringToFloat(timestamp);
+	return moment.duration(timestamp).asHours();
 }
 
 function todayDate() {
@@ -643,7 +647,8 @@ function setParameters() {
 			document.getElementById("startminsubtract").checked = true;
 			
 			// Fix convert minutes to subtract to decimal
-			var startminsubtract_value_decimal = timeStringToFloat("00:"+startminsubtract_value);
+			//var startminsubtract_value_decimal = timeStringToFloat("00:"+startminsubtract_value);
+			var startminsubtract_value_decimal = moment.duration("00:"+startminsubtract_value).asHours();
 			setStart(now() - startminsubtract_value_decimal);
 		} else {
 			setStart(now());
@@ -667,6 +672,7 @@ function add_time(time) {
 
 function add_break(time) {
 	setBreak(time + getBreak());
+	console.log(getBreak());
 	setEnd(time + getEnd());
 	calculateTotal();
 }
@@ -685,7 +691,17 @@ function break_counter() {
 			break_counter_start_time = moment(localStorage.getItem("break_counter_start_time"), "HH:mm"),
 			break_time = break_counter_stop_time.diff(break_counter_start_time, 'minutes'),
 			interval = moment().hour(0).minute(break_time),
-			decimal_time = timeStringToFloat(interval.format("HH:mm"));
+			//decimal_time = timeStringToFloat(interval.format("HH:mm"));
+			decimal_time = moment.duration(interval.format("HH:mm")).asHours();
+			/*
+			console.log("start: " + break_counter_start_time + 
+						", stop:" + break_counter_stop_time + 
+						", break time:" + break_time + 
+						", interval:" +interval +
+						", decimal:" + decimal_time);
+			console.log(moment.duration(interval.format("HH:mm")).asHours());
+			*/
+			
 		localStorage.setItem("break_counter_started", "false");
 		setBreak(decimal_time);
 		add_time(getHourSchedule());
