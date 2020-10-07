@@ -1,3 +1,4 @@
+/*
 Date.prototype.subtractDays = function(days) {
 	var date = new Date(this.valueOf());
 	date.setDate(date.getDate() - days);
@@ -10,7 +11,9 @@ Date.prototype.addDays = function(days) {
 	return date;
 }
 
+*/
 // Conversion functions
+
 /*
 function timeStringToFloat(time) {
 	var hoursMinutes = time.split(/[.:]/);
@@ -21,10 +24,13 @@ function timeStringToFloat(time) {
 }
 */
 function floatToTimeString(timedec){
-	var sign = timedec < 0 ? "-" : "";
+	/*var sign = timedec < 0 ? "-" : "";
 	var hours = Math.floor(Math.abs(timedec));
 	var minutes = Math.floor((Math.abs(timedec) * 60) % 60);
 	return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+	*/
+	
+	return moment().startOf('day').add(timedec, 'hours').format('HH:mm')
 }
 
 function roundTimeOffset(time){
