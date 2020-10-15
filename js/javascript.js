@@ -30,6 +30,9 @@ function floatToTimeString(timedec){
 	return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
 	*/
 	
+	if (timedec < 0) {
+		return "-" + moment().startOf('day').subtract(timedec, 'hours').format('HH:mm')
+	}
 	return moment().startOf('day').add(timedec, 'hours').format('HH:mm')
 }
 
@@ -95,14 +98,22 @@ function setBreakDefault(time){
 	document.getElementById("break_time_default").value = floatToTimeString(time);
 }
 
-function addBreakDefault(){
+function addBreakDefault(){	
 	var break_time_default_init = localStorage.getItem("break_time_default");
+	/*
 	var new_break_dec = getBreak() - break_time_default_init + getBreakDefault();
+	console.log("break: "+getBreak()+" init: "+break_time_default_init+" default: "+getBreakDefault());
 	
 	if ( new_break_dec > 0 ) {
 		setBreak(new_break_dec);
 	} else {
 		setBreak(0);
+	}
+	*/
+	
+	if(getBreak() == break_time_default_init) {
+		setBreak(getBreakDefault());
+		setEnd(parseFloat(getEnd()) + parseFloat(getBreakDefault()) - break_time_default_init);
 	}
 	
 	localStorage.setItem("break_time_default", getBreakDefault());
@@ -678,7 +689,6 @@ function add_time(time) {
 
 function add_break(time) {
 	setBreak(time + getBreak());
-	console.log(getBreak());
 	setEnd(time + getEnd());
 	calculateTotal();
 }
@@ -729,7 +739,7 @@ function break_counter() {
 }
 
 $(document).on('keydown', function (e) {
-	if ( e.keyCode === 13 ) { //ENTER key code
+	if (e.keyCode === 13) { //ENTER key code
 		add_time(getHourSchedule());
 	}
 });
@@ -738,8 +748,8 @@ window.onbeforeunload = function(e) {
 	// Set 'dont save today' and 'automatically set end time' parameters in local storage
 	var nosave = document.getElementById("nosave"),
 		autoend = document.getElementById("autoend");
-	if ( nosave.checked == false ) {
-		if (autoend.checked == false ) {
+	if (nosave.checked == false) {
+		if (autoend.checked == false) {
 			var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '"}';
 			localStorage.setItem("autoend", "false");
 		} else {
@@ -754,7 +764,7 @@ window.onbeforeunload = function(e) {
 	}
 	// Set 'subtract 5 min from start time' parameter in local storage
 	var startminsubtract = document.getElementById("startminsubtract");
-	if ( startminsubtract.checked == false ) {
+	if (startminsubtract.checked == false) {
 		localStorage.setItem("startminsubtract", "false");
 	} else {
 		localStorage.setItem("startminsubtract", "true");
@@ -772,32 +782,32 @@ window.onbeforeunload = function(e) {
 	localStorage.setItem("historyresetperiod", getHistoryResetPeriod());
 	localStorage.setItem("historyresetperiodunit", getHistoryResetPeriodUnit());
 	// Set UI visibility options
-	if ( document.getElementById("overtimeoption").checked == false ) {
+	if (document.getElementById("overtimeoption").checked == false) {
 		localStorage.setItem("overtimeoption", "false");
 	} else {
 		localStorage.setItem("overtimeoption", "true");
 	}
-	if ( document.getElementById("totalhoursoption").checked == false ) {
+	if (document.getElementById("totalhoursoption").checked == false) {
 		localStorage.setItem("totalhoursoption", "false");
 	} else {
 		localStorage.setItem("totalhoursoption", "true");
 	}
-	if ( document.getElementById("weeklyovertimeoption").checked == false ) {
+	if (document.getElementById("weeklyovertimeoption").checked == false) {
 		localStorage.setItem("weeklyovertimeoption", "false");
 	} else {
 		localStorage.setItem("weeklyovertimeoption", "true");
 	}
-	if ( document.getElementById("totalovertimeoption").checked == false ) {
+	if (document.getElementById("totalovertimeoption").checked == false) {
 		localStorage.setItem("totalovertimeoption", "false");
 	} else {
 		localStorage.setItem("totalovertimeoption", "true");
 	}
-	if ( document.getElementById("historyoption").checked == false ) {
+	if (document.getElementById("historyoption").checked == false) {
 		localStorage.setItem("historyoption", "false");
 	} else {
 		localStorage.setItem("historyoption", "true");
 	}
-	if ( document.getElementById("parametersoption").checked == false ) {
+	if (document.getElementById("parametersoption").checked == false) {
 		localStorage.setItem("parametersoption", "false");
 	} else {
 		localStorage.setItem("parametersoption", "true");
