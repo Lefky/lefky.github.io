@@ -1,3 +1,4 @@
+/*
 Date.prototype.subtractDays = function(days) {
 	var date = new Date(this.valueOf());
 	date.setDate(date.getDate() - days);
@@ -10,7 +11,10 @@ Date.prototype.addDays = function(days) {
 	return date;
 }
 
+*/
 // Conversion functions
+
+/*
 function timeStringToFloat(time) {
 	var hoursMinutes = time.split(/[.:]/);
 	var hours = parseInt(hoursMinutes[0], 10);
@@ -18,12 +22,18 @@ function timeStringToFloat(time) {
 	var time = hours + minutes / 60;
 	return Math.round((time + Number.EPSILON) * 100) / 100;
 }
-
+*/
 function floatToTimeString(timedec){
-	var sign = timedec < 0 ? "-" : "";
+	/*var sign = timedec < 0 ? "-" : "";
 	var hours = Math.floor(Math.abs(timedec));
 	var minutes = Math.floor((Math.abs(timedec) * 60) % 60);
 	return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+	*/
+	
+	if (timedec < 0) {
+		return "-" + moment().startOf('day').subtract(timedec, 'hours').format('HH:mm')
+	}
+	return moment().startOf('day').add(timedec, 'hours').format('HH:mm')
 }
 
 function roundTimeOffset(time){
@@ -36,7 +46,8 @@ function roundTimeOffset(time){
 // Setters & getters
 function getStart(){
 	var time = document.getElementById("start_time").value;
-	var time_dec = timeStringToFloat(time);
+	//var time_dec = timeStringToFloat(time);
+	var time_dec = moment.duration(time).asHours();
 	if (!time_dec) {
 		time_dec = 0;
 	}
@@ -49,7 +60,8 @@ function setStart(time){
 
 function getEnd(){
 	var time = document.getElementById("end_time").value;
-	var time_dec = timeStringToFloat(time);
+	//var time_dec = timeStringToFloat(time);
+	var time_dec = moment.duration(time).asHours();
 	if (!time_dec) {
 		time_dec = now();
 	}
@@ -62,7 +74,7 @@ function setEnd(time){
 
 function getBreak(){
 	var time = document.getElementById("break_time").value;
-	var time_dec = timeStringToFloat(time);
+	var time_dec = moment.duration(time).asHours();
 	if (!time_dec) {
 		time_dec = 0;
 	}
@@ -86,14 +98,22 @@ function setBreakDefault(time){
 	document.getElementById("break_time_default").value = floatToTimeString(time);
 }
 
-function addBreakDefault(){
+function addBreakDefault(){	
 	var break_time_default_init = localStorage.getItem("break_time_default");
+	/*
 	var new_break_dec = getBreak() - break_time_default_init + getBreakDefault();
+	console.log("break: "+getBreak()+" init: "+break_time_default_init+" default: "+getBreakDefault());
 	
 	if ( new_break_dec > 0 ) {
 		setBreak(new_break_dec);
 	} else {
 		setBreak(0);
+	}
+	*/
+	
+	if(getBreak() == break_time_default_init) {
+		setBreak(getBreakDefault());
+		setEnd(parseFloat(getEnd()) + parseFloat(getBreakDefault()) - break_time_default_init);
 	}
 	
 	localStorage.setItem("break_time_default", getBreakDefault());
@@ -525,7 +545,8 @@ function now() {
 	min = (min < 10 ? "0" : "") + min;
 	
 	var timestamp = hour + ":" + min; 
-	return timeStringToFloat(timestamp);
+	//return timeStringToFloat(timestamp);
+	return moment.duration(timestamp).asHours();
 }
 
 function todayDate() {
@@ -643,7 +664,8 @@ function setParameters() {
 			document.getElementById("startminsubtract").checked = true;
 			
 			// Fix convert minutes to subtract to decimal
-			var startminsubtract_value_decimal = timeStringToFloat("00:"+startminsubtract_value);
+			//var startminsubtract_value_decimal = timeStringToFloat("00:"+startminsubtract_value);
+			var startminsubtract_value_decimal = moment.duration("00:"+startminsubtract_value).asHours();
 			setStart(now() - startminsubtract_value_decimal);
 		} else {
 			setStart(now());
@@ -685,7 +707,17 @@ function break_counter() {
 			break_counter_start_time = moment(localStorage.getItem("break_counter_start_time"), "HH:mm"),
 			break_time = break_counter_stop_time.diff(break_counter_start_time, 'minutes'),
 			interval = moment().hour(0).minute(break_time),
-			decimal_time = timeStringToFloat(interval.format("HH:mm"));
+			//decimal_time = timeStringToFloat(interval.format("HH:mm"));
+			decimal_time = moment.duration(interval.format("HH:mm")).asHours();
+			/*
+			console.log("start: " + break_counter_start_time + 
+						", stop:" + break_counter_stop_time + 
+						", break time:" + break_time + 
+						", interval:" +interval +
+						", decimal:" + decimal_time);
+			console.log(moment.duration(interval.format("HH:mm")).asHours());
+			*/
+			
 		localStorage.setItem("break_counter_started", "false");
 		setBreak(decimal_time);
 		add_time(getHourSchedule());
@@ -707,7 +739,7 @@ function break_counter() {
 }
 
 $(document).on('keydown', function (e) {
-	if ( e.keyCode === 13 ) { //ENTER key code
+	if (e.keyCode === 13) { //ENTER key code
 		add_time(getHourSchedule());
 	}
 });
@@ -716,8 +748,8 @@ window.onbeforeunload = function(e) {
 	// Set 'dont save today' and 'automatically set end time' parameters in local storage
 	var nosave = document.getElementById("nosave"),
 		autoend = document.getElementById("autoend");
-	if ( nosave.checked == false ) {
-		if (autoend.checked == false ) {
+	if (nosave.checked == false) {
+		if (autoend.checked == false) {
 			var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '"}';
 			localStorage.setItem("autoend", "false");
 		} else {
@@ -732,7 +764,7 @@ window.onbeforeunload = function(e) {
 	}
 	// Set 'subtract 5 min from start time' parameter in local storage
 	var startminsubtract = document.getElementById("startminsubtract");
-	if ( startminsubtract.checked == false ) {
+	if (startminsubtract.checked == false) {
 		localStorage.setItem("startminsubtract", "false");
 	} else {
 		localStorage.setItem("startminsubtract", "true");
@@ -750,32 +782,32 @@ window.onbeforeunload = function(e) {
 	localStorage.setItem("historyresetperiod", getHistoryResetPeriod());
 	localStorage.setItem("historyresetperiodunit", getHistoryResetPeriodUnit());
 	// Set UI visibility options
-	if ( document.getElementById("overtimeoption").checked == false ) {
+	if (document.getElementById("overtimeoption").checked == false) {
 		localStorage.setItem("overtimeoption", "false");
 	} else {
 		localStorage.setItem("overtimeoption", "true");
 	}
-	if ( document.getElementById("totalhoursoption").checked == false ) {
+	if (document.getElementById("totalhoursoption").checked == false) {
 		localStorage.setItem("totalhoursoption", "false");
 	} else {
 		localStorage.setItem("totalhoursoption", "true");
 	}
-	if ( document.getElementById("weeklyovertimeoption").checked == false ) {
+	if (document.getElementById("weeklyovertimeoption").checked == false) {
 		localStorage.setItem("weeklyovertimeoption", "false");
 	} else {
 		localStorage.setItem("weeklyovertimeoption", "true");
 	}
-	if ( document.getElementById("totalovertimeoption").checked == false ) {
+	if (document.getElementById("totalovertimeoption").checked == false) {
 		localStorage.setItem("totalovertimeoption", "false");
 	} else {
 		localStorage.setItem("totalovertimeoption", "true");
 	}
-	if ( document.getElementById("historyoption").checked == false ) {
+	if (document.getElementById("historyoption").checked == false) {
 		localStorage.setItem("historyoption", "false");
 	} else {
 		localStorage.setItem("historyoption", "true");
 	}
-	if ( document.getElementById("parametersoption").checked == false ) {
+	if (document.getElementById("parametersoption").checked == false) {
 		localStorage.setItem("parametersoption", "false");
 	} else {
 		localStorage.setItem("parametersoption", "true");

@@ -9,7 +9,18 @@ const newTr = `
   <td class="pt-3-half new_cell text-black-50" contenteditable="true" onclick='clearPlaceholder(this)'>Overtime</td>
   <td class="pt-3-half new_cell text-black-50" contenteditable="true" onclick='clearPlaceholder(this)'>Total Work Time</td>
   <td class="pt-3-half new_cell text-black-50" contenteditable="true" onclick='clearPlaceholder(this)'>Start Time</td>
-  <td><span class="table-save"><button type="button" class="btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light"><i class="far fa-save"></i></button></span> <span class="table-remove"><button type="button" class="btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light"><i class="far fa-trash-alt"></i></button></span></td>
+  <td>
+	<span class="table-save">
+		<button type="button" class="btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light">
+			<i class="far fa-save"></i>
+		</button>
+	</span> 
+	<span class="table-remove">
+		<button type="button" class="btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light">
+			<i class="far fa-trash-alt"></i>
+		</button>
+	</span>
+  </td>
 </tr>`;
 
  $('.table-add').on('click', 'i', () => {
