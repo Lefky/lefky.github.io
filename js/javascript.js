@@ -379,10 +379,10 @@ function setHistory(refresh_edit_table){
 				//entry_history = entry_history + "<span style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['OvertimeDec'] + "</span><br>";
 				if (timeinfo['OvertimeDec'].startsWith("-")){
 					entry_history = entry_history + "<tr style='color:red;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
-					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:red;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td></tr>"
+					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:red;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td></tr>"
 				} else {
 					entry_history = entry_history + "<tr style='color:green;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
-					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td>"
+					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td>"
 				}
 				overtimetotal = overtimetotal + parseFloat(timeinfo['OvertimeDec']);
 				
@@ -750,11 +750,11 @@ window.onbeforeunload = function(e) {
 		autoend = document.getElementById("autoend");
 	if (nosave.checked == false) {
 		if (autoend.checked == false) {
-			var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '"}';
+			var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule() + '"}';
 			localStorage.setItem("autoend", "false");
 		} else {
 			setEnd(now());
-			var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '"}';
+			var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule() + '"}';
 			localStorage.setItem("autoend", "true");
 		}
 		localStorage.setItem(todayDate(), timeinfo);
@@ -826,5 +826,8 @@ $(document).ready(function() {
   }
   if(window.location.href.indexOf('#modaledithistory') != -1) {
     $('#modaledithistory').modal('show');
+  }
+  if(window.location.href.indexOf('#modalreporting') != -1) {
+    $('#modalreporting').modal('show');
   }
 });
