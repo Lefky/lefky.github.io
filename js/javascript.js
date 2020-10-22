@@ -1,3 +1,4 @@
+console.log("loading javascript.js");
 /*
 Date.prototype.subtractDays = function(days) {
 	var date = new Date(this.valueOf());
@@ -143,7 +144,7 @@ function getWorktime() {
 
 	return worktime;
 	//return Math.round((worktime + Number.EPSILON) * 100) / 100;
-	console.log("worktime: " + worktime);
+	//console.log("worktime: " + worktime);
 }
 
 function calculateTotal() {
@@ -384,14 +385,52 @@ function setHistory(refresh_edit_table){
 					entry_history = entry_history + "<tr style='color:green;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
 					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td>"
 				}
-				overtimetotal = overtimetotal + parseFloat(timeinfo['OvertimeDec']);
+				//var log = "overtime inc: "+overtimetotal+" /// time to add:"+parseFloat(timeinfo['OvertimeDec'])+" /// new total:"
+				overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo['OvertimeDec']);
+				//console.log(log + overtimetotal);
 				
 				if ( moment(key, "DD-MM-YYYY") >= moment().startOf('week') ) {
 					overtimeweekly = overtimeweekly + parseFloat(timeinfo['OvertimeDec']);
 				}
+								
+				// calculate hour schedule if it's not defined yet
+				if (timeinfo['HourSchedule'] == undefined) {
+					var hourschedule = parseFloat(timeinfo['TotalNoBreakDec'])-parseFloat(timeinfo['OvertimeDec']);
+					//hourschedule = Math.round((hourschedule + Number.EPSILON) * 100) / 100;
+					
+					//console.log("old: " + hourschedule);
+					if (hourschedule > 0 && hourschedule < 3.1) {
+						hourschedule = 3.04;
+					} else if (hourschedule > 3.1 && hourschedule < 3.5) {
+						hourschedule = 3.2;
+					} else if (hourschedule > 3.5 && hourschedule < 3.9) {
+						hourschedule = 3.8;
+					} else if (hourschedule > 3.9 && hourschedule < 4.25) {
+						hourschedule = 4;
+					} else if (hourschedule > 4.25 && hourschedule < 4.7) {
+						hourschedule = 4.56;
+					} else if (hourschedule > 4.7 && hourschedule < 5.55) {
+						hourschedule = 4.8;
+					} else if (hourschedule > 5.55 && hourschedule < 6.23) {
+						hourschedule = 6.08;
+					} else if (hourschedule > 6.23 && hourschedule < 7) {
+						hourschedule = 6.4;
+					} else if (hourschedule > 7 && hourschedule < 7.8) {
+						hourschedule = 7.6;
+					} else if (hourschedule > 7.8 && hourschedule < 10) {
+						hourschedule = 8;
+					}
+					//console.log(hourschedule);
+					
+					var new_timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['OvertimeDec'] + '", "TotalDec": "' + timeinfo['TotalDec'] + '", "StartDec": "' + timeinfo['StartDec'] + '", "HourSchedule": "' + hourschedule + '"}';
+					localStorage.setItem(key, new_timeinfo);
+					console.log(timeinfo);
+					console.log(new_timeinfo);
+				}
 			}
 		}
 	}
+	
 	if (keys == "" || keys == null) {
 		entry_history = "No previous data yet :(";
 		entry_edit_history = entry_history;
@@ -750,13 +789,14 @@ window.onbeforeunload = function(e) {
 		autoend = document.getElementById("autoend");
 	if (nosave.checked == false) {
 		if (autoend.checked == false) {
-			var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule() + '"}';
+			//var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule() + '"}';
 			localStorage.setItem("autoend", "false");
 		} else {
 			setEnd(now());
-			var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule() + '"}';
+			//var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule() + '"}';
 			localStorage.setItem("autoend", "true");
 		}
+		var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule() + '"}';
 		localStorage.setItem(todayDate(), timeinfo);
 		localStorage.setItem("nosave", "false");
 	} else {

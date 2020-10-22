@@ -1,4 +1,6 @@
 // source: https://mdbootstrap.com/docs/jquery/tables/editable/
+console.log("loading editable_table.js");
+
 const $tableID = $('#edit_history_table');
 
 const newTr = `

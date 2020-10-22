@@ -8,7 +8,8 @@ console.log("loading graph.js");
 var datasetOvertimeDec = [],
 	datasetStartDec = [],
 	datasetTotalDec = [],
-	datasetTotalNoBreakDec = [];
+	datasetTotalNoBreakDec = [],
+	datasetBreakDec = [];
 
 google.charts.load('current', {
 	packages: ['corechart', 'line']
@@ -46,6 +47,12 @@ function drawBasic(graphtype) {
 			data.addRows(datasetTotalNoBreakDec);
 			linecolor = ['#dc3545', 'black'];
 			break;
+		case "BreakDec":
+			data.addColumn('number', 'Break');
+			data.addColumn('number', 'Hour schedule');
+			data.addRows(datasetBreakDec);
+			linecolor = ['#17a2b8', 'black'];
+			break;
 		default:
 			// code block
 			console.log("No valid graphtype entered");
@@ -65,18 +72,14 @@ function drawBasic(graphtype) {
 		[60, 64], [61, 60], [62, 65], [63, 67], [64, 68], [65, 69],
 		[66, 70], [67, 72], [68, 75], [69, 80]
 	]);*/
-	/*data.addRows([
-		["05-10-2020", 0],
-		["06-10-2020", 2],
-		["07-10-2020", 5],
-	]);*/
 
 	var options = {
-		explorer: {
+		/*explorer: {
 			keepInBounds: true
-		},
+		},*/
 		hAxis: {
-			title: 'Date'
+			title: 'Date',
+			slantedText: true
 			//slantedTextAngle: 60
 		},
 		vAxis: {
@@ -113,11 +116,13 @@ function initGraphs() {
 	datasetStartDec = [];
 	datasetTotalDec = [];
 	datasetTotalNoBreakDec = [];
+	datasetBreakDec = [];
 	formatJSONdata();
 	drawBasic("OvertimeDec");
 	drawBasic("StartDec");
 	drawBasic("TotalDec");
 	drawBasic("TotalNoBreakDec");
+	drawBasic("BreakDec");
 }
 
 // Redraw chart on opening modal
@@ -143,7 +148,7 @@ function formatJSONdata() {
 
 	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 	
-	console.log(sortedkeys);
+	//console.log(sortedkeys);
 
 	for (; key = sortedkeys[i]; i++) {
 		if (!userKeyRegExp.test(key)) {
@@ -179,7 +184,14 @@ function formatJSONdata() {
 					datasetTotalNoBreakDec.push([key, parseFloat(timeinfo['TotalNoBreakDec']), null]);
 				}
 			}
-			console.log("accepted value record");
+			if (timeinfo.hasOwnProperty('TotalDec') && timeinfo.hasOwnProperty('TotalNoBreakDec')) {
+				if (timeinfo.hasOwnProperty('HourSchedule')) {
+					datasetBreakDec.push([key, Math.abs(parseFloat(timeinfo['TotalDec']) - parseFloat(timeinfo['TotalNoBreakDec'])), parseFloat(timeinfo['HourSchedule'])]);
+				} else {
+					datasetBreakDec.push([key, Math.abs(parseFloat(timeinfo['TotalDec']) - parseFloat(timeinfo['TotalNoBreakDec'])), null]);
+				}
+			}
+			//console.log("accepted value record");
 		}
 	}
 }
