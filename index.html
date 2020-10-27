@@ -28,7 +28,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20201021.1</span> <br>
+					Version: <span id="currentappversion">20201027.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -300,6 +300,19 @@
 						<input type="number" name="graphdatasetlength_value" id="graphdatasetlength_value" class="form-control col-sm-2 mx-1" value="999" min="1" max="999" onchange="initGraphs()">
 					</div>
 				</div>
+				<p>
+					You can also zoom in to certain graphs by dragging the area you want to zoom in on.<br>
+					Click right to reset the zoom level.
+				</p>
+				<!--<div id="OvertimeDays_div" style="width: 50%; float:right;"></div>
+				<div id="Gauges_div" style="width: 50%;"></div>
+				
+				<div id="DaysRegisteredGauge_div" style="display: flex; justify-content: center;"></div>-->
+				<div style="display: flex; justify-content: center;">
+					<div id="DaysRegisteredGauge_div" style="display: inline-block;"></div>
+					<div id="AvgStarttimeGauge_div" style="display: inline-block;"></div>
+				</div>
+				<div id="OvertimeDays_div" style="width: 50%;"></div>
 				<div id="OvertimeDec_div"></div>
 				<div id="StartDec_div"></div>
 				<div id="TotalDec_div"></div>
@@ -313,6 +326,7 @@
 	</div>
 </div>
 
+<!-- Page HTML -->
 <div class="container-fluid h-100">
 	<div class="row d-flex justify-content-center">
 		<div id="alertnotification" class="alert alert-danger alert-dismissible fade show my-4 mr-1" role="alert" style="display: none; position: absolute; z-index: 1;">
@@ -486,6 +500,7 @@
 		</div>
 	</div>
 	
+	<!-- Footer HTML -->
     <div class="row fixed-bottom px-3 py-1">
 		<div class="col d-flex align-self-center">
 			<span class="mx-2">Senne Janssens &#169; 2020</span>
@@ -502,7 +517,7 @@
 </div>
 </body>
 
-<!-- BOOTSTRAP -->
+<!-- Bootstrap -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

@@ -1,28 +1,35 @@
 /*
 In HTML
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <div id="chart_div"></div>
+  <div id="div_where_graph_comes"></div>
 */
 console.log("loading graph.js");
 
-var datasetOvertimeDec = [],
+var numberOfDaysRegistered = 0,
+	datasetOvertimeDec = [],
 	datasetStartDec = [],
 	datasetTotalDec = [],
 	datasetTotalNoBreakDec = [],
-	datasetBreakDec = [];
+	datasetBreakDec = [],
+	positiveOvertimeDays = 0,
+	negativeOvertimeDays = 0,
+	sumstarttime = 0;
 
 google.charts.load('current', {
-	packages: ['corechart', 'line']
+	packages: ['corechart']
+});
+google.charts.load('current', {
+	packages: ['gauge']
 });
 
-//In comment to not load on page load, only when modal is opened
-//google.charts.setOnLoadCallback(drawBasic);
 
-function drawBasic(graphtype) {
+// In comment to not load on page load, only when modal is opened
+//google.charts.setOnLoadCallback(drawLinegraph);
 
+function drawLinegraph(graphtype) {
 	var data = new google.visualization.DataTable(),
 		linecolor = "";
-	data.addColumn('string', 'X');
+	data.addColumn('date', 'X');
 
 	switch (graphtype) {
 		case "OvertimeDec":
@@ -74,9 +81,10 @@ function drawBasic(graphtype) {
 	]);*/
 
 	var options = {
-		/*explorer: {
-			keepInBounds: true
-		},*/
+		explorer: {
+			axis: 'horizontal', 
+			actions: ['dragToZoom', 'rightClickToReset']
+		},
 		hAxis: {
 			title: 'Date',
 			slantedText: true
@@ -95,13 +103,22 @@ function drawBasic(graphtype) {
 			alignment: 'center'
 		},
 		series: {
-		  0: {
-		  },
-          1: {
-            lineWidth: 1,
-            lineDashStyle: [1, 1]
-          }
-        },
+			0: {},
+			1: {
+				lineWidth: 1,
+				lineDashStyle: [1, 1]
+			}
+		},
+		trendlines: {
+			0: {
+				labelInLegend: 'Trend',
+				visibleInLegend: true,
+				color: 'purple',
+				lineWidth: 3,
+				opacity: 0.2,
+				type: 'linear'
+			}
+		},
 		colors: linecolor,
 		width: '100%',
 		height: 450
@@ -111,18 +128,191 @@ function drawBasic(graphtype) {
 	chart.draw(data, options);
 }
 
+function drawBargraph(graphtype) {
+	var data = new google.visualization.DataTable(),
+		linecolor = "";
+	data.addColumn('date', 'X');
+
+	switch (graphtype) {
+		case "OvertimeDec":
+			data.addColumn('number', 'Overtime');
+			data.addRows(datasetOvertimeDec);
+			linecolor = ['#28a745'];
+			break;
+		case "StartDec":
+			data.addColumn('number', 'Starttime');
+			data.addRows(datasetStartDec);
+			linecolor = ['#007bff'];
+			break;
+		case "TotalDec":
+			data.addColumn('number', 'Total');
+			data.addColumn('number', 'Hour schedule');
+			data.addRows(datasetTotalDec);
+			linecolor = ['#ffc107', 'black'];
+			break;
+		case "TotalNoBreakDec":
+			data.addColumn('number', 'Total no break');
+			data.addColumn('number', 'Hour schedule');
+			data.addRows(datasetTotalNoBreakDec);
+			linecolor = ['#dc3545', 'black'];
+			break;
+		case "BreakDec":
+			data.addColumn('number', 'Break');
+			data.addColumn('number', 'Hour schedule');
+			data.addRows(datasetBreakDec);
+			linecolor = ['#17a2b8', 'black'];
+			break;
+		default:
+			// code block
+			console.log("No valid graphtype entered");
+	}
+
+	var options = {
+		explorer: {
+			axis: 'horizontal', 
+			actions: ['dragToZoom', 'rightClickToReset']
+		},
+		hAxis: {
+			title: 'Date',
+			slantedText: true
+			//slantedTextAngle: 60
+		},
+		vAxis: {
+			title: 'Time (decimal hours)'
+		},
+		chartArea: {
+			// leave room for y-axis labels
+			left: 65,
+			width: '100%'
+		},
+		legend: {
+			position: 'top',
+			alignment: 'center'
+		},
+		seriesType: 'bars',
+		series: {
+			1: {
+				type: 'line',
+				lineWidth: 1,
+				lineDashStyle: [1, 1]
+			}
+		},
+		trendlines: {
+			0: {
+				labelInLegend: 'Trend',
+				visibleInLegend: true,
+				color: 'purple',
+				lineWidth: 3,
+				opacity: 0.2,
+				type: 'linear'
+			}
+		},
+		colors: linecolor,
+		width: '100%',
+		height: 450
+	};
+
+	var chart = new google.visualization.ComboChart(document.getElementById(graphtype + '_div'));
+	chart.draw(data, options);
+}
+
+function drawPiegraph(graphtype) {
+	var data = new google.visualization.DataTable(),
+		slicecolor,
+		title;
+
+	switch (graphtype) {
+		case "OvertimeDays":
+			data.addColumn('string', 'Metric');
+			data.addColumn('number', 'Value');
+			data.addRows([
+				['# positive overtime days', positiveOvertimeDays],
+				['# negative overtime days', negativeOvertimeDays]
+			]);
+			slicecolor = ['#28a745', '#dc3545'];
+			title = "Days of overtime";
+			break;
+		default:
+			// code block
+			console.log("No valid graphtype entered");
+	}
+
+	var options = {
+		//pieStartAngle: 270,
+		title: title,
+		colors: slicecolor,
+		width: '100%',
+		height: 300
+	};
+
+	var chart = new google.visualization.PieChart(document.getElementById(graphtype + '_div'));
+	chart.draw(data, options);
+}
+
+function drawGaugegraph(graphtype) {
+	var data = new google.visualization.DataTable(),
+		max = 0;
+
+	switch (graphtype) {
+		case "DaysRegisteredGauge":
+			data.addColumn('string', 'Metric');
+			data.addColumn('number', 'Value');
+			data.addRows([
+				['# days registered', numberOfDaysRegistered],
+			]);
+			max = 999;
+			break;
+		case "AvgStarttimeGauge":
+			data.addColumn('string', 'Metric');
+			data.addColumn('number', 'Value');
+			data.addRows([
+				['Avg starttime', sumstarttime / numberOfDaysRegistered]
+			]);
+			max = 24;
+			break;
+		default:
+			// code block
+			console.log("No valid graphtype entered");
+	}
+
+	var options = {
+		/*redFrom: 90, 
+		redTo: 999,
+        yellowFrom:75, 
+		yellowTo: 90,*/
+		minorTicks: 5,
+		max: max,
+		width: '100%',
+		height: 250
+	};
+
+	var chart = new google.visualization.Gauge(document.getElementById(graphtype + '_div'));
+	chart.draw(data, options);
+	$('#' + graphtype + '_div svg text').attr('font-size', 20); // change the fontsize of the title, there's no parameter for this
+}
+
+
 function initGraphs() {
-	datasetOvertimeDec = [];
-	datasetStartDec = [];
-	datasetTotalDec = [];
-	datasetTotalNoBreakDec = [];
-	datasetBreakDec = [];
+	numberOfDaysRegistered = 0,
+		datasetOvertimeDec = [],
+		datasetStartDec = [],
+		datasetTotalDec = [],
+		datasetTotalNoBreakDec = [],
+		datasetBreakDec = [],
+		positiveOvertimeDays = 0,
+		negativeOvertimeDays = 0,
+		sumstarttime = 0;
+
 	formatJSONdata();
-	drawBasic("OvertimeDec");
-	drawBasic("StartDec");
-	drawBasic("TotalDec");
-	drawBasic("TotalNoBreakDec");
-	drawBasic("BreakDec");
+
+	drawGaugegraph("DaysRegisteredGauge");
+	drawGaugegraph("AvgStarttimeGauge");
+	drawPiegraph("OvertimeDays");
+	drawLinegraph("OvertimeDec");
+	drawLinegraph("StartDec");
+	drawBargraph("TotalDec");
+	drawBargraph("TotalNoBreakDec");
+	drawLinegraph("BreakDec");
 }
 
 // Redraw chart on opening modal
@@ -147,48 +337,61 @@ function formatJSONdata() {
 		datasetlength = document.getElementById('graphdatasetlength_value').value;
 
 	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
-	
-	//console.log(sortedkeys);
 
-	for (; key = sortedkeys[i]; i++) {
+
+	for (i = 0; key = sortedkeys[i]; i++) {
 		if (!userKeyRegExp.test(key)) {
 			sortedkeys.splice(i, 1)
 			i--;
 		}
 	}
 
-	i = 0;
-	var start = sortedkeys.length - datasetlength;
+	var start = sortedkeys.length - datasetlength; // howmany datapoints need to be skipped before starting to draw graphs
+	var timeinfo,
+		variable,
+		dateKey;
 
-	for (; key = sortedkeys[i]; i++) {
+	for (i = 0; key = sortedkeys[i]; i++) {
 		if (userKeyRegExp.test(key) && i >= start) {
-			var timeinfo = JSON.parse(localStorage.getItem(key));
+			timeinfo = JSON.parse(localStorage.getItem(key));
+			dateKey = key.split('-');
+			dateKey = new Date(dateKey[2], dateKey[1] - 1, dateKey[0]);
+			numberOfDaysRegistered++;
+
 			if (timeinfo.hasOwnProperty('OvertimeDec')) {
-				datasetOvertimeDec.push([key, parseFloat(timeinfo['OvertimeDec'])]);
+				variable = parseFloat(timeinfo['OvertimeDec']);
+				datasetOvertimeDec.push([dateKey, variable]);
+				if (variable > 0) {
+					positiveOvertimeDays++;
+				} else if (variable < 0) {
+					negativeOvertimeDays++;
+				}
 			}
 			if (timeinfo.hasOwnProperty('StartDec')) {
-				var StartDec = parseFloat(timeinfo['StartDec']);
-				datasetStartDec.push([key, StartDec]);
+				variable = parseFloat(timeinfo['StartDec']);
+				sumstarttime = sumstarttime + variable;
+				datasetStartDec.push([dateKey, variable]);
 			}
 			if (timeinfo.hasOwnProperty('TotalDec')) {
 				if (timeinfo.hasOwnProperty('HourSchedule')) {
-					datasetTotalDec.push([key, parseFloat(timeinfo['TotalDec']), parseFloat(timeinfo['HourSchedule'])]);
+					datasetTotalDec.push([dateKey, parseFloat(timeinfo['TotalDec']), parseFloat(timeinfo['HourSchedule'])]);
 				} else {
-					datasetTotalDec.push([key, parseFloat(timeinfo['TotalDec']), null]);
+					datasetTotalDec.push([dateKey, parseFloat(timeinfo['TotalDec']), null]);
 				}
 			}
 			if (timeinfo.hasOwnProperty('TotalNoBreakDec')) {
 				if (timeinfo.hasOwnProperty('HourSchedule')) {
-					datasetTotalNoBreakDec.push([key, parseFloat(timeinfo['TotalNoBreakDec']), parseFloat(timeinfo['HourSchedule'])]);
+					datasetTotalNoBreakDec.push([dateKey, parseFloat(timeinfo['TotalNoBreakDec']), parseFloat(timeinfo['HourSchedule'])]);
 				} else {
-					datasetTotalNoBreakDec.push([key, parseFloat(timeinfo['TotalNoBreakDec']), null]);
+					datasetTotalNoBreakDec.push([dateKey, parseFloat(timeinfo['TotalNoBreakDec']), null]);
 				}
 			}
 			if (timeinfo.hasOwnProperty('TotalDec') && timeinfo.hasOwnProperty('TotalNoBreakDec')) {
+				variable = Math.abs(parseFloat(timeinfo['TotalDec']) - parseFloat(timeinfo['TotalNoBreakDec']));
 				if (timeinfo.hasOwnProperty('HourSchedule')) {
-					datasetBreakDec.push([key, Math.abs(parseFloat(timeinfo['TotalDec']) - parseFloat(timeinfo['TotalNoBreakDec'])), parseFloat(timeinfo['HourSchedule'])]);
+					datasetBreakDec.push([dateKey, variable, parseFloat(timeinfo['HourSchedule'])]);
 				} else {
-					datasetBreakDec.push([key, Math.abs(parseFloat(timeinfo['TotalDec']) - parseFloat(timeinfo['TotalNoBreakDec'])), null]);
+					datasetBreakDec.push([dateKey, variable, null]);
 				}
 			}
 			//console.log("accepted value record");
