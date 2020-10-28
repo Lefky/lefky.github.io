@@ -11,6 +11,7 @@ var numberOfDaysRegistered = 0,
 	datasetTotalDec = [],
 	datasetTotalNoBreakDec = [],
 	datasetBreakDec = [],
+	datasetHourscheduleDec = [],
 	positiveOvertimeDays = 0,
 	negativeOvertimeDays = 0,
 	sumstarttime = 0;
@@ -83,7 +84,8 @@ function drawLinegraph(graphtype) {
 	var options = {
 		explorer: {
 			axis: 'horizontal', 
-			actions: ['dragToZoom', 'rightClickToReset']
+			actions: ['dragToZoom', 'rightClickToReset'],
+			maxZoomIn: 0.05
 		},
 		hAxis: {
 			title: 'Date',
@@ -121,7 +123,7 @@ function drawLinegraph(graphtype) {
 		},
 		colors: linecolor,
 		width: '100%',
-		height: 450
+		height: 500
 	};
 
 	var chart = new google.visualization.LineChart(document.getElementById(graphtype + '_div'));
@@ -170,7 +172,8 @@ function drawBargraph(graphtype) {
 	var options = {
 		explorer: {
 			axis: 'horizontal', 
-			actions: ['dragToZoom', 'rightClickToReset']
+			actions: ['dragToZoom', 'rightClickToReset'],
+			maxZoomIn: 0.05
 		},
 		hAxis: {
 			title: 'Date',
@@ -209,7 +212,7 @@ function drawBargraph(graphtype) {
 		},
 		colors: linecolor,
 		width: '100%',
-		height: 450
+		height: 500
 	};
 
 	var chart = new google.visualization.ComboChart(document.getElementById(graphtype + '_div'));
@@ -231,6 +234,12 @@ function drawPiegraph(graphtype) {
 			]);
 			slicecolor = ['#28a745', '#dc3545'];
 			title = "Days of overtime";
+			break;
+		case "Hourschedules":
+			data.addColumn('string', 'Schedule');
+			data.addColumn('number', 'Value');
+			data.addRows(datasetHourscheduleDec);
+			title = "Hourschedules";
 			break;
 		default:
 			// code block
@@ -294,20 +303,24 @@ function drawGaugegraph(graphtype) {
 
 function initGraphs() {
 	numberOfDaysRegistered = 0,
-		datasetOvertimeDec = [],
-		datasetStartDec = [],
-		datasetTotalDec = [],
-		datasetTotalNoBreakDec = [],
-		datasetBreakDec = [],
-		positiveOvertimeDays = 0,
-		negativeOvertimeDays = 0,
-		sumstarttime = 0;
+	datasetOvertimeDec = [],
+	datasetStartDec = [],
+	datasetTotalDec = [],
+	datasetTotalNoBreakDec = [],
+	datasetBreakDec = [],
+	datasetHourscheduleDec = [],
+	positiveOvertimeDays = 0,
+	negativeOvertimeDays = 0,
+	sumstarttime = 0;
 
 	formatJSONdata();
+}
 
+function drawGraphs() {
 	drawGaugegraph("DaysRegisteredGauge");
 	drawGaugegraph("AvgStarttimeGauge");
 	drawPiegraph("OvertimeDays");
+	drawPiegraph("Hourschedules");
 	drawLinegraph("OvertimeDec");
 	drawLinegraph("StartDec");
 	drawBargraph("TotalDec");
@@ -318,10 +331,11 @@ function initGraphs() {
 // Redraw chart on opening modal
 $('#modalreporting').on('shown.bs.modal', function() {
 	initGraphs();
+	drawGraphs();
 });
 
 $(window).resize(function() {
-	initGraphs();
+	drawGraphs();
 });
 
 function formatJSONdata() {
@@ -337,8 +351,6 @@ function formatJSONdata() {
 		datasetlength = document.getElementById('graphdatasetlength_value').value;
 
 	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
-
-
 	for (i = 0; key = sortedkeys[i]; i++) {
 		if (!userKeyRegExp.test(key)) {
 			sortedkeys.splice(i, 1)
@@ -350,7 +362,7 @@ function formatJSONdata() {
 	var timeinfo,
 		variable,
 		dateKey;
-
+		
 	for (i = 0; key = sortedkeys[i]; i++) {
 		if (userKeyRegExp.test(key) && i >= start) {
 			timeinfo = JSON.parse(localStorage.getItem(key));
@@ -394,7 +406,25 @@ function formatJSONdata() {
 					datasetBreakDec.push([dateKey, variable, null]);
 				}
 			}
+			if (timeinfo.hasOwnProperty('HourSchedule')) {
+				variable = timeinfo['HourSchedule'];				
+				updateArray(datasetHourscheduleDec, variable + "h");											
+			}
 			//console.log("accepted value record");
 		}
 	}
+	//console.log(datasetHourscheduleDec);
+}
+
+function updateArray(array, category) {
+    const entry = array.find(([cat]) => cat === category);
+    if (entry) {
+        // Update the value
+        ++entry[1];
+        //console.log("category updated");
+    } else {
+        // Add a new entry
+        array.push([category, 1]);
+        //console.log("category created");
+    }
 }
