@@ -223,6 +223,11 @@ function drawPiegraph(graphtype) {
 
 	var chart = new google.visualization.PieChart(document.getElementById(graphtype + '_div'));
 	chart.draw(data, options);
+	
+	// If there isn't any data to display, display a notification
+	if (graphtype == "OvertimeDays" && positiveOvertimeDays == 0 && negativeOvertimeDays == 0) {
+		$('#OvertimeDays_div svg g text:first').html("No days of overtime in window"); 
+	}
 }
 
 function drawGaugegraph(graphtype) {

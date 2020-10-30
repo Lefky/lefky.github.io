@@ -145,17 +145,9 @@ function setHourSchedule(time){
 
 function getWorktime() {
 	if (getEnd() < getStart()) {
-		/*console.log("start: "+getStart());
-		console.log("end: "+getEnd());
-		
-		console.log("smaller: "+(24 + getEnd() - getStart()));*/
 		return 24 + getEnd() - getStart();
 	}
-	
-	
-	var worktime = getEnd() - getStart();
-
-	return worktime;
+	return getEnd() - getStart();
 	//return Math.round((worktime + Number.EPSILON) * 100) / 100;
 	//console.log("worktime: " + worktime);
 }
@@ -258,7 +250,7 @@ function getHistoryDeleteOption(){
 function getHistoryRetain(){
 	var days = document.getElementById("historyretain").value;
 	if (!days) {
-		days = 30;
+		days = 999;
 	}
 	if ( days > 999 ) {
 		days = 999;
@@ -378,8 +370,7 @@ function setHistory(refresh_edit_table){
 	  return `${parts[2]}-${parts[1]}-${parts[0]}`;
 	};
 	
-	var //entry_history = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Overtime</span><br><div class='greyed' style='border-bottom: 1px solid black; width: 100%;'></div>",
-		entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
+	var entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
 		entry_edit_history = "",
 		keys = Object.keys(localStorage),
 		revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
@@ -393,7 +384,6 @@ function setHistory(refresh_edit_table){
 		if (userKeyRegExp.test(key)) {
 			var timeinfo = JSON.parse(localStorage.getItem(key));
 			if (timeinfo.hasOwnProperty('OvertimeDec')){
-				//entry_history = entry_history + "<span style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['OvertimeDec'] + "</span><br>";
 				if (timeinfo['OvertimeDec'].startsWith("-")){
 					entry_history = entry_history + "<tr style='color:red;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
 					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:red;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td></tr>"
@@ -401,9 +391,7 @@ function setHistory(refresh_edit_table){
 					entry_history = entry_history + "<tr style='color:green;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
 					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td>"
 				}
-				//var log = "overtime inc: "+overtimetotal+" /// time to add:"+parseFloat(timeinfo['OvertimeDec'])+" /// new total:"
 				overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo['OvertimeDec']);
-				//console.log(log + overtimetotal);
 				
 				if ( moment(key, "DD-MM-YYYY") >= moment().startOf('week') ) {
 					overtimeweekly = overtimeweekly + parseFloat(timeinfo['OvertimeDec']);
@@ -526,7 +514,7 @@ function deleteHistory() {
 			}
 		}
 		setHistory(true);
-		document.getElementById("settingsmodalclosebutton").click();
+		//document.getElementById("settingsmodalclosebutton").click();
 		alert("History deleted!");
 	}
 }
@@ -805,11 +793,9 @@ window.onbeforeunload = function(e) {
 		autoend = document.getElementById("autoend");
 	if (nosave.checked == false) {
 		if (autoend.checked == false) {
-			//var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule() + '"}';
 			localStorage.setItem("autoend", "false");
 		} else {
 			setEnd(now());
-			//var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule() + '"}';
 			localStorage.setItem("autoend", "true");
 		}
 		var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule() + '"}';
