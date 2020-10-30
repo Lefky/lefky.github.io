@@ -71,6 +71,9 @@ function getEnd(){
 }
 
 function setEnd(time){
+	if (time > 24) {
+		time = time - 24;
+	}
 	document.getElementById("end_time").value = floatToTimeString(time);
 }
 
@@ -141,6 +144,15 @@ function setHourSchedule(time){
 }
 
 function getWorktime() {
+	if (getEnd() < getStart()) {
+		/*console.log("start: "+getStart());
+		console.log("end: "+getEnd());
+		
+		console.log("smaller: "+(24 + getEnd() - getStart()));*/
+		return 24 + getEnd() - getStart();
+	}
+	
+	
 	var worktime = getEnd() - getStart();
 
 	return worktime;
@@ -164,6 +176,9 @@ function calculateTotal() {
 }
 
 function setTotal(time){
+	if (time < 0) {
+		time = time + 24;
+	}
 	document.getElementById("total").value = floatToTimeString(time);
 }
 
