@@ -40,11 +40,11 @@ $tableID.on('click', '.table-save', function() {
 	var currentRow = $(this).closest("tr");
 
 	var key = currentRow.find("td:eq(0)").text(); // get current row 1st TD value
-	var TotalNoBreakDec = currentRow.find("td:eq(1)").text(); // get current row 2nd TD
-	var OvertimeDec = currentRow.find("td:eq(2)").text(); // get current row 3rd TD
-	var TotalDec = currentRow.find("td:eq(3)").text(); // get current row 4th TD
-	var StartDec = currentRow.find("td:eq(4)").text(); // get current row 5th TD
-	var HourSchedule = currentRow.find("td:eq(5)").text(); // get current row 6th TD
+	var TotalNoBreakDec = String(parseFloat(currentRow.find("td:eq(1)").text())); // get current row 2nd TD
+	var OvertimeDec = String(parseFloat(currentRow.find("td:eq(2)").text())); // get current row 3rd TD
+	var TotalDec = String(parseFloat(currentRow.find("td:eq(3)").text())); // get current row 4th TD
+	var StartDec = String(parseFloat(currentRow.find("td:eq(4)").text())); // get current row 5th TD
+	var HourSchedule = String(parseFloat(currentRow.find("td:eq(5)").text())); // get current row 6th TD
 
 	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 	const isnumber = /^-?[0-9]+.*[0-9]*$/;
