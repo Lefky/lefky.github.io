@@ -225,7 +225,7 @@ function setTotalNoBreak(time){
 
 function getTotalNoBreakDec(){
 	var worktime = getWorktime();
-	return Math.abs(parseFloat(worktime - getBreak()).toFixed(2));
+	return Math.abs(parseFloat(worktime - getBreak())).toFixed(2);
 }
 
 function setTotalNoBreakDec(time){
@@ -798,7 +798,7 @@ window.onbeforeunload = function(e) {
 			setEnd(now());
 			localStorage.setItem("autoend", "true");
 		}
-		var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule() + '"}';
+		var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule().toFixed(2) + '"}';
 		localStorage.setItem(todayDate(), timeinfo);
 		localStorage.setItem("nosave", "false");
 	} else {

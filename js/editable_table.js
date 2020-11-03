@@ -1,6 +1,11 @@
 // source: https://mdbootstrap.com/docs/jquery/tables/editable/
 console.log("loading editable_table.js");
 
+// Redraw table on opening modal
+$('#modaledithistory').on('shown.bs.modal', function() {
+	setHistory(true);
+});
+
 const $tableID = $('#edit_history_table');
 
 const newTr = `
@@ -36,15 +41,16 @@ function clearPlaceholder(cell) {
 	}
 }
 
+
 $tableID.on('click', '.table-save', function() {
 	var currentRow = $(this).closest("tr");
 
 	var key = currentRow.find("td:eq(0)").text(); // get current row 1st TD value
-	var TotalNoBreakDec = String(parseFloat(currentRow.find("td:eq(1)").text())); // get current row 2nd TD
-	var OvertimeDec = String(parseFloat(currentRow.find("td:eq(2)").text())); // get current row 3rd TD
-	var TotalDec = String(parseFloat(currentRow.find("td:eq(3)").text())); // get current row 4th TD
-	var StartDec = String(parseFloat(currentRow.find("td:eq(4)").text())); // get current row 5th TD
-	var HourSchedule = String(parseFloat(currentRow.find("td:eq(5)").text())); // get current row 6th TD
+	var TotalNoBreakDec = parseFloat(currentRow.find("td:eq(1)").text()); // get current row 2nd TD
+	var OvertimeDec = parseFloat(currentRow.find("td:eq(2)").text()); // get current row 3rd TD
+	var TotalDec = parseFloat(currentRow.find("td:eq(3)").text()); // get current row 4th TD
+	var StartDec = parseFloat(currentRow.find("td:eq(4)").text()); // get current row 5th TD
+	var HourSchedule = parseFloat(currentRow.find("td:eq(5)").text()); // get current row 6th TD
 
 	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 	const isnumber = /^-?[0-9]+.*[0-9]*$/;
@@ -73,7 +79,7 @@ $tableID.on('click', '.table-save', function() {
 		return;
 	}
 
-	var timeinfo = '{"TotalNoBreakDec": "' + TotalNoBreakDec + '", "OvertimeDec": "' + OvertimeDec + '", "TotalDec": "' + TotalDec + '", "StartDec": "' + StartDec + '", "HourSchedule": "' + HourSchedule + '"}';
+	var timeinfo = '{"TotalNoBreakDec": "' + TotalNoBreakDec.toFixed(2) + '", "OvertimeDec": "' + OvertimeDec.toFixed(2) + '", "TotalDec": "' + TotalDec.toFixed(2) + '", "StartDec": "' + StartDec.toFixed(2) + '", "HourSchedule": "' + HourSchedule.toFixed(2) + '"}';
 	localStorage.setItem(key, timeinfo);
 
 	var btn = $(this).find("button:eq(0)");
