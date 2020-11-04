@@ -1,0 +1,423 @@
+/*
+In HTML
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <div id="div_where_graph_comes"></div>
+*/
+console.log("loading graph.js");
+
+var numberOfDaysRegistered = 0,
+	datasetOvertimeDec = [],
+	datasetStartDec = [],
+	datasetTotalDec = [],
+	datasetTotalNoBreakDec = [],
+	datasetBreakDec = [],
+	datasetHourscheduleDec = [],
+	positiveOvertimeDays = 0,
+	negativeOvertimeDays = 0,
+	sumStarttime = 0;
+
+google.charts.load('current', {
+	packages: ['corechart']
+});
+google.charts.load('current', {
+	packages: ['gauge']
+});
+
+
+// In comment to not load on page load, only when modal is opened
+//google.charts.setOnLoadCallback(drawLinegraph);
+
+function drawLinegraph(graphtype) {
+	var data = new google.visualization.DataTable(),
+		linecolor = "";
+	data.addColumn('date', 'X');
+
+	switch (graphtype) {
+		case "OvertimeDec":
+			data.addColumn('number', 'Overtime');
+			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addRows(datasetOvertimeDec);
+			linecolor = ['#28a745'];
+			break;
+		case "StartDec":
+			data.addColumn('number', 'Starttime');
+			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addRows(datasetStartDec);
+			linecolor = ['#007bff'];
+			break;
+		case "BreakDec":
+			data.addColumn('number', 'Break');
+			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addColumn('number', 'Hour schedule');
+			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addRows(datasetBreakDec);
+			linecolor = ['#17a2b8', 'black'];
+			break;
+		default:
+			// code block
+			console.log("No valid graphtype entered");
+	}
+
+	var options = {
+		tooltip: {isHtml: true},
+		explorer: {
+			axis: 'horizontal', 
+			actions: ['dragToZoom', 'rightClickToReset'],
+			maxZoomIn: 0.05
+		},
+		hAxis: {
+			title: 'Date',
+			slantedText: true
+			//slantedTextAngle: 60
+		},
+		vAxis: {
+			title: 'Time (decimal hours)'
+		},
+		chartArea: {
+			// leave room for y-axis labels
+			left: 65,
+			width: '100%'
+		},
+		legend: {
+			position: 'top',
+			alignment: 'center'
+		},
+		series: {
+			0: {},
+			1: {
+				lineWidth: 1,
+				lineDashStyle: [1, 1]
+			}
+		},
+		trendlines: {
+			0: {
+				labelInLegend: 'Trend',
+				visibleInLegend: true,
+				color: 'purple',
+				lineWidth: 3,
+				opacity: 0.2,
+				type: 'linear'
+			}
+		},
+		colors: linecolor,
+		width: '100%',
+		height: 500
+	};
+
+	var chart = new google.visualization.LineChart(document.getElementById(graphtype + '_div'));
+	chart.draw(data, options);
+}
+
+function drawBargraph(graphtype) {
+	var data = new google.visualization.DataTable(),
+		linecolor = "";
+	data.addColumn('date', 'X');
+
+	switch (graphtype) {
+		case "TotalDec":
+			data.addColumn('number', 'Total');
+			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addColumn('number', 'Hour schedule');
+			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addRows(datasetTotalDec);
+			linecolor = ['#ffc107', 'black'];
+			break;
+		case "TotalNoBreakDec":
+			data.addColumn('number', 'Total no break');
+			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addColumn('number', 'Hour schedule');
+			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addRows(datasetTotalNoBreakDec);
+			linecolor = ['#dc3545', 'black'];
+			break;
+		default:
+			// code block
+			console.log("No valid graphtype entered");
+	}
+
+	var options = {
+		tooltip: {isHtml: true},
+		explorer: {
+			axis: 'horizontal', 
+			actions: ['dragToZoom', 'rightClickToReset'],
+			maxZoomIn: 0.05
+		},
+		hAxis: {
+			title: 'Date',
+			slantedText: true
+			//slantedTextAngle: 60
+		},
+		vAxis: {
+			title: 'Time (decimal hours)'
+		},
+		chartArea: {
+			// leave room for y-axis labels
+			left: 65,
+			width: '100%'
+		},
+		legend: {
+			position: 'top',
+			alignment: 'center'
+		},
+		seriesType: 'bars',
+		series: {
+			1: {
+				type: 'line',
+				lineWidth: 1,
+				lineDashStyle: [1, 1]
+			}
+		},
+		trendlines: {
+			0: {
+				labelInLegend: 'Trend',
+				visibleInLegend: true,
+				color: 'purple',
+				lineWidth: 3,
+				opacity: 0.2,
+				type: 'linear'
+			}
+		},
+		colors: linecolor,
+		width: '100%',
+		height: 500
+	};
+
+	var chart = new google.visualization.ComboChart(document.getElementById(graphtype + '_div'));
+	chart.draw(data, options);
+}
+
+function drawPiegraph(graphtype) {
+	var data = new google.visualization.DataTable(),
+		slicecolor,
+		title = "";
+
+	switch (graphtype) {
+		case "OvertimeDays":
+			data.addColumn('string', 'Metric');
+			data.addColumn('number', 'Value');
+			data.addRows([
+				['# positive overtime days', positiveOvertimeDays],
+				['# negative overtime days', negativeOvertimeDays]
+			]);
+			slicecolor = ['#28a745', '#dc3545'];
+			title = "Days of overtime";
+			break;
+		case "Hourschedules":
+			data.addColumn('string', 'Schedule');
+			data.addColumn('number', 'Value');
+			data.addRows(datasetHourscheduleDec);
+			title = "Hourschedules";
+			break;
+		default:
+			// code block
+			console.log("No valid graphtype entered");
+	}
+
+	var options = {
+		//pieStartAngle: 270,
+		title: title,
+		colors: slicecolor,
+		width: '100%',
+		height: 300
+	};
+
+	var chart = new google.visualization.PieChart(document.getElementById(graphtype + '_div'));
+	chart.draw(data, options);
+	
+	// If there isn't any data to display, display a notification
+	if (graphtype == "OvertimeDays" && positiveOvertimeDays == 0 && negativeOvertimeDays == 0) {
+		$('#OvertimeDays_div svg g text:first').html("No days of overtime in window"); 
+	}
+}
+
+function drawGaugegraph(graphtype) {
+	var data = new google.visualization.DataTable(),
+		max = 0;
+
+	switch (graphtype) {
+		case "DaysRegisteredGauge":
+			data.addColumn('string', 'Metric');
+			data.addColumn('number', 'Value');
+			data.addRows([
+				['# days registered', numberOfDaysRegistered],
+			]);
+			max = 999;
+			break;
+		case "AvgStarttimeGauge":
+			data.addColumn('string', 'Metric');
+			data.addColumn('number', 'Value');
+			var avg_starttime = sumStarttime / numberOfDaysRegistered;
+			data.addRows([
+				['Avg starttime', avg_starttime]
+			]);
+			max = 24;
+			break;
+		default:
+			// code block
+			console.log("No valid graphtype entered");
+	}
+
+	var options = {
+		/*redFrom: 90, 
+		redTo: 999,
+        yellowFrom:75, 
+		yellowTo: 90,*/
+		minorTicks: 5,
+		max: max,
+		width: '100%',
+		height: 250
+	};
+
+	var chart = new google.visualization.Gauge(document.getElementById(graphtype + '_div'));
+	chart.draw(data, options);
+	
+	$('#' + graphtype + '_div svg g text:first').attr('font-size', 20); // change the fontsize of the title, there's no parameter for this
+
+	// change the format of the starttime gauge to non-decimal
+	if (graphtype == "AvgStarttimeGauge") {
+		$('#AvgStarttimeGauge_div svg g g text:first').html(floatToTimeString(avg_starttime)); 
+	}
+}
+
+function initGraphs() {
+	numberOfDaysRegistered = 0,
+	datasetOvertimeDec = [],
+	datasetStartDec = [],
+	datasetTotalDec = [],
+	datasetTotalNoBreakDec = [],
+	datasetBreakDec = [],
+	datasetHourscheduleDec = [],
+	positiveOvertimeDays = 0,
+	negativeOvertimeDays = 0,
+	sumStarttime = 0;
+
+	formatJSONdata();
+}
+
+function drawGraphs() {
+	drawGaugegraph("DaysRegisteredGauge");
+	drawGaugegraph("AvgStarttimeGauge");
+	drawPiegraph("OvertimeDays");
+	drawPiegraph("Hourschedules");
+	drawLinegraph("OvertimeDec");
+	drawLinegraph("StartDec");
+	drawBargraph("TotalDec");
+	drawBargraph("TotalNoBreakDec");
+	drawLinegraph("BreakDec");
+}
+
+// Redraw chart on opening modal
+$('#modalreporting').on('shown.bs.modal', function() {
+	initGraphs();
+	drawGraphs();
+});
+
+$(window).resize(function() {
+	drawGraphs();
+});
+
+function formatJSONdata() {
+	const reverseDateRepresentation = date => {
+		let parts = date.split('-');
+		return `${parts[2]}-${parts[1]}-${parts[0]}`;
+	};
+
+	var keys = Object.keys(localStorage),
+		sortedkeys = keys.map(reverseDateRepresentation).sort().map(reverseDateRepresentation), // don't do reverse() here to have dates ascending
+		i = 0,
+		key,
+		datasetlength = document.getElementById('graphdatasetlength_value').value;
+
+	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
+	for (i = 0; key = sortedkeys[i]; i++) {
+		if (!userKeyRegExp.test(key)) {
+			sortedkeys.splice(i, 1)
+			i--;
+		}
+	}
+
+	var start = sortedkeys.length - datasetlength; // howmany datapoints need to be skipped before starting to draw graphs
+	var timeinfo,
+		variable,
+		hourschedule,
+		tooltip,
+		hourscheduletooltip,
+		dateKey;
+	
+	for (i = 0; key = sortedkeys[i]; i++) {
+		if (userKeyRegExp.test(key) && i >= start) {
+			timeinfo = JSON.parse(localStorage.getItem(key));
+			dateKey = key.split('-');
+			dateKey = new Date(dateKey[2], dateKey[1] - 1, dateKey[0]);
+			numberOfDaysRegistered++;
+
+			if (timeinfo.hasOwnProperty('OvertimeDec')) {
+				variable = parseFloat(timeinfo['OvertimeDec']);
+				tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Starttime: </span>" + floatToTimeString(variable) + "</div>";
+				datasetOvertimeDec.push([dateKey, variable, tooltip]);
+				if (variable > 0) {
+					positiveOvertimeDays++;
+				} else if (variable < 0) {
+					negativeOvertimeDays++;
+				}
+			}
+			if (timeinfo.hasOwnProperty('StartDec')) {
+				variable = parseFloat(timeinfo['StartDec']);
+				tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Starttime: </span>" + floatToTimeString(variable) + "</div>";
+				sumStarttime = sumStarttime + variable;
+				datasetStartDec.push([dateKey, variable, tooltip]);
+			}
+			
+			if (timeinfo.hasOwnProperty('HourSchedule')) {
+				hourschedule = parseFloat(timeinfo['HourSchedule']);
+				hourscheduletooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Hourschedule: </span>" + hourschedule + "h</div>";
+			}
+			
+			if (timeinfo.hasOwnProperty('TotalDec')) {
+				variable = parseFloat(timeinfo['TotalDec']);
+				tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Total time: </span>" + floatToTimeString(variable) + "</div>";
+				if (timeinfo.hasOwnProperty('HourSchedule')) {
+					datasetTotalDec.push([dateKey, variable, tooltip, hourschedule, hourscheduletooltip]);
+				} else {
+					datasetTotalDec.push([dateKey, variable, null]);
+				}
+			}
+			if (timeinfo.hasOwnProperty('TotalNoBreakDec')) {
+				variable = parseFloat(timeinfo['TotalNoBreakDec']);
+				tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Total time (no break): </span>" + floatToTimeString(variable) + "</div>";
+				if (timeinfo.hasOwnProperty('HourSchedule')) {
+					datasetTotalNoBreakDec.push([dateKey, variable, tooltip, hourschedule, hourscheduletooltip]);
+				} else {
+					datasetTotalNoBreakDec.push([dateKey, variable, null]);
+				}
+			}
+			if (timeinfo.hasOwnProperty('TotalDec') && timeinfo.hasOwnProperty('TotalNoBreakDec')) {
+				variable = Math.abs(parseFloat(timeinfo['TotalDec']) - parseFloat(timeinfo['TotalNoBreakDec']));
+				tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Breaktime: </span>" + floatToTimeString(variable) + "</div>";
+				if (timeinfo.hasOwnProperty('HourSchedule')) {
+					//datasetBreakDec.push([dateKey, variable, parseFloat(timeinfo['HourSchedule'])]);
+					datasetBreakDec.push([dateKey, variable, tooltip, hourschedule, hourscheduletooltip]);
+				} else {
+					datasetBreakDec.push([dateKey, variable, tooltip, null]);
+				}
+			}
+			if (timeinfo.hasOwnProperty('HourSchedule')) {
+				updateArray(datasetHourscheduleDec, timeinfo['HourSchedule'] + "h");											
+			}
+			//console.log("accepted value record");
+		}
+	}
+}
+
+function updateArray(array, category) {
+    const entry = array.find(([cat]) => cat === category);
+    if (entry) {
+        // Update the value
+        ++entry[1];
+        //console.log("category updated");
+    } else {
+        // Add a new entry
+        array.push([category, 1]);
+        //console.log("category created");
+    }
+}

@@ -1,3 +1,4 @@
+console.log("loading javascript.js");
 /*
 Date.prototype.subtractDays = function(days) {
 	var date = new Date(this.valueOf());
@@ -24,16 +25,17 @@ function timeStringToFloat(time) {
 }
 */
 function floatToTimeString(timedec){
-	/*var sign = timedec < 0 ? "-" : "";
+	var sign = timedec < 0 ? "-" : "";
 	var hours = Math.floor(Math.abs(timedec));
 	var minutes = Math.floor((Math.abs(timedec) * 60) % 60);
 	return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
-	*/
 	
+	/*
 	if (timedec < 0) {
 		return "-" + moment().startOf('day').subtract(timedec, 'hours').format('HH:mm')
 	}
 	return moment().startOf('day').add(timedec, 'hours').format('HH:mm')
+	*/
 }
 
 function roundTimeOffset(time){
@@ -69,6 +71,9 @@ function getEnd(){
 }
 
 function setEnd(time){
+	if (time > 24) {
+		time = time - 24;
+	}
 	document.getElementById("end_time").value = floatToTimeString(time);
 }
 
@@ -139,11 +144,12 @@ function setHourSchedule(time){
 }
 
 function getWorktime() {
-	var worktime = getEnd() - getStart();
-
-	return worktime;
+	if (getEnd() < getStart()) {
+		return 24 + getEnd() - getStart();
+	}
+	return getEnd() - getStart();
 	//return Math.round((worktime + Number.EPSILON) * 100) / 100;
-	console.log("worktime: " + worktime);
+	//console.log("worktime: " + worktime);
 }
 
 function calculateTotal() {
@@ -162,6 +168,9 @@ function calculateTotal() {
 }
 
 function setTotal(time){
+	if (time < 0) {
+		time = time + 24;
+	}
 	document.getElementById("total").value = floatToTimeString(time);
 }
 
@@ -216,7 +225,7 @@ function setTotalNoBreak(time){
 
 function getTotalNoBreakDec(){
 	var worktime = getWorktime();
-	return Math.abs(parseFloat(worktime - getBreak()).toFixed(2));
+	return Math.abs(parseFloat(worktime - getBreak())).toFixed(2);
 }
 
 function setTotalNoBreakDec(time){
@@ -241,7 +250,7 @@ function getHistoryDeleteOption(){
 function getHistoryRetain(){
 	var days = document.getElementById("historyretain").value;
 	if (!days) {
-		days = 30;
+		days = 999;
 	}
 	if ( days > 999 ) {
 		days = 999;
@@ -361,8 +370,7 @@ function setHistory(refresh_edit_table){
 	  return `${parts[2]}-${parts[1]}-${parts[0]}`;
 	};
 	
-	var //entry_history = "<span style='float: left; text-align: left;'>Date</span><span style=''>Time (no break)</span><span style='width: 30%; float: right;'>Overtime</span><br><div class='greyed' style='border-bottom: 1px solid black; width: 100%;'></div>",
-		entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
+	var entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
 		entry_edit_history = "",
 		keys = Object.keys(localStorage),
 		revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
@@ -376,22 +384,57 @@ function setHistory(refresh_edit_table){
 		if (userKeyRegExp.test(key)) {
 			var timeinfo = JSON.parse(localStorage.getItem(key));
 			if (timeinfo.hasOwnProperty('OvertimeDec')){
-				//entry_history = entry_history + "<span style='float:left; text-align: left;'>" + key + "</span><span style=''>" + timeinfo['TotalNoBreakDec'] + "</span><span style='width: 30%; float: right;'>" + timeinfo['OvertimeDec'] + "</span><br>";
 				if (timeinfo['OvertimeDec'].startsWith("-")){
 					entry_history = entry_history + "<tr style='color:red;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
-					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:red;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td></tr>"
+					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:red;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td></tr>"
 				} else {
 					entry_history = entry_history + "<tr style='color:green;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
-					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td>"
+					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td>"
 				}
-				overtimetotal = overtimetotal + parseFloat(timeinfo['OvertimeDec']);
+				overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo['OvertimeDec']);
 				
 				if ( moment(key, "DD-MM-YYYY") >= moment().startOf('week') ) {
 					overtimeweekly = overtimeweekly + parseFloat(timeinfo['OvertimeDec']);
 				}
+								
+				// calculate hour schedule if it's not defined yet
+				if (timeinfo['HourSchedule'] == undefined) {
+					var hourschedule = parseFloat(timeinfo['TotalNoBreakDec'])-parseFloat(timeinfo['OvertimeDec']);
+					//hourschedule = Math.round((hourschedule + Number.EPSILON) * 100) / 100;
+					
+					//console.log("old: " + hourschedule);
+					if (hourschedule > 0 && hourschedule < 3.1) {
+						hourschedule = 3.04;
+					} else if (hourschedule > 3.1 && hourschedule < 3.5) {
+						hourschedule = 3.2;
+					} else if (hourschedule > 3.5 && hourschedule < 3.9) {
+						hourschedule = 3.8;
+					} else if (hourschedule > 3.9 && hourschedule < 4.25) {
+						hourschedule = 4;
+					} else if (hourschedule > 4.25 && hourschedule < 4.7) {
+						hourschedule = 4.56;
+					} else if (hourschedule > 4.7 && hourschedule < 5.55) {
+						hourschedule = 4.8;
+					} else if (hourschedule > 5.55 && hourschedule < 6.23) {
+						hourschedule = 6.08;
+					} else if (hourschedule > 6.23 && hourschedule < 7) {
+						hourschedule = 6.4;
+					} else if (hourschedule > 7 && hourschedule < 7.8) {
+						hourschedule = 7.6;
+					} else if (hourschedule > 7.8 && hourschedule < 10) {
+						hourschedule = 8;
+					}
+					//console.log(hourschedule);
+					
+					var new_timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['OvertimeDec'] + '", "TotalDec": "' + timeinfo['TotalDec'] + '", "StartDec": "' + timeinfo['StartDec'] + '", "HourSchedule": "' + hourschedule + '"}';
+					localStorage.setItem(key, new_timeinfo);
+					console.log(timeinfo);
+					console.log(new_timeinfo);
+				}
 			}
 		}
 	}
+	
 	if (keys == "" || keys == null) {
 		entry_history = "No previous data yet :(";
 		entry_edit_history = entry_history;
@@ -471,7 +514,7 @@ function deleteHistory() {
 			}
 		}
 		setHistory(true);
-		document.getElementById("settingsmodalclosebutton").click();
+		//document.getElementById("settingsmodalclosebutton").click();
 		alert("History deleted!");
 	}
 }
@@ -750,13 +793,12 @@ window.onbeforeunload = function(e) {
 		autoend = document.getElementById("autoend");
 	if (nosave.checked == false) {
 		if (autoend.checked == false) {
-			var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '"}';
 			localStorage.setItem("autoend", "false");
 		} else {
 			setEnd(now());
-			var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '"}';
 			localStorage.setItem("autoend", "true");
 		}
+		var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule().toFixed(2) + '"}';
 		localStorage.setItem(todayDate(), timeinfo);
 		localStorage.setItem("nosave", "false");
 	} else {
@@ -826,5 +868,8 @@ $(document).ready(function() {
   }
   if(window.location.href.indexOf('#modaledithistory') != -1) {
     $('#modaledithistory').modal('show');
+  }
+  if(window.location.href.indexOf('#modalreporting') != -1) {
+    $('#modalreporting').modal('show');
   }
 });

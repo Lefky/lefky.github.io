@@ -28,7 +28,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20201015.1</span> <br>
+					Version: <span id="currentappversion">20201102.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -57,9 +57,28 @@
 				<p>
 					<h4>Import / export / delete</h4>
 					If you delete your browser data the history will reset. You can export and import your data.<br><br>
-					<button class="btn btn-outline-secondary btn-sm" id="exportHistory" onclick="exportHistory()">Export History</button >
-					<button class="btn btn-outline-secondary btn-sm" id="importHistory">Import History</button >
-					<button class="btn btn-outline-secondary btn-sm" id="deleteHistory" onclick="deleteHistory()">Delete History</button >
+					<div class="container">
+						<div class="row">
+							<div class="col-sm-auto justify-content-center text-center">
+								<button class="btn btn-outline-secondary btn-sm" id="exportHistory" onclick="exportHistory()">Export History</button>
+							</div>
+							<div class="col-sm justify-content-center text-center">
+								<button class="btn btn-outline-secondary btn-sm" id="importHistory">Import History</button>
+							</div>
+							<div class="col-sm justify-content-center text-center">
+								<button class="btn btn-outline-secondary btn-sm" id="deleteHistory" onclick="deleteHistory()">Delete History</button>
+							</div>
+							<div class="col-sm-auto justify-content-center text-center">
+								<a class="btn btn-outline-secondary btn-sm" target="_blank" href="sample_data/working_history_sample_data.json">Download Sample Data</a>
+							</div>
+						</div>
+					</div>
+					<br>
+					You can download the example as a '.json' file and import it into the application.
+					<!--<button class="btn btn-outline-secondary btn-sm" id="exportHistory" onclick="exportHistory()">Export History</button>
+					<button class="btn btn-outline-secondary btn-sm" id="importHistory">Import History</button>
+					<button class="btn btn-outline-secondary btn-sm" id="deleteHistory" onclick="deleteHistory()">Delete History</button>
+					<a class="btn btn-outline-secondary btn-sm" target="_blank" href="sample_data/working_history_sample_data.json">Download Sample Data</a>-->
 					<a id="exportHistoryLink" style="display: none;">Export</a>
 					<input type="file" id="importFile" accept=".json" style="display:none" />
 				</p>
@@ -101,11 +120,11 @@
 						</div>
 						<div class="custom-control custom-checkbox">
 							<input type="checkbox" class="custom-control-input" id="weeklyovertimeoption" name="weeklyovertimeoption" data-toggle="collapse" data-target="#divovertimeweekly">
-							<label class="custom-control-label" for="weeklyovertimeoption">Show weekly overtime saldo</label>
+							<label class="custom-control-label" for="weeklyovertimeoption">Show weekly overtime balance</label>
 						</div>
 						<div class="custom-control custom-checkbox">
 							<input type="checkbox" class="custom-control-input" id="totalovertimeoption" name="totalovertimeoption" data-toggle="collapse" data-target="#divovertimetotal">
-							<label class="custom-control-label" for="totalovertimeoption">Show total overtime saldo</label>
+							<label class="custom-control-label" for="totalovertimeoption">Show total overtime balance</label>
 						</div>
 						<div class="custom-control custom-checkbox">
 							<input type="checkbox" class="custom-control-input" id="historyoption" name="historyoption" data-toggle="collapse" data-target="#historycontainer">
@@ -227,7 +246,7 @@
 </div>
 
 <div id="modaledithistory" class="modal fade">
-	<div class="modal-dialog modal-lg">
+	<div class="modal-dialog modal-xl">
 		<div class="modal-content px-2">
 			<div class="modal-header">
 				<h2>Edit time history</h2>
@@ -251,7 +270,8 @@
 						<th class="text-center">Overtime</th>
 						<th class="text-center">Total Work Time</th>
 						<th class="text-center">Start Time</th>
-						<th class="text-center px-5">Edit</th>
+						<th class="text-center">Hour Schedule</th>
+						<th class="text-center">Edit</th>
 					  </tr>
 					</thead>
 					<tbody id="edit_history_table_body">
@@ -266,6 +286,47 @@
 	</div>
 </div>
 
+<div id="modalreporting" class="modal fade">
+	<div class="modal-dialog modal-xl" style="width:150%">
+		<div class="modal-content px-2">
+			<div class="modal-header">
+				<h2>Reporting</h2>
+				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<div class="input-group">
+						<label class="col-form-label" for="graphdatasetlength_value">Number of points to display (starting today and going back): </label>
+						<input type="number" name="graphdatasetlength_value" id="graphdatasetlength_value" class="form-control col-sm-2 mx-1" value="999" min="1" max="999" onchange="initGraphs(); drawGraphs();">
+					</div>
+				</div>
+				<p>
+					You can also zoom in to certain graphs by dragging the area you want to zoom in on.<br>
+					Click right to reset the zoom level.
+				</p>
+				<!--<div id="OvertimeDays_div" style="width: 50%; float:right;"></div>
+				<div id="Gauges_div" style="width: 50%;"></div>
+				
+				<div id="DaysRegisteredGauge_div" style="display: flex; justify-content: center;"></div>-->
+				<div style="display: flex; justify-content: center;">
+					<div id="DaysRegisteredGauge_div" style="display: inline-block;"></div>
+					<div id="AvgStarttimeGauge_div" style="display: inline-block;"></div>
+				</div>
+				<div id="OvertimeDays_div" style="width: 50%;display: inline-block;"></div><div id="Hourschedules_div" style="width: 50%;display: inline-block;"></div>
+				<div id="OvertimeDec_div"></div>
+				<div id="StartDec_div"></div>
+				<div id="TotalDec_div"></div>
+				<div id="TotalNoBreakDec_div"></div>
+				<div id="BreakDec_div"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Page HTML -->
 <div class="container-fluid h-100">
 	<div class="row d-flex justify-content-center">
 		<div id="alertnotification" class="alert alert-danger alert-dismissible fade show my-4 mr-1" role="alert" style="display: none; position: absolute; z-index: 1;">
@@ -275,7 +336,7 @@
 				</div>
 				<div class="col-lg-10 py-1 px-4">
 					<p>
-						Ironed out some bugs, background code received more consitancy in function usage.
+						Added the reporting feature in the lower right corner. Go check it out!
 					</p>
 				</div>
 			</div>
@@ -439,22 +500,24 @@
 		</div>
 	</div>
 	
+	<!-- Footer HTML -->
     <div class="row fixed-bottom px-3 py-1">
 		<div class="col d-flex align-self-center">
 			<span class="mx-2">Senne Janssens &#169; 2020</span>
 		</div>
 		<div class="col d-flex justify-content-end">
 			<div class="btn-group align-self-center" role="group">
-				<button type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="modal" data-target="#modalabout"><i class="fas fa-info"></i></button>
-				<button type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 0 !important;" data-toggle="modal" data-target="#modalinfo"><i class="fas fa-lightbulb"></i></button>
-				<button type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="modal" data-target="#modalsettings"><i class="fas fa-cog"></i></button>
+				<button title="Reporting" type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="modal" data-target="#modalreporting"><i class="fas fa-chart-line"></i></button>
+				<button title="About" type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 0 !important;" data-toggle="modal" data-target="#modalabout"><i class="fas fa-info"></i></button>
+				<button title="Info" type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 0 !important;" data-toggle="modal" data-target="#modalinfo"><i class="fas fa-lightbulb"></i></button>
+				<button title="Settings" type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="modal" data-target="#modalsettings"><i class="fas fa-cog"></i></button>
 			</div>			
 		</div>
 	</div>
 </div>
 </body>
 
-<!-- BOOTSTRAP -->
+<!-- Bootstrap -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -469,10 +532,12 @@
 <!-- Custom Styles -->
 <link href="css/bootstrap_specific_style.css" rel="stylesheet">
 <!-- Moment.js -->
-<script src="js/moment.min.js"></script><!-- https://momentjs.com/docs -->
+<script type="text/javascript" src="js/moment.min.js"></script><!-- https://momentjs.com/docs -->
 <script>
 	moment().format();
 </script>
-<script src="js/javascript.js"></script>
-<script src="js/editable_table.js"></script>
+<script type="text/javascript" src="js/javascript.js"></script>
+<script type="text/javascript" src="js/editable_table.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript"  src="js/graphs.js"></script>
 </html>
