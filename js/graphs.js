@@ -27,6 +27,88 @@ google.charts.load('current', {
 // In comment to not load on page load, only when modal is opened
 //google.charts.setOnLoadCallback(drawLinegraph);
 
+function initGraphs() {
+	numberOfDaysRegistered = 0,
+	datasetOvertimeDec = [],
+	datasetStartDec = [],
+	datasetTotalDec = [],
+	datasetTotalNoBreakDec = [],
+	datasetBreakDec = [],
+	datasetHourscheduleDec = [],
+	positiveOvertimeDays = 0,
+	negativeOvertimeDays = 0,
+	sumStarttime = 0;
+
+	formatJSONdata();
+}
+
+function drawGraphs() {
+	drawGaugegraph("DaysRegisteredGauge");
+	drawGaugegraph("AvgStarttimeGauge");
+	drawPiegraph("OvertimeDays");
+	drawPiegraph("Hourschedules");
+	drawLinegraph("OvertimeDec");
+	drawLinegraph("StartDec");
+	drawBargraph("TotalDec");
+	drawBargraph("TotalNoBreakDec");
+	drawLinegraph("BreakDec");
+}
+
+// Redraw chart on opening modal
+$('#modalreporting').on('shown.bs.modal', function() {
+	// Rotate screen for mobile users so it displays the entire width
+	// https://usefulangle.com/post/105/javascript-change-screen-orientation
+	/*
+	if( /Chrome|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+		document.getElementsByTagName("BODY")[0].style.webkitTransform = "rotate(90deg)"; 
+	}
+	*/
+	
+	initGraphs();
+	drawGraphs();
+	
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+		/*if(document.querySelector("#modalreporting").requestFullscreen)
+			document.querySelector("#modalreporting").requestFullscreen();
+		else if(document.querySelector("#modalreporting").webkitRequestFullScreen)
+			document.querySelector("#modalreporting").webkitRequestFullScreen();
+		*/
+		document.documentElement.requestFullscreen();
+		document.documentElement.webkitRequestFullScreen();
+	
+		var current_mode = screen.orientation;
+		console.log(current_mode.type)
+		console.log(current_mode.angle)
+		
+		screen.orientation.lock("landscape");
+		/*
+		screen.orientation.lock("portrait")
+			.then(function() {
+				alert('Locked');
+			})
+			.catch(function(error) {
+				alert(error);
+			});
+		*/
+		current_mode = screen.orientation;
+		console.log(current_mode.type)
+		console.log(current_mode.angle)
+	}
+});
+
+// Rotate screen for mobile users so it displays normal again
+$('#modalreporting').on('hidden.bs.modal', function() {
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+		screen.orientation.unlock();
+		document.exitFullscreen();
+		document.webkitExitFullscreen();
+	}
+});
+
+$(window).resize(function() {
+	drawGraphs();
+});
+
 function drawLinegraph(graphtype) {
 	var data = new google.visualization.DataTable(),
 		linecolor = "";
@@ -279,43 +361,6 @@ function drawGaugegraph(graphtype) {
 	}
 }
 
-function initGraphs() {
-	numberOfDaysRegistered = 0,
-	datasetOvertimeDec = [],
-	datasetStartDec = [],
-	datasetTotalDec = [],
-	datasetTotalNoBreakDec = [],
-	datasetBreakDec = [],
-	datasetHourscheduleDec = [],
-	positiveOvertimeDays = 0,
-	negativeOvertimeDays = 0,
-	sumStarttime = 0;
-
-	formatJSONdata();
-}
-
-function drawGraphs() {
-	drawGaugegraph("DaysRegisteredGauge");
-	drawGaugegraph("AvgStarttimeGauge");
-	drawPiegraph("OvertimeDays");
-	drawPiegraph("Hourschedules");
-	drawLinegraph("OvertimeDec");
-	drawLinegraph("StartDec");
-	drawBargraph("TotalDec");
-	drawBargraph("TotalNoBreakDec");
-	drawLinegraph("BreakDec");
-}
-
-// Redraw chart on opening modal
-$('#modalreporting').on('shown.bs.modal', function() {
-	initGraphs();
-	drawGraphs();
-});
-
-$(window).resize(function() {
-	drawGraphs();
-});
-
 function formatJSONdata() {
 	const reverseDateRepresentation = date => {
 		let parts = date.split('-');
@@ -402,7 +447,7 @@ function formatJSONdata() {
 				}
 			}
 			if (timeinfo.hasOwnProperty('HourSchedule')) {
-				updateArray(datasetHourscheduleDec, timeinfo['HourSchedule'] + "h");											
+				datasetHourscheduleDec = updateArray(datasetHourscheduleDec, timeinfo['HourSchedule'] + "h");											
 			}
 			//console.log("accepted value record");
 		}
@@ -420,4 +465,5 @@ function updateArray(array, category) {
         array.push([category, 1]);
         //console.log("category created");
     }
+	return array;
 }
