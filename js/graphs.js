@@ -14,7 +14,8 @@ var numberOfDaysRegistered = 0,
 	datasetHourscheduleDec = [],
 	positiveOvertimeDays = 0,
 	negativeOvertimeDays = 0,
-	sumStarttime = 0;
+	sumStarttime = 0,
+	sumStoptime = 0;
 
 google.charts.load('current', {
 	packages: ['corechart']
@@ -37,7 +38,8 @@ function initGraphs() {
 	datasetHourscheduleDec = [],
 	positiveOvertimeDays = 0,
 	negativeOvertimeDays = 0,
-	sumStarttime = 0;
+	sumStarttime = 0,
+	sumStoptime = 0;
 
 	formatJSONdata();
 }
@@ -45,6 +47,7 @@ function initGraphs() {
 function drawGraphs() {
 	drawGaugegraph("DaysRegisteredGauge");
 	drawGaugegraph("AvgStarttimeGauge");
+	drawGaugegraph("AvgStoptimeGauge");
 	drawPiegraph("OvertimeDays");
 	drawPiegraph("Hourschedules");
 	drawLinegraph("OvertimeDec");
@@ -334,6 +337,15 @@ function drawGaugegraph(graphtype) {
 			]);
 			max = 24;
 			break;
+		case "AvgStoptimeGauge":
+			data.addColumn('string', 'Metric');
+			data.addColumn('number', 'Value');
+			var avg_stoptime = sumStoptime / numberOfDaysRegistered;
+			data.addRows([
+				['Avg stoptime', avg_stoptime]
+			]);
+			max = 24;
+			break;
 		default:
 			// code block
 			console.log("No valid graphtype entered");
@@ -358,6 +370,9 @@ function drawGaugegraph(graphtype) {
 	// change the format of the starttime gauge to non-decimal
 	if (graphtype == "AvgStarttimeGauge") {
 		$('#AvgStarttimeGauge_div svg g g text:first').html(floatToTimeString(avg_starttime)); 
+	}
+	if (graphtype == "AvgStoptimeGauge") {
+		$('#AvgStoptimeGauge_div svg g g text:first').html(floatToTimeString(avg_stoptime)); 
 	}
 }
 
@@ -410,6 +425,9 @@ function formatJSONdata() {
 				variable = parseFloat(timeinfo['StartDec']);
 				tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Starttime: </span>" + floatToTimeString(variable) + "</div>";
 				sumStarttime = sumStarttime + variable;
+				if (timeinfo.hasOwnProperty('TotalDec')) {
+					sumStoptime = sumStoptime + (variable + parseFloat(timeinfo['TotalDec']));
+				}
 				datasetStartDec.push([dateKey, variable, tooltip]);
 			}
 			
