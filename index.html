@@ -294,10 +294,18 @@
 				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
 			</div>
 			<div class="modal-body">
-				<div class="form-group">
+				<!--<div class="form-group">
 					<div class="input-group">
 						<label class="col-form-label" for="graphdatasetlength_value">Number of points to display (starting today and going back): </label>
 						<input type="number" name="graphdatasetlength_value" id="graphdatasetlength_value" class="form-control col-sm-2 mx-1" value="999" min="1" max="999" onchange="initGraphs(); drawGraphs();">
+					</div>
+				</div>-->
+				<div class="form-group">
+					<div class="input-group">
+						<label for="start_reporting_selection" class="col-form-label mr-1">Display registered points from</label>
+						<input id="start_reporting_selection" class="form-control" type="date" style="min-width: 165px; max-width: 165px;" value="" onchange="initGraphs(); drawGraphs();">
+						<label for="end_reporting_selection" class="col-form-label mr-1 ml-1">to</label>
+						<input id="end_reporting_selection" class="form-control" type="date" style="min-width: 165px; max-width: 165px;" value="" onchange="initGraphs(); drawGraphs();">
 					</div>
 				</div>
 				<p>
