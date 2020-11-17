@@ -14,7 +14,8 @@ var numberOfDaysRegistered = 0,
 	datasetHourscheduleDec = [],
 	positiveOvertimeDays = 0,
 	negativeOvertimeDays = 0,
-	sumStarttime = 0;
+	sumStarttime = 0,
+	sumStoptime = 0;
 
 google.charts.load('current', {
 	packages: ['corechart']
@@ -23,9 +24,99 @@ google.charts.load('current', {
 	packages: ['gauge']
 });
 
+document.getElementById("start_reporting_selection").addEventListener("load", initDateSelector());
 
 // In comment to not load on page load, only when modal is opened
 //google.charts.setOnLoadCallback(drawLinegraph);
+
+function initGraphs() {
+	numberOfDaysRegistered = 0,
+	datasetOvertimeDec = [],
+	datasetStartDec = [],
+	datasetTotalDec = [],
+	datasetTotalNoBreakDec = [],
+	datasetBreakDec = [],
+	datasetHourscheduleDec = [],
+	positiveOvertimeDays = 0,
+	negativeOvertimeDays = 0,
+	sumStarttime = 0,
+	sumStoptime = 0;
+
+	formatJSONdata();
+}
+
+function drawGraphs() {
+	drawGaugegraph("DaysRegisteredGauge");
+	drawGaugegraph("AvgStarttimeGauge");
+	drawGaugegraph("AvgStoptimeGauge");
+	drawPiegraph("OvertimeDays");
+	drawPiegraph("Hourschedules");
+	drawLinegraph("OvertimeDec");
+	drawLinegraph("StartDec");
+	drawBargraph("TotalDec");
+	drawBargraph("TotalNoBreakDec");
+	drawLinegraph("BreakDec");
+}
+
+function initDateSelector() {
+	document.getElementById('start_reporting_selection').value = moment().startOf('year').subtract(1, 'year').format('YYYY-MM-DD');
+	document.getElementById('end_reporting_selection').value = moment().endOf('year').format('YYYY-MM-DD');
+}
+
+// Redraw chart on opening modal
+$('#modalreporting').on('shown.bs.modal', function() {
+	// Rotate screen for mobile users so it displays the entire width
+	// https://usefulangle.com/post/105/javascript-change-screen-orientation
+	/*
+	if( /Chrome|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+		document.getElementsByTagName("BODY")[0].style.webkitTransform = "rotate(90deg)"; 
+	}
+	*/
+	
+	initGraphs();
+	drawGraphs();
+	
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+		/*if(document.querySelector("#modalreporting").requestFullscreen)
+			document.querySelector("#modalreporting").requestFullscreen();
+		else if(document.querySelector("#modalreporting").webkitRequestFullScreen)
+			document.querySelector("#modalreporting").webkitRequestFullScreen();
+		*/
+		document.documentElement.requestFullscreen();
+		document.documentElement.webkitRequestFullScreen();
+	
+		var current_mode = screen.orientation;
+		console.log(current_mode.type)
+		console.log(current_mode.angle)
+		
+		screen.orientation.lock("landscape");
+		/*
+		screen.orientation.lock("portrait")
+			.then(function() {
+				alert('Locked');
+			})
+			.catch(function(error) {
+				alert(error);
+			});
+		*/
+		current_mode = screen.orientation;
+		console.log(current_mode.type)
+		console.log(current_mode.angle)
+	}
+});
+
+// Rotate screen for mobile users so it displays normal again
+$('#modalreporting').on('hidden.bs.modal', function() {
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+		screen.orientation.unlock();
+		document.exitFullscreen();
+		document.webkitExitFullscreen();
+	}
+});
+
+$(window).resize(function() {
+	drawGraphs();
+});
 
 function drawLinegraph(graphtype) {
 	var data = new google.visualization.DataTable(),
@@ -66,7 +157,8 @@ function drawLinegraph(graphtype) {
 			maxZoomIn: 0.05
 		},
 		hAxis: {
-			title: 'Date',
+			//title: 'Date',
+			format:'dd-MM-YYYY',
 			slantedText: true
 			//slantedTextAngle: 60
 		},
@@ -143,7 +235,8 @@ function drawBargraph(graphtype) {
 			maxZoomIn: 0.05
 		},
 		hAxis: {
-			title: 'Date',
+			//title: 'Date',
+			format:'dd-MM-YYYY',
 			slantedText: true
 			//slantedTextAngle: 60
 		},
@@ -252,6 +345,15 @@ function drawGaugegraph(graphtype) {
 			]);
 			max = 24;
 			break;
+		case "AvgStoptimeGauge":
+			data.addColumn('string', 'Metric');
+			data.addColumn('number', 'Value');
+			var avg_stoptime = sumStoptime / numberOfDaysRegistered;
+			data.addRows([
+				['Avg stoptime', avg_stoptime]
+			]);
+			max = 24;
+			break;
 		default:
 			// code block
 			console.log("No valid graphtype entered");
@@ -277,44 +379,10 @@ function drawGaugegraph(graphtype) {
 	if (graphtype == "AvgStarttimeGauge") {
 		$('#AvgStarttimeGauge_div svg g g text:first').html(floatToTimeString(avg_starttime)); 
 	}
+	if (graphtype == "AvgStoptimeGauge") {
+		$('#AvgStoptimeGauge_div svg g g text:first').html(floatToTimeString(avg_stoptime)); 
+	}
 }
-
-function initGraphs() {
-	numberOfDaysRegistered = 0,
-	datasetOvertimeDec = [],
-	datasetStartDec = [],
-	datasetTotalDec = [],
-	datasetTotalNoBreakDec = [],
-	datasetBreakDec = [],
-	datasetHourscheduleDec = [],
-	positiveOvertimeDays = 0,
-	negativeOvertimeDays = 0,
-	sumStarttime = 0;
-
-	formatJSONdata();
-}
-
-function drawGraphs() {
-	drawGaugegraph("DaysRegisteredGauge");
-	drawGaugegraph("AvgStarttimeGauge");
-	drawPiegraph("OvertimeDays");
-	drawPiegraph("Hourschedules");
-	drawLinegraph("OvertimeDec");
-	drawLinegraph("StartDec");
-	drawBargraph("TotalDec");
-	drawBargraph("TotalNoBreakDec");
-	drawLinegraph("BreakDec");
-}
-
-// Redraw chart on opening modal
-$('#modalreporting').on('shown.bs.modal', function() {
-	initGraphs();
-	drawGraphs();
-});
-
-$(window).resize(function() {
-	drawGraphs();
-});
 
 function formatJSONdata() {
 	const reverseDateRepresentation = date => {
@@ -325,8 +393,8 @@ function formatJSONdata() {
 	var keys = Object.keys(localStorage),
 		sortedkeys = keys.map(reverseDateRepresentation).sort().map(reverseDateRepresentation), // don't do reverse() here to have dates ascending
 		i = 0,
-		key,
-		datasetlength = document.getElementById('graphdatasetlength_value').value;
+		key;
+		//datasetlength = document.getElementById('graphdatasetlength_value').value;
 
 	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 	for (i = 0; key = sortedkeys[i]; i++) {
@@ -336,7 +404,10 @@ function formatJSONdata() {
 		}
 	}
 
-	var start = sortedkeys.length - datasetlength; // howmany datapoints need to be skipped before starting to draw graphs
+	//var start = sortedkeys.length - datasetlength; // howmany datapoints need to be skipped before starting to draw graphs
+	var start_reporting_selection = document.getElementById('start_reporting_selection').value,
+		end_reporting_selection = document.getElementById('end_reporting_selection').value;
+	
 	var timeinfo,
 		variable,
 		hourschedule,
@@ -344,67 +415,76 @@ function formatJSONdata() {
 		hourscheduletooltip,
 		dateKey;
 	
-	for (i = 0; key = sortedkeys[i]; i++) {
-		if (userKeyRegExp.test(key) && i >= start) {
+	for (i = 0; key = sortedkeys[i]; i++) {		
+		
+		if (userKeyRegExp.test(key)/* && i >= start*/) {
 			timeinfo = JSON.parse(localStorage.getItem(key));
-			dateKey = key.split('-');
-			dateKey = new Date(dateKey[2], dateKey[1] - 1, dateKey[0]);
-			numberOfDaysRegistered++;
+			dateKey=moment(key, "DD-MM-YYYY");
+			
+			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection)){
 
-			if (timeinfo.hasOwnProperty('OvertimeDec')) {
-				variable = parseFloat(timeinfo['OvertimeDec']);
-				tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Starttime: </span>" + floatToTimeString(variable) + "</div>";
-				datasetOvertimeDec.push([dateKey, variable, tooltip]);
-				if (variable > 0) {
-					positiveOvertimeDays++;
-				} else if (variable < 0) {
-					negativeOvertimeDays++;
+				dateKey = key.split('-');
+				dateKey = new Date(dateKey[2], dateKey[1] - 1, dateKey[0]);
+				numberOfDaysRegistered++;
+
+				if (timeinfo.hasOwnProperty('OvertimeDec')) {
+					variable = parseFloat(timeinfo['OvertimeDec']);
+					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Starttime: </span>" + floatToTimeString(variable) + "</div>";
+					datasetOvertimeDec.push([dateKey, variable, tooltip]);
+					if (variable > 0) {
+						positiveOvertimeDays++;
+					} else if (variable < 0) {
+						negativeOvertimeDays++;
+					}
 				}
-			}
-			if (timeinfo.hasOwnProperty('StartDec')) {
-				variable = parseFloat(timeinfo['StartDec']);
-				tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Starttime: </span>" + floatToTimeString(variable) + "</div>";
-				sumStarttime = sumStarttime + variable;
-				datasetStartDec.push([dateKey, variable, tooltip]);
-			}
-			
-			if (timeinfo.hasOwnProperty('HourSchedule')) {
-				hourschedule = parseFloat(timeinfo['HourSchedule']);
-				hourscheduletooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Hourschedule: </span>" + hourschedule + "h</div>";
-			}
-			
-			if (timeinfo.hasOwnProperty('TotalDec')) {
-				variable = parseFloat(timeinfo['TotalDec']);
-				tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Total time: </span>" + floatToTimeString(variable) + "</div>";
+				if (timeinfo.hasOwnProperty('StartDec')) {
+					variable = parseFloat(timeinfo['StartDec']);
+					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Starttime: </span>" + floatToTimeString(variable) + "</div>";
+					sumStarttime = sumStarttime + variable;
+					if (timeinfo.hasOwnProperty('TotalDec')) {
+						sumStoptime = sumStoptime + (variable + parseFloat(timeinfo['TotalDec']));
+					}
+					datasetStartDec.push([dateKey, variable, tooltip]);
+				}
+				
 				if (timeinfo.hasOwnProperty('HourSchedule')) {
-					datasetTotalDec.push([dateKey, variable, tooltip, hourschedule, hourscheduletooltip]);
-				} else {
-					datasetTotalDec.push([dateKey, variable, null]);
+					hourschedule = parseFloat(timeinfo['HourSchedule']);
+					hourscheduletooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Hourschedule: </span>" + hourschedule + "h</div>";
 				}
-			}
-			if (timeinfo.hasOwnProperty('TotalNoBreakDec')) {
-				variable = parseFloat(timeinfo['TotalNoBreakDec']);
-				tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Total time (no break): </span>" + floatToTimeString(variable) + "</div>";
+				
+				if (timeinfo.hasOwnProperty('TotalDec')) {
+					variable = parseFloat(timeinfo['TotalDec']);
+					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Total time: </span>" + floatToTimeString(variable) + "</div>";
+					if (timeinfo.hasOwnProperty('HourSchedule')) {
+						datasetTotalDec.push([dateKey, variable, tooltip, hourschedule, hourscheduletooltip]);
+					} else {
+						datasetTotalDec.push([dateKey, variable, null]);
+					}
+				}
+				if (timeinfo.hasOwnProperty('TotalNoBreakDec')) {
+					variable = parseFloat(timeinfo['TotalNoBreakDec']);
+					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Total time (no break): </span>" + floatToTimeString(variable) + "</div>";
+					if (timeinfo.hasOwnProperty('HourSchedule')) {
+						datasetTotalNoBreakDec.push([dateKey, variable, tooltip, hourschedule, hourscheduletooltip]);
+					} else {
+						datasetTotalNoBreakDec.push([dateKey, variable, null]);
+					}
+				}
+				if (timeinfo.hasOwnProperty('TotalDec') && timeinfo.hasOwnProperty('TotalNoBreakDec')) {
+					variable = Math.abs(parseFloat(timeinfo['TotalDec']) - parseFloat(timeinfo['TotalNoBreakDec']));
+					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Breaktime: </span>" + floatToTimeString(variable) + "</div>";
+					if (timeinfo.hasOwnProperty('HourSchedule')) {
+						//datasetBreakDec.push([dateKey, variable, parseFloat(timeinfo['HourSchedule'])]);
+						datasetBreakDec.push([dateKey, variable, tooltip, hourschedule, hourscheduletooltip]);
+					} else {
+						datasetBreakDec.push([dateKey, variable, tooltip, null]);
+					}
+				}
 				if (timeinfo.hasOwnProperty('HourSchedule')) {
-					datasetTotalNoBreakDec.push([dateKey, variable, tooltip, hourschedule, hourscheduletooltip]);
-				} else {
-					datasetTotalNoBreakDec.push([dateKey, variable, null]);
+					datasetHourscheduleDec = updateArray(datasetHourscheduleDec, timeinfo['HourSchedule'] + "h");											
 				}
+				//console.log("accepted value record");
 			}
-			if (timeinfo.hasOwnProperty('TotalDec') && timeinfo.hasOwnProperty('TotalNoBreakDec')) {
-				variable = Math.abs(parseFloat(timeinfo['TotalDec']) - parseFloat(timeinfo['TotalNoBreakDec']));
-				tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Breaktime: </span>" + floatToTimeString(variable) + "</div>";
-				if (timeinfo.hasOwnProperty('HourSchedule')) {
-					//datasetBreakDec.push([dateKey, variable, parseFloat(timeinfo['HourSchedule'])]);
-					datasetBreakDec.push([dateKey, variable, tooltip, hourschedule, hourscheduletooltip]);
-				} else {
-					datasetBreakDec.push([dateKey, variable, tooltip, null]);
-				}
-			}
-			if (timeinfo.hasOwnProperty('HourSchedule')) {
-				updateArray(datasetHourscheduleDec, timeinfo['HourSchedule'] + "h");											
-			}
-			//console.log("accepted value record");
 		}
 	}
 }
@@ -420,4 +500,5 @@ function updateArray(array, category) {
         array.push([category, 1]);
         //console.log("category created");
     }
+	return array;
 }

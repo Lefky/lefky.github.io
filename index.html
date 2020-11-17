@@ -28,7 +28,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20201102.1</span> <br>
+					Version: <span id="currentappversion">20201117.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -294,10 +294,18 @@
 				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
 			</div>
 			<div class="modal-body">
-				<div class="form-group">
+				<!--<div class="form-group">
 					<div class="input-group">
 						<label class="col-form-label" for="graphdatasetlength_value">Number of points to display (starting today and going back): </label>
 						<input type="number" name="graphdatasetlength_value" id="graphdatasetlength_value" class="form-control col-sm-2 mx-1" value="999" min="1" max="999" onchange="initGraphs(); drawGraphs();">
+					</div>
+				</div>-->
+				<div class="form-group">
+					<div class="input-group">
+						<label for="start_reporting_selection" class="col-form-label mr-1">Display registered points from</label>
+						<input id="start_reporting_selection" class="form-control" type="date" style="min-width: 165px; max-width: 165px;" value="" onchange="initGraphs(); drawGraphs();">
+						<label for="end_reporting_selection" class="col-form-label mr-1 ml-1">to</label>
+						<input id="end_reporting_selection" class="form-control" type="date" style="min-width: 165px; max-width: 165px;" value="" onchange="initGraphs(); drawGraphs();">
 					</div>
 				</div>
 				<p>
@@ -311,6 +319,7 @@
 				<div style="display: flex; justify-content: center;">
 					<div id="DaysRegisteredGauge_div" style="display: inline-block;"></div>
 					<div id="AvgStarttimeGauge_div" style="display: inline-block;"></div>
+					<div id="AvgStoptimeGauge_div" style="display: inline-block;"></div>
 				</div>
 				<div id="OvertimeDays_div" style="width: 50%;display: inline-block;"></div><div id="Hourschedules_div" style="width: 50%;display: inline-block;"></div>
 				<div id="OvertimeDec_div"></div>
@@ -337,6 +346,11 @@
 				<div class="col-lg-10 py-1 px-4">
 					<p>
 						Added the reporting feature in the lower right corner. Go check it out!
+					</p>
+					<p>
+						Reporting now based on time range.<br>
+						Added average stoptime gauge to reporting.<br>
+						Added automatic landscape screen to reporting for mobile devices.
 					</p>
 				</div>
 			</div>
