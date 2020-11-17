@@ -59,7 +59,7 @@ function drawGraphs() {
 }
 
 function initDateSelector() {
-	document.getElementById('start_reporting_selection').value = moment().startOf('year').format('YYYY-MM-DD');
+	document.getElementById('start_reporting_selection').value = moment().startOf('year').subtract(1, 'year').format('YYYY-MM-DD');
 	document.getElementById('end_reporting_selection').value = moment().endOf('year').format('YYYY-MM-DD');
 }
 
@@ -157,7 +157,8 @@ function drawLinegraph(graphtype) {
 			maxZoomIn: 0.05
 		},
 		hAxis: {
-			title: 'Date',
+			//title: 'Date',
+			format:'dd-MM-YYYY',
 			slantedText: true
 			//slantedTextAngle: 60
 		},
@@ -234,7 +235,8 @@ function drawBargraph(graphtype) {
 			maxZoomIn: 0.05
 		},
 		hAxis: {
-			title: 'Date',
+			//title: 'Date',
+			format:'dd-MM-YYYY',
 			slantedText: true
 			//slantedTextAngle: 60
 		},

@@ -10,12 +10,12 @@ const $tableID = $('#edit_history_table');
 
 const newTr = `
 <tr class="hide">
-  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onclick='clearPlaceholder(this)'>01-01-1900</td>
-  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onclick='clearPlaceholder(this)'>Total Time No Break</td>
-  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onclick='clearPlaceholder(this)'>Overtime</td>
-  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onclick='clearPlaceholder(this)'>Total Work Time</td>
-  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onclick='clearPlaceholder(this)'>Start Time</td>
-  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onclick='clearPlaceholder(this)'>Hour Schedule</td>
+  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>01-01-1900</td>
+  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Total Time No Break</td>
+  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Overtime</td>
+  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Total Work Time</td>
+  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Start Time</td>
+  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Hour Schedule</td>
   <td>
 	<span class="table-save">
 		<button type="button" class="btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light">
