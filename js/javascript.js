@@ -614,7 +614,6 @@ function reset() {
 	
 	// 'lazy' loading
 	setParameters();
-	add_time(getHourSchedule());
 	cleanLocalStorage();
 }
 
@@ -650,7 +649,7 @@ function setParameters() {
 	} else {
 		document.getElementById("break_time_default").value = 0;
 	}
-	if (historydeleteoption == "days" ) {
+	if (historydeleteoption == "days") {
 		document.getElementById("historydeleteoptiondays").checked = true;
 	} else if (historydeleteoption == "period") {
 		document.getElementById("historydeleteoptionperiod").checked = true;
@@ -713,10 +712,12 @@ function setParameters() {
 		} else {
 			setStart(now());
 		}
+		add_time(getHourSchedule());
 	} else {
 		setStart(timeinfo['StartDec']);
 		setBreak(timeinfo['TotalDec'] - timeinfo['TotalNoBreakDec']);
-		//setEnd(timeinfo['StartDec'] + timeinfo['TotalDec']);
+		setEnd(parseFloat(timeinfo['StartDec']) + parseFloat(timeinfo['TotalDec']));
+		calculateTotal();
 		if (startminsubtract == "true")
 			document.getElementById("startminsubtract").checked = true;
 	}
