@@ -316,10 +316,10 @@
 				<div id="Gauges_div" style="width: 50%;"></div>
 				
 				<div id="DaysRegisteredGauge_div" style="display: flex; justify-content: center;"></div>-->
-				<div style="display: flex; justify-content: center;">
-					<div id="DaysRegisteredGauge_div" style="display: inline-block;"></div>
-					<div id="AvgStarttimeGauge_div" style="display: inline-block;"></div>
-					<div id="AvgStoptimeGauge_div" style="display: inline-block;"></div>
+				<div style="display: flex; justify-content: center; height:100%; width:100%;">
+					<div id="DaysRegisteredGauge_div" style="height:33%; width:33%;"></div>
+					<div id="AvgStarttimeGauge_div" style="height:33%; width:33%;"></div>
+					<div id="AvgStoptimeGauge_div" style="height:33%; width:33%;"></div>
 				</div>
 				<div id="OvertimeDays_div" style="width: 50%;display: inline-block;"></div><div id="Hourschedules_div" style="width: 50%;display: inline-block;"></div>
 				<div id="OvertimeDec_div"></div>
@@ -373,6 +373,10 @@
 							</div>
 						</div>				
 						<div class="input-group justify-content-end my-3">
+							<div class="btn-group-vertical">
+								<button type="button" class="btn btn-primary" style="border-radius: 1.5rem 1.5rem 0 0 !important;">Duration</button>
+								<button type="button" class="btn btn-primary" style="border-radius: 0 0 1.5rem 1.5rem !important;">Timerange</button>
+							</div>
 							<label class="col-form-label" for="break_time" data-toggle="tooltip" data-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
 								Break with default
 							</label>

@@ -715,6 +715,8 @@ function setParameters() {
 		}
 	} else {
 		setStart(timeinfo['StartDec']);
+		setBreak(timeinfo['TotalDec'] - timeinfo['TotalNoBreakDec']);
+		//setEnd(timeinfo['StartDec'] + timeinfo['TotalDec']);
 		if (startminsubtract == "true")
 			document.getElementById("startminsubtract").checked = true;
 	}
