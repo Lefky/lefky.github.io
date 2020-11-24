@@ -3,6 +3,10 @@ html, body {
 	height: 100%;
 }
 
+.fontsize60 {
+	font-size: 0.6rem;
+}
+
 .card, .btn, .form-control, .modal-content, .alert { 
 	border-radius: 1.5rem !important; 
 }
@@ -51,6 +55,10 @@ html, body {
 	font-size: 70%;
 }
 
+.no-bottom-margin {
+	margin-bottom:0 !important;
+}
+
 .custom-control-input:checked~.custom-control-label.checkred::before {
 	border-color: #dc3545;
 	background-color: #dc3545;
@@ -83,4 +91,15 @@ html, body {
 	100% { 
 		opacity: 0.5;
 	}
+}
+
+.alertnotification {
+	display: none; 
+	position: absolute; 
+	z-index: 1;
+}
+
+.input-fixedwidth100 {
+	min-width: 100px; 
+	max-width: 100px;
 }

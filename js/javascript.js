@@ -78,8 +78,25 @@ function setEnd(time){
 }
 
 function getBreak(){
-	var time = document.getElementById("break_time").value;
-	var time_dec = moment.duration(time).asHours();
+	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
+		var time = document.getElementById("break_time").value;
+		var time_dec = moment.duration(time).asHours();
+	} else {
+		var break_time_start = document.getElementById("break_time_start").value,
+			break_time_end = document.getElementById("break_time_end").value;
+			
+		break_time_start = moment(break_time_start, "hh:mm");
+		break_time_end = moment(break_time_end, "hh:mm");
+				
+		var time_dec = moment.duration(break_time_end.diff(break_time_start)).asHours();
+		
+		if (time_dec < 0) {
+			document.getElementById("break_time_start").value = "00:00";
+			document.getElementById("alertmessage").innerHTML = "<strong>Holy guacamole!</strong> You can't end your break before you start it, can you superman?";
+			$("#app_alert").show();
+		}
+	}
+
 	if (!time_dec) {
 		time_dec = 0;
 	}
@@ -88,6 +105,9 @@ function getBreak(){
 
 function setBreak(time){
 	document.getElementById("break_time").value = floatToTimeString(time);
+	
+	document.getElementById("break_time_start").value = "00:00";
+	document.getElementById("break_time_end").value = floatToTimeString(time);
 }
 
 function getBreakDefault(){
@@ -475,6 +495,40 @@ function hourscheduleAddTimeButton(){
 	addtimebutton_span.innerHTML = hourschedule; 
 }
 
+function breaktimeTimeselection(){
+	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
+		document.getElementById("breaktime_timeselection_option_timerange_div").classList.add("d-none");
+		document.getElementById("breaktime_timeselection_option_duration_div").classList.remove("d-none");
+		
+		reset_break();
+		
+		document.getElementById('break_btn_div').removeAttribute('title');
+		document.getElementById('break_btn_div').removeAttribute('data-toggle');
+		document.getElementById('break_btn_div').removeAttribute('data-placement');
+		document.getElementById("break_reset_btn").disabled = false;
+		document.getElementById("break_add5_btn").disabled = false;
+		document.getElementById("break_add30_btn").disabled = false;
+		document.getElementById("break_counter_btn").disabled = false;
+		// re-initialize tooltips to pickup the changes
+		$('[data-toggle="tooltip"]').tooltip();
+	} else {
+		document.getElementById("breaktime_timeselection_option_timerange_div").classList.remove("d-none");
+		document.getElementById("breaktime_timeselection_option_duration_div").classList.add("d-none");
+		
+		reset_break();
+		
+		document.getElementById('break_btn_div').setAttribute('title', 'Only available when break time option is duration. Change this in the settings view.');
+		document.getElementById('break_btn_div').setAttribute('data-toggle', 'tooltip');
+		document.getElementById('break_btn_div').setAttribute('data-placement', 'top');
+		document.getElementById("break_reset_btn").disabled = true;
+		document.getElementById("break_add5_btn").disabled = true;
+		document.getElementById("break_add30_btn").disabled = true;
+		document.getElementById("break_counter_btn").disabled = true;
+		// re-initialize tooltips to pickup the changes
+		$('[data-toggle="tooltip"]').tooltip();
+	}
+}
+
 // Storage functions
 function cleanLocalStorage() {
 	var keys = Object.keys(localStorage),
@@ -636,7 +690,8 @@ function setParameters() {
 		historyoption = localStorage.getItem("historyoption"),
 		weeklyovertimeoption = localStorage.getItem("weeklyovertimeoption"),
 		totalovertimeoption = localStorage.getItem("totalovertimeoption"),
-		parametersoption = localStorage.getItem("parametersoption");
+		parametersoption = localStorage.getItem("parametersoption"),
+		breaktime_timeselection_option_timerange = localStorage.getItem("breaktime_timeselection_option_timerange");
 
 	if (autoend == "true")
 		document.getElementById("autoend").checked = true;
@@ -686,6 +741,10 @@ function setParameters() {
 	if (parametersoption == "true" || parametersoption === null) {
 		document.getElementById("parametersoption").checked = true;
 		document.getElementById("divparameters").classList.add("show");
+	}
+	if (breaktime_timeselection_option_timerange == "true") {
+		document.getElementById("breaktime_timeselection_option_timerange").checked = true;
+		breaktimeTimeselection();
 	}
 
 	showHistorydeleteoptionContent();
@@ -784,12 +843,6 @@ function break_counter() {
 	
 }
 
-$(document).on('keydown', function (e) {
-	if (e.keyCode === 13) { //ENTER key code
-		add_time(getHourSchedule());
-	}
-});
-
 window.onbeforeunload = function(e) {
 	// Set 'dont save today' and 'automatically set end time' parameters in local storage
 	var nosave = document.getElementById("nosave"),
@@ -857,22 +910,40 @@ window.onbeforeunload = function(e) {
 	} else {
 		localStorage.setItem("parametersoption", "true");
 	}
+	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
+		localStorage.setItem("breaktime_timeselection_option_timerange", "false");
+	} else {
+		localStorage.setItem("breaktime_timeselection_option_timerange", "true");
+	}
 };
 
+// Listeners and initializers
 $(document).ready(function() {
-  if(window.location.href.indexOf('#modalabout') != -1) {
-    $('#modalabout').modal('show');
-  }
-  if(window.location.href.indexOf('#modalsettings') != -1) {
-    $('#modalsettings').modal('show');
-  }
-  if(window.location.href.indexOf('#modalinfo') != -1) {
-    $('#modalinfo').modal('show');
-  }
-  if(window.location.href.indexOf('#modaledithistory') != -1) {
-    $('#modaledithistory').modal('show');
-  }
-  if(window.location.href.indexOf('#modalreporting') != -1) {
-    $('#modalreporting').modal('show');
-  }
+	$('[data-toggle="tooltip"]').tooltip();
+	
+	if(window.location.href.indexOf('#modalabout') != -1) {
+		$('#modalabout').modal('show');
+	}
+	if(window.location.href.indexOf('#modalsettings') != -1) {
+		$('#modalsettings').modal('show');
+	}
+	if(window.location.href.indexOf('#modalinfo') != -1) {
+		$('#modalinfo').modal('show');
+	}
+	if(window.location.href.indexOf('#modaledithistory') != -1) {
+		$('#modaledithistory').modal('show');
+	}
+	if(window.location.href.indexOf('#modalreporting') != -1) {
+		$('#modalreporting').modal('show');
+	}
+});
+
+$(document).on('keydown', function (e) {
+	if (e.keyCode === 13) { //ENTER key code
+		add_time(getHourSchedule());
+	}
+});
+
+$('#app_alert .close').click(function(){
+   $(this).parent().hide();
 });
