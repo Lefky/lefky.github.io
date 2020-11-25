@@ -28,7 +28,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20201124.1</span> <br>
+					Version: <span id="currentappversion">20201125.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -79,8 +79,8 @@
 					<button class="btn btn-outline-secondary btn-sm" id="importHistory">Import History</button>
 					<button class="btn btn-outline-secondary btn-sm" id="deleteHistory" onclick="deleteHistory()">Delete History</button>
 					<a class="btn btn-outline-secondary btn-sm" target="_blank" href="sample_data/working_history_sample_data.json">Download Sample Data</a>-->
-					<a id="exportHistoryLink" style="display: none;">Export</a>
-					<input type="file" id="importFile" accept=".json" style="display:none" />
+					<a id="exportHistoryLink" class="d-none">Export</a>
+					<input type="file" id="importFile" accept=".json" class="d-none" />
 				</p>
 				<p>
 					<h4>Parameters</h4>
@@ -139,10 +139,10 @@
 						Breaktime input format.
 					</p>
 					<div class="input-group">
-						<label class="mr-1">Duration</label>
-						<div class="custom-control custom-switch mx-1">
+						<label class="mr-4">Duration</label>
+						<div class="custom-control custom-switch custom-switch-md mx-1">
 							<input type="checkbox" class="custom-control-input" id="breaktime_timeselection_option_timerange" onchange="breaktimeTimeselection();">
-							<label class="custom-control-label" for="breaktime_timeselection_option_timerange">Time range</label>
+							<label class="custom-control-label checkneutral" for="breaktime_timeselection_option_timerange">Time range</label>
 						</div>
 					</div>
 				</p>
@@ -165,7 +165,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="historydeleteoptiondayscontent" style="display: none;">
+						<div id="historydeleteoptiondayscontent" class="d-none">
 							<div class="form-group">
 								<div class="input-group">
 									<label class="col-form-label" for="historyretain">Days to keep: </label>
@@ -173,7 +173,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="historydeleteoptionperiodscontent" style="display: none;">
+						<div id="historydeleteoptionperiodscontent" class="d-none">
 							<div class="form-group">
 								<div class="input-group">
 									<label class="col-form-label" for="historyresetday">Reset on day </label>
@@ -268,7 +268,7 @@
 						All times displayed are in decimal hour units. You should edit them in the same way/units!!!<br>
 						Visit <a href="https://www.timecalculator.net/time-to-decimal" target="_blank">timecalculator.net</a> to help you converting.
 					</p>
-					<p style="color: red;">
+					<p class="text-danger">
 						To save an entry you need to click the save button! If you add a date that already exists it'll be overwritten!
 					</p>
 				  <span class="table-add float-right mb-3 mr-2"><a href="#!" class="text-success"><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
@@ -297,41 +297,33 @@
 </div>
 
 <div id="modalreporting" class="modal fade">
-	<div class="modal-dialog modal-xl" style="width:150%">
+	<div class="modal-dialog modal-xl">
 		<div class="modal-content px-2">
 			<div class="modal-header">
 				<h2>Reporting</h2>
 				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
 			</div>
 			<div class="modal-body">
-				<!--<div class="form-group">
-					<div class="input-group">
-						<label class="col-form-label" for="graphdatasetlength_value">Number of points to display (starting today and going back): </label>
-						<input type="number" name="graphdatasetlength_value" id="graphdatasetlength_value" class="form-control col-sm-2 mx-1" value="999" min="1" max="999" onchange="initGraphs(); drawGraphs();">
-					</div>
-				</div>-->
 				<div class="form-group">
 					<div class="input-group">
 						<label for="start_reporting_selection" class="col-form-label mr-1">Display history from</label>
-						<input id="start_reporting_selection" class="form-control" type="date" style="min-width: 165px; max-width: 165px;" value="" onchange="initGraphs(); drawGraphs();">
+						<input id="start_reporting_selection" class="form-control input-fixedwidth165" type="date" value="" onchange="initGraphs(); drawGraphs();">
 						<label for="end_reporting_selection" class="col-form-label mr-1 ml-1">to</label>
-						<input id="end_reporting_selection" class="form-control" type="date" style="min-width: 165px; max-width: 165px;" value="" onchange="initGraphs(); drawGraphs();">
+						<input id="end_reporting_selection" class="form-control input-fixedwidth165" type="date" value="" onchange="initGraphs(); drawGraphs();">
 					</div>
 				</div>
 				<p>
 					You can also zoom in to certain graphs by dragging the area you want to zoom in on.<br>
 					Click right to reset the zoom level.
 				</p>
-				<!--<div id="OvertimeDays_div" style="width: 50%; float:right;"></div>
-				<div id="Gauges_div" style="width: 50%;"></div>
-				
-				<div id="DaysRegisteredGauge_div" style="display: flex; justify-content: center;"></div>-->
-				<div style="display: flex; justify-content: center; height:100%; width:100%;">
-					<div id="DaysRegisteredGauge_div" style="height:33%; width:33%;"></div>
-					<div id="AvgStarttimeGauge_div" style="height:33%; width:33%;"></div>
-					<div id="AvgStoptimeGauge_div" style="height:33%; width:33%;"></div>
+				<div class="d-flex justify-content-center w-100 h-100">
+					<div id="DaysRegisteredGauge_div" class="d-flex justify-content-center w-33 h-33"></div>
+					<div id="AvgStarttimeGauge_div" class="d-flex justify-content-center w-33 h-33"></div>
+					<div id="AvgStoptimeGauge_div" class="d-flex justify-content-center w-33 h-33"></div>
 				</div>
-				<div id="OvertimeDays_div" style="width: 50%;display: inline-block;"></div><div id="Hourschedules_div" style="width: 50%;display: inline-block;"></div>
+				<div class="d-flex justify-content-center w-100 h-100">
+					<div id="OvertimeDays_div" class="w-50 d-inline-block"></div><div id="Hourschedules_div" class="w-50 d-inline-block"></div>
+				</div>
 				<div id="OvertimeDec_div"></div>
 				<div id="StartDec_div"></div>
 				<div id="TotalDec_div"></div>
@@ -351,7 +343,7 @@
 		<div id="alertnotification" class="alert alert-danger alert-dismissible fade show my-4 mr-1 alertnotification" role="alert">
 			<div class="row">
 				<div class="col-lg-2 text-center py-1 px-4 my-auto">
-					<i class="far fa-exclamation-triangle fa-4x pulsate" style="color: orange; font-size: 60px;"></i>
+					<i class="far fa-exclamation-triangle fa-4x pulsate text-warning display-2"></i>
 				</div>
 				<div class="col-lg-10 py-1 px-4">
 					<p>
@@ -510,18 +502,18 @@
 						<div class="row">
 							<div class="col my-3 ml-sm-1">
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="add_time(getHourSchedule())" style="border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="tooltip" data-placement="bottom" title="Adds the time selected in the hour schedule to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> <span id="addtimebutton_span"></span>h</button>
-									<button type="button" class="btn btn-lg btn-success px-4 py-3" onclick="end_time()" style="border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Sets the 'Time to go home' field to the current time.">End time now</button>
+									<button type="button" class="btn btn-lg btn-success leftbtn px-4 py-3" onclick="add_time(getHourSchedule())" data-toggle="tooltip" data-placement="bottom" title="Adds the time selected in the hour schedule to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> <span id="addtimebutton_span"></span>h</button>
+									<button type="button" class="btn btn-lg btn-success rightbtn px-4 py-3" onclick="end_time()" data-toggle="tooltip" data-placement="bottom" title="Sets the 'Time to go home' field to the current time.">End time now</button>
 								</div>
 							</div>
 						</div>
 						<div id="break_btn_div" class="row">
 							<div class="col my-3">
 								<div class="btn-group" role="group">
-									<button id="break_reset_btn" type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="reset_break()" style="border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="tooltip" data-placement="bottom" title="Resets the break time."><i class="fal fa-redo"></i></button>
-									<button id="break_add5_btn" type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_break(0.084)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 5min of break time."><i class="fal fa-plus"></i> 5min</button>
-									<button id="break_add30_btn" type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="add_break(0.5)" style="border-radius: 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Adds 30min of break time."><i class="fal fa-plus"></i> 30min</button>
-									<button id="break_counter_btn" type="button" class="btn btn-lg btn-primary px-4 py-3" onclick="break_counter()" style="border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="tooltip" data-placement="bottom" title="Click once to start the break time counter. Click again to stop it and add the break time. If you don't click the button a second time, no time will be added."><i class="fal fa-stopwatch"></i> Start</button>
+									<button id="break_reset_btn" type="button" class="btn btn-lg btn-primary leftbtn px-4 py-3" onclick="reset_break()"data-toggle="tooltip" data-placement="bottom" title="Resets the break time."><i class="fal fa-redo"></i></button>
+									<button id="break_add5_btn" type="button" class="btn btn-lg btn-primary middlebtn px-4 py-3" onclick="add_break(0.084)" data-toggle="tooltip" data-placement="bottom" title="Adds 5min of break time."><i class="fal fa-plus"></i> 5min</button>
+									<button id="break_add30_btn" type="button" class="btn btn-lg btn-primary middlebtn px-4 py-3" onclick="add_break(0.5)" data-toggle="tooltip" data-placement="bottom" title="Adds 30min of break time."><i class="fal fa-plus"></i> 30min</button>
+									<button id="break_counter_btn" type="button" class="btn btn-lg btn-primary rightbtn px-4 py-3" onclick="break_counter()" data-toggle="tooltip" data-placement="bottom" title="Click once to start the break time counter. Click again to stop it and add the break time. If you don't click the button a second time, no time will be added."><i class="fal fa-stopwatch"></i> Start</button>
 								</div>						
 							</div>
 						</div>
@@ -546,10 +538,10 @@
 		</div>
 		<div class="col d-flex justify-content-end">
 			<div class="btn-group align-self-center" role="group">
-				<button title="Reporting" type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 1.5rem 0 0 1.5rem !important;" data-toggle="modal" data-target="#modalreporting"><i class="fas fa-chart-line"></i></button>
-				<button title="About" type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 0 !important;" data-toggle="modal" data-target="#modalabout"><i class="fas fa-info"></i></button>
-				<button title="Info" type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 0 !important;" data-toggle="modal" data-target="#modalinfo"><i class="fas fa-lightbulb"></i></button>
-				<button title="Settings" type="button" class="btn btn-outline-secondary py-1 px-4" style="height: 50%; font-size: 1.2rem; border-radius: 0 1.5rem 1.5rem 0 !important;" data-toggle="modal" data-target="#modalsettings"><i class="fas fa-cog"></i></button>
+				<button title="Reporting" type="button" class="btn btn-outline-secondary leftbtn footerbtn py-1 px-4" data-toggle="modal" data-target="#modalreporting"><i class="fas fa-chart-line"></i></button>
+				<button title="About" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4" data-toggle="modal" data-target="#modalabout"><i class="fas fa-info"></i></button>
+				<button title="Info" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4" data-toggle="modal" data-target="#modalinfo"><i class="fas fa-lightbulb"></i></button>
+				<button title="Settings" type="button" class="btn btn-outline-secondary rightbtn footerbtn py-1 px-4" data-toggle="modal" data-target="#modalsettings"><i class="fas fa-cog"></i></button>
 			</div>			
 		</div>
 	</div>

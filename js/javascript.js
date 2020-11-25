@@ -322,11 +322,11 @@ function getResetDate(){
 // UI
 function showHistorydeleteoptionContent() {
 	if( document.getElementById("historydeleteoptiondays").checked ) {
-		$("#historydeleteoptiondayscontent").show();
-		$("#historydeleteoptionperiodscontent").hide();
+		document.getElementById("historydeleteoptiondayscontent").classList.remove("d-none");
+		document.getElementById("historydeleteoptionperiodscontent").classList.add("d-none");
 	} else {
-		$("#historydeleteoptionperiodscontent").show();
-		$("#historydeleteoptiondayscontent").hide();
+		document.getElementById("historydeleteoptiondayscontent").classList.add("d-none");
+		document.getElementById("historydeleteoptionperiodscontent").classList.remove("d-none");
 		maxValuesDeleteOption();
 		//localStorage.setItem("lasthistoryclean", moment());
 	}
