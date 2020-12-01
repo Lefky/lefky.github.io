@@ -114,6 +114,10 @@ html, body {
 	position: absolute; 
 	z-index: 1;
 }
+#app_alert {
+	bottom: 0;
+	margin-bottom: 10rem !important;
+}
 .input-fixedwidth100 {
 	min-width: 100px; 
 	max-width: 100px;

@@ -92,12 +92,13 @@ function getBreak(){
 		
 		if (time_dec < 0) {
 			document.getElementById("break_time_start").value = "00:00";
-			document.getElementById("alertmessage").innerHTML = "<strong>Holy guacamole!</strong> You can't end your break before you start it, can you superman?";
+			document.getElementById("alertmessage").innerHTML = "<b>Holy guacamole!</b> You can't end your break before you start it, can you superman?<br> Fill in when your break ended first.";
 			$("#app_alert").show();
+			setTimeout(function() {$("#app_alert").fadeOut();}, 5000);
 		}
 	}
 
-	if (!time_dec) {
+	if (!time_dec || time_dec < 0) {
 		time_dec = 0;
 	}
 	return time_dec;
@@ -945,5 +946,5 @@ $(document).on('keydown', function (e) {
 });
 
 $('#app_alert .close').click(function(){
-   $(this).parent().hide();
+   $(this).parent().fadeOut();
 });
