@@ -38,12 +38,14 @@ function floatToTimeString(timedec){
 	*/
 }
 
+/*
 function roundTimeOffset(time){
 	if (time <= (0.02) && time >= (-0.02)) {
 		time = 0;
 	}
 	return time;
 }
+*/
 
 // Setters & getters
 function getStart(){
@@ -77,7 +79,7 @@ function setEnd(time){
 	document.getElementById("end_time").value = floatToTimeString(time);
 }
 
-function getBreak(){
+function getBreak(allowNegative){
 	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
 		var time = document.getElementById("break_time").value;
 		var time_dec = moment.duration(time).asHours();
@@ -90,15 +92,27 @@ function getBreak(){
 				
 		var time_dec = moment.duration(break_time_end.diff(break_time_start)).asHours();
 		
+		/*
 		if (time_dec < 0) {
 			document.getElementById("break_time_start").value = "00:00";
 			document.getElementById("alertmessage").innerHTML = "<b>Holy guacamole!</b> You can't end your break before you start it, can you superman?<br> Fill in when your break ended first.";
 			$("#app_alert").show();
 			setTimeout(function() {$("#app_alert").fadeOut();}, 5000);
 		}
+		*/
 	}
 
-	if (!time_dec || time_dec < 0) {
+	if (!allowNegative && (!time_dec || time_dec < 0)) {
+		time_dec = 0;
+	}
+	return time_dec;
+}
+
+function getBreakTimeStart(){
+	var time = document.getElementById("break_time_start").value;
+	//var time_dec = timeStringToFloat(time);
+	var time_dec = moment.duration(time).asHours();
+	if (!time_dec) {
 		time_dec = 0;
 	}
 	return time_dec;
@@ -127,8 +141,8 @@ function setBreakDefault(time){
 function addBreakDefault(){	
 	var break_time_default_init = localStorage.getItem("break_time_default");
 	/*
-	var new_break_dec = getBreak() - break_time_default_init + getBreakDefault();
-	console.log("break: "+getBreak()+" init: "+break_time_default_init+" default: "+getBreakDefault());
+	var new_break_dec = getBreak(false) - break_time_default_init + getBreakDefault();
+	console.log("break: "+getBreak(false)+" init: "+break_time_default_init+" default: "+getBreakDefault());
 	
 	if ( new_break_dec > 0 ) {
 		setBreak(new_break_dec);
@@ -137,7 +151,7 @@ function addBreakDefault(){
 	}
 	*/
 	
-	if(getBreak() == break_time_default_init) {
+	if(getBreak(false) == break_time_default_init) {
 		setBreak(getBreakDefault());
 		setEnd(parseFloat(getEnd()) + parseFloat(getBreakDefault()) - break_time_default_init);
 	}
@@ -164,25 +178,35 @@ function setHourSchedule(time){
 	hourscheduleAddTimeButton();
 }
 
-function getWorktime() {
+function getWorktime(){
+	var worktime = 0;
 	if (getEnd() < getStart()) {
-		return 24 + getEnd() - getStart();
+		worktime = 24 + getEnd() - getStart();
+		if ( Math.abs(worktime - getHourSchedule()) <= 0.02 ){
+			worktime = getHourSchedule();
+		}
+		return worktime
 	}
-	return getEnd() - getStart();
-	//return Math.round((worktime + Number.EPSILON) * 100) / 100;
-	//console.log("worktime: " + worktime);
+	
+	worktime = getEnd() - getStart();
+	if ( Math.abs(worktime - getHourSchedule()) <= 0.02 ){
+			worktime = getHourSchedule();
+	}
+	return worktime;
 }
 
-function calculateTotal() {
+function calculateTotal(){
 	var worktime = getWorktime(),
-		overtime = worktime - getBreak() - getHourSchedule();
+		overtime = worktime - getBreak(false) - getHourSchedule();
 
 	setTotal(worktime);
-	setOvertime(roundTimeOffset(overtime));
-	setTotalNoBreak(Math.abs(worktime - getBreak()));
+	//setOvertime(roundTimeOffset(overtime));
+	setOvertime(overtime);
+	setTotalNoBreak(Math.abs(worktime - getBreak(false)));
 	
 	setTotalDec((parseFloat(worktime).toFixed(2)));
-	setOvertimeDec(parseFloat(roundTimeOffset(overtime)).toFixed(2));
+	//setOvertimeDec(parseFloat(roundTimeOffset(overtime)).toFixed(2));
+	setOvertimeDec(parseFloat(overtime).toFixed(2));
 	setTotalNoBreakDec(getTotalNoBreakDec());
 	
 	hourscheduleAddTimeButton();
@@ -213,9 +237,10 @@ function setOvertime(time){
 
 function getOvertimeDec(){
 	var worktime = getWorktime(),
-		overtime = worktime - getBreak() - getHourSchedule();
-
-	return parseFloat(roundTimeOffset(overtime)).toFixed(2);
+		overtime = worktime - getBreak(false) - getHourSchedule();
+		
+	//return parseFloat(roundTimeOffset(overtime)).toFixed(2);
+	return parseFloat(overtime).toFixed(2);
 }
 
 function setOvertimeDec(time){
@@ -246,7 +271,7 @@ function setTotalNoBreak(time){
 
 function getTotalNoBreakDec(){
 	var worktime = getWorktime();
-	return Math.abs(parseFloat(worktime - getBreak())).toFixed(2);
+	return Math.abs(parseFloat(worktime - getBreak(false))).toFixed(2);
 }
 
 function setTotalNoBreakDec(time){
@@ -321,7 +346,7 @@ function getResetDate(){
 }
 
 // UI
-function showHistorydeleteoptionContent() {
+function showHistorydeleteoptionContent(){
 	if( document.getElementById("historydeleteoptiondays").checked ) {
 		document.getElementById("historydeleteoptiondayscontent").classList.remove("d-none");
 		document.getElementById("historydeleteoptionperiodscontent").classList.add("d-none");
@@ -333,7 +358,7 @@ function showHistorydeleteoptionContent() {
 	}
 }
 
-function maxValuesDeleteOption() {
+function maxValuesDeleteOption(){
 	var historyresetperiodunit = getHistoryResetPeriodUnit(),
 		cleaningday = calculateCleaningDay(),
 		historyresetperiod = document.getElementById("historyresetperiod"),
@@ -354,14 +379,14 @@ function maxValuesDeleteOption() {
 	setResetDate(cleaningday.format("dddd, DD-MM-YYYY"));
 }
 
-function saveCleaningDay() {
+function saveCleaningDay(){
 	localStorage.setItem("cleaningday", moment(getResetDate(),"dddd, DD-MM-YYYY"));
 	document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: #28a745;");
 	document.getElementById("modalsavebutton").innerHTML = '<i class="fas fa-check"></i>'; 
 	setTimeout('document.getElementById("modalsavebutton").innerHTML = "Save"; document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear;");', 5000);
 }
 
-function calculateCleaningDay() {
+function calculateCleaningDay(){
 	var historyretain = getHistoryRetain(),
 		historyresetday = getHistoryResetDay(),
 		historyresetperiod = getHistoryResetPeriod(),
@@ -530,8 +555,25 @@ function breaktimeTimeselection(){
 	}
 }
 
+function checkInputValues(){
+	var alertmessage = "";
+	
+	//console.log(getBreak(true));
+	
+	if (getBreak(true) < 0 && getBreakTimeStart() > 0) {
+		document.getElementById("break_time_end").value = document.getElementById("break_time_start").value;
+		alertmessage = "<b>Holy guacamole!</b> You can't end your break before you start it, can you superman?<br> Fill in when your break ended first.";
+	}
+
+	if (alertmessage != "") {
+		document.getElementById("alertmessage").innerHTML = alertmessage;
+		$("#app_alert").show();
+		setTimeout(function() {$("#app_alert").fadeOut();}, 5000);
+	}
+}
+
 // Storage functions
-function cleanLocalStorage() {
+function cleanLocalStorage(){
 	var keys = Object.keys(localStorage),
 		i = 0,
 		today = moment(),
@@ -560,7 +602,7 @@ function cleanLocalStorage() {
 	}
 }
 
-function deleteHistory() {
+function deleteHistory(){
 	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 	if ( confirm("Are you sure you wish to delete your history?\nIf you choose not to then your data will be saved untill the next cleaning time.") ) {
 		for(key in localStorage) {
@@ -574,7 +616,7 @@ function deleteHistory() {
 	}
 }
 
-function exportHistory() {		
+function exportHistory(){		
 	/*
 	var _myArray = JSON.stringify(localStorage , null, 4); //indentation in json format, human readable
 	
@@ -612,7 +654,7 @@ var importHistory = document.getElementById('importHistory'),
 	importFile = document.getElementById('importFile');
 importFile.addEventListener("change", importHistoryData, false);
 importHistory.onclick = function () {importFile.click()}
-function importHistoryData(e) {
+function importHistoryData(e){
 	var files = e.target.files, reader = new FileReader();
 	reader.onload = readerEvent => {
 		var content = JSON.parse(readerEvent.target.result); // this is the content!
@@ -634,7 +676,7 @@ function makeDate(date){
 }
 
 // Application functions
-function now() {
+function now(){
 	var date = new Date();
 	var hour = date.getHours(),
 		min  = date.getMinutes();
@@ -647,7 +689,7 @@ function now() {
 	return moment.duration(timestamp).asHours();
 }
 
-function todayDate() {
+function todayDate(){
 	var date = new Date();
 	
 	var dd = ('0' + date.getDate()).slice(-2),
@@ -658,7 +700,7 @@ function todayDate() {
 	return moment().format("DD-MM-YYYY");
 }
 
-function reset() {
+function reset(){
 	notificationClosed("onload");
 	setEnd(0);
 	setTotal(0);
@@ -672,7 +714,7 @@ function reset() {
 	cleanLocalStorage();
 }
 
-function setParameters() {
+function setParameters(){
 	// Set options to parameters from localStorage
 	var alertnotification = localStorage.getItem("alertnotification"),
 		autoend = localStorage.getItem("autoend"),
@@ -783,29 +825,29 @@ function setParameters() {
 	}
 }
 
-function end_time() {
+function end_time(){
 	setEnd(now());
 	calculateTotal();
 }
 
-function add_time(time) {
-	setEnd(getStart() + time + getBreak());
+function add_time(time){
+	setEnd(getStart() + time + getBreak(false));
 	calculateTotal();
 }
 
-function add_break(time) {
-	setBreak(time + getBreak());
+function add_break(time){
+	setBreak(time + getBreak(false));
 	setEnd(time + getEnd());
 	calculateTotal();
 }
 
-function reset_break() {
-	setEnd(getEnd() - getBreak());
+function reset_break(){
+	setEnd(getEnd() - getBreak(false));
 	setBreak(0);
 	calculateTotal();
 }
 
-function break_counter() {
+function break_counter(){
 	var break_counter_started = localStorage.getItem("break_counter_started"),
 		break_counter_btn = document.getElementById("break_counter_btn");	
 	if (break_counter_started == "true") {
@@ -844,7 +886,7 @@ function break_counter() {
 	
 }
 
-window.onbeforeunload = function(e) {
+window.onbeforeunload = function(e){
 	// Set 'dont save today' and 'automatically set end time' parameters in local storage
 	var nosave = document.getElementById("nosave"),
 		autoend = document.getElementById("autoend");
@@ -919,7 +961,7 @@ window.onbeforeunload = function(e) {
 };
 
 // Listeners and initializers
-$(document).ready(function() {
+$(document).ready(function(){
 	$('[data-toggle="tooltip"]').tooltip();
 	
 	if(window.location.href.indexOf('#modalabout') != -1) {
@@ -939,7 +981,7 @@ $(document).ready(function() {
 	}
 });
 
-$(document).on('keydown', function (e) {
+$(document).on('keydown', function (e){
 	if (e.keyCode === 13) { //ENTER key code
 		add_time(getHourSchedule());
 	}
@@ -947,4 +989,8 @@ $(document).on('keydown', function (e) {
 
 $('#app_alert .close').click(function(){
    $(this).parent().fadeOut();
+});
+
+$("input").focusout(function(){
+	checkInputValues()
 });
