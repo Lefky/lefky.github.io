@@ -2,33 +2,53 @@ html, body {
 	overflow-x: hidden;
 	height: 100%;
 }
-
+.fontsize60 {
+	font-size: 0.6rem;
+}
+.h-33 {
+	height: 33%;
+}
+.w-33 {
+	width: 33%;
+}
+.w-150 {
+	width: 150%;
+}
 .card, .btn, .form-control, .modal-content, .alert { 
 	border-radius: 1.5rem !important; 
+}
+.btn-group .btn.leftbtn {
+	border-radius: 1.5rem 0 0 1.5rem !important;
+}
+.btn-group .btn.middlebtn {
+	border-radius: 0 !important;
+}
+.btn-group .btn.rightbtn {
+	border-radius: 0 1.5rem 1.5rem 0 !important;
+}
+.footerbtn {
+	height: 50%; 
+	font-size: 1.2rem;
 }
 .rounded-right {
 	border-top-right-radius: 1.5rem !important; 
 	border-bottom-right-radius: 1.5rem !important; 
 }
-
 .bottom-align-text {
 	position: absolute !important;
 	bottom: 0 !important;
 	right: 0 !important;
 }
-
 .fill { 
     min-height: 100% !important;
     height: 100% !important;
 }
-
 #historycontainer {
 	overflow: hidden;
 	border: 1px solid #ced4da;
 	border-radius: .75rem;
 	width: 80%
 }
-
 #history {
 	background-color: #e9ecef;
     opacity: 1;
@@ -46,28 +66,33 @@ html, body {
 	margin-left:auto; 
 	margin-right:0; 
 }	
-
 .font-sm {
 	font-size: 70%;
 }
-
+.no-bottom-margin {
+	margin-bottom:0 !important;
+}
 .custom-control-input:checked~.custom-control-label.checkred::before {
 	border-color: #dc3545;
 	background-color: #dc3545;
 }
-
 .custom-control-input:checked~.custom-control-label.checkgreen::before {
 	border-color: #28a745;
 	background-color: #28a745;
 }
-
+.custom-control-input:checked~.custom-control-label.checkneutral::before {
+	border-color: #adb5bd;
+	background-color: #fff;
+}
+.custom-switch .custom-control-input:checked~.custom-control-label.checkneutral::after {
+    background-color: #adb5bd;
+}
 .form-group label> .description{
     display: none;
 }
 .form-group input[type="radio"]:checked ~ .description{
     display: block;
 }
-
 .pulsate {
 	-webkit-animation: pulsate 3s ease-out;
 	-webkit-animation-iteration-count: infinite; 
@@ -84,3 +109,132 @@ html, body {
 		opacity: 0.5;
 	}
 }
+.alertnotification {
+	display: none; 
+	position: absolute; 
+	z-index: 1;
+}
+#app_alert {
+	bottom: 0;
+	margin-bottom: 10rem !important;
+}
+.input-fixedwidth100 {
+	min-width: 100px; 
+	max-width: 100px;
+}
+.input-fixedwidth165 {
+	min-width: 165px; 
+	max-width: 165px;
+}
+
+/* CUSTOM SWITCH SIZES */
+/* for sm */
+.custom-switch.custom-switch-sm .custom-control-label {
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+}
+.custom-switch.custom-switch-sm .custom-control-label::before {
+    height: 1rem;
+    width: calc(1rem + 0.75rem);
+    border-radius: 2rem;
+}
+.custom-switch.custom-switch-sm .custom-control-label::after {
+    width: calc(1rem - 4px);
+    height: calc(1rem - 4px);
+    border-radius: calc(1rem - (1rem / 2));
+}
+.custom-switch.custom-switch-sm .custom-control-input:checked ~ .custom-control-label::after {
+    transform: translateX(calc(1rem - 0.25rem));
+}
+/* for md */
+.custom-switch.custom-switch-md .custom-control-label {
+    padding-left: 2rem;
+    padding-bottom: 1.5rem;
+}
+.custom-switch.custom-switch-md .custom-control-label::before {
+    height: 1.5rem;
+    width: calc(2rem + 0.75rem);
+    border-radius: 3rem;
+}
+.custom-switch.custom-switch-md .custom-control-label::after {
+    width: calc(1.5rem - 4px);
+    height: calc(1.5rem - 4px);
+    border-radius: calc(2rem - (1.5rem / 2));
+}
+.custom-switch.custom-switch-md .custom-control-input:checked ~ .custom-control-label::after {
+    transform: translateX(calc(1.5rem - 0.25rem));
+}
+/* for lg */
+.custom-switch.custom-switch-lg .custom-control-label {
+    padding-left: 3rem;
+    padding-bottom: 2rem;
+}
+.custom-switch.custom-switch-lg .custom-control-label::before {
+    height: 2rem;
+    width: calc(3rem + 0.75rem);
+    border-radius: 4rem;
+}
+.custom-switch.custom-switch-lg .custom-control-label::after {
+    width: calc(2rem - 4px);
+    height: calc(2rem - 4px);
+    border-radius: calc(3rem - (2rem / 2));
+}
+.custom-switch.custom-switch-lg .custom-control-input:checked ~ .custom-control-label::after {
+    transform: translateX(calc(2rem - 0.25rem));
+}
+/* for xl */
+.custom-switch.custom-switch-xl .custom-control-label {
+    padding-left: 4rem;
+    padding-bottom: 2.5rem;
+}
+.custom-switch.custom-switch-xl .custom-control-label::before {
+    height: 2.5rem;
+    width: calc(4rem + 0.75rem);
+    border-radius: 5rem;
+}
+.custom-switch.custom-switch-xl .custom-control-label::after {
+    width: calc(2.5rem - 4px);
+    height: calc(2.5rem - 4px);
+    border-radius: calc(4rem - (2.5rem / 2));
+}
+.custom-switch.custom-switch-xl .custom-control-input:checked ~ .custom-control-label::after {
+    transform: translateX(calc(2.5rem - 0.25rem));
+}
+/* END CUSTOM SWITCH SIZES */
+/* BOOTSTRAP 5 CUSTOM SWITCH SIZES */
+.form-check-input {
+  clear: left;
+}
+.form-switch.form-switch-sm {
+  margin-bottom: 0.5rem; /* JUST FOR STYLING PURPOSE */
+}
+.form-switch.form-switch-sm .form-check-input {
+  height: 1rem;
+  width: calc(1rem + 0.75rem);
+  border-radius: 2rem;
+}
+.form-switch.form-switch-md {
+  margin-bottom: 1rem; /* JUST FOR STYLING PURPOSE */
+}
+.form-switch.form-switch-md .form-check-input {
+  height: 1.5rem;
+  width: calc(2rem + 0.75rem);
+  border-radius: 3rem;
+}
+.form-switch.form-switch-lg {
+  margin-bottom: 1.5rem; /* JUST FOR STYLING PURPOSE */
+}
+.form-switch.form-switch-lg .form-check-input {
+  height: 2rem;
+  width: calc(3rem + 0.75rem);
+  border-radius: 4rem;
+}
+.form-switch.form-switch-xl {
+  margin-bottom: 2rem; /* JUST FOR STYLING PURPOSE */
+}
+.form-switch.form-switch-xl .form-check-input {
+  height: 2.5rem;
+  width: calc(4rem + 0.75rem);
+  border-radius: 5rem;
+}
+/* END BOOTSTRAP 5 CUSTOM SWITCH SIZES */
