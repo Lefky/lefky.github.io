@@ -1011,6 +1011,10 @@ $(document).on('keydown', function (e){
 	if (e.keyCode === 13) { //ENTER key code
 		add_time(getHourSchedule());
 	}
+	
+	if (e.keyCode === 27) { //ENTER key code
+		$('.modal').modal('hide');
+	}
 });
 
 $('#app_alert .close').click(function(){
