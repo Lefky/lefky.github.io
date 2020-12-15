@@ -52,9 +52,8 @@ $tableID.on('click', '.table-save', function() {
 	var StartDec = parseFloat(currentRow.find("td:eq(4)").text()); // get current row 5th TD
 	var HourSchedule = parseFloat(currentRow.find("td:eq(5)").text()); // get current row 6th TD
 
-	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 	const isnumber = /^-?[0-9]+.*[0-9]*$/;
-	if (!userKeyRegExp.test(key)) {
+	if (!testDateFormat(key)) {
 		alert("\nDate \n\nis not in the DD-MM-YYYY format.\nPlease correct your entry and try again.");
 		return;
 	}

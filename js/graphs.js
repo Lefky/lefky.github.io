@@ -396,9 +396,8 @@ function formatJSONdata() {
 		key;
 		//datasetlength = document.getElementById('graphdatasetlength_value').value;
 
-	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 	for (i = 0; key = sortedkeys[i]; i++) {
-		if (!userKeyRegExp.test(key)) {
+		if (!testDateFormat(key)) {
 			sortedkeys.splice(i, 1)
 			i--;
 		}
@@ -417,7 +416,7 @@ function formatJSONdata() {
 	
 	for (i = 0; key = sortedkeys[i]; i++) {		
 		
-		if (userKeyRegExp.test(key)/* && i >= start*/) {
+		if (testDateFormat(key)/* && i >= start*/) {
 			timeinfo = JSON.parse(localStorage.getItem(key));
 			dateKey=moment(key, "DD-MM-YYYY");
 			

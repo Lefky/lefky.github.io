@@ -200,12 +200,10 @@ function calculateTotal(){
 		overtime = worktime - getBreak(false) - getHourSchedule();
 
 	setTotal(worktime);
-	//setOvertime(roundTimeOffset(overtime));
 	setOvertime(overtime);
 	setTotalNoBreak(Math.abs(worktime - getBreak(false)));
 	
 	setTotalDec((parseFloat(worktime).toFixed(2)));
-	//setOvertimeDec(parseFloat(roundTimeOffset(overtime)).toFixed(2));
 	setOvertimeDec(parseFloat(overtime).toFixed(2));
 	setTotalNoBreakDec(getTotalNoBreakDec());
 	
@@ -239,7 +237,6 @@ function getOvertimeDec(){
 	var worktime = getWorktime(),
 		overtime = worktime - getBreak(false) - getHourSchedule();
 		
-	//return parseFloat(roundTimeOffset(overtime)).toFixed(2);
 	return parseFloat(overtime).toFixed(2);
 }
 
@@ -410,6 +407,11 @@ function calculateCleaningDay(){
 	return cleaningday;
 }
 
+function testDateFormat(date){
+	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
+	return userKeyRegExp.test(date);
+}
+
 function setHistory(refresh_edit_table){
 	const reverseDateRepresentation = date => {
 	  let parts = date.split('-');
@@ -423,12 +425,12 @@ function setHistory(refresh_edit_table){
 		overtimetotal = 0,
 		overtimeweekly = 0,
 		i = 0, 
-		key;	
-	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
+		key,
+		timeinfo;	
 	
 	for (; key = revkeys[i]; i++) {
-		if (userKeyRegExp.test(key)) {
-			var timeinfo = JSON.parse(localStorage.getItem(key));
+		if (testDateFormat(key)) {
+			timeinfo = JSON.parse(localStorage.getItem(key));
 			if (timeinfo.hasOwnProperty('OvertimeDec')){
 				if (timeinfo['OvertimeDec'].startsWith("-")){
 					entry_history = entry_history + "<tr style='color:red;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
@@ -444,11 +446,10 @@ function setHistory(refresh_edit_table){
 				}
 								
 				// calculate hour schedule if it's not defined yet
+				// TEMPORARY
 				if (timeinfo['HourSchedule'] == undefined) {
 					var hourschedule = parseFloat(timeinfo['TotalNoBreakDec'])-parseFloat(timeinfo['OvertimeDec']);
-					//hourschedule = Math.round((hourschedule + Number.EPSILON) * 100) / 100;
 					
-					//console.log("old: " + hourschedule);
 					if (hourschedule > 0 && hourschedule < 3.1) {
 						hourschedule = 3.04;
 					} else if (hourschedule > 3.1 && hourschedule < 3.5) {
@@ -470,7 +471,6 @@ function setHistory(refresh_edit_table){
 					} else if (hourschedule > 7.8 && hourschedule < 10) {
 						hourschedule = 8;
 					}
-					//console.log(hourschedule);
 					
 					var new_timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['OvertimeDec'] + '", "TotalDec": "' + timeinfo['TotalDec'] + '", "StartDec": "' + timeinfo['StartDec'] + '", "HourSchedule": "' + hourschedule + '"}';
 					localStorage.setItem(key, new_timeinfo);
@@ -555,18 +555,42 @@ function breaktimeTimeselection(){
 	}
 }
 
-function checkInputValues(){
-	var alertmessage = "";
+function loadjscssfile(filename, filetype){
+	//source: http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml#:~:text=To%20load%20a%20.,location%20within%20the%20document%20tree.
+    if (filetype=="js"){ //if filename is a external JavaScript file
+        var fileref=document.createElement('script')
+        fileref.setAttribute("type","text/javascript")
+        fileref.setAttribute("src", filename)
+    }
+    else if (filetype=="css"){ //if filename is an external CSS file
+        var fileref=document.createElement("link")
+        fileref.setAttribute("rel", "stylesheet")
+        fileref.setAttribute("type", "text/css")
+        fileref.setAttribute("href", filename)
+    }
+    if (typeof fileref!="undefined")
+        document.getElementsByTagName("head")[0].appendChild(fileref)
+}
+
+function initializeIntroduction(){
+	loadjscssfile("js/introduction.js", "js");
 	
-	//console.log(getBreak(true));
+	setTimeout(function(){
+		//Wait till the JS is loaded
+		startIntroduction();
+	}, 500);
+}
+
+function checkInputValues(){
+	var app_alert_message = "";
 	
 	if (getBreak(true) < 0 && getBreakTimeStart() > 0) {
 		document.getElementById("break_time_end").value = document.getElementById("break_time_start").value;
-		alertmessage = "<b>Holy guacamole!</b> You can't end your break before you start it, can you superman?<br> Fill in when your break ended first.";
+		app_alert_message = "<b>Holy guacamole!</b> You can't end your break before you start it, can you superman?<br> Fill in when your break ended first.";
 	}
 
-	if (alertmessage != "") {
-		document.getElementById("alertmessage").innerHTML = alertmessage;
+	if (app_alert_message != "") {
+		document.getElementById("app_alert_message").innerHTML = app_alert_message;
 		$("#app_alert").show();
 		setTimeout(function() {$("#app_alert").fadeOut();}, 5000);
 	}
@@ -579,12 +603,11 @@ function cleanLocalStorage(){
 		today = moment(),
 		deleteoption = localStorage.getItem("historydeleteoption");
 		//lasthistoryclean = moment(localStorage.getItem("lasthistoryclean"));
-	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 	
 	if ( deleteoption == "days" ) {
 		const expiredate = today.subtract(getHistoryRetain(), "days")
 		for(; key = keys[i]; i++) {
-			if ( moment(key, "DD-MM-YYYY") < expiredate && userKeyRegExp.test(key)) { // days to keep data excluding today
+			if ( moment(key, "DD-MM-YYYY") < expiredate && testDateFormat(key)) { // days to keep data excluding today
 				delete localStorage[key];
 			}
 		}	
@@ -603,10 +626,9 @@ function cleanLocalStorage(){
 }
 
 function deleteHistory(){
-	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 	if ( confirm("Are you sure you wish to delete your history?\nIf you choose not to then your data will be saved untill the next cleaning time.") ) {
 		for(key in localStorage) {
-			if ( userKeyRegExp.test(key) ) {
+			if ( testDateFormat(key) ) {
 				delete localStorage[key];
 			}
 		}
@@ -701,7 +723,6 @@ function todayDate(){
 }
 
 function reset(){
-	notificationClosed("onload");
 	setEnd(0);
 	setTotal(0);
 	setTotalDec(0);
@@ -710,8 +731,13 @@ function reset(){
 	setHistory(true);
 	
 	// 'lazy' loading
+	notificationClosed("onload");
 	setParameters();
 	cleanLocalStorage();
+	if (localStorage.length < 10) {
+		initializeIntroduction();
+	}
+	//initializeIntroduction();
 }
 
 function setParameters(){
@@ -988,7 +1014,7 @@ $(document).on('keydown', function (e){
 });
 
 $('#app_alert .close').click(function(){
-   $(this).parent().fadeOut();
+	$(this).parent().fadeOut();
 });
 
 $("input").focusout(function(){
