@@ -26,7 +26,8 @@ function startIntroduction(){
 
 function playIntroduction(){
 	// Dismiss the changes notification
-	document.getElementById("alertnotification").lastChild.previousSibling.click();
+	//document.getElementById("alertnotification").lastChild.previousSibling.click();
+	$("#alertnotification").alert('dispose')
 	
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea";

@@ -1,20 +1,8 @@
 console.log("loading javascript.js");
-/*
-Date.prototype.subtractDays = function(days) {
-	var date = new Date(this.valueOf());
-	date.setDate(date.getDate() - days);
-	return date;
-}
 
-Date.prototype.addDays = function(days) {
-	var date = new Date(this.valueOf());
-	date.setDate(date.getDate() + days);
-	return date;
-}
+var filesadded="";
 
-*/
 // Conversion functions
-
 /*
 function timeStringToFloat(time) {
 	var hoursMinutes = time.split(/[.:]/);
@@ -37,15 +25,6 @@ function floatToTimeString(timedec){
 	return moment().startOf('day').add(timedec, 'hours').format('HH:mm')
 	*/
 }
-
-/*
-function roundTimeOffset(time){
-	if (time <= (0.02) && time >= (-0.02)) {
-		time = 0;
-	}
-	return time;
-}
-*/
 
 // Setters & getters
 function getStart(){
@@ -488,9 +467,11 @@ function setHistory(refresh_edit_table){
 		entry_history = entry_history + "</table>";
 	}
 	document.getElementById("history").innerHTML = entry_history;	
+	
 	if(refresh_edit_table){
 		document.getElementById("edit_history_table_body").innerHTML = entry_edit_history;
 	}
+	
 	setOvertimeTotal(overtimetotal);
 	setOvertimeWeekly(overtimeweekly);
 }
@@ -553,32 +534,6 @@ function breaktimeTimeselection(){
 		// re-initialize tooltips to pickup the changes
 		$('[data-toggle="tooltip"]').tooltip();
 	}
-}
-
-function loadjscssfile(filename, filetype){
-	//source: http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml#:~:text=To%20load%20a%20.,location%20within%20the%20document%20tree.
-    if (filetype=="js"){ //if filename is a external JavaScript file
-        var fileref=document.createElement('script')
-        fileref.setAttribute("type","text/javascript")
-        fileref.setAttribute("src", filename)
-    }
-    else if (filetype=="css"){ //if filename is an external CSS file
-        var fileref=document.createElement("link")
-        fileref.setAttribute("rel", "stylesheet")
-        fileref.setAttribute("type", "text/css")
-        fileref.setAttribute("href", filename)
-    }
-    if (typeof fileref!="undefined")
-        document.getElementsByTagName("head")[0].appendChild(fileref)
-}
-
-function initializeIntroduction(){
-	loadjscssfile("js/introduction.js", "js");
-	
-	setTimeout(function(){
-		//Wait till the JS is loaded
-		startIntroduction();
-	}, 500);
 }
 
 function checkInputValues(){
@@ -737,7 +692,6 @@ function reset(){
 	if (localStorage.length < 10) {
 		initializeIntroduction();
 	}
-	//initializeIntroduction();
 }
 
 function setParameters(){
@@ -1023,4 +977,79 @@ $('#app_alert .close').click(function(){
 
 $("input").focusout(function(){
 	checkInputValues()
+});
+
+function loadjscssfile(filename, filetype){
+	//source: http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml#:~:text=To%20load%20a%20.,location%20within%20the%20document%20tree.    
+	if (filesadded.indexOf("["+filename+"]")==-1){
+		if (filetype=="js"){ //if filename is a external JavaScript file
+			var fileref=document.createElement('script');
+			fileref.setAttribute("type","text/javascript");
+			fileref.setAttribute("src", filename);
+		}
+		else if (filetype=="css"){ //if filename is an external CSS file
+			var fileref=document.createElement("link");
+			fileref.setAttribute("rel", "stylesheet");
+			fileref.setAttribute("type", "text/css");
+			fileref.setAttribute("href", filename);
+		}
+		if (typeof fileref!="undefined")
+			document.getElementsByTagName("head")[0].appendChild(fileref);
+		
+		filesadded+="["+filename+"]";
+	}
+}
+
+function initializeIntroduction(){
+	document.getElementById('settingsmodalclosebutton').click();
+	
+	var filename = "js/introduction.js";
+	if (filesadded.indexOf("["+filename+"]")==-1){
+		loadjscssfile(filename, "js");
+		
+		setTimeout(function(){
+			// Wait till the JS is loaded
+			startIntroduction();
+		}, 500);
+	} else {
+		startIntroduction();
+	}
+}
+
+$('#modalreporting').on('shown.bs.modal', function() {
+	var filename = "js/graphs.js";
+	if (filesadded.indexOf("["+filename+"]")==-1){
+		loadjscssfile(filename, "js");
+		
+		setTimeout(function(){
+			// Wait till the JS is loaded
+
+			// Redraw charts on opening modal
+			initGraphs();
+			drawGraphs();
+			
+			// Rotate screen for mobile users so it displays the entire width
+			// https://usefulangle.com/post/105/javascript-change-screen-orientation
+			mobileRotateScreen(true);
+		}, 500);
+	} else {
+		initGraphs();
+		drawGraphs();
+		mobileRotateScreen(true);
+	}
+});
+
+$('#modaledithistory').on('shown.bs.modal', function() {
+	var filename = "js/editable_table.js";
+	if (filesadded.indexOf("["+filename+"]")==-1){
+		loadjscssfile(filename, "js");
+		loadjscssfile("https://www.gstatic.com/charts/loader.js", "js");
+		
+		setTimeout(function(){
+			// Wait till the JS is loaded
+			setHistory(true);
+		}, 500);
+	} else {
+		setHistory(true);
+	}
 });

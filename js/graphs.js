@@ -63,60 +63,46 @@ function initDateSelector() {
 	document.getElementById('end_reporting_selection').value = moment().endOf('year').format('YYYY-MM-DD');
 }
 
-// Redraw chart on opening modal
+/*
 $('#modalreporting').on('shown.bs.modal', function() {
-	// Rotate screen for mobile users so it displays the entire width
-	// https://usefulangle.com/post/105/javascript-change-screen-orientation
-	/*
-	if( /Chrome|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-		document.getElementsByTagName("BODY")[0].style.webkitTransform = "rotate(90deg)"; 
-	}
-	*/
-	
+	// Redraw charts on opening modal
 	initGraphs();
 	drawGraphs();
 	
-	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-		/*if(document.querySelector("#modalreporting").requestFullscreen)
-			document.querySelector("#modalreporting").requestFullscreen();
-		else if(document.querySelector("#modalreporting").webkitRequestFullScreen)
-			document.querySelector("#modalreporting").webkitRequestFullScreen();
-		*/
-		document.documentElement.requestFullscreen();
-		document.documentElement.webkitRequestFullScreen();
-	
-		var current_mode = screen.orientation;
-		console.log(current_mode.type)
-		console.log(current_mode.angle)
-		
-		screen.orientation.lock("landscape");
-		/*
-		screen.orientation.lock("portrait")
-			.then(function() {
-				alert('Locked');
-			})
-			.catch(function(error) {
-				alert(error);
-			});
-		*/
-		current_mode = screen.orientation;
-		console.log(current_mode.type)
-		console.log(current_mode.angle)
-	}
+	// Rotate screen for mobile users so it displays the entire width
+	// https://usefulangle.com/post/105/javascript-change-screen-orientation
+	mobileRotateScreen(true);
 });
+*/
 
-// Rotate screen for mobile users so it displays normal again
 $('#modalreporting').on('hidden.bs.modal', function() {
-	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-		screen.orientation.unlock();
-		document.exitFullscreen();
-		document.webkitExitFullscreen();
-	}
+	// Rotate screen for mobile users so it displays normal again
+	mobileRotateScreen(false);
 });
 
 $(window).resize(function() {
 	drawGraphs();
 });
+
+function mobileRotateScreen(rotate) {
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+		if (rotate) {
+			document.documentElement.requestFullscreen();
+			document.documentElement.webkitRequestFullScreen();
+		
+			var current_mode = screen.orientation;
+			console.log(current_mode.type)
+			console.log(current_mode.angle)
+			
+			screen.orientation.lock("landscape");
+			current_mode = screen.orientation;
+		} else {
+			screen.orientation.unlock();
+			document.exitFullscreen();
+			document.webkitExitFullscreen();
+		}
+	}
+}
 
 function drawLinegraph(graphtype) {
 	var data = new google.visualization.DataTable(),
