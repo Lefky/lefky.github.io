@@ -1,4 +1,4 @@
-console.log("loading javascript.js");
+console.log("loaded javascript.js");
 
 var filesadded="";
 
@@ -979,30 +979,44 @@ $("input").focusout(function(){
 	checkInputValues()
 });
 
-function loadjscssfile(filename, filetype){
-	//source: http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml#:~:text=To%20load%20a%20.,location%20within%20the%20document%20tree.    
+function loadjscssfile(filename, filetype, callback){
+	//source: http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml    
 	if (filesadded.indexOf("["+filename+"]")==-1){
-		if (filetype=="js"){ //if filename is a external JavaScript file
+		if (filetype=="js"){ // If filename is a external JavaScript file
+			// Adding the script tag to the head
 			var fileref=document.createElement('script');
 			fileref.setAttribute("type","text/javascript");
 			fileref.setAttribute("src", filename);
-		}
-		else if (filetype=="css"){ //if filename is an external CSS file
+			
+			// Bind the event to the callback function.
+			// There are several events for cross browser compatibility.
+			fileref.onreadystatechange = callback;
+			fileref.onload = callback;	
+		} 
+		else if (filetype=="css"){ // If filename is an external CSS file
 			var fileref=document.createElement("link");
 			fileref.setAttribute("rel", "stylesheet");
 			fileref.setAttribute("type", "text/css");
 			fileref.setAttribute("href", filename);
 		}
-		if (typeof fileref!="undefined")
+		
+		if (typeof fileref!="undefined"){
+			// Fire the loading
 			document.getElementsByTagName("head")[0].appendChild(fileref);
+			console.log("added to html: " + filename);
+		} 
 		
 		filesadded+="["+filename+"]";
+	} else {
+		callback();
+		console.log("already loaded: " + filename);
 	}
 }
 
 function initializeIntroduction(){
 	document.getElementById('settingsmodalclosebutton').click();
-	
+	loadjscssfile("js/introduction.js", "js", function(){ startIntroduction(); });
+	/*
 	var filename = "js/introduction.js";
 	if (filesadded.indexOf("["+filename+"]")==-1){
 		loadjscssfile(filename, "js");
@@ -1014,12 +1028,24 @@ function initializeIntroduction(){
 	} else {
 		startIntroduction();
 	}
+	*/
 }
 
 $('#modalreporting').on('shown.bs.modal', function() {
+    loadjscssfile("https://www.gstatic.com/charts/loader.js", "js", function () {
+      loadjscssfile("js/graphs.js", "js", function() {
+        console.log("loaded graphs2");
+		
+		initGoogleLibraries("googleCharts").then(function () {
+			initGraphs();
+			drawGraphs(); 
+			mobileRotateScreen(true);
+		});
+      });
+    });
+	/*
 	var filename = "js/graphs.js";
 	if (filesadded.indexOf("["+filename+"]")==-1){
-		loadjscssfile(filename, "js");
 		
 		setTimeout(function(){
 			// Wait till the JS is loaded
@@ -1032,18 +1058,21 @@ $('#modalreporting').on('shown.bs.modal', function() {
 			// https://usefulangle.com/post/105/javascript-change-screen-orientation
 			mobileRotateScreen(true);
 		}, 500);
+		
 	} else {
 		initGraphs();
 		drawGraphs();
 		mobileRotateScreen(true);
 	}
+	*/
 });
 
 $('#modaledithistory').on('shown.bs.modal', function() {
+	loadjscssfile("js/editable_table.js", "js", function(){ setHistory(true); });
+	/*
 	var filename = "js/editable_table.js";
 	if (filesadded.indexOf("["+filename+"]")==-1){
 		loadjscssfile(filename, "js");
-		loadjscssfile("https://www.gstatic.com/charts/loader.js", "js");
 		
 		setTimeout(function(){
 			// Wait till the JS is loaded
@@ -1052,4 +1081,5 @@ $('#modaledithistory').on('shown.bs.modal', function() {
 	} else {
 		setHistory(true);
 	}
+	*/
 });

@@ -1,4 +1,4 @@
-console.log("loading introduction.js");
+console.log("loaded introduction.js");
 
 function startIntroduction(){
 	var new_element = document.createElement("div");

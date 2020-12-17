@@ -3,7 +3,7 @@ In HTML
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <div id="div_where_graph_comes"></div>
 */
-console.log("loading graph.js");
+console.log("loaded graphs.js");
 
 var numberOfDaysRegistered = 0,
 	datasetOvertimeDec = [],
@@ -17,12 +17,26 @@ var numberOfDaysRegistered = 0,
 	sumStarttime = 0,
 	sumStoptime = 0;
 
+/*
+// SYNC loading
 google.charts.load('current', {
 	packages: ['corechart']
 });
 google.charts.load('current', {
 	packages: ['gauge']
-});
+});*/
+
+// ASYNC loading
+function initGoogleLibraries(googleLib) {
+	if (filesadded.indexOf("["+googleLib+"]")==-1){
+		google.charts.load('current', {
+			packages: ['corechart','gauge']
+		}).then(function () {
+			filesadded+="["+googleLib+"]";
+			console.log("loaded google Lib");
+		});
+	}
+}
 
 document.getElementById("start_reporting_selection").addEventListener("load", initDateSelector());
 

@@ -1,5 +1,5 @@
 // source: https://mdbootstrap.com/docs/jquery/tables/editable/
-console.log("loading editable_table.js");
+console.log("loaded editable_table.js");
 
 /*
 // Redraw table on opening modal

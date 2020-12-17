@@ -28,7 +28,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20201215.1</span> <br>
+					Version: <span id="currentappversion">20201216.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -350,18 +350,13 @@
 				</div>
 				<div class="col-lg-10 py-1 px-4">
 					<p>
-						Added the reporting feature in the lower right corner. Go check it out!
-					</p>
-					<p>
-						Reporting now based on time range.<br>
-						Added average stoptime gauge to reporting.<br>
-						Added automatic landscape screen to reporting for mobile devices.
-					</p>
-					<p>
-						Added option for break time based on interval instead of only duration. This can now be toggled in the settings.
-					</p>
-					<p>
 						Changed offset on timings sometimes missing a minute to a more consistent way of calculating.
+					</p>
+					<p>
+						Added a "Getting started" wizard.
+					</p>
+					<p>
+						Made additional javascript files load asynchronously for a compacter and more performant page / app.
 					</p>
 				</div>
 			</div>
@@ -569,9 +564,10 @@
 	moment().format();
 </script>
 <script type="text/javascript" src="js/javascript.js"></script>
+
 <!--
-<script type="text/javascript" src="js/editable_table.js"></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript"  src="js/graphs.js"></script>
+<script type="text/javascript" src="js/editable_table.js" async defer></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" async defer></script>
+<script type="text/javascript" src="js/graphs.js" async defer></script>
 -->
 </html>
