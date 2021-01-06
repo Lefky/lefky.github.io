@@ -7,14 +7,29 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-160200625-1"></script>
+	<script src="https://www.googletagmanager.com/gtag/js?id=UA-160200625-1" async></script>
 	<script>
 	  window.dataLayer = window.dataLayer || [];
 	  function gtag(){dataLayer.push(arguments);}
 	  gtag('js', new Date());
-
 	  gtag('config', 'UA-160200625-1');
 	</script>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" defer>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" defer></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" defer></script>
+	<!-- Font Awsome -->
+	<link href="css/all.min.css" rel="stylesheet" defer>
+	<!-- Custom Styles -->
+	<link href="css/bootstrap_specific_style.css" rel="stylesheet" defer>
+	<!-- Moment.js -->
+	<script type="text/javascript" src="js/moment.min.js" defer></script><!-- https://momentjs.com/docs -->
+	<script type="text/javascript" src="js/javascript.js" defer></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" defer></script>
+	<script type="text/javascript" src="js/graphs.js" defer></script>
+	<script type="text/javascript" src="js/editable_table.js" defer></script>
+	<script type="text/javascript" src="js/introduction.js" async></script>
 </head>
 <body onload="reset();">
 <!-- Modal HTML -->
@@ -28,7 +43,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20201216.1</span> <br>
+					Version: <span id="currentappversion">20210106.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -55,7 +70,8 @@
 					Hitting "ENTER" will add the time corresponding to the selected value next to 'Overtime' to the end date (and break time if defined).
 				</p>
 				<p>
-					<button id="btn_getting_started" class="btn btn-outline-secondary btn-sm" onclick="initializeIntroduction();">Run through the "Get started" wizard.</button>
+					<!--<button id="btn_getting_started" class="btn btn-outline-secondary btn-sm" onclick="initializeIntroduction();">Run through the "Get started" wizard.</button>-->
+					<button id="btn_getting_started" class="btn btn-outline-secondary btn-sm" onclick="startIntroduction();">Run through the "Get started" wizard.</button>
 				</p>
 				<p>
 					<h4>Import / export / delete</h4>
@@ -78,10 +94,6 @@
 					</div>
 					<br>
 					You can download the example as a '.json' file and import it into the application.
-					<!--<button class="btn btn-outline-secondary btn-sm" id="exportHistory" onclick="exportHistory()">Export History</button>
-					<button class="btn btn-outline-secondary btn-sm" id="importHistory">Import History</button>
-					<button class="btn btn-outline-secondary btn-sm" id="deleteHistory" onclick="deleteHistory()">Delete History</button>
-					<a class="btn btn-outline-secondary btn-sm" target="_blank" href="sample_data/working_history_sample_data.json">Download Sample Data</a>-->
 					<a id="exportHistoryLink" class="d-none">Export</a>
 					<input type="file" id="importFile" accept=".json" class="d-none" />
 				</p>
@@ -353,10 +365,13 @@
 						Changed offset on timings sometimes missing a minute to a more consistent way of calculating.
 					</p>
 					<p>
-						Added a "Getting started" wizard.
+						Added a "Getting started" wizard. <a href="#" onclick="startIntroduction();">Click here to start the wizard now.</a>
 					</p>
 					<p>
-						Made additional javascript files load asynchronously for a compacter and more performant page / app.
+						Javascript and CSS files now load asynchronously for a more performant page / app.
+					</p>
+					<p>
+						Added a more robust timer for the break which will also display the current elapsed time.
 					</p>
 				</div>
 			</div>
@@ -548,26 +563,4 @@
 	</div>
 </div>
 </body>
-
-<!-- Bootstrap -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<!-- Font Awsome -->
-<link href="css/all.min.css" rel="stylesheet">
-<!-- Custom Styles -->
-<link href="css/bootstrap_specific_style.css" rel="stylesheet">
-<!-- Moment.js -->
-<script type="text/javascript" src="js/moment.min.js"></script><!-- https://momentjs.com/docs -->
-<script>
-	moment().format();
-</script>
-<script type="text/javascript" src="js/javascript.js"></script>
-
-<!--
-<script type="text/javascript" src="js/editable_table.js" async defer></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" async defer></script>
-<script type="text/javascript" src="js/graphs.js" async defer></script>
--->
 </html>

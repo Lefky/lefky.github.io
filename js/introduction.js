@@ -1,6 +1,8 @@
 console.log("loaded introduction.js");
 
 function startIntroduction(){
+	document.getElementById('settingsmodalclosebutton').click();
+	
 	var new_element = document.createElement("div");
 	new_element.id = "overlay";
 	new_element.style.cssText = "z-index: 1090; background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; right: 0; bottom: 0; left: 0;";

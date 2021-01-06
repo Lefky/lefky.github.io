@@ -822,11 +822,110 @@ function add_break(time){
 }
 
 function reset_break(){
+	// Timer functionality
+	timer.stop(); // Stop break timer
+	timer.reset(); // Reset break timer
+	clearInterval(refreshIntervalId); // Clear break timer refresh interval
+	break_counter_started = false;
+	break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Start";
+	break_counter_btn.classList.remove("btn-warning");
+	break_counter_btn.classList.add("btn-primary");
+	break_counter_btn.classList.remove("pulsate");
+	
+	// Regular functionality
 	setEnd(getEnd() - getBreak(false));
 	setBreak(0);
 	calculateTotal();
 }
 
+class Timer {
+  constructor () {
+    this.isRunning = false;
+    this.startTime = 0;
+    this.overallTime = 0;
+  }
+  _getTimeElapsedSinceLastStart () {
+    if (!this.startTime) {
+      return 0;
+    }
+ 
+    return Date.now() - this.startTime;
+  }
+  start () {
+    if (this.isRunning) {
+      return console.error('Timer is already running');
+    }
+    this.isRunning = true;
+    this.startTime = Date.now();
+  }
+  stop () {
+    if (!this.isRunning) {
+      return console.error('Timer is already stopped');
+    }
+    this.isRunning = false;
+    this.overallTime = this.overallTime + this._getTimeElapsedSinceLastStart();
+  }
+  reset () {
+    this.overallTime = 0;
+    if (this.isRunning) {
+      this.startTime = Date.now();
+      return;
+    }
+    this.startTime = 0;
+  }
+  getTime () {
+    if (!this.startTime) {
+      return 0;
+    }
+    if (this.isRunning) {
+      return this.overallTime + this._getTimeElapsedSinceLastStart();
+    }
+    return this.overallTime;
+  }
+}
+
+const timer = new Timer(); // Initialize object to 
+var break_counter_started = false, refreshIntervalId = 0;
+function break_counter(){
+	var break_counter_btn = document.getElementById("break_counter_btn");	
+	
+	// Delete old localstorage entries for previous version timer
+	localStorage.removeItem("break_counter_start_time");
+	localStorage.removeItem("break_counter_started");
+	
+	if (break_counter_started) {		
+		break_counter_started = false;
+		timer.stop();
+		clearInterval(refreshIntervalId);
+		
+		const timeInSeconds = Math.round(timer.getTime() / 1000);
+		const timeInDecimalHours = moment.duration(moment.utc(timeInSeconds*1000).format('HH:mm:ss')).asHours();
+		setBreak(timeInDecimalHours);
+		add_time(getHourSchedule());
+		
+		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Start";
+		break_counter_btn.classList.remove("btn-warning");
+		break_counter_btn.classList.add("btn-primary");
+		break_counter_btn.classList.remove("pulsate");
+	} else {
+		break_counter_started = true;
+		timer.start();
+		
+		refreshIntervalId = setInterval(() => {
+			const timeInSeconds = Math.round(timer.getTime() / 1000);
+			const timeInDecimalHours = moment.duration(moment.utc(timeInSeconds*1000).format('HH:mm:ss')).asHours();
+			setBreak(timeInDecimalHours);
+			add_time(getHourSchedule());
+		}, 1000)
+		
+		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Stop";
+		break_counter_btn.classList.remove("btn-primary");
+		break_counter_btn.classList.add("btn-warning");
+		break_counter_btn.classList.add("pulsate");
+	}
+	
+}
+/*
 function break_counter(){
 	var break_counter_started = localStorage.getItem("break_counter_started"),
 		break_counter_btn = document.getElementById("break_counter_btn");	
@@ -837,14 +936,6 @@ function break_counter(){
 			interval = moment().hour(0).minute(break_time),
 			//decimal_time = timeStringToFloat(interval.format("HH:mm"));
 			decimal_time = moment.duration(interval.format("HH:mm")).asHours();
-			/*
-			console.log("start: " + break_counter_start_time + 
-						", stop:" + break_counter_stop_time + 
-						", break time:" + break_time + 
-						", interval:" +interval +
-						", decimal:" + decimal_time);
-			console.log(moment.duration(interval.format("HH:mm")).asHours());
-			*/
 			
 		localStorage.setItem("break_counter_started", "false");
 		setBreak(decimal_time);
@@ -865,6 +956,7 @@ function break_counter(){
 	}
 	
 }
+*/
 
 window.onbeforeunload = function(e){
 	// Set 'dont save today' and 'automatically set end time' parameters in local storage
@@ -941,6 +1033,8 @@ window.onbeforeunload = function(e){
 };
 
 // Listeners and initializers
+moment().format(); // Initialize momentjs
+
 $(document).ready(function(){
 	$('[data-toggle="tooltip"]').tooltip();
 	
@@ -979,6 +1073,10 @@ $("input").focusout(function(){
 	checkInputValues()
 });
 
+/*
+// ASYNC loading of JS files
+// When using this comment out the related script file record in index.html
+
 function loadjscssfile(filename, filetype, callback){
 	//source: http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml    
 	if (filesadded.indexOf("["+filename+"]")==-1){
@@ -987,6 +1085,7 @@ function loadjscssfile(filename, filetype, callback){
 			var fileref=document.createElement('script');
 			fileref.setAttribute("type","text/javascript");
 			fileref.setAttribute("src", filename);
+			fileref.setAttribute("async", false);
 			
 			// Bind the event to the callback function.
 			// There are several events for cross browser compatibility.
@@ -1013,73 +1112,49 @@ function loadjscssfile(filename, filetype, callback){
 	}
 }
 
+// Change the function in the index page for button id="btn_getting_started" and it's script loading record in index.html when enabling this one
 function initializeIntroduction(){
-	document.getElementById('settingsmodalclosebutton').click();
 	loadjscssfile("js/introduction.js", "js", function(){ startIntroduction(); });
-	/*
-	var filename = "js/introduction.js";
-	if (filesadded.indexOf("["+filename+"]")==-1){
-		loadjscssfile(filename, "js");
-		
-		setTimeout(function(){
-			// Wait till the JS is loaded
-			startIntroduction();
-		}, 500);
-	} else {
-		startIntroduction();
-	}
-	*/
 }
 
-$('#modalreporting').on('shown.bs.modal', function() {
+// Disable this function in graphs.js and it's script loading record in index.html when enabling this one
+$('#modalreporting').on('shown.bs.modal', function() {	
     loadjscssfile("https://www.gstatic.com/charts/loader.js", "js", function () {
-      loadjscssfile("js/graphs.js", "js", function() {
-        console.log("loaded graphs2");
+		console.log("loaded https://www.gstatic.com/charts/loader.js");
+		loadjscssfile("js/graphs.js", "js", function() {
 		
-		initGoogleLibraries("googleCharts").then(function () {
-			initGraphs();
-			drawGraphs(); 
-			mobileRotateScreen(true);
+			initGoogleLibraries("googleCharts").then(function () {
+				initGraphs();
+				drawGraphs(); 
+				mobileRotateScreen(true);
+			});
 		});
-      });
     });
-	/*
-	var filename = "js/graphs.js";
-	if (filesadded.indexOf("["+filename+"]")==-1){
-		
-		setTimeout(function(){
-			// Wait till the JS is loaded
 
-			// Redraw charts on opening modal
-			initGraphs();
-			drawGraphs();
-			
-			// Rotate screen for mobile users so it displays the entire width
-			// https://usefulangle.com/post/105/javascript-change-screen-orientation
-			mobileRotateScreen(true);
-		}, 500);
-		
-	} else {
-		initGraphs();
-		drawGraphs();
-		mobileRotateScreen(true);
-	}
-	*/
+//	var filename = "js/graphs.js";
+//	if (filesadded.indexOf("["+filename+"]")==-1){
+//		
+//		setTimeout(function(){
+//			// Wait till the JS is loaded
+//
+//			// Redraw charts on opening modal
+//			initGraphs();
+//			drawGraphs();
+//			
+//			// Rotate screen for mobile users so it displays the entire width
+//			// https://usefulangle.com/post/105/javascript-change-screen-orientation
+//			mobileRotateScreen(true);
+//		}, 500);
+//		
+//	} else {
+//		initGraphs();
+//		drawGraphs();
+//		mobileRotateScreen(true);
+//	}
 });
 
-$('#modaledithistory').on('shown.bs.modal', function() {
+// Disable this function in editable_table.js and it's script loading record in index.html when enabling this one
+$('#modaledithistory').on('shown.bs.modal', function() {	
 	loadjscssfile("js/editable_table.js", "js", function(){ setHistory(true); });
-	/*
-	var filename = "js/editable_table.js";
-	if (filesadded.indexOf("["+filename+"]")==-1){
-		loadjscssfile(filename, "js");
-		
-		setTimeout(function(){
-			// Wait till the JS is loaded
-			setHistory(true);
-		}, 500);
-	} else {
-		setHistory(true);
-	}
-	*/
 });
+*/

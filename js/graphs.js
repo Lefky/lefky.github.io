@@ -17,25 +17,25 @@ var numberOfDaysRegistered = 0,
 	sumStarttime = 0,
 	sumStoptime = 0;
 
-/*
+
 // SYNC loading
-google.charts.load('current', {
-	packages: ['corechart']
-});
-google.charts.load('current', {
-	packages: ['gauge']
-});*/
+google.charts.load('current', {packages: ['corechart','gauge']});
 
 // ASYNC loading
 function initGoogleLibraries(googleLib) {
-	if (filesadded.indexOf("["+googleLib+"]")==-1){
-		google.charts.load('current', {
-			packages: ['corechart','gauge']
-		}).then(function () {
-			filesadded+="["+googleLib+"]";
-			console.log("loaded google Lib");
-		});
-	}
+	return new Promise(function(resolve, reject) {
+		if (filesadded.indexOf("["+googleLib+"]")==-1) {
+			google.charts.load('current', {
+				packages: ['corechart','gauge']
+			}).then(function () {
+				filesadded+="["+googleLib+"]";
+				console.log("loaded google Lib");
+				resolve("loaded google Lib");
+			});
+		} else {
+			resolve("already loaded google Lib");
+		}
+	});
 }
 
 document.getElementById("start_reporting_selection").addEventListener("load", initDateSelector());
@@ -77,7 +77,7 @@ function initDateSelector() {
 	document.getElementById('end_reporting_selection').value = moment().endOf('year').format('YYYY-MM-DD');
 }
 
-/*
+
 $('#modalreporting').on('shown.bs.modal', function() {
 	// Redraw charts on opening modal
 	initGraphs();
@@ -87,7 +87,7 @@ $('#modalreporting').on('shown.bs.modal', function() {
 	// https://usefulangle.com/post/105/javascript-change-screen-orientation
 	mobileRotateScreen(true);
 });
-*/
+
 
 $('#modalreporting').on('hidden.bs.modal', function() {
 	// Rotate screen for mobile users so it displays normal again

@@ -1,12 +1,12 @@
 // source: https://mdbootstrap.com/docs/jquery/tables/editable/
 console.log("loaded editable_table.js");
 
-/*
+
 // Redraw table on opening modal
 $('#modaledithistory').on('shown.bs.modal', function() {
 	setHistory(true);
 });
-*/
+
 
 const $tableID = $('#edit_history_table');
 
