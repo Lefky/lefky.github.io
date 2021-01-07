@@ -8,6 +8,7 @@ console.log("loaded graphs.js");
 var numberOfDaysRegistered = 0,
 	datasetOvertimeDec = [],
 	datasetStartDec = [],
+	datasetStopDec = [],
 	datasetTotalDec = [],
 	datasetTotalNoBreakDec = [],
 	datasetBreakDec = [],
@@ -67,6 +68,7 @@ function drawGraphs() {
 	drawPiegraph("Hourschedules");
 	drawLinegraph("OvertimeDec");
 	drawLinegraph("StartDec");
+	drawLinegraph("StopDec");
 	drawBargraph("TotalDec");
 	drawBargraph("TotalNoBreakDec");
 	drawLinegraph("BreakDec");
@@ -77,7 +79,6 @@ function initDateSelector() {
 	document.getElementById('end_reporting_selection').value = moment().endOf('year').format('YYYY-MM-DD');
 }
 
-
 $('#modalreporting').on('shown.bs.modal', function() {
 	// Redraw charts on opening modal
 	initGraphs();
@@ -87,7 +88,6 @@ $('#modalreporting').on('shown.bs.modal', function() {
 	// https://usefulangle.com/post/105/javascript-change-screen-orientation
 	mobileRotateScreen(true);
 });
-
 
 $('#modalreporting').on('hidden.bs.modal', function() {
 	// Rotate screen for mobile users so it displays normal again
@@ -136,6 +136,12 @@ function drawLinegraph(graphtype) {
 			data.addRows(datasetStartDec);
 			linecolor = ['#007bff'];
 			break;
+		case "StopDec":
+			data.addColumn('number', 'Stoptime');
+			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addRows(datasetStopDec);
+			linecolor = ['#ff9900'];
+			break;
 		case "BreakDec":
 			data.addColumn('number', 'Break');
 			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
@@ -178,7 +184,8 @@ function drawLinegraph(graphtype) {
 			0: {},
 			1: {
 				lineWidth: 1,
-				lineDashStyle: [1, 1]
+				lineDashStyle: [1, 1],
+				areaOpacity : 0
 			}
 		},
 		trendlines: {
@@ -196,7 +203,7 @@ function drawLinegraph(graphtype) {
 		height: 500
 	};
 
-	var chart = new google.visualization.LineChart(document.getElementById(graphtype + '_div'));
+	var chart = new google.visualization.AreaChart(document.getElementById(graphtype + '_div'));
 	chart.draw(data, options);
 }
 
@@ -440,10 +447,14 @@ function formatJSONdata() {
 					variable = parseFloat(timeinfo['StartDec']);
 					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Starttime: </span>" + floatToTimeString(variable) + "</div>";
 					sumStarttime = sumStarttime + variable;
-					if (timeinfo.hasOwnProperty('TotalDec')) {
-						sumStoptime = sumStoptime + (variable + parseFloat(timeinfo['TotalDec']));
-					}
 					datasetStartDec.push([dateKey, variable, tooltip]);
+
+					if (timeinfo.hasOwnProperty('TotalDec')) {
+						variable = variable + parseFloat(timeinfo['TotalDec']);
+						tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Stoptime: </span>" + floatToTimeString(variable) + "</div>";
+						sumStoptime = sumStoptime + variable;
+						datasetStopDec.push([dateKey, variable, tooltip]);
+					}
 				}
 				
 				if (timeinfo.hasOwnProperty('HourSchedule')) {
@@ -486,6 +497,7 @@ function formatJSONdata() {
 			}
 		}
 	}
+	//console.log(datasetStopDec);
 }
 
 function updateArray(array, category) {

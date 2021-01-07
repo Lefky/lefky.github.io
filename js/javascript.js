@@ -690,7 +690,7 @@ function reset(){
 	setParameters();
 	cleanLocalStorage();
 	if (localStorage.length < 10) {
-		initializeIntroduction();
+		startIntroduction();
 	}
 }
 
