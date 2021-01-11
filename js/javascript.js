@@ -903,7 +903,7 @@ function break_counter(){
 		setBreak(timeInDecimalHours);
 		add_time(getHourSchedule());
 		
-		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Start";
+		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Resume";
 		break_counter_btn.classList.remove("btn-warning");
 		break_counter_btn.classList.add("btn-primary");
 		break_counter_btn.classList.remove("pulsate");
@@ -916,9 +916,10 @@ function break_counter(){
 			const timeInDecimalHours = moment.duration(moment.utc(timeInSeconds*1000).format('HH:mm:ss')).asHours();
 			setBreak(timeInDecimalHours);
 			add_time(getHourSchedule());
+			console.log(timeInDecimalHours);
 		}, 1000)
 		
-		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Stop";
+		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch fa-spin'></i> Stop";
 		break_counter_btn.classList.remove("btn-primary");
 		break_counter_btn.classList.add("btn-warning");
 		break_counter_btn.classList.add("pulsate");
@@ -1033,10 +1034,9 @@ window.onbeforeunload = function(e){
 };
 
 // Listeners and initializers
-moment().format(); // Initialize momentjs
-
 $(document).ready(function(){
-	$('[data-toggle="tooltip"]').tooltip();
+	$('[data-toggle="tooltip"]').tooltip({trigger: "hover"}); // Initialize bootstrap tooltips
+	moment().format(); // Initialize momentjs
 	
 	if(window.location.href.indexOf('#modalabout') != -1) {
 		$('#modalabout').modal('show');
