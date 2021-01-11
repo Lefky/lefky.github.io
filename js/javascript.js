@@ -48,6 +48,7 @@ function getEnd(){
 	if (!time_dec) {
 		time_dec = now();
 	}
+	
 	return time_dec;
 }
 
@@ -1037,7 +1038,7 @@ window.onbeforeunload = function(e){
 $(document).ready(function(){
 	$('[data-toggle="tooltip"]').tooltip({trigger: "hover"}); // Initialize bootstrap tooltips
 	moment().format(); // Initialize momentjs
-	
+		
 	if(window.location.href.indexOf('#modalabout') != -1) {
 		$('#modalabout').modal('show');
 	}
@@ -1072,6 +1073,16 @@ $('#app_alert .close').click(function(){
 $("input").focusout(function(){
 	checkInputValues()
 });
+
+function run60sec() {
+    // runs every 60 sec
+	if (getEnd() <= now() && !startedLeaves){
+		startLeaves();
+	} else if (startedLeaves){
+		stopLeaves();
+	}
+}
+setInterval(run60sec, 2*60000); // (Every 2) * (60 * 1000 milliseconds = 60 seconds = 1 minute)
 
 /*
 // ASYNC loading of JS files

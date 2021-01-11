@@ -42,7 +42,7 @@ function initGoogleLibraries(googleLib) {
 document.getElementById("start_reporting_selection").addEventListener("load", initDateSelector());
 
 // In comment to not load on page load, only when modal is opened
-//google.charts.setOnLoadCallback(drawLinegraph);
+//google.charts.setOnLoadCallback(drawAreagraph);
 
 function initGraphs() {
 	numberOfDaysRegistered = 0,
@@ -66,12 +66,12 @@ function drawGraphs() {
 	drawGaugegraph("AvgStoptimeGauge");
 	drawPiegraph("OvertimeDays");
 	drawPiegraph("Hourschedules");
-	drawLinegraph("OvertimeDec");
-	drawLinegraph("StartDec");
-	drawLinegraph("StopDec");
+	drawAreagraph("OvertimeDec");
+	drawAreagraph("StartDec");
+	drawAreagraph("StopDec");
 	drawBargraph("TotalDec");
 	drawBargraph("TotalNoBreakDec");
-	drawLinegraph("BreakDec");
+	drawAreagraph("BreakDec");
 }
 
 function initDateSelector() {
@@ -118,7 +118,7 @@ function mobileRotateScreen(rotate) {
 	}
 }
 
-function drawLinegraph(graphtype) {
+function drawAreagraph(graphtype) {
 	var data = new google.visualization.DataTable(),
 		linecolor = "";
 	data.addColumn('date', 'X');
