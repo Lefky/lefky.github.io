@@ -1,20 +1,8 @@
-console.log("loading javascript.js");
-/*
-Date.prototype.subtractDays = function(days) {
-	var date = new Date(this.valueOf());
-	date.setDate(date.getDate() - days);
-	return date;
-}
+console.log("loaded javascript.js");
 
-Date.prototype.addDays = function(days) {
-	var date = new Date(this.valueOf());
-	date.setDate(date.getDate() + days);
-	return date;
-}
+var filesadded="";
 
-*/
 // Conversion functions
-
 /*
 function timeStringToFloat(time) {
 	var hoursMinutes = time.split(/[.:]/);
@@ -37,15 +25,6 @@ function floatToTimeString(timedec){
 	return moment().startOf('day').add(timedec, 'hours').format('HH:mm')
 	*/
 }
-
-/*
-function roundTimeOffset(time){
-	if (time <= (0.02) && time >= (-0.02)) {
-		time = 0;
-	}
-	return time;
-}
-*/
 
 // Setters & getters
 function getStart(){
@@ -200,12 +179,10 @@ function calculateTotal(){
 		overtime = worktime - getBreak(false) - getHourSchedule();
 
 	setTotal(worktime);
-	//setOvertime(roundTimeOffset(overtime));
 	setOvertime(overtime);
 	setTotalNoBreak(Math.abs(worktime - getBreak(false)));
 	
 	setTotalDec((parseFloat(worktime).toFixed(2)));
-	//setOvertimeDec(parseFloat(roundTimeOffset(overtime)).toFixed(2));
 	setOvertimeDec(parseFloat(overtime).toFixed(2));
 	setTotalNoBreakDec(getTotalNoBreakDec());
 	
@@ -239,7 +216,6 @@ function getOvertimeDec(){
 	var worktime = getWorktime(),
 		overtime = worktime - getBreak(false) - getHourSchedule();
 		
-	//return parseFloat(roundTimeOffset(overtime)).toFixed(2);
 	return parseFloat(overtime).toFixed(2);
 }
 
@@ -410,6 +386,11 @@ function calculateCleaningDay(){
 	return cleaningday;
 }
 
+function testDateFormat(date){
+	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
+	return userKeyRegExp.test(date);
+}
+
 function setHistory(refresh_edit_table){
 	const reverseDateRepresentation = date => {
 	  let parts = date.split('-');
@@ -423,12 +404,12 @@ function setHistory(refresh_edit_table){
 		overtimetotal = 0,
 		overtimeweekly = 0,
 		i = 0, 
-		key;	
-	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
+		key,
+		timeinfo;	
 	
 	for (; key = revkeys[i]; i++) {
-		if (userKeyRegExp.test(key)) {
-			var timeinfo = JSON.parse(localStorage.getItem(key));
+		if (testDateFormat(key)) {
+			timeinfo = JSON.parse(localStorage.getItem(key));
 			if (timeinfo.hasOwnProperty('OvertimeDec')){
 				if (timeinfo['OvertimeDec'].startsWith("-")){
 					entry_history = entry_history + "<tr style='color:red;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
@@ -444,11 +425,10 @@ function setHistory(refresh_edit_table){
 				}
 								
 				// calculate hour schedule if it's not defined yet
+				// TEMPORARY
 				if (timeinfo['HourSchedule'] == undefined) {
 					var hourschedule = parseFloat(timeinfo['TotalNoBreakDec'])-parseFloat(timeinfo['OvertimeDec']);
-					//hourschedule = Math.round((hourschedule + Number.EPSILON) * 100) / 100;
 					
-					//console.log("old: " + hourschedule);
 					if (hourschedule > 0 && hourschedule < 3.1) {
 						hourschedule = 3.04;
 					} else if (hourschedule > 3.1 && hourschedule < 3.5) {
@@ -470,7 +450,6 @@ function setHistory(refresh_edit_table){
 					} else if (hourschedule > 7.8 && hourschedule < 10) {
 						hourschedule = 8;
 					}
-					//console.log(hourschedule);
 					
 					var new_timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['OvertimeDec'] + '", "TotalDec": "' + timeinfo['TotalDec'] + '", "StartDec": "' + timeinfo['StartDec'] + '", "HourSchedule": "' + hourschedule + '"}';
 					localStorage.setItem(key, new_timeinfo);
@@ -488,9 +467,11 @@ function setHistory(refresh_edit_table){
 		entry_history = entry_history + "</table>";
 	}
 	document.getElementById("history").innerHTML = entry_history;	
+	
 	if(refresh_edit_table){
 		document.getElementById("edit_history_table_body").innerHTML = entry_edit_history;
 	}
+	
 	setOvertimeTotal(overtimetotal);
 	setOvertimeWeekly(overtimeweekly);
 }
@@ -556,17 +537,15 @@ function breaktimeTimeselection(){
 }
 
 function checkInputValues(){
-	var alertmessage = "";
-	
-	//console.log(getBreak(true));
+	var app_alert_message = "";
 	
 	if (getBreak(true) < 0 && getBreakTimeStart() > 0) {
 		document.getElementById("break_time_end").value = document.getElementById("break_time_start").value;
-		alertmessage = "<b>Holy guacamole!</b> You can't end your break before you start it, can you superman?<br> Fill in when your break ended first.";
+		app_alert_message = "<b>Holy guacamole!</b> You can't end your break before you start it, can you superman?<br> Fill in when your break ended first.";
 	}
 
-	if (alertmessage != "") {
-		document.getElementById("alertmessage").innerHTML = alertmessage;
+	if (app_alert_message != "") {
+		document.getElementById("app_alert_message").innerHTML = app_alert_message;
 		$("#app_alert").show();
 		setTimeout(function() {$("#app_alert").fadeOut();}, 5000);
 	}
@@ -579,12 +558,11 @@ function cleanLocalStorage(){
 		today = moment(),
 		deleteoption = localStorage.getItem("historydeleteoption");
 		//lasthistoryclean = moment(localStorage.getItem("lasthistoryclean"));
-	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 	
 	if ( deleteoption == "days" ) {
 		const expiredate = today.subtract(getHistoryRetain(), "days")
 		for(; key = keys[i]; i++) {
-			if ( moment(key, "DD-MM-YYYY") < expiredate && userKeyRegExp.test(key)) { // days to keep data excluding today
+			if ( moment(key, "DD-MM-YYYY") < expiredate && testDateFormat(key)) { // days to keep data excluding today
 				delete localStorage[key];
 			}
 		}	
@@ -603,10 +581,9 @@ function cleanLocalStorage(){
 }
 
 function deleteHistory(){
-	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 	if ( confirm("Are you sure you wish to delete your history?\nIf you choose not to then your data will be saved untill the next cleaning time.") ) {
 		for(key in localStorage) {
-			if ( userKeyRegExp.test(key) ) {
+			if ( testDateFormat(key) ) {
 				delete localStorage[key];
 			}
 		}
@@ -701,7 +678,6 @@ function todayDate(){
 }
 
 function reset(){
-	notificationClosed("onload");
 	setEnd(0);
 	setTotal(0);
 	setTotalDec(0);
@@ -710,8 +686,12 @@ function reset(){
 	setHistory(true);
 	
 	// 'lazy' loading
+	notificationClosed("onload");
 	setParameters();
 	cleanLocalStorage();
+	if (localStorage.length < 10) {
+		startIntroduction();
+	}
 }
 
 function setParameters(){
@@ -842,11 +822,110 @@ function add_break(time){
 }
 
 function reset_break(){
+	// Timer functionality
+	timer.stop(); // Stop break timer
+	timer.reset(); // Reset break timer
+	clearInterval(refreshIntervalId); // Clear break timer refresh interval
+	break_counter_started = false;
+	break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Start";
+	break_counter_btn.classList.remove("btn-warning");
+	break_counter_btn.classList.add("btn-primary");
+	break_counter_btn.classList.remove("pulsate");
+	
+	// Regular functionality
 	setEnd(getEnd() - getBreak(false));
 	setBreak(0);
 	calculateTotal();
 }
 
+class Timer {
+  constructor () {
+    this.isRunning = false;
+    this.startTime = 0;
+    this.overallTime = 0;
+  }
+  _getTimeElapsedSinceLastStart () {
+    if (!this.startTime) {
+      return 0;
+    }
+ 
+    return Date.now() - this.startTime;
+  }
+  start () {
+    if (this.isRunning) {
+      return console.error('Timer is already running');
+    }
+    this.isRunning = true;
+    this.startTime = Date.now();
+  }
+  stop () {
+    if (!this.isRunning) {
+      return console.error('Timer is already stopped');
+    }
+    this.isRunning = false;
+    this.overallTime = this.overallTime + this._getTimeElapsedSinceLastStart();
+  }
+  reset () {
+    this.overallTime = 0;
+    if (this.isRunning) {
+      this.startTime = Date.now();
+      return;
+    }
+    this.startTime = 0;
+  }
+  getTime () {
+    if (!this.startTime) {
+      return 0;
+    }
+    if (this.isRunning) {
+      return this.overallTime + this._getTimeElapsedSinceLastStart();
+    }
+    return this.overallTime;
+  }
+}
+
+const timer = new Timer(); // Initialize object to 
+var break_counter_started = false, refreshIntervalId = 0;
+function break_counter(){
+	var break_counter_btn = document.getElementById("break_counter_btn");	
+	
+	// Delete old localstorage entries for previous version timer
+	localStorage.removeItem("break_counter_start_time");
+	localStorage.removeItem("break_counter_started");
+	
+	if (break_counter_started) {		
+		break_counter_started = false;
+		timer.stop();
+		clearInterval(refreshIntervalId);
+		
+		const timeInSeconds = Math.round(timer.getTime() / 1000);
+		const timeInDecimalHours = moment.duration(moment.utc(timeInSeconds*1000).format('HH:mm:ss')).asHours();
+		setBreak(timeInDecimalHours);
+		add_time(getHourSchedule());
+		
+		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Start";
+		break_counter_btn.classList.remove("btn-warning");
+		break_counter_btn.classList.add("btn-primary");
+		break_counter_btn.classList.remove("pulsate");
+	} else {
+		break_counter_started = true;
+		timer.start();
+		
+		refreshIntervalId = setInterval(() => {
+			const timeInSeconds = Math.round(timer.getTime() / 1000);
+			const timeInDecimalHours = moment.duration(moment.utc(timeInSeconds*1000).format('HH:mm:ss')).asHours();
+			setBreak(timeInDecimalHours);
+			add_time(getHourSchedule());
+		}, 1000)
+		
+		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Stop";
+		break_counter_btn.classList.remove("btn-primary");
+		break_counter_btn.classList.add("btn-warning");
+		break_counter_btn.classList.add("pulsate");
+	}
+	
+}
+/*
 function break_counter(){
 	var break_counter_started = localStorage.getItem("break_counter_started"),
 		break_counter_btn = document.getElementById("break_counter_btn");	
@@ -857,14 +936,6 @@ function break_counter(){
 			interval = moment().hour(0).minute(break_time),
 			//decimal_time = timeStringToFloat(interval.format("HH:mm"));
 			decimal_time = moment.duration(interval.format("HH:mm")).asHours();
-			/*
-			console.log("start: " + break_counter_start_time + 
-						", stop:" + break_counter_stop_time + 
-						", break time:" + break_time + 
-						", interval:" +interval +
-						", decimal:" + decimal_time);
-			console.log(moment.duration(interval.format("HH:mm")).asHours());
-			*/
 			
 		localStorage.setItem("break_counter_started", "false");
 		setBreak(decimal_time);
@@ -885,6 +956,7 @@ function break_counter(){
 	}
 	
 }
+*/
 
 window.onbeforeunload = function(e){
 	// Set 'dont save today' and 'automatically set end time' parameters in local storage
@@ -961,6 +1033,8 @@ window.onbeforeunload = function(e){
 };
 
 // Listeners and initializers
+moment().format(); // Initialize momentjs
+
 $(document).ready(function(){
 	$('[data-toggle="tooltip"]').tooltip();
 	
@@ -985,12 +1059,102 @@ $(document).on('keydown', function (e){
 	if (e.keyCode === 13) { //ENTER key code
 		add_time(getHourSchedule());
 	}
+	
+	if (e.keyCode === 27) { //ENTER key code
+		$('.modal').modal('hide');
+	}
 });
 
 $('#app_alert .close').click(function(){
-   $(this).parent().fadeOut();
+	$(this).parent().fadeOut();
 });
 
 $("input").focusout(function(){
 	checkInputValues()
 });
+
+/*
+// ASYNC loading of JS files
+// When using this comment out the related script file record in index.html
+
+function loadjscssfile(filename, filetype, callback){
+	//source: http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml    
+	if (filesadded.indexOf("["+filename+"]")==-1){
+		if (filetype=="js"){ // If filename is a external JavaScript file
+			// Adding the script tag to the head
+			var fileref=document.createElement('script');
+			fileref.setAttribute("type","text/javascript");
+			fileref.setAttribute("src", filename);
+			fileref.setAttribute("async", false);
+			
+			// Bind the event to the callback function.
+			// There are several events for cross browser compatibility.
+			fileref.onreadystatechange = callback;
+			fileref.onload = callback;	
+		} 
+		else if (filetype=="css"){ // If filename is an external CSS file
+			var fileref=document.createElement("link");
+			fileref.setAttribute("rel", "stylesheet");
+			fileref.setAttribute("type", "text/css");
+			fileref.setAttribute("href", filename);
+		}
+		
+		if (typeof fileref!="undefined"){
+			// Fire the loading
+			document.getElementsByTagName("head")[0].appendChild(fileref);
+			console.log("added to html: " + filename);
+		} 
+		
+		filesadded+="["+filename+"]";
+	} else {
+		callback();
+		console.log("already loaded: " + filename);
+	}
+}
+
+// Change the function in the index page for button id="btn_getting_started" and it's script loading record in index.html when enabling this one
+function initializeIntroduction(){
+	loadjscssfile("js/introduction.js", "js", function(){ startIntroduction(); });
+}
+
+// Disable this function in graphs.js and it's script loading record in index.html when enabling this one
+$('#modalreporting').on('shown.bs.modal', function() {	
+    loadjscssfile("https://www.gstatic.com/charts/loader.js", "js", function () {
+		console.log("loaded https://www.gstatic.com/charts/loader.js");
+		loadjscssfile("js/graphs.js", "js", function() {
+		
+			initGoogleLibraries("googleCharts").then(function () {
+				initGraphs();
+				drawGraphs(); 
+				mobileRotateScreen(true);
+			});
+		});
+    });
+
+//	var filename = "js/graphs.js";
+//	if (filesadded.indexOf("["+filename+"]")==-1){
+//		
+//		setTimeout(function(){
+//			// Wait till the JS is loaded
+//
+//			// Redraw charts on opening modal
+//			initGraphs();
+//			drawGraphs();
+//			
+//			// Rotate screen for mobile users so it displays the entire width
+//			// https://usefulangle.com/post/105/javascript-change-screen-orientation
+//			mobileRotateScreen(true);
+//		}, 500);
+//		
+//	} else {
+//		initGraphs();
+//		drawGraphs();
+//		mobileRotateScreen(true);
+//	}
+});
+
+// Disable this function in editable_table.js and it's script loading record in index.html when enabling this one
+$('#modaledithistory').on('shown.bs.modal', function() {	
+	loadjscssfile("js/editable_table.js", "js", function(){ setHistory(true); });
+});
+*/

@@ -3,11 +3,12 @@ In HTML
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <div id="div_where_graph_comes"></div>
 */
-console.log("loading graph.js");
+console.log("loaded graphs.js");
 
 var numberOfDaysRegistered = 0,
 	datasetOvertimeDec = [],
 	datasetStartDec = [],
+	datasetStopDec = [],
 	datasetTotalDec = [],
 	datasetTotalNoBreakDec = [],
 	datasetBreakDec = [],
@@ -17,12 +18,26 @@ var numberOfDaysRegistered = 0,
 	sumStarttime = 0,
 	sumStoptime = 0;
 
-google.charts.load('current', {
-	packages: ['corechart']
-});
-google.charts.load('current', {
-	packages: ['gauge']
-});
+
+// SYNC loading
+google.charts.load('current', {packages: ['corechart','gauge']});
+
+// ASYNC loading
+function initGoogleLibraries(googleLib) {
+	return new Promise(function(resolve, reject) {
+		if (filesadded.indexOf("["+googleLib+"]")==-1) {
+			google.charts.load('current', {
+				packages: ['corechart','gauge']
+			}).then(function () {
+				filesadded+="["+googleLib+"]";
+				console.log("loaded google Lib");
+				resolve("loaded google Lib");
+			});
+		} else {
+			resolve("already loaded google Lib");
+		}
+	});
+}
 
 document.getElementById("start_reporting_selection").addEventListener("load", initDateSelector());
 
@@ -53,6 +68,7 @@ function drawGraphs() {
 	drawPiegraph("Hourschedules");
 	drawLinegraph("OvertimeDec");
 	drawLinegraph("StartDec");
+	drawLinegraph("StopDec");
 	drawBargraph("TotalDec");
 	drawBargraph("TotalNoBreakDec");
 	drawLinegraph("BreakDec");
@@ -63,60 +79,44 @@ function initDateSelector() {
 	document.getElementById('end_reporting_selection').value = moment().endOf('year').format('YYYY-MM-DD');
 }
 
-// Redraw chart on opening modal
 $('#modalreporting').on('shown.bs.modal', function() {
-	// Rotate screen for mobile users so it displays the entire width
-	// https://usefulangle.com/post/105/javascript-change-screen-orientation
-	/*
-	if( /Chrome|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-		document.getElementsByTagName("BODY")[0].style.webkitTransform = "rotate(90deg)"; 
-	}
-	*/
-	
+	// Redraw charts on opening modal
 	initGraphs();
 	drawGraphs();
 	
-	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-		/*if(document.querySelector("#modalreporting").requestFullscreen)
-			document.querySelector("#modalreporting").requestFullscreen();
-		else if(document.querySelector("#modalreporting").webkitRequestFullScreen)
-			document.querySelector("#modalreporting").webkitRequestFullScreen();
-		*/
-		document.documentElement.requestFullscreen();
-		document.documentElement.webkitRequestFullScreen();
-	
-		var current_mode = screen.orientation;
-		console.log(current_mode.type)
-		console.log(current_mode.angle)
-		
-		screen.orientation.lock("landscape");
-		/*
-		screen.orientation.lock("portrait")
-			.then(function() {
-				alert('Locked');
-			})
-			.catch(function(error) {
-				alert(error);
-			});
-		*/
-		current_mode = screen.orientation;
-		console.log(current_mode.type)
-		console.log(current_mode.angle)
-	}
+	// Rotate screen for mobile users so it displays the entire width
+	// https://usefulangle.com/post/105/javascript-change-screen-orientation
+	mobileRotateScreen(true);
 });
 
-// Rotate screen for mobile users so it displays normal again
 $('#modalreporting').on('hidden.bs.modal', function() {
-	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-		screen.orientation.unlock();
-		document.exitFullscreen();
-		document.webkitExitFullscreen();
-	}
+	// Rotate screen for mobile users so it displays normal again
+	mobileRotateScreen(false);
 });
 
 $(window).resize(function() {
 	drawGraphs();
 });
+
+function mobileRotateScreen(rotate) {
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+		if (rotate) {
+			document.documentElement.requestFullscreen();
+			document.documentElement.webkitRequestFullScreen();
+		
+			var current_mode = screen.orientation;
+			console.log(current_mode.type)
+			console.log(current_mode.angle)
+			
+			screen.orientation.lock("landscape");
+			current_mode = screen.orientation;
+		} else {
+			screen.orientation.unlock();
+			document.exitFullscreen();
+			document.webkitExitFullscreen();
+		}
+	}
+}
 
 function drawLinegraph(graphtype) {
 	var data = new google.visualization.DataTable(),
@@ -135,6 +135,12 @@ function drawLinegraph(graphtype) {
 			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
 			data.addRows(datasetStartDec);
 			linecolor = ['#007bff'];
+			break;
+		case "StopDec":
+			data.addColumn('number', 'Stoptime');
+			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addRows(datasetStopDec);
+			linecolor = ['#ff9900'];
 			break;
 		case "BreakDec":
 			data.addColumn('number', 'Break');
@@ -178,7 +184,8 @@ function drawLinegraph(graphtype) {
 			0: {},
 			1: {
 				lineWidth: 1,
-				lineDashStyle: [1, 1]
+				lineDashStyle: [1, 1],
+				areaOpacity : 0
 			}
 		},
 		trendlines: {
@@ -196,7 +203,7 @@ function drawLinegraph(graphtype) {
 		height: 500
 	};
 
-	var chart = new google.visualization.LineChart(document.getElementById(graphtype + '_div'));
+	var chart = new google.visualization.AreaChart(document.getElementById(graphtype + '_div'));
 	chart.draw(data, options);
 }
 
@@ -396,9 +403,8 @@ function formatJSONdata() {
 		key;
 		//datasetlength = document.getElementById('graphdatasetlength_value').value;
 
-	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
 	for (i = 0; key = sortedkeys[i]; i++) {
-		if (!userKeyRegExp.test(key)) {
+		if (!testDateFormat(key)) {
 			sortedkeys.splice(i, 1)
 			i--;
 		}
@@ -417,7 +423,7 @@ function formatJSONdata() {
 	
 	for (i = 0; key = sortedkeys[i]; i++) {		
 		
-		if (userKeyRegExp.test(key)/* && i >= start*/) {
+		if (testDateFormat(key)/* && i >= start*/) {
 			timeinfo = JSON.parse(localStorage.getItem(key));
 			dateKey=moment(key, "DD-MM-YYYY");
 			
@@ -441,10 +447,14 @@ function formatJSONdata() {
 					variable = parseFloat(timeinfo['StartDec']);
 					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Starttime: </span>" + floatToTimeString(variable) + "</div>";
 					sumStarttime = sumStarttime + variable;
-					if (timeinfo.hasOwnProperty('TotalDec')) {
-						sumStoptime = sumStoptime + (variable + parseFloat(timeinfo['TotalDec']));
-					}
 					datasetStartDec.push([dateKey, variable, tooltip]);
+
+					if (timeinfo.hasOwnProperty('TotalDec')) {
+						variable = variable + parseFloat(timeinfo['TotalDec']);
+						tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Stoptime: </span>" + floatToTimeString(variable) + "</div>";
+						sumStoptime = sumStoptime + variable;
+						datasetStopDec.push([dateKey, variable, tooltip]);
+					}
 				}
 				
 				if (timeinfo.hasOwnProperty('HourSchedule')) {
@@ -487,6 +497,7 @@ function formatJSONdata() {
 			}
 		}
 	}
+	//console.log(datasetStopDec);
 }
 
 function updateArray(array, category) {
