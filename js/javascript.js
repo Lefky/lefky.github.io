@@ -1036,7 +1036,8 @@ window.onbeforeunload = function(e){
 
 // Listeners and initializers
 $(document).ready(function(){
-	$('[data-toggle="tooltip"]').tooltip({trigger: "hover"}); // Initialize bootstrap tooltips
+	//$('[data-toggle="tooltip"]').tooltip({trigger: "hover"}); // Initialize bootstrap tooltips
+	$('[data-toggle="tooltip"]').tooltip(); 
 	moment().format(); // Initialize momentjs
 		
 	if(window.location.href.indexOf('#modalabout') != -1) {
@@ -1072,6 +1073,11 @@ $('#app_alert .close').click(function(){
 
 $("input").focusout(function(){
 	checkInputValues()
+});
+
+$(".btn").mouseup(function(){
+	// Fix buttons keeping focus after being clicked
+	this.blur();
 });
 
 function run60sec() {
