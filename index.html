@@ -66,7 +66,7 @@
 			<div class="modal-body">
 				<p>
 					Use Google Chrome or Firefox for optimal results. Let's be honest here... Edge or IE are crap.
-				</<p>
+				/<p>
 				<p>
 					Set this page as your browser startup page or pin the tab to automatically start counting when you open your browser.<br><br>
 					Hitting "ENTER" will add the time corresponding to the selected value next to 'Overtime' to the end date (and break time if defined).
@@ -396,7 +396,7 @@
 						<div id="divstarttime" class="input-group justify-content-end my-1">
 							<label class="col-form-label" for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time</label>
 							<div class="pr-2 pl-3">
-								<input name="start_time" id="start_time" type="time" class="form-control mx-1 input-fixedwidth100" onchange="calculateTotal();"/>
+								<input name="start_time" id="start_time" type="time" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 							</div>
 						</div>				
 						<div id="divbreaktime" class="input-group justify-content-end my-3">
@@ -404,7 +404,7 @@
 								Break with default
 							</label>
 							<div class="mb-1 mb-md-0 mx-3 mr-sm-0">
-								<select name="break_time_default" id="break_time_default" class="form-control mb-md-0 input-fixedwidth100" onchange="addBreakDefault();">
+								<select name="break_time_default" id="break_time_default" class="form-control mb-md-0 input-fixedwidth110" onchange="addBreakDefault();">
 									<option value="0">0 min</option>
 									<option value="0.25">15 min</option>
 									<option value="0.5">30 min</option>
@@ -414,25 +414,25 @@
 							</div>
 							<div id="breaktime_timeselection_option_timerange_div" class="form-inline pr-2 pl-3 d-none">
 								<label class="col-form-label" for="break_time_start">from</label>
-								<input name="break_time_start" id="break_time_start" type="time" value="00:00" class="form-control mx-1 input-fixedwidth100" onchange="calculateTotal();"/>
+								<input name="break_time_start" id="break_time_start" type="time" value="00:00" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 								<label class="col-form-label" for="break_time_end">to</label>
-								<input name="break_time_end" id="break_time_end" type="time" value="00:00" class="form-control mx-1 input-fixedwidth100" onchange="calculateTotal();"/>
+								<input name="break_time_end" id="break_time_end" type="time" value="00:00" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 							</div>
 							<div id="breaktime_timeselection_option_duration_div" class="form-inline pr-2 pl-3">
-								<input name="break_time" id="break_time" type="time" value="00:00" class="form-control mx-1 input-fixedwidth100" onchange="calculateTotal();"/>
+								<input name="break_time" id="break_time" type="time" value="00:00" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 							</div>
 						</div>
 						<div id="divendtime" class="input-group justify-content-end my-3">
 							<label class="col-form-label" for="end_time" data-toggle="tooltip" data-placement="left" title="You can have this automatically filled in by setting the parameter at the bottom of the box. You can manually enter a value.">Time to go home</label>
 							<div class="pr-2 pl-3">
-								<input name="end_time" id="end_time" type="time" class="form-control mx-1 input-fixedwidth100" onchange="calculateTotal();"/>
+								<input name="end_time" id="end_time" type="time" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 							</div>
 						</div>
 						<div id="divtotalnobreaktime" class="input-group justify-content-end my-3">
 							<label class="col-form-label" for="totalnobreak" data-toggle="tooltip" data-placement="left" title="These hours are your actual working hours.">Total hours (no break)</label>
 							<div class="pr-2 pl-3">
-								<input name="totalnobreak" id="totalnobreak" type="time" class="form-control mx-1 input-fixedwidth100" value="" disabled>
-								<input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control mx-1 mt-1 input-fixedwidth100" disabled>
+								<input name="totalnobreak" id="totalnobreak" type="time" class="form-control mx-1 input-fixedwidth110" value="" disabled>
+								<input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
 							</div>
 						</div>
 						<div id="divovertime" class="collapse input-group justify-content-end my-3">
@@ -440,7 +440,7 @@
 								Overtime @
 							</label>
 							<div class="mb-1 mb-md-0 mx-3 mr-sm-0">
-								<select name="hourschedule" id="hourschedule" class="form-control input-fixedwidth100" onchange="calculateTotal();" data-toggle="tooltip" data-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
+								<select name="hourschedule" id="hourschedule" class="form-control input-fixedwidth110" onchange="calculateTotal();" data-toggle="tooltip" data-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
 									<option value="0">0h		&nbsp;&emsp;&emsp;&emsp;(working overtime)</option>
 									<option value="3.04">3,04h 	&emsp;&emsp;(part-time 2/5, 38h week)</option>
 									<option value="3.2">3,2h 	&ensp;&emsp;&emsp;(part-time 2/5, 40h week)</option>
@@ -460,28 +460,28 @@
 								</select>
 							</div>
 							<div class="pr-2 pl-3">
-								<input name="overtime" id="overtime" type="text" class="form-control mx-1 input-fixedwidth100" disabled>
-								<input name="overtimedec" id="overtimedec" type="text" class="form-control mx-1 mt-1 input-fixedwidth100" disabled>
+								<input name="overtime" id="overtime" type="text" class="form-control mx-1 input-fixedwidth110" disabled>
+								<input name="overtimedec" id="overtimedec" type="text" class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
 							</div>
 						</div>
 						<div id="divtotalhours" class="collapse input-group justify-content-end my-3">
 							<label class="col-form-label" for="total" data-toggle="tooltip" data-placement="left" title="These hours are howmuch time you spent being at your workplace.">Total hours</label>
 							<div class="pr-2 pl-3">
-								<input name="total" id="total" type="time" class="form-control mx-1 input-fixedwidth100" disabled>
-								<input name="totaldec" id="totaldec" type="text" class="form-control mx-1 mt-1 input-fixedwidth100" disabled>
+								<input name="total" id="total" type="time" class="form-control mx-1 input-fixedwidth110" disabled>
+								<input name="totaldec" id="totaldec" type="text" class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
 							</div>
 						</div>
 						<div class="input-group justify-content-end my-3">
 							<div id="divovertimeweekly" class="collapse input-group justify-content-end mb-1">
 								<label class="col-form-label" for="overtimeweekly" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the current week. This value doesn't include today yet.">Weekly overtime</label>
 								<div class="pr-2 pl-3">
-									<input name="overtimeweekly" id="overtimeweekly" type="text" class="font-weight-bold form-control mx-1 input-fixedwidth100" disabled>
+									<input name="overtimeweekly" id="overtimeweekly" type="text" class="font-weight-bold form-control mx-1 input-fixedwidth110" disabled>
 								</div>
 							</div>
 							<div id="divovertimetotal" class="collapse input-group justify-content-end mt-1">
 								<label class="col-form-label" for="overtimetotal" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime</label>
 								<div class="pr-2 pl-3">
-									<input name="overtimetotal" id="overtimetotal" type="text" class="font-weight-bold form-control mx-1 input-fixedwidth100" disabled>
+									<input name="overtimetotal" id="overtimetotal" type="text" class="font-weight-bold form-control mx-1 input-fixedwidth110" disabled>
 								</div>
 							</div>
 						</div>
