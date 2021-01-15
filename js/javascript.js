@@ -1083,9 +1083,11 @@ $(".btn").mouseup(function(){
 function run60sec() {
     // runs every 60 sec
 	if (getEnd() <= now() && !startedLeaves){
+		//console.log("if " + getEnd() + " <= " + now() + " && !" + startedLeaves);
 		startLeaves();
-	} else if (startedLeaves){
+	} else if (getEnd() > now() && startedLeaves){
 		stopLeaves();
+		//console.log("else if " + startedLeaves);
 	}
 }
 setInterval(run60sec, 2*60000); // (Every 2) * (60 * 1000 milliseconds = 60 seconds = 1 minute)
