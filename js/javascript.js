@@ -48,6 +48,7 @@ function getEnd(){
 	if (!time_dec) {
 		time_dec = now();
 	}
+	
 	return time_dec;
 }
 
@@ -903,7 +904,7 @@ function break_counter(){
 		setBreak(timeInDecimalHours);
 		add_time(getHourSchedule());
 		
-		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Start";
+		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Resume";
 		break_counter_btn.classList.remove("btn-warning");
 		break_counter_btn.classList.add("btn-primary");
 		break_counter_btn.classList.remove("pulsate");
@@ -916,9 +917,10 @@ function break_counter(){
 			const timeInDecimalHours = moment.duration(moment.utc(timeInSeconds*1000).format('HH:mm:ss')).asHours();
 			setBreak(timeInDecimalHours);
 			add_time(getHourSchedule());
+			console.log(timeInDecimalHours);
 		}, 1000)
 		
-		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Stop";
+		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch fa-spin'></i> Stop";
 		break_counter_btn.classList.remove("btn-primary");
 		break_counter_btn.classList.add("btn-warning");
 		break_counter_btn.classList.add("pulsate");
@@ -1033,11 +1035,11 @@ window.onbeforeunload = function(e){
 };
 
 // Listeners and initializers
-moment().format(); // Initialize momentjs
-
 $(document).ready(function(){
-	$('[data-toggle="tooltip"]').tooltip();
-	
+	//$('[data-toggle="tooltip"]').tooltip({trigger: "hover"}); // Initialize bootstrap tooltips
+	$('[data-toggle="tooltip"]').tooltip(); 
+	moment().format(); // Initialize momentjs
+		
 	if(window.location.href.indexOf('#modalabout') != -1) {
 		$('#modalabout').modal('show');
 	}
@@ -1072,6 +1074,23 @@ $('#app_alert .close').click(function(){
 $("input").focusout(function(){
 	checkInputValues()
 });
+
+$(".btn").mouseup(function(){
+	// Fix buttons keeping focus after being clicked
+	this.blur();
+});
+
+function run60sec() {
+    // runs every 60 sec
+	if (getEnd() <= now() && !startedLeaves){
+		//console.log("if " + getEnd() + " <= " + now() + " && !" + startedLeaves);
+		startLeaves();
+	} else if (getEnd() > now() && startedLeaves){
+		stopLeaves();
+		//console.log("else if " + startedLeaves);
+	}
+}
+setInterval(run60sec, 2*60000); // (Every 2) * (60 * 1000 milliseconds = 60 seconds = 1 minute)
 
 /*
 // ASYNC loading of JS files

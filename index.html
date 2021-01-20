@@ -25,11 +25,13 @@
 	<link href="css/bootstrap_specific_style.css" rel="stylesheet" defer>
 	<!-- Moment.js -->
 	<script type="text/javascript" src="js/moment.min.js" defer></script><!-- https://momentjs.com/docs -->
+	<!-- Custom scripting -->
 	<script type="text/javascript" src="js/javascript.js" defer></script>
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" defer></script>
 	<script type="text/javascript" src="js/graphs.js" defer></script>
 	<script type="text/javascript" src="js/editable_table.js" defer></script>
 	<script type="text/javascript" src="js/introduction.js" async></script>
+	<script type="text/javascript" src="js/leaves.js" async></script>
 </head>
 <body onload="reset();">
 <!-- Modal HTML -->
@@ -43,7 +45,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20210107.1</span> <br>
+					Version: <span id="currentappversion">20210112.2</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -64,7 +66,7 @@
 			<div class="modal-body">
 				<p>
 					Use Google Chrome or Firefox for optimal results. Let's be honest here... Edge or IE are crap.
-				</<p>
+				/<p>
 				<p>
 					Set this page as your browser startup page or pin the tab to automatically start counting when you open your browser.<br><br>
 					Hitting "ENTER" will add the time corresponding to the selected value next to 'Overtime' to the end date (and break time if defined).
@@ -257,7 +259,7 @@
 					Some of these include the weather forecast, quick launch buttons for applications or folders, monitoring displays (for CPU, GPU, RAM, disk size, ...), music player info and controls, time clocks, ... And all of this in different flavours.<br>
 					And the most cool aspect about it: it moves! Skins get updated every X seconds making it possible to display animations and update your weather etc.<br>
 					<br>
-					<img class="rounded mx-auto d-block" width="640" src="https://media1.tenor.com/images/c2f0bcdc67b7417d7e74b53b8f8aefb9/tenor.gif?itemid=15613840"/><br>
+					<img class="rounded mx-auto d-block" width="640" loading="lazy" src="https://media1.tenor.com/images/c2f0bcdc67b7417d7e74b53b8f8aefb9/tenor.gif?itemid=15613840"/><br>
 					You can make your own, but you can also just download skins and even entire layouts. Check the <a href="https://www.rainmeter.net/discover/" target ="_blank">rainmeter discover page</a> to find links to libraries of great skins.<br>
 					<br>
 					<a class="btn btn-outline-success btn-sm" href="https://www.rainmeter.net/" target="_blank" role="button">Rainmeter website</a>
@@ -363,19 +365,13 @@
 				</div>
 				<div class="col-lg-10 py-1 px-4">
 					<p>
-						Changed offset on timings sometimes missing a minute to a more consistent way of calculating.
+						Made instructions and user experience for break counter more clear.
 					</p>
 					<p>
-						Added a "Getting started" wizard. <a href="#" onclick="startIntroduction();">Click here to start the wizard now.</a>
+						Added easter egg. If you work long enough you'll be able to spot it!
 					</p>
 					<p>
-						Javascript and CSS files now load asynchronously for a more performant page / app.
-					</p>
-					<p>
-						Added a more robust timer for the break which will also display the current elapsed time.
-					</p>
-					<p>
-						Added stop time to reporting.
+						Bugfix buttons keeping focus after being clicked.
 					</p>
 				</div>
 			</div>
@@ -400,7 +396,7 @@
 						<div id="divstarttime" class="input-group justify-content-end my-1">
 							<label class="col-form-label" for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time</label>
 							<div class="pr-2 pl-3">
-								<input name="start_time" id="start_time" type="time" class="form-control mx-1 input-fixedwidth100" onchange="calculateTotal();"/>
+								<input name="start_time" id="start_time" type="time" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 							</div>
 						</div>				
 						<div id="divbreaktime" class="input-group justify-content-end my-3">
@@ -408,7 +404,7 @@
 								Break with default
 							</label>
 							<div class="mb-1 mb-md-0 mx-3 mr-sm-0">
-								<select name="break_time_default" id="break_time_default" class="form-control mb-md-0 input-fixedwidth100" onchange="addBreakDefault();">
+								<select name="break_time_default" id="break_time_default" class="form-control mb-md-0 input-fixedwidth110" onchange="addBreakDefault();">
 									<option value="0">0 min</option>
 									<option value="0.25">15 min</option>
 									<option value="0.5">30 min</option>
@@ -418,25 +414,25 @@
 							</div>
 							<div id="breaktime_timeselection_option_timerange_div" class="form-inline pr-2 pl-3 d-none">
 								<label class="col-form-label" for="break_time_start">from</label>
-								<input name="break_time_start" id="break_time_start" type="time" value="00:00" class="form-control mx-1 input-fixedwidth100" onchange="calculateTotal();"/>
+								<input name="break_time_start" id="break_time_start" type="time" value="00:00" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 								<label class="col-form-label" for="break_time_end">to</label>
-								<input name="break_time_end" id="break_time_end" type="time" value="00:00" class="form-control mx-1 input-fixedwidth100" onchange="calculateTotal();"/>
+								<input name="break_time_end" id="break_time_end" type="time" value="00:00" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 							</div>
 							<div id="breaktime_timeselection_option_duration_div" class="form-inline pr-2 pl-3">
-								<input name="break_time" id="break_time" type="time" value="00:00" class="form-control mx-1 input-fixedwidth100" onchange="calculateTotal();"/>
+								<input name="break_time" id="break_time" type="time" value="00:00" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 							</div>
 						</div>
 						<div id="divendtime" class="input-group justify-content-end my-3">
 							<label class="col-form-label" for="end_time" data-toggle="tooltip" data-placement="left" title="You can have this automatically filled in by setting the parameter at the bottom of the box. You can manually enter a value.">Time to go home</label>
 							<div class="pr-2 pl-3">
-								<input name="end_time" id="end_time" type="time" class="form-control mx-1 input-fixedwidth100" onchange="calculateTotal();"/>
+								<input name="end_time" id="end_time" type="time" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 							</div>
 						</div>
 						<div id="divtotalnobreaktime" class="input-group justify-content-end my-3">
 							<label class="col-form-label" for="totalnobreak" data-toggle="tooltip" data-placement="left" title="These hours are your actual working hours.">Total hours (no break)</label>
 							<div class="pr-2 pl-3">
-								<input name="totalnobreak" id="totalnobreak" type="time" class="form-control mx-1 input-fixedwidth100" value="" disabled>
-								<input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control mx-1 mt-1 input-fixedwidth100" disabled>
+								<input name="totalnobreak" id="totalnobreak" type="time" class="form-control mx-1 input-fixedwidth110" value="" disabled>
+								<input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
 							</div>
 						</div>
 						<div id="divovertime" class="collapse input-group justify-content-end my-3">
@@ -444,7 +440,7 @@
 								Overtime @
 							</label>
 							<div class="mb-1 mb-md-0 mx-3 mr-sm-0">
-								<select name="hourschedule" id="hourschedule" class="form-control input-fixedwidth100" onchange="calculateTotal();" data-toggle="tooltip" data-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
+								<select name="hourschedule" id="hourschedule" class="form-control input-fixedwidth110" onchange="calculateTotal();" data-toggle="tooltip" data-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
 									<option value="0">0h		&nbsp;&emsp;&emsp;&emsp;(working overtime)</option>
 									<option value="3.04">3,04h 	&emsp;&emsp;(part-time 2/5, 38h week)</option>
 									<option value="3.2">3,2h 	&ensp;&emsp;&emsp;(part-time 2/5, 40h week)</option>
@@ -464,28 +460,28 @@
 								</select>
 							</div>
 							<div class="pr-2 pl-3">
-								<input name="overtime" id="overtime" type="text" class="form-control mx-1 input-fixedwidth100" disabled>
-								<input name="overtimedec" id="overtimedec" type="text" class="form-control mx-1 mt-1 input-fixedwidth100" disabled>
+								<input name="overtime" id="overtime" type="text" class="form-control mx-1 input-fixedwidth110" disabled>
+								<input name="overtimedec" id="overtimedec" type="text" class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
 							</div>
 						</div>
 						<div id="divtotalhours" class="collapse input-group justify-content-end my-3">
 							<label class="col-form-label" for="total" data-toggle="tooltip" data-placement="left" title="These hours are howmuch time you spent being at your workplace.">Total hours</label>
 							<div class="pr-2 pl-3">
-								<input name="total" id="total" type="time" class="form-control mx-1 input-fixedwidth100" disabled>
-								<input name="totaldec" id="totaldec" type="text" class="form-control mx-1 mt-1 input-fixedwidth100" disabled>
+								<input name="total" id="total" type="time" class="form-control mx-1 input-fixedwidth110" disabled>
+								<input name="totaldec" id="totaldec" type="text" class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
 							</div>
 						</div>
 						<div class="input-group justify-content-end my-3">
 							<div id="divovertimeweekly" class="collapse input-group justify-content-end mb-1">
 								<label class="col-form-label" for="overtimeweekly" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the current week. This value doesn't include today yet.">Weekly overtime</label>
 								<div class="pr-2 pl-3">
-									<input name="overtimeweekly" id="overtimeweekly" type="text" class="font-weight-bold form-control mx-1 input-fixedwidth100" disabled>
+									<input name="overtimeweekly" id="overtimeweekly" type="text" class="font-weight-bold form-control mx-1 input-fixedwidth110" disabled>
 								</div>
 							</div>
 							<div id="divovertimetotal" class="collapse input-group justify-content-end mt-1">
 								<label class="col-form-label" for="overtimetotal" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime</label>
 								<div class="pr-2 pl-3">
-									<input name="overtimetotal" id="overtimetotal" type="text" class="font-weight-bold form-control mx-1 input-fixedwidth100" disabled>
+									<input name="overtimetotal" id="overtimetotal" type="text" class="font-weight-bold form-control mx-1 input-fixedwidth110" disabled>
 								</div>
 							</div>
 						</div>
@@ -533,7 +529,7 @@
 									<button id="break_reset_btn" type="button" class="btn btn-lg btn-primary leftbtn px-4 py-3" onclick="reset_break()"data-toggle="tooltip" data-placement="bottom" title="Resets the break time."><i class="fal fa-redo"></i></button>
 									<button id="break_add5_btn" type="button" class="btn btn-lg btn-primary middlebtn px-4 py-3" onclick="add_break(0.084)" data-toggle="tooltip" data-placement="bottom" title="Adds 5min of break time."><i class="fal fa-plus"></i> 5min</button>
 									<button id="break_add30_btn" type="button" class="btn btn-lg btn-primary middlebtn px-4 py-3" onclick="add_break(0.5)" data-toggle="tooltip" data-placement="bottom" title="Adds 30min of break time."><i class="fal fa-plus"></i> 30min</button>
-									<button id="break_counter_btn" type="button" class="btn btn-lg btn-primary rightbtn px-4 py-3" onclick="break_counter()" data-toggle="tooltip" data-placement="bottom" title="Click once to start the break time counter. Click again to stop it and add the break time. If you don't click the button a second time, no time will be added."><i class="fal fa-stopwatch"></i> Start</button>
+									<button id="break_counter_btn" type="button" class="btn btn-lg btn-primary rightbtn px-4 py-3" onclick="break_counter()" data-toggle="tooltip" data-placement="bottom" title="Click once to start the break time counter. Click again to stop it. While running, the elapsed time will be displayed in the break time field. To resume the counter click this start button again, to reset click the reset button."><i class="fal fa-stopwatch"></i> Start</button>
 								</div>						
 							</div>
 						</div>
