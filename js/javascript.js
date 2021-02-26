@@ -976,6 +976,11 @@ window.onbeforeunload = function(e){
 		localStorage.setItem("nosave", "false");
 	} else {
 		localStorage.setItem("nosave", todayDate());
+		if (autoend.checked == false) {
+			localStorage.setItem("autoend", "false");
+		} else {
+			localStorage.setItem("autoend", "true");
+		}
 	}
 	// Set 'subtract 5 min from start time' parameter in local storage
 	var startminsubtract = document.getElementById("startminsubtract");

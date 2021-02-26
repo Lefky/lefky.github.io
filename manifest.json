@@ -1,0 +1,22 @@
+{
+    "short_name": "Working hours",
+    "name": "Working hours app",
+    "icons": [
+        {
+            "src": "images/clock192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "images/clock512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "/",
+    "background_color": "#f8f9fa",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#f8f9fa",
+    "description": "Keep track of the hours you've been working."
+}
