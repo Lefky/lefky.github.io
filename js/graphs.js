@@ -435,7 +435,7 @@ function formatJSONdata() {
 
 				if (timeinfo.hasOwnProperty('OvertimeDec')) {
 					variable = parseFloat(timeinfo['OvertimeDec']);
-					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Starttime: </span>" + floatToTimeString(variable) + "</div>";
+					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Overtime: </span>" + floatToTimeString(variable) + "</div>";
 					datasetOvertimeDec.push([dateKey, variable, tooltip]);
 					if (variable > 0) {
 						positiveOvertimeDays++;
