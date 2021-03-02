@@ -1,6 +1,7 @@
 html, body {
 	overflow-x: hidden;
 	height: 100%;
+    font-size: 0.9rem;
 }
 .fontsize60 {
 	font-size: 0.6rem;
