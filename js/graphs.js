@@ -16,7 +16,8 @@ var numberOfDaysRegistered = 0,
 	positiveOvertimeDays = 0,
 	negativeOvertimeDays = 0,
 	sumStarttime = 0,
-	sumStoptime = 0;
+	sumStoptime = 0,
+	sumOvertime = 0;
 
 
 // SYNC loading
@@ -55,7 +56,8 @@ function initGraphs() {
 	positiveOvertimeDays = 0,
 	negativeOvertimeDays = 0,
 	sumStarttime = 0,
-	sumStoptime = 0;
+	sumStoptime = 0,
+	sumOvertime = 0;
 
 	formatJSONdata();
 }
@@ -64,6 +66,7 @@ function drawGraphs() {
 	drawGaugegraph("DaysRegisteredGauge");
 	drawGaugegraph("AvgStarttimeGauge");
 	drawGaugegraph("AvgStoptimeGauge");
+	drawGaugegraph("SumOvertimeGauge");
 	drawPiegraph("OvertimeDays");
 	drawPiegraph("Hourschedules");
 	drawAreagraph("OvertimeDec");
@@ -341,7 +344,7 @@ function drawGaugegraph(graphtype) {
 			data.addRows([
 				['# days registered', numberOfDaysRegistered],
 			]);
-			max = 999;
+			max = localStorage.getItem("historyretain");
 			break;
 		case "AvgStarttimeGauge":
 			data.addColumn('string', 'Metric');
@@ -358,6 +361,14 @@ function drawGaugegraph(graphtype) {
 			var avg_stoptime = sumStoptime / numberOfDaysRegistered;
 			data.addRows([
 				['Avg stoptime', avg_stoptime]
+			]);
+			max = 24;
+			break;
+		case "SumOvertimeGauge":
+			data.addColumn('string', 'Metric');
+			data.addColumn('number', 'Value');
+			data.addRows([
+				['Total overtime', sumOvertime]
 			]);
 			max = 24;
 			break;
@@ -437,6 +448,7 @@ function formatJSONdata() {
 					variable = parseFloat(timeinfo['OvertimeDec']);
 					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Overtime: </span>" + floatToTimeString(variable) + "</div>";
 					datasetOvertimeDec.push([dateKey, variable, tooltip]);
+					sumOvertime = sumOvertime + variable;
 					if (variable > 0) {
 						positiveOvertimeDays++;
 					} else if (variable < 0) {
@@ -497,7 +509,7 @@ function formatJSONdata() {
 			}
 		}
 	}
-	//console.log(datasetStopDec);
+	//console.log("sumOvertime: "+sumOvertime);
 }
 
 function updateArray(array, category) {
