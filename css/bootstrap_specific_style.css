@@ -15,6 +15,9 @@ html, body {
 .w-150 {
 	width: 150%;
 }
+.btn-lg {
+    font-size: 1.15rem;
+}
 .card, .btn, .form-control, .modal-content, .alert { 
 	border-radius: 1.5rem !important; 
 }
@@ -29,7 +32,7 @@ html, body {
 }
 .footerbtn {
 	height: 50%; 
-	font-size: 1.2rem;
+	font-size: 1.1rem;
 }
 .rounded-right {
 	border-top-right-radius: 1.5rem !important; 
@@ -48,7 +51,7 @@ html, body {
 	overflow: hidden;
 	border: 1px solid #ced4da;
 	border-radius: .75rem;
-	width: 80%
+	width: 70%
 }
 #history {
 	background-color: #e9ecef;
@@ -57,13 +60,13 @@ html, body {
     width: 100%;
 	overflow-y: auto;
     padding: .375rem .75rem;
-    font-size: 1rem;
+    /*font-size: 1rem;*/
     font-weight: 400;
     line-height: 1.5;
     color: #495057;
     background-clip: padding-box;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-	height: 180px;
+	height: 150px;
 	margin-left:auto; 
 	margin-right:0; 
 }	
@@ -118,6 +121,9 @@ html, body {
 .form-group input[type="radio"]:checked ~ .description{
     display: block;
 }
+.form-control {
+    font-size: 0.9rem;
+}
 .pulsate {
 	-webkit-animation: pulsate 3s ease-out;
 	-webkit-animation-iteration-count: infinite; 
@@ -142,6 +148,10 @@ html, body {
 #app_alert {
 	bottom: 0;
 	margin-bottom: 10rem !important;
+}
+.input-fixedwidth80 {
+	min-width: 80px; 
+	max-width: 80px;
 }
 .input-fixedwidth110 {
 	min-width: 110px; 
