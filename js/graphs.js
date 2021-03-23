@@ -335,7 +335,19 @@ function drawPiegraph(graphtype) {
 
 function drawGaugegraph(graphtype) {
 	var data = new google.visualization.DataTable(),
-		max = 0;
+		min = 0,
+		max = 0,
+		redFrom,
+		redTo,
+		yellowFrom,
+		yellowTo,
+		greenFrom,
+		greenTo,
+		redColor = 'rgb(251, 216, 208)',
+		yellowColor = 'rgb(255, 235, 204)',
+		greenColor = 'rgb(209, 250, 211)',
+		majorTicks,
+		minorTicks = 5;
 
 	switch (graphtype) {
 		case "DaysRegisteredGauge":
@@ -344,7 +356,12 @@ function drawGaugegraph(graphtype) {
 			data.addRows([
 				['# days registered', numberOfDaysRegistered],
 			]);
+			min = 0;
 			max = localStorage.getItem("historyretain");
+			redFrom = max - ((max / 100) * 5);
+			redTo = max;
+			yellowFrom = max - ((max / 100) * 7.5);
+			yellowTo = max - ((max / 100) * 5);
 			break;
 		case "AvgStarttimeGauge":
 			data.addColumn('string', 'Metric');
@@ -353,7 +370,17 @@ function drawGaugegraph(graphtype) {
 			data.addRows([
 				['Avg starttime', avg_starttime]
 			]);
+			min = 0;
 			max = 24;
+			redFrom = 4;
+			redTo = 6;
+			yellowFrom = 10;
+			yellowTo = 12;
+			greenFrom = 6;
+			greenTo = 10;
+			redColor = 'rgb(255, 235, 204)';
+			majorTicks = ["0", "", "6", "", "12", "", "18", "", "24"];
+			minorTicks = 3;
 			break;
 		case "AvgStoptimeGauge":
 			data.addColumn('string', 'Metric');
@@ -362,7 +389,17 @@ function drawGaugegraph(graphtype) {
 			data.addRows([
 				['Avg stoptime', avg_stoptime]
 			]);
+			min = 0;
 			max = 24;
+			redFrom = 12.5;
+			redTo = 14.5;
+			yellowFrom = 18.5;
+			yellowTo = 20.5;
+			greenFrom = 14.5;
+			greenTo = 18.5;
+			redColor = 'rgb(255, 235, 204)';
+			majorTicks = ["0", "", "6", "", "12", "", "18", "", "24"];
+			minorTicks = 3;
 			break;
 		case "SumOvertimeGauge":
 			data.addColumn('string', 'Metric');
@@ -370,7 +407,12 @@ function drawGaugegraph(graphtype) {
 			data.addRows([
 				['Total overtime', sumOvertime]
 			]);
-			max = 24;
+			min = -50;
+			max = 50;
+			redFrom = min;
+			redTo = 0;
+			greenFrom = 0;
+			greenTo = max;
 			break;
 		default:
 			// code block
@@ -378,11 +420,19 @@ function drawGaugegraph(graphtype) {
 	}
 
 	var options = {
-		/*redFrom: 90, 
-		redTo: 999,
-        yellowFrom:75, 
-		yellowTo: 90,*/
-		minorTicks: 5,
+		/* https://developers.google.com/chart/interactive/docs/gallery/gauge#configuration-options */
+		redFrom: redFrom,
+		redTo: redTo,
+		yellowFrom: yellowFrom,
+		yellowTo: yellowTo,
+		greenFrom: greenFrom,
+		greenTo: greenTo,
+		redColor: redColor,
+		yellowColor: yellowColor,
+		greenColor: greenColor,
+		majorTicks: majorTicks,
+		minorTicks: minorTicks,
+		min: min,
 		max: max,
 		width: '100%',
 		height: 250
