@@ -1062,6 +1062,12 @@ $(document).ready(function(){
 	}
 });
 
+$(window).on("load", function () {
+	if ("serviceWorker" in navigator) {
+		navigator.serviceWorker.register("service-worker.js");
+	}
+});
+
 $(document).on('keydown', function (e){
 	if (e.keyCode === 13) { //ENTER key code
 		add_time(getHourSchedule());
