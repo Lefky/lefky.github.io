@@ -354,7 +354,7 @@ function drawGaugegraph(graphtype) {
 			data.addColumn('string', 'Metric');
 			data.addColumn('number', 'Value');
 			data.addRows([
-				['# days registered', numberOfDaysRegistered],
+				['Days registered', numberOfDaysRegistered],
 			]);
 			min = 0;
 			max = localStorage.getItem("historyretain");
@@ -379,7 +379,7 @@ function drawGaugegraph(graphtype) {
 			greenFrom = 6;
 			greenTo = 10;
 			redColor = 'rgb(255, 235, 204)';
-			majorTicks = ["0", "", "6", "", "12", "", "18", "", "24"];
+			majorTicks = ["0", "3", "", "", "12", "", "", "21", "24"];
 			minorTicks = 3;
 			break;
 		case "AvgStoptimeGauge":
@@ -398,7 +398,7 @@ function drawGaugegraph(graphtype) {
 			greenFrom = 14.5;
 			greenTo = 18.5;
 			redColor = 'rgb(255, 235, 204)';
-			majorTicks = ["0", "", "6", "", "12", "", "18", "", "24"];
+			majorTicks = ["0", "3", "", "", "12", "", "", "21", "24"];
 			minorTicks = 3;
 			break;
 		case "SumOvertimeGauge":
