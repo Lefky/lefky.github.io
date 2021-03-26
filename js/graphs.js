@@ -5,7 +5,8 @@ In HTML
 */
 console.log("loaded graphs.js");
 
-var numberOfDaysRegistered = 0,
+var sortedkeys = getHistory(),
+	numberOfDaysRegistered = 0,
 	datasetOvertimeDec = [],
 	datasetStartDec = [],
 	datasetStopDec = [],
@@ -78,8 +79,10 @@ function drawGraphs() {
 }
 
 function initDateSelector() {
-	document.getElementById('start_reporting_selection').value = moment().startOf('year').subtract(1, 'year').format('YYYY-MM-DD');
-	document.getElementById('end_reporting_selection').value = moment().endOf('year').format('YYYY-MM-DD');
+	//document.getElementById('start_reporting_selection').value = moment().startOf('year').subtract(1, 'year').format('YYYY-MM-DD');
+	document.getElementById('start_reporting_selection').value = moment(sortedkeys[0], 'DD-MM-YYYY').format('YYYY-MM-DD');
+
+	document.getElementById('end_reporting_selection').value = moment().format('YYYY-MM-DD');
 }
 
 $('#modalreporting').on('shown.bs.modal', function() {
@@ -453,24 +456,6 @@ function drawGaugegraph(graphtype) {
 }
 
 function formatJSONdata() {
-	const reverseDateRepresentation = date => {
-		let parts = date.split('-');
-		return `${parts[2]}-${parts[1]}-${parts[0]}`;
-	};
-
-	var keys = Object.keys(localStorage),
-		sortedkeys = keys.map(reverseDateRepresentation).sort().map(reverseDateRepresentation), // don't do reverse() here to have dates ascending
-		i = 0,
-		key;
-		//datasetlength = document.getElementById('graphdatasetlength_value').value;
-
-	for (i = 0; key = sortedkeys[i]; i++) {
-		if (!testDateFormat(key)) {
-			sortedkeys.splice(i, 1)
-			i--;
-		}
-	}
-
 	//var start = sortedkeys.length - datasetlength; // howmany datapoints need to be skipped before starting to draw graphs
 	var start_reporting_selection = document.getElementById('start_reporting_selection').value,
 		end_reporting_selection = document.getElementById('end_reporting_selection').value;
@@ -482,7 +467,7 @@ function formatJSONdata() {
 		hourscheduletooltip,
 		dateKey;
 	
-	for (i = 0; key = sortedkeys[i]; i++) {		
+	for (var i = 0; key = sortedkeys[i]; i++) {		
 		
 		if (testDateFormat(key)/* && i >= start*/) {
 			timeinfo = JSON.parse(localStorage.getItem(key));
@@ -515,6 +500,8 @@ function formatJSONdata() {
 						variable = variable + parseFloat(timeinfo['TotalDec']);
 						tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Stoptime: </span>" + floatToTimeString(variable) + "</div>";
 						sumStoptime = sumStoptime + variable;
+
+						//console.log(key + " = " + moment().format("DD-MM-YYYY"));
 						datasetStopDec.push([dateKey, variable, tooltip]);
 					}
 				}
