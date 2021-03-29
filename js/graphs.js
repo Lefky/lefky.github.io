@@ -5,7 +5,8 @@ In HTML
 */
 console.log("loaded graphs.js");
 
-var numberOfDaysRegistered = 0,
+var sortedkeys = getHistory(),
+	numberOfDaysRegistered = 0,
 	datasetOvertimeDec = [],
 	datasetStartDec = [],
 	datasetStopDec = [],
@@ -16,7 +17,8 @@ var numberOfDaysRegistered = 0,
 	positiveOvertimeDays = 0,
 	negativeOvertimeDays = 0,
 	sumStarttime = 0,
-	sumStoptime = 0;
+	sumStoptime = 0,
+	sumOvertime = 0;
 
 
 // SYNC loading
@@ -55,7 +57,8 @@ function initGraphs() {
 	positiveOvertimeDays = 0,
 	negativeOvertimeDays = 0,
 	sumStarttime = 0,
-	sumStoptime = 0;
+	sumStoptime = 0,
+	sumOvertime = 0;
 
 	formatJSONdata();
 }
@@ -64,6 +67,7 @@ function drawGraphs() {
 	drawGaugegraph("DaysRegisteredGauge");
 	drawGaugegraph("AvgStarttimeGauge");
 	drawGaugegraph("AvgStoptimeGauge");
+	drawGaugegraph("SumOvertimeGauge");
 	drawPiegraph("OvertimeDays");
 	drawPiegraph("Hourschedules");
 	drawAreagraph("OvertimeDec");
@@ -75,8 +79,10 @@ function drawGraphs() {
 }
 
 function initDateSelector() {
-	document.getElementById('start_reporting_selection').value = moment().startOf('year').subtract(1, 'year').format('YYYY-MM-DD');
-	document.getElementById('end_reporting_selection').value = moment().endOf('year').format('YYYY-MM-DD');
+	//document.getElementById('start_reporting_selection').value = moment().startOf('year').subtract(1, 'year').format('YYYY-MM-DD');
+	document.getElementById('start_reporting_selection').value = moment(sortedkeys[0], 'DD-MM-YYYY').format('YYYY-MM-DD');
+
+	document.getElementById('end_reporting_selection').value = moment().format('YYYY-MM-DD');
 }
 
 $('#modalreporting').on('shown.bs.modal', function() {
@@ -332,16 +338,33 @@ function drawPiegraph(graphtype) {
 
 function drawGaugegraph(graphtype) {
 	var data = new google.visualization.DataTable(),
-		max = 0;
+		min = 0,
+		max = 0,
+		redFrom,
+		redTo,
+		yellowFrom,
+		yellowTo,
+		greenFrom,
+		greenTo,
+		redColor = 'rgb(251, 216, 208)',
+		yellowColor = 'rgb(255, 235, 204)',
+		greenColor = 'rgb(209, 250, 211)',
+		majorTicks,
+		minorTicks = 5;
 
 	switch (graphtype) {
 		case "DaysRegisteredGauge":
 			data.addColumn('string', 'Metric');
 			data.addColumn('number', 'Value');
 			data.addRows([
-				['# days registered', numberOfDaysRegistered],
+				['Days registered', numberOfDaysRegistered],
 			]);
-			max = 999;
+			min = 0;
+			max = localStorage.getItem("historyretain");
+			redFrom = max - ((max / 100) * 5);
+			redTo = max;
+			yellowFrom = max - ((max / 100) * 7.5);
+			yellowTo = max - ((max / 100) * 5);
 			break;
 		case "AvgStarttimeGauge":
 			data.addColumn('string', 'Metric');
@@ -350,7 +373,17 @@ function drawGaugegraph(graphtype) {
 			data.addRows([
 				['Avg starttime', avg_starttime]
 			]);
+			min = 0;
 			max = 24;
+			redFrom = 4;
+			redTo = 6;
+			yellowFrom = 10;
+			yellowTo = 12;
+			greenFrom = 6;
+			greenTo = 10;
+			redColor = 'rgb(255, 235, 204)';
+			majorTicks = ["0", "3", "", "", "12", "", "", "21", "24"];
+			minorTicks = 3;
 			break;
 		case "AvgStoptimeGauge":
 			data.addColumn('string', 'Metric');
@@ -359,7 +392,30 @@ function drawGaugegraph(graphtype) {
 			data.addRows([
 				['Avg stoptime', avg_stoptime]
 			]);
+			min = 0;
 			max = 24;
+			redFrom = 12.5;
+			redTo = 14.5;
+			yellowFrom = 18.5;
+			yellowTo = 20.5;
+			greenFrom = 14.5;
+			greenTo = 18.5;
+			redColor = 'rgb(255, 235, 204)';
+			majorTicks = ["0", "3", "", "", "12", "", "", "21", "24"];
+			minorTicks = 3;
+			break;
+		case "SumOvertimeGauge":
+			data.addColumn('string', 'Metric');
+			data.addColumn('number', 'Value');
+			data.addRows([
+				['Total overtime', sumOvertime]
+			]);
+			min = -50;
+			max = 50;
+			redFrom = min;
+			redTo = 0;
+			greenFrom = 0;
+			greenTo = max;
 			break;
 		default:
 			// code block
@@ -367,11 +423,19 @@ function drawGaugegraph(graphtype) {
 	}
 
 	var options = {
-		/*redFrom: 90, 
-		redTo: 999,
-        yellowFrom:75, 
-		yellowTo: 90,*/
-		minorTicks: 5,
+		/* https://developers.google.com/chart/interactive/docs/gallery/gauge#configuration-options */
+		redFrom: redFrom,
+		redTo: redTo,
+		yellowFrom: yellowFrom,
+		yellowTo: yellowTo,
+		greenFrom: greenFrom,
+		greenTo: greenTo,
+		redColor: redColor,
+		yellowColor: yellowColor,
+		greenColor: greenColor,
+		majorTicks: majorTicks,
+		minorTicks: minorTicks,
+		min: min,
 		max: max,
 		width: '100%',
 		height: 250
@@ -392,24 +456,6 @@ function drawGaugegraph(graphtype) {
 }
 
 function formatJSONdata() {
-	const reverseDateRepresentation = date => {
-		let parts = date.split('-');
-		return `${parts[2]}-${parts[1]}-${parts[0]}`;
-	};
-
-	var keys = Object.keys(localStorage),
-		sortedkeys = keys.map(reverseDateRepresentation).sort().map(reverseDateRepresentation), // don't do reverse() here to have dates ascending
-		i = 0,
-		key;
-		//datasetlength = document.getElementById('graphdatasetlength_value').value;
-
-	for (i = 0; key = sortedkeys[i]; i++) {
-		if (!testDateFormat(key)) {
-			sortedkeys.splice(i, 1)
-			i--;
-		}
-	}
-
 	//var start = sortedkeys.length - datasetlength; // howmany datapoints need to be skipped before starting to draw graphs
 	var start_reporting_selection = document.getElementById('start_reporting_selection').value,
 		end_reporting_selection = document.getElementById('end_reporting_selection').value;
@@ -421,7 +467,7 @@ function formatJSONdata() {
 		hourscheduletooltip,
 		dateKey;
 	
-	for (i = 0; key = sortedkeys[i]; i++) {		
+	for (var i = 0; key = sortedkeys[i]; i++) {		
 		
 		if (testDateFormat(key)/* && i >= start*/) {
 			timeinfo = JSON.parse(localStorage.getItem(key));
@@ -435,8 +481,9 @@ function formatJSONdata() {
 
 				if (timeinfo.hasOwnProperty('OvertimeDec')) {
 					variable = parseFloat(timeinfo['OvertimeDec']);
-					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Starttime: </span>" + floatToTimeString(variable) + "</div>";
+					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Overtime: </span>" + floatToTimeString(variable) + "</div>";
 					datasetOvertimeDec.push([dateKey, variable, tooltip]);
+					sumOvertime = sumOvertime + variable;
 					if (variable > 0) {
 						positiveOvertimeDays++;
 					} else if (variable < 0) {
@@ -453,6 +500,8 @@ function formatJSONdata() {
 						variable = variable + parseFloat(timeinfo['TotalDec']);
 						tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Stoptime: </span>" + floatToTimeString(variable) + "</div>";
 						sumStoptime = sumStoptime + variable;
+
+						//console.log(key + " = " + moment().format("DD-MM-YYYY"));
 						datasetStopDec.push([dateKey, variable, tooltip]);
 					}
 				}
@@ -497,7 +546,7 @@ function formatJSONdata() {
 			}
 		}
 	}
-	//console.log(datasetStopDec);
+	//console.log("sumOvertime: "+sumOvertime);
 }
 
 function updateArray(array, category) {

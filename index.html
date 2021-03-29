@@ -2,7 +2,8 @@
 <html>
 <head>
 	<title>Working hours</title>
-	<link rel="shortcut icon" type="image/png" href="images/time-png_favicon.png"/>
+	<link rel="shortcut icon" type="image/png" href="images/clock64.png"/>
+	<link rel="manifest" href="manifest.json">
 	<meta name="robots" content="index">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -45,7 +46,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20210112.2</span> <br>
+					Version: <span id="currentappversion">20210323.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -334,9 +335,10 @@
 					Click right to reset the zoom level.
 				</p>
 				<div class="d-flex justify-content-center w-100 h-100">
-					<div id="DaysRegisteredGauge_div" class="d-flex justify-content-center w-33 h-33"></div>
-					<div id="AvgStarttimeGauge_div" class="d-flex justify-content-center w-33 h-33"></div>
-					<div id="AvgStoptimeGauge_div" class="d-flex justify-content-center w-33 h-33"></div>
+					<div id="DaysRegisteredGauge_div" class="d-flex justify-content-center w-25"></div>
+					<div id="SumOvertimeGauge_div" class="d-flex justify-content-center w-25"></div>
+					<div id="AvgStarttimeGauge_div" class="d-flex justify-content-center w-25"></div>
+					<div id="AvgStoptimeGauge_div" class="d-flex justify-content-center w-25"></div>
 				</div>
 				<div class="d-flex justify-content-center w-100 h-100">
 					<div id="OvertimeDays_div" class="w-50 d-inline-block"></div><div id="Hourschedules_div" class="w-50 d-inline-block"></div>
@@ -365,13 +367,16 @@
 				</div>
 				<div class="col-lg-10 py-1 px-4">
 					<p>
-						Made instructions and user experience for break counter more clear.
+						Added better support for large screens and various layout fixes.
 					</p>
 					<p>
-						Added easter egg. If you work long enough you'll be able to spot it!
+						Fix automatic endtime checkmark not persistent when not saving today is checked.
 					</p>
 					<p>
-						Bugfix buttons keeping focus after being clicked.
+						Gauges in reporting have an additional meter and now include colors and dynamic ranges.
+					</p>
+					<p>
+						Added progressive web app support (or trying to) to make it possible to install the app out of the browser.
 					</p>
 				</div>
 			</div>
@@ -389,8 +394,8 @@
 	
 	<div class="row h-100">
 		<div class="row w-100 align-self-center">
-			<div class="col-lg-2 d-none d-lg-block bg-light"></div>
-			<div id="inputarea" class="col-lg-4 rounded-right bg-light">
+			<div class="col-lg-1 d-none d-lg-block bg-light"></div>
+			<div id="inputarea" class="col-lg-5 rounded-right bg-light">
 				<form>
 					<div class="form-group pt-3 mr-xs-2 mr-lg-5">
 						<div id="divstarttime" class="input-group justify-content-end my-1">
@@ -404,7 +409,7 @@
 								Break with default
 							</label>
 							<div class="mb-1 mb-md-0 mx-3 mr-sm-0">
-								<select name="break_time_default" id="break_time_default" class="form-control mb-md-0 input-fixedwidth110" onchange="addBreakDefault();">
+								<select name="break_time_default" id="break_time_default" class="form-control mb-md-0 input-fixedwidth80" onchange="addBreakDefault();">
 									<option value="0">0 min</option>
 									<option value="0.25">15 min</option>
 									<option value="0.5">30 min</option>
@@ -440,7 +445,7 @@
 								Overtime @
 							</label>
 							<div class="mb-1 mb-md-0 mx-3 mr-sm-0">
-								<select name="hourschedule" id="hourschedule" class="form-control input-fixedwidth110" onchange="calculateTotal();" data-toggle="tooltip" data-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
+								<select name="hourschedule" id="hourschedule" class="form-control input-fixedwidth80" onchange="calculateTotal();" data-toggle="tooltip" data-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
 									<option value="0">0h		&nbsp;&emsp;&emsp;&emsp;(working overtime)</option>
 									<option value="3.04">3,04h 	&emsp;&emsp;(part-time 2/5, 38h week)</option>
 									<option value="3.2">3,2h 	&ensp;&emsp;&emsp;(part-time 2/5, 40h week)</option>
@@ -471,7 +476,7 @@
 								<input name="totaldec" id="totaldec" type="text" class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
 							</div>
 						</div>
-						<div class="input-group justify-content-end my-3">
+						<div class="input-group justify-content-end mt-3">
 							<div id="divovertimeweekly" class="collapse input-group justify-content-end mb-1">
 								<label class="col-form-label" for="overtimeweekly" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the current week. This value doesn't include today yet.">Weekly overtime</label>
 								<div class="pr-2 pl-3">
@@ -486,7 +491,7 @@
 							</div>
 						</div>
 						<div class="form-inline">
-							<button id="btnedithistory" type="button" class="btn btn-outline-secondary fontsize60 ml-auto mr-2 py-1 px-2" data-toggle="modal" data-target="#modaledithistory"><i class="fas fa-edit"></i></button>
+							<button id="btnedithistory" type="button" class="btn btn-outline-secondary fontsize60 ml-auto mr-2 pb-1 px-2" data-toggle="modal" data-target="#modaledithistory"><i class="fas fa-edit"></i></button>
 							<div id="historycontainer" class="collapse my-3 mr-2">
 								<div id="history" class="w-100"></div>
 							</div>
@@ -511,12 +516,12 @@
 					</div>
 				</form>
 			</div>
-			<div id="buttonarea" class="col-lg-4 align-self-center text-lg-left text-center">	
+			<div id="buttonarea" class="col-lg-5 align-self-center text-lg-left text-center">	
 				<div class="row">
-					<div class="col col-sm-1 d-none d-xs-block d-sm-block d-md-block d-lg-block"></div>
-					<div class="col">
+					<!-- <div class="col col-sm-1 d-none d-xs-block d-sm-block d-md-block d-lg-block"></div> -->
+					<div class="col ml-xs-2 ml-lg-5">
 						<div class="row">
-							<div class="col my-3 ml-sm-1">
+							<div class="col my-3">
 								<div class="btn-group" role="group">
 									<button type="button" class="btn btn-lg btn-success leftbtn px-4 py-3" onclick="add_time(getHourSchedule())" data-toggle="tooltip" data-placement="bottom" title="Adds the time selected in the hour schedule to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> <span id="addtimebutton_span"></span>h</button>
 									<button type="button" class="btn btn-lg btn-success rightbtn px-4 py-3" onclick="end_time()" data-toggle="tooltip" data-placement="bottom" title="Sets the 'Time to go home' field to the current time.">End time now</button>
@@ -541,7 +546,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-2 d-none d-xs-block d-sm-block d-md-block d-lg-block"></div>
+					<!-- <div class="col-sm-2 d-none d-xs-block d-sm-block d-md-block d-lg-block"></div> -->
 				</div>
 			</div>
 		</div>
@@ -550,7 +555,7 @@
 	<!-- Footer HTML -->
     <div id="footer" class="row fixed-bottom px-3 py-1">
 		<div class="col d-flex align-self-center">
-			<span class="mx-2">Senne Janssens &#169; 2020</span>
+			<span class="mx-2">Senne Janssens &#169; 2021</span>
 		</div>
 		<div class="col d-flex justify-content-end">
 			<div id="footer_button_group" class="btn-group align-self-center" role="group">

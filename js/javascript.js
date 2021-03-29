@@ -1,6 +1,6 @@
 console.log("loaded javascript.js");
 
-var filesadded="";
+// var filesadded="";
 
 // Conversion functions
 /*
@@ -25,6 +25,11 @@ function floatToTimeString(timedec){
 	return moment().startOf('day').add(timedec, 'hours').format('HH:mm')
 	*/
 }
+
+const reverseDateRepresentation = date => {
+	let parts = date.split('-');
+	return `${parts[2]}-${parts[1]}-${parts[0]}`;
+};
 
 // Setters & getters
 function getStart(){
@@ -258,6 +263,21 @@ function setTotalNoBreakDec(time){
 		document.getElementById("totalnobreakdec").value = time;
 }
 
+function getHistory(){
+	var keys = Object.keys(localStorage),
+		sortedkeys = keys.map(reverseDateRepresentation).sort().map(reverseDateRepresentation), // don't do reverse() here to have dates ascending
+		i = 0,
+		key;
+
+	for (i = 0; key = sortedkeys[i]; i++) {
+		if (!testDateFormat(key)) {
+			sortedkeys.splice(i, 1)
+			i--;
+		}
+	}
+	return sortedkeys;
+}
+
 function getHistoryDeleteOption(){
 	if (document.getElementById('historydeleteoptionperiod').checked) {
 		var option = document.getElementById('historydeleteoptionperiod').value;
@@ -393,11 +413,6 @@ function testDateFormat(date){
 }
 
 function setHistory(refresh_edit_table){
-	const reverseDateRepresentation = date => {
-	  let parts = date.split('-');
-	  return `${parts[2]}-${parts[1]}-${parts[0]}`;
-	};
-	
 	var entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
 		entry_edit_history = "",
 		keys = Object.keys(localStorage),
@@ -976,6 +991,11 @@ window.onbeforeunload = function(e){
 		localStorage.setItem("nosave", "false");
 	} else {
 		localStorage.setItem("nosave", todayDate());
+		if (autoend.checked == false) {
+			localStorage.setItem("autoend", "false");
+		} else {
+			localStorage.setItem("autoend", "true");
+		}
 	}
 	// Set 'subtract 5 min from start time' parameter in local storage
 	var startminsubtract = document.getElementById("startminsubtract");
@@ -1054,6 +1074,12 @@ $(document).ready(function(){
 	}
 	if(window.location.href.indexOf('#modalreporting') != -1) {
 		$('#modalreporting').modal('show');
+	}
+});
+
+$(window).on("load", function () {
+	if ("serviceWorker" in navigator) {
+		navigator.serviceWorker.register("service-worker.js");
 	}
 });
 
