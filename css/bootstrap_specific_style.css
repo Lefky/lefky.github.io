@@ -149,9 +149,9 @@ html, body {
 	bottom: 0;
 	margin-bottom: 10rem !important;
 }
-.input-fixedwidth80 {
-	min-width: 80px; 
-	max-width: 80px;
+.input-fixedwidth90 {
+	min-width: 90px; 
+	max-width: 90px;
 }
 .input-fixedwidth110 {
 	min-width: 110px; 

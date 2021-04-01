@@ -177,20 +177,21 @@ function getWorktime(){
 	if ( Math.abs(worktime - getHourSchedule()) <= 0.02 ){
 			worktime = getHourSchedule();
 	}
-	return worktime;
+	return worktime.toFixed(2);
 }
 
 function calculateTotal(){
 	var worktime = getWorktime(),
-		overtime = worktime - getBreak(false) - getHourSchedule();
+		overtimedec = getOvertimeDec(),
+		totalnobreakdec = getTotalNoBreakDec();
 
 	setTotal(worktime);
-	setOvertime(overtime);
-	setTotalNoBreak(Math.abs(worktime - getBreak(false)));
+	setOvertime(overtimedec);
+	setTotalNoBreak(totalnobreakdec);
 	
-	setTotalDec((parseFloat(worktime).toFixed(2)));
-	setOvertimeDec(parseFloat(overtime).toFixed(2));
-	setTotalNoBreakDec(getTotalNoBreakDec());
+	setTotalDec(worktime);
+	setOvertimeDec(overtimedec);
+	setTotalNoBreakDec(totalnobreakdec);
 	
 	hourscheduleAddTimeButton();
 }
@@ -221,8 +222,13 @@ function setOvertime(time){
 function getOvertimeDec(){
 	var worktime = getWorktime(),
 		overtime = worktime - getBreak(false) - getHourSchedule();
-		
-	return parseFloat(overtime).toFixed(2);
+		overtime = overtime.toFixed(2);
+
+	if (overtime.toString() == "-0.00"){
+		return "0.00";
+	} else {
+		return overtime;
+	}
 }
 
 function setOvertimeDec(time){

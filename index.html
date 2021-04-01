@@ -46,7 +46,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20210323.1</span> <br>
+					Version: <span id="currentappversion">20210401.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -409,7 +409,7 @@
 								Break with default
 							</label>
 							<div class="mb-1 mb-md-0 mx-3 mr-sm-0">
-								<select name="break_time_default" id="break_time_default" class="form-control mb-md-0 input-fixedwidth80" onchange="addBreakDefault();">
+								<select name="break_time_default" id="break_time_default" class="form-control mb-md-0 input-fixedwidth90" onchange="addBreakDefault();">
 									<option value="0">0 min</option>
 									<option value="0.25">15 min</option>
 									<option value="0.5">30 min</option>
@@ -445,7 +445,7 @@
 								Overtime @
 							</label>
 							<div class="mb-1 mb-md-0 mx-3 mr-sm-0">
-								<select name="hourschedule" id="hourschedule" class="form-control input-fixedwidth80" onchange="calculateTotal();" data-toggle="tooltip" data-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
+								<select name="hourschedule" id="hourschedule" class="form-control input-fixedwidth90" onchange="calculateTotal();" data-toggle="tooltip" data-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
 									<option value="0">0h		&nbsp;&emsp;&emsp;&emsp;(working overtime)</option>
 									<option value="3.04">3,04h 	&emsp;&emsp;(part-time 2/5, 38h week)</option>
 									<option value="3.2">3,2h 	&ensp;&emsp;&emsp;(part-time 2/5, 40h week)</option>
