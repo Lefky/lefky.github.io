@@ -691,10 +691,10 @@ function now(){
 function todayDate(){
 	var date = new Date();
 	
-	var dd = ('0' + date.getDate()).slice(-2),
+	/*var dd = ('0' + date.getDate()).slice(-2),
 		mm = ('0' + (date.getMonth()+1)).slice(-2), //jan is 0
 		yyyy = date.getFullYear();
-	
+	*/
 	//return dd + "-" + mm + "-" + yyyy;
 	return moment().format("DD-MM-YYYY");
 }
@@ -720,6 +720,7 @@ function setParameters(){
 	// Set options to parameters from localStorage
 	var alertnotification = localStorage.getItem("alertnotification"),
 		autoend = localStorage.getItem("autoend"),
+		autoend_today_disabled = localStorage.getItem("autoend_today_disabled"),
 		nosave = localStorage.getItem("nosave"),
 		hourschedule = localStorage.getItem("hourschedule"),
 		break_time_default = localStorage.getItem("break_time_default"),
@@ -739,9 +740,13 @@ function setParameters(){
 		breaktime_timeselection_option_timerange = localStorage.getItem("breaktime_timeselection_option_timerange");
 
 	if (autoend == "true")
-		document.getElementById("autoend").checked = true;
+		//document.getElementById("autoend").checked = true;
+		document.getElementById("autoend").click();
+	if (autoend_today_disabled == todayDate())
+		document.getElementById("autoend_today_disabled").click();
 	if (nosave == todayDate())
-		document.getElementById("nosave").checked = true;
+		//document.getElementById("nosave").checked = true;
+		document.getElementById("nosave").click();
 	setHourSchedule(hourschedule);
 	if (break_time_default) {
 		document.getElementById("break_time_default").value = break_time_default;
@@ -750,9 +755,11 @@ function setParameters(){
 		document.getElementById("break_time_default").value = 0;
 	}
 	if (historydeleteoption == "days") {
-		document.getElementById("historydeleteoptiondays").checked = true;
+		//document.getElementById("historydeleteoptiondays").checked = true;
+		document.getElementById("historydeleteoptiondays").click();
 	} else if (historydeleteoption == "period") {
-		document.getElementById("historydeleteoptionperiod").checked = true;
+		//document.getElementById("historydeleteoptionperiod").checked = true;
+		document.getElementById("historydeleteoptionperiod").click();
 	}
 	if (historyretain)
 		document.getElementById("historyretain").value = historyretain;
@@ -764,31 +771,38 @@ function setParameters(){
 		document.getElementById("historyresetperiodunit").value = historyresetperiodunit;
 	// Set UI visibility options
 	if (overtimeoption == "true" || overtimeoption === null) {
-		document.getElementById("overtimeoption").checked = true;
+		//document.getElementById("overtimeoption").checked = true;
+		document.getElementById("overtimeoption").click();
 		document.getElementById("divovertime").classList.add("show");
 	}
 	if (totalhoursoption == "true" || totalhoursoption === null) {
-		document.getElementById("totalhoursoption").checked = true;
+		//document.getElementById("totalhoursoption").checked = true;
+		document.getElementById("totalhoursoption").click();
 		document.getElementById("divtotalhours").classList.add("show");
 	}
 	if (weeklyovertimeoption == "true" || weeklyovertimeoption === null) {
-		document.getElementById("weeklyovertimeoption").checked = true;
+		//document.getElementById("weeklyovertimeoption").checked = true;
+		document.getElementById("weeklyovertimeoption").click();
 		document.getElementById("divovertimeweekly").classList.add("show");
 	}
 	if (totalovertimeoption == "true" || totalovertimeoption === null) {
-		document.getElementById("totalovertimeoption").checked = true;
+		//document.getElementById("totalovertimeoption").checked = true;
+		document.getElementById("totalovertimeoption").click();
 		document.getElementById("divovertimetotal").classList.add("show");
 	}
 	if (historyoption == "true" || historyoption === null) {
-		document.getElementById("historyoption").checked = true;
+		//document.getElementById("historyoption").checked = true;
+		document.getElementById("historyoption").click();
 		document.getElementById("historycontainer").classList.add("show");
 	}
 	if (parametersoption == "true" || parametersoption === null) {
-		document.getElementById("parametersoption").checked = true;
+		//document.getElementById("parametersoption").checked = true;
+		document.getElementById("parametersoption").click();
 		document.getElementById("divparameters").classList.add("show");
 	}
 	if (breaktime_timeselection_option_timerange == "true") {
-		document.getElementById("breaktime_timeselection_option_timerange").checked = true;
+		//document.getElementById("breaktime_timeselection_option_timerange").checked = true;
+		document.getElementById("breaktime_timeselection_option_timerange").click();
 		breaktimeTimeselection();
 	}
 
@@ -807,7 +821,8 @@ function setParameters(){
 	var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
 	if (timeinfo == null) {
 		if (startminsubtract == "true") {
-			document.getElementById("startminsubtract").checked = true;
+			//document.getElementById("startminsubtract").checked = true;
+			document.getElementById("startminsubtract").click();
 			
 			// Fix convert minutes to subtract to decimal
 			//var startminsubtract_value_decimal = timeStringToFloat("00:"+startminsubtract_value);
@@ -823,7 +838,8 @@ function setParameters(){
 		setEnd(parseFloat(timeinfo['StartDec']) + parseFloat(timeinfo['TotalDec']));
 		calculateTotal();
 		if (startminsubtract == "true")
-			document.getElementById("startminsubtract").checked = true;
+			//document.getElementById("startminsubtract").checked = true;
+			document.getElementById("startminsubtract").click();
 	}
 }
 
@@ -984,24 +1000,31 @@ function break_counter(){
 window.onbeforeunload = function(e){
 	// Set 'dont save today' and 'automatically set end time' parameters in local storage
 	var nosave = document.getElementById("nosave"),
-		autoend = document.getElementById("autoend");
+		autoend = document.getElementById("autoend"),
+		autoend_today_disabled = document.getElementById("autoend_today_disabled");
 	if (nosave.checked == false) {
 		if (autoend.checked == false) {
 			localStorage.setItem("autoend", "false");
+			localStorage.setItem("autoend_today_disabled", "false");
 		} else {
-			setEnd(now());
+			if (autoend_today_disabled.checked == true) {
+				localStorage.setItem("autoend_today_disabled", todayDate());
+			} else {
+				setEnd(now());
+				localStorage.setItem("autoend_today_disabled", "false");
+			}
 			localStorage.setItem("autoend", "true");
 		}
 		var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule().toFixed(2) + '"}';
 		localStorage.setItem(todayDate(), timeinfo);
 		localStorage.setItem("nosave", "false");
 	} else {
-		localStorage.setItem("nosave", todayDate());
 		if (autoend.checked == false) {
 			localStorage.setItem("autoend", "false");
 		} else {
 			localStorage.setItem("autoend", "true");
 		}
+		localStorage.setItem("nosave", todayDate());
 	}
 	// Set 'subtract 5 min from start time' parameter in local storage
 	var startminsubtract = document.getElementById("startminsubtract");
@@ -1062,6 +1085,7 @@ window.onbeforeunload = function(e){
 
 // Listeners and initializers
 $(document).ready(function(){
+	reset();
 	//$('[data-toggle="tooltip"]').tooltip({trigger: "hover"}); // Initialize bootstrap tooltips
 	$('[data-toggle="tooltip"]').tooltip(); 
 	moment().format(); // Initialize momentjs
