@@ -170,7 +170,7 @@ function getWorktime(){
 		if ( Math.abs(worktime - getHourSchedule()) <= 0.02 ){
 			worktime = getHourSchedule();
 		}
-		return worktime
+		return worktime.toFixed(2);
 	}
 	
 	worktime = getEnd() - getStart();
@@ -182,7 +182,7 @@ function getWorktime(){
 
 function calculateTotal(){
 	var worktime = getWorktime(),
-		overtimedec = getOvertimeDec(),
+		overtimedec = Math.abs(getOvertimeDec()),
 		totalnobreakdec = getTotalNoBreakDec();
 
 	setTotal(worktime);
