@@ -182,7 +182,7 @@ function getWorktime(){
 
 function calculateTotal(){
 	var worktime = getWorktime(),
-		overtimedec = Math.abs(getOvertimeDec()),
+		overtimedec = getOvertimeDec(),
 		totalnobreakdec = getTotalNoBreakDec();
 
 	setTotal(worktime);
