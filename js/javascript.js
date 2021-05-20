@@ -435,10 +435,10 @@ function setHistory(refresh_edit_table){
 			if (timeinfo.hasOwnProperty('OvertimeDec')){
 				if (timeinfo['OvertimeDec'].startsWith("-")){
 					entry_history = entry_history + "<tr style='color:red;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
-					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:red;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td></tr>"
+					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:red;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + parseFloat(timeinfo['StartDec']).toFixed(2) + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-remove'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td></tr>"
 				} else {
 					entry_history = entry_history + "<tr style='color:green;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
-					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['StartDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='table-save'><button type='button' class='btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-save'></i></button></span> <span class='table-remove'><button type='button' class='btn btn-outline-danger btn-rounded btn-sm my-0 waves-effect waves-light'><i class='far fa-trash-alt'></i></button></span></td>"
+					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + parseFloat(timeinfo['StartDec']).toFixed(2) + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-remove'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td>"
 				}
 				overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo['OvertimeDec']);
 				
@@ -539,7 +539,9 @@ function breaktimeTimeselection(){
 		document.getElementById("break_add30_btn").disabled = false;
 		document.getElementById("break_counter_btn").disabled = false;
 		// re-initialize tooltips to pickup the changes
-		$('[data-toggle="tooltip"]').tooltip();
+		$('[data-toggle="tooltip"]').tooltip({
+			'delay': { show: 1000, hide: 0 }
+		});
 	} else {
 		document.getElementById("breaktime_timeselection_option_timerange_div").classList.remove("d-none");
 		document.getElementById("breaktime_timeselection_option_duration_div").classList.add("d-none");
@@ -554,7 +556,9 @@ function breaktimeTimeselection(){
 		document.getElementById("break_add30_btn").disabled = true;
 		document.getElementById("break_counter_btn").disabled = true;
 		// re-initialize tooltips to pickup the changes
-		$('[data-toggle="tooltip"]').tooltip();
+		$('[data-toggle="tooltip"]').tooltip({
+			'delay': { show: 1000, hide: 0 }
+		});
 	}
 }
 
@@ -565,11 +569,14 @@ function checkInputValues(){
 		document.getElementById("break_time_end").value = document.getElementById("break_time_start").value;
 		app_alert_message = "<b>Holy guacamole!</b> You can't end your break before you start it, can you superman?<br> Fill in when your break ended first.";
 	}
+	setAlertMessage(app_alert_message);
+}
 
+function setAlertMessage(app_alert_message){
 	if (app_alert_message != "") {
 		document.getElementById("app_alert_message").innerHTML = app_alert_message;
 		$("#app_alert").show();
-		setTimeout(function() {$("#app_alert").fadeOut();}, 5000);
+		setTimeout(function() {$("#app_alert").fadeOut();}, 10000);
 	}
 }
 
@@ -603,7 +610,7 @@ function cleanLocalStorage(){
 }
 
 function deleteHistory(){
-	if ( confirm("Are you sure you wish to delete your history?\nIf you choose not to then your data will be saved untill the next cleaning time.") ) {
+	if ( confirm("Are you sure you wish to delete your history?\nIf you choose not to, then your data will be saved until the next cleaning time.") ) {
 		for(key in localStorage) {
 			if ( testDateFormat(key) ) {
 				delete localStorage[key];
@@ -1087,7 +1094,9 @@ window.onbeforeunload = function(e){
 $(document).ready(function(){
 	reset();
 	//$('[data-toggle="tooltip"]').tooltip({trigger: "hover"}); // Initialize bootstrap tooltips
-	$('[data-toggle="tooltip"]').tooltip(); 
+	$('[data-toggle="tooltip"]').tooltip({
+		'delay': { show: 1000, hide: 0 }
+	});
 	moment().format(); // Initialize momentjs
 		
 	if(window.location.href.indexOf('#modalabout') != -1) {
@@ -1109,7 +1118,12 @@ $(document).ready(function(){
 
 $(window).on("load", function () {
 	if ("serviceWorker" in navigator) {
-		navigator.serviceWorker.register("js/service-worker.js");
+		navigator.serviceWorker.register("js/service-worker.js", { scope: '/' })
+			.then(function (registration) {
+				console.log('Service worker registered successfully');
+			}).catch(function (e) {
+				console.error('Error during service worker registration:', e);
+			});
 	}
 });
 
@@ -1139,14 +1153,12 @@ $(".btn").mouseup(function(){
 function run60sec() {
     // runs every 60 sec
 	if (getEnd() <= now() && !startedLeaves){
-		//console.log("if " + getEnd() + " <= " + now() + " && !" + startedLeaves);
 		startLeaves();
 	} else if (getEnd() > now() && startedLeaves){
 		stopLeaves();
-		//console.log("else if " + startedLeaves);
 	}
 }
-setInterval(run60sec, 2*60000); // (Every 2) * (60 * 1000 milliseconds = 60 seconds = 1 minute)
+setInterval(run60sec, 5*60000); // (Every 2) * (60 * 1000 milliseconds = 60 seconds = 1 minute)
 
 /*
 // ASYNC loading of JS files

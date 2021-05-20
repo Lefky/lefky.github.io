@@ -46,7 +46,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20210512.1</span> <br>
+					Version: <span id="currentappversion">20210520.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -289,22 +289,35 @@
 					<p class="text-danger">
 						To save an entry you need to click the save button! If you add a date that already exists it'll be overwritten!
 					</p>
-				  <span class="table-add float-right mb-3 mr-2"><a href="#!" class="text-success"><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
-				  <table class="table table-bordered table-responsive-md table-striped text-center">
-					<thead>
-					  <tr>
-						<th class="text-center px-5">Date</th>
-						<th class="text-center">Total Time No Break</th>
-						<th class="text-center">Overtime</th>
-						<th class="text-center">Total Work Time</th>
-						<th class="text-center">Start Time</th>
-						<th class="text-center">Hour Schedule</th>
-						<th class="text-center">Edit</th>
-					  </tr>
-					</thead>
+					<div class="float-right">
+						<span class="table-add mb-3 mr-2">
+							<!-- <a href="#!" class="text-info my-0 mx-2" title="Add entry"><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a> -->
+							<button type="button" class="btn btn-info my-1 mx-2"><i class="fa fa-plus"></i> Add New</button>
+						</span>
+						<span class="table-save-all mb-3 mr-2">
+							<!-- <a href="#!" class="text-success my-0 mx-2" title="Save all entries"><i class="fas fa-save fa-2x" aria-hidden="true"></i></a> -->
+							<button type="button" class="btn btn-success my-1 mx-2"><i class="fa fa-save"></i> Save all</button>
+						</span>
+						<span class="table-delete-all mb-3 mr-2">
+							<!-- <a href="#!" class="text-danger my-0 mx-2" title="Delete all entries"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a> -->
+							<button type="button" class="btn btn-danger my-1 mx-2"><i class="fa fa-trash"></i> Delete all</button>
+						</span>
+					</div>
+					<table class="table table-bordered table-responsive-md table-striped text-center">
+						<thead>
+							<tr>
+							<th class="text-center px-5">Date</th>
+							<th class="text-center">Total Time No Break</th>
+							<th class="text-center">Overtime</th>
+							<th class="text-center">Total Work Time</th>
+							<th class="text-center">Start Time</th>
+							<th class="text-center">Hour Schedule</th>
+							<th class="text-center">Edit</th>
+							</tr>
+						</thead>
 					<tbody id="edit_history_table_body">
 					</tbody>
-				  </table>
+					</table>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -367,17 +380,15 @@
 				</div>
 				<div class="col-lg-8 py-1 px-4">
 					<p>
-						Small layout fixes.
-					</p>
-					<p>
-						More consistent endtime calculations.
-					</p>
-					<p>
 						Added progressive web app support (or trying to) to make it possible to install the app out of the browser.<br>
 						BUGFIX: on top of previous build.
+						BUGFIX 2: regarding the service worker.
 					</p>
 					<p>
-						Added option to not automatically set endtime only for today (in case you forget to enable the automatic endtime again the next day if you meant to disable it for only 1 day).
+						Added a 'save all' and 'delete all' button to the edit history screen so you can make changes in bulk without having to save each entry seperatly.
+					</p>
+					<p>
+						Tooltips will now be shown with a 2 second delay to be more user-friendly.
 					</p>
 				</div>
 			</div>

@@ -1,9 +1,9 @@
+console.log("loaded graphs.js");
 /*
 In HTML
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <div id="div_where_graph_comes"></div>
 */
-console.log("loaded graphs.js");
 
 var sortedkeys = getHistory(),
 	numberOfDaysRegistered = 0,
