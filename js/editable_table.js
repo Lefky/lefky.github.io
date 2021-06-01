@@ -50,27 +50,34 @@ $('.table-save-all').on('click', 'button', function() {
 	}
 
 	// loop through each row of the table.
+	var returncode, 
+		app_alert_message = "";
 	for (row = 0; row < table.rows.length; row++) {
 		var currentRow = table.rows.item(row);
 
 		var key = currentRow.cells.item(0).innerHTML;
-		var TotalNoBreakDec = parseFloat(currentRow.cells.item(1).innerHTML);
-		var OvertimeDec = parseFloat(currentRow.cells.item(2).innerHTML);
-		var TotalDec = parseFloat(currentRow.cells.item(3).innerHTML);
-		var StartDec = parseFloat(currentRow.cells.item(4).innerHTML);
-		var HourSchedule = parseFloat(currentRow.cells.item(5).innerHTML);
+		var TotalNoBreakDec = currentRow.cells.item(1).innerHTML;
+		var OvertimeDec = currentRow.cells.item(2).innerHTML;
+		var TotalDec = currentRow.cells.item(3).innerHTML;
+		var StartDec = currentRow.cells.item(4).innerHTML;
+		var HourSchedule = currentRow.cells.item(5).innerHTML;
 
-		var returncode = save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule);
+		returncode = save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule);
 	
-		if (returncode == 0) {
+		if (!returncode) {
 			const btn = currentRow.getElementsByClassName('record-save')[0].firstElementChild;
+			currentRow.style.backgroundColor = "";
 			iconToggle(btn, "check");
 			setTimeout(() => { iconToggle(btn, "save") }, 2000);	
 		} else {
 			currentRow.style.backgroundColor = "#ffcccc";
-			app_alert_message = "<b>Ai caramba!</b> An entry hasn't been saved!";
-			setAlertMessage(app_alert_message);
+			app_alert_message = app_alert_message + returncode;
 		}
+	}
+	
+	if (app_alert_message) {
+		app_alert_message = "<b>Ai caramba!</b> One or multiple entries haven't been saved!" + app_alert_message;
+		setAlertMessage(app_alert_message);
 	}
 
 	const btn_all = document.getElementsByClassName('table-save-all')[0].firstElementChild;
@@ -92,46 +99,47 @@ function clearPlaceholder(cell) {
 }
 
 function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule){
-	const isnumber = /^-?[0-9]+.*[0-9]*$/;
+	const isnumber = /^(?<=^| )(-?)\d+(\.\d+)?(?=$| )$/;
+	var error_message = "";
+
 	if (!testDateFormat(key)) {
-		alert("\nDate for date " + key +"\n\nis not in the DD-MM-YYYY format.\nPlease correct your entry and try again.");
-		return 1;
+		error_message = error_message + "<br><br>Date for date " + key +"<br><br>is not in the DD-MM-YYYY format.";
 	}
 	if (!isnumber.test(TotalNoBreakDec)) {
-		alert("\nTotal Time No Break for date " + key +"\n\nis not a (decimal) number.\nPlease correct your entry and try again.");
-		return 1;
+		error_message = error_message + "<br><br>Total Time No Break for date " + key +"<br><br>is not a (decimal) number.";
 	}
 	if (!isnumber.test(OvertimeDec)) {
-		alert("\nOvertime for date " + key +"\n\nis not a (decimal) number.\nPlease correct your entry and try again.");
-		return 1;
+		error_message = error_message + "<br><br>Overtime for date " + key +"<br><br>is not a (decimal) number.";
 	}
 	if (!isnumber.test(TotalDec)) {
-		alert("\nTotal Work Time for date " + key +"\n\nis not a (decimal) number.\nPlease correct your entry and try again.");
-		return 1;
+		error_message = error_message + "<br><br>Total Work Time for date " + key +"<br><br>is not a (decimal) number.";
 	}
 	if (!isnumber.test(StartDec)) {
-		alert("\nStart Time for date " + key +"\n\nis not a (decimal) number.\nPlease correct your entry and try again.");
-		return 1;
+		error_message = error_message + "<br><br>Start Time for date " + key +"<br><br>is not a (decimal) number.";
 	}
 	if (!isnumber.test(HourSchedule)) {
-		alert("\Hour Schedule for date " + key +"\n\nis not a (decimal) number.\nPlease correct your entry and try again.");
-		return 1;
+		error_message = error_message + "<br><br>Hour Schedule for date " + key +"<br><br>is not a (decimal) number.";
 	}
 
-	var timeinfo = '{"TotalNoBreakDec": "' + TotalNoBreakDec.toFixed(2) + '", "OvertimeDec": "' + OvertimeDec.toFixed(2) + '", "TotalDec": "' + TotalDec.toFixed(2) + '", "StartDec": "' + StartDec.toFixed(2) + '", "HourSchedule": "' + HourSchedule.toFixed(2) + '"}';
-	localStorage.setItem(key, timeinfo);
-	return 0;
+	if (error_message == "") {
+		var timeinfo = '{"TotalNoBreakDec": "' + parseFloat(TotalNoBreakDec).toFixed(2) + '", "OvertimeDec": "' + parseFloat(OvertimeDec).toFixed(2) + '", "TotalDec": "' + parseFloat(TotalDec).toFixed(2) + '", "StartDec": "' + parseFloat(StartDec).toFixed(2) + '", "HourSchedule": "' + parseFloat(HourSchedule).toFixed(2) + '"}';
+		localStorage.setItem(key, timeinfo);
+	} else {
+		error_message = error_message + "<br><br>Please correct your entry and try again.";
+		return error_message;
+	}
+	return;
 }
 
 $tableID.on('click', '.record-save', function() {
 	var currentRow = $(this).closest("tr");
 
 	var key = currentRow.find("td:eq(0)").text(); // get current row 1st TD value
-	var TotalNoBreakDec = parseFloat(currentRow.find("td:eq(1)").text()); // get current row 2nd TD
-	var OvertimeDec = parseFloat(currentRow.find("td:eq(2)").text()); // get current row 3rd TD
-	var TotalDec = parseFloat(currentRow.find("td:eq(3)").text()); // get current row 4th TD
-	var StartDec = parseFloat(currentRow.find("td:eq(4)").text()); // get current row 5th TD
-	var HourSchedule = parseFloat(currentRow.find("td:eq(5)").text()); // get current row 6th TD
+	var TotalNoBreakDec = currentRow.find("td:eq(1)").text(); // get current row 2nd TD
+	var OvertimeDec = currentRow.find("td:eq(2)").text(); // get current row 3rd TD
+	var TotalDec = currentRow.find("td:eq(3)").text(); // get current row 4th TD
+	var StartDec = currentRow.find("td:eq(4)").text(); // get current row 5th TD
+	var HourSchedule = currentRow.find("td:eq(5)").text(); // get current row 6th TD
 
 	var returncode = save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule);
 
@@ -144,10 +152,15 @@ $tableID.on('click', '.record-save', function() {
 			btn.html('<i class="fa fa-check fontsize150"></i>')
 		}
 	}
-	if (returncode == 0) {
+	if (!returncode) {
+		currentRow.css("backgroundColor", "");
 		iconToggle();
 		setTimeout(iconToggle, 2000);
 		setHistory(false);
+	} else {
+		currentRow.css("backgroundColor", "#ffcccc");
+		app_alert_message = "<b>Ai caramba!</b> An entry hasn't been saved!";
+		setAlertMessage(app_alert_message + returncode);
 	}
 });
 
