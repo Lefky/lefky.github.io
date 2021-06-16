@@ -1150,7 +1150,7 @@ $(".btn").mouseup(function(){
 	this.blur();
 });
 
-function run60sec() {
+function intervalListener() {
     // runs every 60 sec
 	if (getEnd() <= now() && !startedLeaves){
 		startLeaves();
@@ -1158,7 +1158,7 @@ function run60sec() {
 		stopLeaves();
 	}
 }
-setInterval(run60sec, 5*60000); // (Every 2) * (60 * 1000 milliseconds = 60 seconds = 1 minute)
+setInterval(intervalListener, 5*60000); // (Every 5) * (60 * 1000 milliseconds = 60 seconds = 1 minute)
 
 /*
 // ASYNC loading of JS files
