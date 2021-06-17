@@ -6,6 +6,12 @@ html, body {
 .fontsize60 {
 	font-size: 0.6rem;
 }
+.fontsize150 {
+    font-size: 1.5rem;
+}
+.fontsize200 {
+    font-size: 2rem;
+}
 .h-33 {
 	height: 33%;
 }
@@ -148,6 +154,7 @@ html, body {
 #app_alert {
 	bottom: 0;
 	margin-bottom: 10rem !important;
+    z-index: 2000;
 }
 .input-fixedwidth90 {
 	min-width: 90px; 

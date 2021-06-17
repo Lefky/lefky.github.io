@@ -1,9 +1,9 @@
+console.log("loaded graphs.js");
 /*
 In HTML
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <div id="div_where_graph_comes"></div>
 */
-console.log("loaded graphs.js");
 
 var sortedkeys = getHistory(),
 	numberOfDaysRegistered = 0,
@@ -457,7 +457,7 @@ function drawGaugegraph(graphtype) {
 
 function formatJSONdata() {
 	//var start = sortedkeys.length - datasetlength; // howmany datapoints need to be skipped before starting to draw graphs
-	var start_reporting_selection = document.getElementById('start_reporting_selection').value,
+	var start_reporting_selection = moment(document.getElementById('start_reporting_selection').value, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD'),
 		end_reporting_selection = document.getElementById('end_reporting_selection').value;
 	
 	var timeinfo,

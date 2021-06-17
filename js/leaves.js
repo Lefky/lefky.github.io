@@ -50,7 +50,35 @@ function showLeafMessage(){
 	alertMessage.setAttribute("role", "alert");
 	alertMessage.setAttribute("style", "position: absolute; top: 4rem; right: 4rem; z-index: 2; font-size: 2rem;");
 	
-	alertMessage.innerHTML = "<span><i class='fas fa-glass-cheers faa-shake animated'></i> Time to 'LEAF' work <i class='far fa-smile-wink'></i></span>" + "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>" + "<span aria-hidden='true'>&times;</span>" + "</button>";
+	alertMessage.innerHTML = "<audio id='audioNotification' src='sounds/pristine-609.mp3' muted></audio><span><i class='fas fa-glass-cheers faa-shake animated'></i> Time to 'LEAF' work <i class='far fa-smile-wink'></i></span>" + "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>" + "<span aria-hidden='true'>&times;</span>" + "</button>";
 	
 	document.getElementsByTagName("body")[0].appendChild(alertMessage);
+
+	playNotificationSound();
+}
+
+function playNotificationSound() {
+	// https://notificationsounds.com/
+
+	// Doesn't launch without user interaction because of browsers not supporting autoplay sounds anymore
+	document.getElementById('audioNotification').muted = false;
+	document.getElementById('audioNotification').play();
+
+/*
+	var audio = new Audio('sounds/pristine-609.mp3');
+
+	setTimeout(() => {
+		audio.play();
+	}, 500)
+*/
+/*
+	let audioPlay = document.getElementById('audioNotification')
+
+	audioPlay.play()
+
+	setTimeout(() => {
+		audioPlay.pause()
+		audioPlay.load()
+	}, 100)
+*/
 }
