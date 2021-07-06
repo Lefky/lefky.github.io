@@ -3,6 +3,7 @@ console.log("loaded leaves.js");
 // source: https://codepen.io/uurrnn/pen/Kuylr?editors=1100
 
 var startedLeaves = false;
+var interval = "";
 
 function startLeaves(){
 	loadLeavesCSS();
@@ -21,12 +22,26 @@ function startLeaves(){
 	document.getElementsByTagName("body")[0].appendChild(leaves_div);
 	
 	showLeafMessage();
+
+	playNotificationSound();
+	document.title = "Done for the day!";
+
+	interval = setInterval(function () {
+		if (document.title == "Working hours") {
+			document.title = "Done for the day!";
+		} else {
+			document.title = "Working hours";
+		}
+	}, 1000);
 }
 
 function stopLeaves(){
 	startedLeaves = false;	
 	document.getElementById("leaves_alert").remove();
 	document.getElementById("leaves").remove();
+
+	clearInterval(interval);
+	document.title = "Working hours";
 }
 
 function loadLeavesCSS(){
@@ -53,8 +68,6 @@ function showLeafMessage(){
 	alertMessage.innerHTML = "<audio id='audioNotification' src='sounds/pristine-609.mp3' muted></audio><span><i class='fas fa-glass-cheers faa-shake animated'></i> Time to 'LEAF' work <i class='far fa-smile-wink'></i></span>" + "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>" + "<span aria-hidden='true'>&times;</span>" + "</button>";
 	
 	document.getElementsByTagName("body")[0].appendChild(alertMessage);
-
-	playNotificationSound();
 }
 
 function playNotificationSound() {
