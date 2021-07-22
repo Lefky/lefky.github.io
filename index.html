@@ -46,7 +46,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20210706.1</span> <br>
+					Version: <span id="currentappversion">20210722.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -387,6 +387,9 @@
 					<p>
 						Added tab message when the day is over.
 					</p>
+					<p>
+						Added 39h week for overtime.
+					</p>
 				</div>
 			</div>
 			<button type="button" class="close" onclick="notificationClosed('click');" data-dismiss="alert" aria-label="Close">
@@ -455,17 +458,22 @@
 							</label>
 							<div class="mb-1 mb-md-0 mx-3 mr-sm-0">
 								<select name="hourschedule" id="hourschedule" class="form-control input-fixedwidth90" onchange="calculateTotal();" data-toggle="tooltip" data-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
-									<option value="0">0h		&nbsp;&emsp;&emsp;&emsp;(working overtime)</option>
-									<option value="3.04">3,04h 	&emsp;&emsp;(part-time 2/5, 38h week)</option>
-									<option value="3.2">3,2h 	&ensp;&emsp;&emsp;(part-time 2/5, 40h week)</option>
-									<option value="3.8">3,8h 	&ensp;&emsp;&emsp;(half-time, 38h week)</option>
-									<option value="4">4h 		&nbsp;&emsp;&emsp;&emsp;(half-time, 40h week)</option>
-									<option value="4.56">4,56h 	&emsp;&emsp;(part-time 3/5, 38h week)</option>
-									<option value="4.8">4,8h 	&ensp;&emsp;&emsp;(part-time 3/5, 40h week)</option>
-									<option value="6.08">6,08h 	&emsp;&emsp;(part-time 4/5, 38h week)</option>
-									<option value="6.4">6,4h 	&ensp;&emsp;&emsp;(part-time 4/5, 40h week)</option>
+									<option value="0">0h				&nbsp;&emsp;&emsp;&emsp;(working overtime)</option>
+									<option value="3.04">3,04h 			&emsp;&emsp;(part-time 2/5, 38h week)</option>
+									<option value="3.12">3,12h 			&emsp;&emsp;(part-time 2/5, 39h week)</option>
+									<option value="3.2">3,2h 			&ensp;&emsp;&emsp;(part-time 2/5, 40h week)</option>
+									<option value="3.8">3,8h 			&ensp;&emsp;&emsp;(half-time, 38h week)</option>
+									<option value="3.9">3,9h 			&ensp;&emsp;&emsp;(half-time, 39h week)</option>
+									<option value="4">4h 				&nbsp;&emsp;&emsp;&emsp;(half-time, 40h week)</option>
+									<option value="4.56">4,56h 			&emsp;&emsp;(part-time 3/5, 38h week)</option>
+									<option value="4.68">4,68h 			&emsp;&emsp;(part-time 3/5, 39h week)</option>
+									<option value="4.8">4,8h 			&ensp;&emsp;&emsp;(part-time 3/5, 40h week)</option>
+									<option value="6.08">6,08h 			&emsp;&emsp;(part-time 4/5, 38h week)</option>
+									<option value="6.24">6,24h 			&emsp;&emsp;(part-time 4/5, 39h week)</option>
+									<option value="6.4">6,4h 			&ensp;&emsp;&emsp;(part-time 4/5, 40h week)</option>
 									<option value="7.6" selected>7,6h 	&ensp;&emsp;&emsp;(full-time, 38h week)</option>
-									<option value="8">8h 		&nbsp;&emsp;&emsp;&emsp;(full-time, 40h week)</option>
+									<option value="7.8">7,8h 			&ensp;&emsp;&emsp;(full-time, 39h week)</option>
+									<option value="8">8h 				&nbsp;&emsp;&emsp;&emsp;(full-time, 40h week)</option>
 									<!--
 										&nbsp; (adds a single space)
 										&ensp; (it is about the width of two normal spaces)
