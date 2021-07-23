@@ -1118,7 +1118,7 @@ $(document).ready(function(){
 
 $(window).on("load", function () {
 	if ("serviceWorker" in navigator) {
-		navigator.serviceWorker.register("js/service-worker.js", { scope: '/' })
+		navigator.serviceWorker.register("service-worker.js", { scope: '/' })
 			.then(function (registration) {
 				console.log('Service worker registered successfully');
 			}).catch(function (e) {
