@@ -275,11 +275,11 @@ function getHistory(){
 		i = 0,
 		key;
 
-	for (i = 0; key = sortedkeys[i]; i++) {
+	for (i = 0; key = sortedkeys[i]; i++) {	
 		if (!testDateFormat(key)) {
 			sortedkeys.splice(i, 1)
 			i--;
-		}
+		} 
 	}
 	return sortedkeys;
 }
@@ -421,8 +421,7 @@ function testDateFormat(date){
 function setHistory(refresh_edit_table){
 	var entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
 		entry_edit_history = "",
-		keys = Object.keys(localStorage),
-		revkeys = keys.map(reverseDateRepresentation).sort().reverse().map(reverseDateRepresentation),
+		revkeys = getHistory().reverse(),
 		overtimetotal = 0,
 		overtimeweekly = 0,
 		i = 0, 
@@ -430,15 +429,15 @@ function setHistory(refresh_edit_table){
 		timeinfo;	
 	
 	for (; key = revkeys[i]; i++) {
-		if (testDateFormat(key)) {
+		//if (testDateFormat(key)) {
 			timeinfo = JSON.parse(localStorage.getItem(key));
 			if (timeinfo.hasOwnProperty('OvertimeDec')){
 				if (timeinfo['OvertimeDec'].startsWith("-")){
 					entry_history = entry_history + "<tr style='color:red;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
-					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:red;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + parseFloat(timeinfo['StartDec']).toFixed(2) + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td></tr>"
+					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:red;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + (timeinfo['StartDec'].toLowerCase() != "correction" ? parseFloat(timeinfo['StartDec']).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td></tr>"
 				} else {
 					entry_history = entry_history + "<tr style='color:green;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
-					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + parseFloat(timeinfo['StartDec']).toFixed(2) + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td>"
+					entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + (timeinfo['StartDec'].toLowerCase() != "correction" ? parseFloat(timeinfo['StartDec']).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td>"
 				}
 				overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo['OvertimeDec']);
 				
@@ -479,10 +478,10 @@ function setHistory(refresh_edit_table){
 					console.log(new_timeinfo);
 				}
 			}
-		}
+		//}
 	}
 	
-	if (keys == "" || keys == null) {
+	if (revkeys == "" || revkeys == null) {
 		entry_history = "No previous data yet :(";
 		entry_edit_history = entry_history;
 	} else {
@@ -1090,6 +1089,10 @@ window.onbeforeunload = function(e){
 	}
 };
 
+$(function () {
+	$('[data-toggle="tooltip"]').tooltip()
+})
+
 // Listeners and initializers
 $(document).ready(function(){
 	reset();
@@ -1097,6 +1100,7 @@ $(document).ready(function(){
 	$('[data-toggle="tooltip"]').tooltip({
 		'delay': { show: 1000, hide: 0 }
 	});
+
 	moment().format(); // Initialize momentjs
 		
 	if(window.location.href.indexOf('#modalabout') != -1) {
