@@ -1089,10 +1089,6 @@ window.onbeforeunload = function(e){
 	}
 };
 
-$(function () {
-	$('[data-toggle="tooltip"]').tooltip()
-})
-
 // Listeners and initializers
 $(document).ready(function(){
 	reset();
