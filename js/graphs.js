@@ -472,8 +472,12 @@ function formatJSONdata() {
 		if (testDateFormat(key)/* && i >= start*/) {
 			timeinfo = JSON.parse(localStorage.getItem(key));
 			dateKey=moment(key, "DD-MM-YYYY");
+
+			if (timeinfo['HourSchedule'].toLowerCase() == "correction") {
+				sumOvertime = parseFloat(sumOvertime.toFixed(2)) + parseFloat(timeinfo['OvertimeDec']);
+			}
 			
-			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection)){
+			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo['HourSchedule'].toLowerCase() != "correction"){
 
 				dateKey = key.split('-');
 				dateKey = new Date(dateKey[2], dateKey[1] - 1, dateKey[0]);

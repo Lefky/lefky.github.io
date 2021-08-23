@@ -3,7 +3,7 @@
 <head>
 	<title>Working hours</title>
 	<link rel="shortcut icon" type="image/png" href="images/clock64.png"/>
-	<link rel="manifest" href="manifest.json">
+	<link rel="manifest" href="manifest.json" crossorigin="anonymous">
 	<meta name="robots" content="index">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -16,10 +16,10 @@
 	  gtag('config', 'UA-160200625-1');
 	</script>
 	<!-- Bootstrap -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" defer>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" defer></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" defer></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" defer></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" defer>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" defer></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" defer></script>
 	<!-- Font Awsome -->
 	<link href="css/all.min.css" rel="stylesheet" defer>
 	<!-- Custom Styles -->
@@ -46,7 +46,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20210723.1</span> <br>
+					Version: <span id="currentappversion">20210823.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
@@ -380,16 +380,10 @@
 				</div>
 				<div class="col-lg-8 py-1 px-4">
 					<p>
-						Added progressive web app support (or trying to) to make it possible to install the app out of the browser.<br>
-						BUGFIX: on top of previous build.<br>
-						BUGFIX 2: regarding the service worker.
-						BUGFIX 3: regarding the service worker.
+						Bugfix: delete entry wasn't working anymore.
 					</p>
 					<p>
-						Added tab message when the day is over.
-					</p>
-					<p>
-						Added 39h week for overtime.
+						Added option to introduce a correction entry for overtime.
 					</p>
 				</div>
 			</div>

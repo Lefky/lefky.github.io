@@ -105,24 +105,24 @@ function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSch
 	if (!testDateFormat(key)) {
 		error_message = error_message + "<br><br>Date for date " + key +"<br><br>is not in the DD-MM-YYYY format.";
 	}
-	if (!isnumber.test(TotalNoBreakDec)) {
+	if (!isnumber.test(TotalNoBreakDec) && TotalNoBreakDec.toLowerCase() != "correction") {
 		error_message = error_message + "<br><br>Total Time No Break for date " + key +"<br><br>is not a (decimal) number.";
 	}
 	if (!isnumber.test(OvertimeDec)) {
 		error_message = error_message + "<br><br>Overtime for date " + key +"<br><br>is not a (decimal) number.";
 	}
-	if (!isnumber.test(TotalDec)) {
+	if (!isnumber.test(TotalDec) && TotalDec.toLowerCase() != "correction") {
 		error_message = error_message + "<br><br>Total Work Time for date " + key +"<br><br>is not a (decimal) number.";
 	}
-	if (!isnumber.test(StartDec)) {
+	if (!isnumber.test(StartDec) && StartDec.toLowerCase() != "correction") {
 		error_message = error_message + "<br><br>Start Time for date " + key +"<br><br>is not a (decimal) number.";
 	}
-	if (!isnumber.test(HourSchedule)) {
+	if (!isnumber.test(HourSchedule) && HourSchedule.toLowerCase() != "correction") {
 		error_message = error_message + "<br><br>Hour Schedule for date " + key +"<br><br>is not a (decimal) number.";
 	}
 
 	if (error_message == "") {
-		var timeinfo = '{"TotalNoBreakDec": "' + parseFloat(TotalNoBreakDec).toFixed(2) + '", "OvertimeDec": "' + parseFloat(OvertimeDec).toFixed(2) + '", "TotalDec": "' + parseFloat(TotalDec).toFixed(2) + '", "StartDec": "' + parseFloat(StartDec).toFixed(2) + '", "HourSchedule": "' + parseFloat(HourSchedule).toFixed(2) + '"}';
+		var timeinfo = '{"TotalNoBreakDec": "' + (TotalNoBreakDec.toLowerCase() != "correction" ? parseFloat(TotalNoBreakDec).toFixed(2) : "correction") + '", "OvertimeDec": "' + parseFloat(OvertimeDec).toFixed(2) + '", "TotalDec": "' + (TotalDec.toLowerCase() != "correction" ? parseFloat(TotalDec).toFixed(2) : "correction") + '", "StartDec": "' + (StartDec.toLowerCase() != "correction" ? parseFloat(StartDec).toFixed(2) : "correction") + '", "HourSchedule": "' + (HourSchedule.toLowerCase() != "correction" ? parseFloat(HourSchedule).toFixed(2) : "correction") + '"}';
 		localStorage.setItem(key, timeinfo);
 	} else {
 		error_message = error_message + "<br><br>Please correct your entry and try again.";
