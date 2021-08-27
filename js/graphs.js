@@ -473,7 +473,7 @@ function formatJSONdata() {
 			timeinfo = JSON.parse(localStorage.getItem(key));
 			dateKey=moment(key, "DD-MM-YYYY");
 
-			if (timeinfo['HourSchedule'].toLowerCase() == "correction") {
+			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo['HourSchedule'].toLowerCase() == "correction") {
 				sumOvertime = parseFloat(sumOvertime.toFixed(2)) + parseFloat(timeinfo['OvertimeDec']);
 			}
 			

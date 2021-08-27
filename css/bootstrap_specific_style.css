@@ -13,13 +13,16 @@ html, body {
     font-size: 2rem;
 }
 .h-33 {
-	height: 33%;
+	height: 33% !important;
 }
 .w-33 {
-	width: 33%;
+	width: 33% !important;
+}
+.w-90 {
+	width: 90% !important;
 }
 .w-150 {
-	width: 150%;
+	width: 150% !important;
 }
 .btn-lg {
     font-size: 1.15rem;
@@ -41,8 +44,16 @@ html, body {
 	font-size: 1.1rem;
 }
 .rounded-right {
+    border-bottom-left-radius: 0 !important;
+    border-top-left-radius: 0 !important;
 	border-top-right-radius: 1.5rem !important; 
 	border-bottom-right-radius: 1.5rem !important; 
+}
+.rounded-left {
+    border-bottom-left-radius: 1.5rem !important;
+    border-top-left-radius: 1.5rem !important;
+	border-top-right-radius: 0 !important; 
+	border-bottom-right-radius: 0 !important; 
 }
 .bottom-align-text {
 	position: absolute !important;
