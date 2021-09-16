@@ -6,7 +6,7 @@ $('#modaledithistory').on('shown.bs.modal', function() {
 	setHistory(true);
 });
 
-const $tableID = $('#edit_history_table');
+const $tableID = '#edit_history_table';
 
 const newTr = `
 <tr class="hide">
@@ -131,7 +131,7 @@ function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSch
 	return;
 }
 
-$tableID.on('click', '.record-save', function() {
+$($tableID).on('click', '.record-save', function() {
 	var currentRow = $(this).closest("tr");
 
 	var key = currentRow.find("td:eq(0)").text(); // get current row 1st TD value
@@ -164,7 +164,7 @@ $tableID.on('click', '.record-save', function() {
 	}
 });
 
-$tableID.on('click', '.record-delete', function() {
+$($tableID).on('click', '.record-delete', function() {
 	var currentRow = $(this).closest("tr");
 
 	var key = currentRow.find("td:eq(0)").text(); // get current row 1st TD value
@@ -181,4 +181,13 @@ $tableID.on('click', '.record-delete', function() {
 		delete localStorage[key];
 		setHistory(true);
 	}
+});
+
+$("#edit_history_search").on("input", function () {
+	var value = $(this).val().toLowerCase();
+	$($tableID + " tr").filter(function () {
+		$(this).toggle(
+			$(this).text().toLowerCase().indexOf(value) > -1 || $(this).text().toLowerCase().indexOf("edit") > -1
+		)
+	});
 });
