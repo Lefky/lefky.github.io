@@ -190,4 +190,12 @@ $("#edit_history_search").on("input", function () {
 			$(this).text().toLowerCase().indexOf(value) > -1 || $(this).text().toLowerCase().indexOf("edit") > -1
 		)
 	});
+
+	$("tr:visible").each(function (index, obj) {
+		if (index % 2) {
+			$(this).addClass('visible-odd').removeClass('visible-even');
+		} else {
+			$(this).addClass('visible-even').removeClass('visible-odd');
+		}
+	});
 });
