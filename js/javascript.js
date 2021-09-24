@@ -76,15 +76,6 @@ function getBreak(allowNegative){
 		break_time_end = moment(break_time_end, "hh:mm");
 				
 		var time_dec = moment.duration(break_time_end.diff(break_time_start)).asHours();
-		
-		/*
-		if (time_dec < 0) {
-			document.getElementById("break_time_start").value = "00:00";
-			document.getElementById("alertmessage").innerHTML = "<b>Holy guacamole!</b> You can't end your break before you start it, can you superman?<br> Fill in when your break ended first.";
-			$("#app_alert").show();
-			setTimeout(function() {$("#app_alert").fadeOut();}, 5000);
-		}
-		*/
 	}
 
 	if (!allowNegative && (!time_dec || time_dec < 0)) {
@@ -1093,26 +1084,38 @@ window.onbeforeunload = function(e){
 $(document).ready(function(){
 	reset();
 	//$('[data-toggle="tooltip"]').tooltip({trigger: "hover"}); // Initialize bootstrap tooltips
-	$('[data-toggle="tooltip"]').tooltip({
+	/*$('[data-toggle="tooltip"]').tooltip({
 		'delay': { show: 1000, hide: 0 }
-	});
+	});*/
+	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+		return new bootstrap.Tooltip(tooltipTriggerEl, {
+			boundary: document.body,
+			'delay': { show: 1000, hide: 0 }
+		})
+	})
 
 	moment().format(); // Initialize momentjs
 		
-	if(window.location.href.indexOf('#modalabout') != -1) {
-		$('#modalabout').modal('show');
+	if(window.location.href.indexOf('#about') != -1) {
+		var myModal = new bootstrap.Modal(document.getElementById('modalabout'));
+		myModal.show();
 	}
-	if(window.location.href.indexOf('#modalsettings') != -1) {
-		$('#modalsettings').modal('show');
+	if(window.location.href.indexOf('#settings') != -1) {
+		var myModal = new bootstrap.Modal(document.getElementById('modalsettings'));
+		myModal.show();
 	}
-	if(window.location.href.indexOf('#modalinfo') != -1) {
-		$('#modalinfo').modal('show');
+	if(window.location.href.indexOf('#info') != -1) {
+		var myModal = new bootstrap.Modal(document.getElementById('modalinfo'));
+		myModal.show();
 	}
-	if(window.location.href.indexOf('#modaledithistory') != -1) {
-		$('#modaledithistory').modal('show');
+	if(window.location.href.indexOf('#history') != -1) {
+		var myModal = new bootstrap.Modal(document.getElementById('modaledithistory'));
+		myModal.show();
 	}
-	if(window.location.href.indexOf('#modalreporting') != -1) {
-		$('#modalreporting').modal('show');
+	if(window.location.href.indexOf('#reporting') != -1) {
+		var myModal = new bootstrap.Modal(document.getElementById('modalreporting'));
+		myModal.show();
 	}
 });
 
@@ -1130,10 +1133,6 @@ $(window).on("load", function () {
 $(document).on('keydown', function (e){
 	if (e.keyCode === 13) { //ENTER key code
 		add_time(getHourSchedule());
-	}
-	
-	if (e.keyCode === 27) { //ENTER key code
-		$('.modal').modal('hide');
 	}
 });
 

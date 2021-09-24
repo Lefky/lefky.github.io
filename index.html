@@ -16,10 +16,14 @@
 	  gtag('config', 'UA-160200625-1');
 	</script>
 	<!-- Bootstrap -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" defer>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" defer>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"	crossorigin="anonymous" defer></script>
+	<!-- 
+		https://getbootstrap.com/docs/5.0/migration/
+		https://web3canvas.com/convert-bootstrap-4-to-5-migration-guide/#!
+	-->
+	<!-- jquery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" defer></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" defer></script>
 	<!-- Font Awsome -->
 	<link href="css/all.min.css" rel="stylesheet" defer>
 	<!-- Custom Styles -->
@@ -31,38 +35,38 @@
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" defer></script>
 	<script type="text/javascript" src="js/graphs.js" defer></script>
 	<script type="text/javascript" src="js/editable_table.js" defer></script>
-	<script type="text/javascript" src="js/introduction.js" async></script>
+	<script type="text/javascript" src="js/introduction.js" defer></script>
 	<script type="text/javascript" src="js/leaves.js" async></script>
 </head>
 <body>
 <!-- Modal HTML -->
-<div id="modalabout" class="modal fade">
+<div id="modalabout" class="modal fade" tabindex="-1">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content px-2">
 			<div class="modal-header">
 				<h2>About</h2>
-				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
+				<button type="button" class="btn float-end" data-bs-dismiss="modal"><i class="fas fa-times float-end"></i></button>
 			</div>
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20210922.1</span> <br>
+					Version: <span id="currentappversion">20210927.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>	
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div id="modalsettings" class="modal fade">
+<div id="modalsettings" class="modal fade" tabindex="-1">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content px-2">
 			<div class="modal-header">
 				<h2>Settings</h2>
-				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
+				<button type="button" class="btn float-end" data-bs-dismiss="modal"><i class="fas fa-times float-end"></i></button>
 			</div>
 			<div class="modal-body">
 				<p>
@@ -115,10 +119,10 @@
 				<p>
 					<i>"Subtract X min from time on open."</i><br>
 					&emsp;will subtract X min from the time the page was opened NEXT DAY YOU OPEN THE PAGE. This is to take the time to boot your laptop, ... into account.
-					<div class="form-group">
+					<div class="mb-3">
 						<div class="input-group">
 							<label class="col-form-label" for="startminsubtract_value">Minutes to subtract: </label>
-							<input type="number" name="startminsubtract_value" id="startminsubtract_value" class="form-control col-sm-2 mx-1" placeholder="5" min="0" max="60" onchange="startminsubtract()">
+							<input type="number" name="startminsubtract_value" id="startminsubtract_value" class="form-control flex-grow-0 w-f-80 col-2 mx-1" placeholder="5" min="0" max="60" onchange="startminsubtract()">
 						</div>
 					</div>
 				</p>
@@ -128,77 +132,85 @@
 						Select which different stats and options should be visible in the UI.
 					</p>
 					<form>
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" id="overtimeoption" name="overtimeoption" data-toggle="collapse" data-target="#divovertime">
-							<label class="custom-control-label" for="overtimeoption">Show overtime count</label>
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="overtimeoption" name="overtimeoption" data-bs-toggle="collapse" data-bs-target="#divovertime">
+							<label class="form-check-label" for="overtimeoption">Show overtime count</label>
 						</div>
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" id="totalhoursoption" name="totalhoursoption" data-toggle="collapse" data-target="#divtotalhours">
-							<label class="custom-control-label" for="totalhoursoption">Show total hours count</label>
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="totalhoursoption" name="totalhoursoption" data-bs-toggle="collapse" data-bs-target="#divtotalhours">
+							<label class="form-check-label" for="totalhoursoption">Show total hours count</label>
 						</div>
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" id="weeklyovertimeoption" name="weeklyovertimeoption" data-toggle="collapse" data-target="#divovertimeweekly">
-							<label class="custom-control-label" for="weeklyovertimeoption">Show weekly overtime balance</label>
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="weeklyovertimeoption" name="weeklyovertimeoption" data-bs-toggle="collapse" data-bs-target="#divovertimeweekly">
+							<label class="form-check-label" for="weeklyovertimeoption">Show weekly overtime balance</label>
 						</div>
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" id="totalovertimeoption" name="totalovertimeoption" data-toggle="collapse" data-target="#divovertimetotal">
-							<label class="custom-control-label" for="totalovertimeoption">Show total overtime balance</label>
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="totalovertimeoption" name="totalovertimeoption" data-bs-toggle="collapse" data-bs-target="#divovertimetotal">
+							<label class="form-check-label" for="totalovertimeoption">Show total overtime balance</label>
 						</div>
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" id="historyoption" name="historyoption" data-toggle="collapse" data-target="#historycontainer">
-							<label class="custom-control-label" for="historyoption">Show history</label>
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="historyoption" name="historyoption" data-bs-toggle="collapse" data-bs-target="#historycontainer">
+							<label class="form-check-label" for="historyoption">Show history</label>
 						</div>
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" id="parametersoption" name="parametersoption" data-toggle="collapse" data-target="#divparameters">
-							<label class="custom-control-label" for="parametersoption">Show parameters</label>
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="parametersoption" name="parametersoption" data-bs-toggle="collapse" data-bs-target="#divparameters">
+							<label class="form-check-label" for="parametersoption">Show parameters</label>
 						</div>
 					</form>
 					<p class="mt-3 no-bottom-margin">
-						Breaktime input format.
+						Breaktime input format:
 					</p>
-					<div class="input-group">
-						<label class="mr-4">Duration</label>
-						<div class="custom-control custom-switch custom-switch-md mx-1">
-							<input type="checkbox" class="custom-control-input" id="breaktime_timeselection_option_timerange" onchange="breaktimeTimeselection();">
-							<label class="custom-control-label checkneutral" for="breaktime_timeselection_option_timerange">Time range</label>
+					<div class="row align-items-center">
+						<div class="col-2">
+							<div class="input-group">
+								<label>Duration</label>
+							</div>
+						</div>
+						<div class="col-2">
+							<div class="form-check form-switch-md form-switch ps-5">
+								<input type="checkbox" class="form-check-input checkneutral" id="breaktime_timeselection_option_timerange" onchange="breaktimeTimeselection();">
+							</div>
+						</div>
+						<div class="col-3">
+							<label class="form-check-label" for="breaktime_timeselection_option_timerange">Time range</label>
 						</div>
 					</div>
 				</p>
 				<p>
 					<h4>History deletion policy</h4>
-					<div class="form-group">
+					<div class="mb-3 ms-1">
 						<div class="input-group mb-2">
 							<div class="row w-100">
 								<div class="col-sm">
-									<div class="custom-control custom-radio">
-										<input type="radio" id="historydeleteoptiondays" name="historydeleteoption" class="custom-control-input" value="days" checked="checked" onchange="showHistorydeleteoptionContent()">
-										<label class="custom-control-label" for="historydeleteoptiondays" data-toggle="tooltip" data-placement="right" title="This will keep XXX days of data.">Max days to keep history</label>
+									<div class="form-check">
+										<input type="radio" id="historydeleteoptiondays" name="historydeleteoption" class="form-check-input" value="days" checked="checked" onchange="showHistorydeleteoptionContent()">
+										<label class="form-check-label" for="historydeleteoptiondays" data-bs-toggle="tooltip" data-bs-placement="right" title="This will keep XXX days of data.">Max days to keep history</label>
 									</div>
 								</div>
 								<div class="col-sm">
-									<div class="custom-control custom-radio">
-										<input type="radio" id="historydeleteoptionperiod" name="historydeleteoption" class="custom-control-input" value="period" onchange="showHistorydeleteoptionContent()">
-										<label class="custom-control-label" for="historydeleteoptionperiod" data-toggle="tooltip" data-placement="right" title="This will delete the entire history on the day that's displayed next to 'Reset date'.">Reset history on specific day</label>
+									<div class="form-check">
+										<input type="radio" id="historydeleteoptionperiod" name="historydeleteoption" class="form-check-input" value="period" onchange="showHistorydeleteoptionContent()">
+										<label class="form-check-label" for="historydeleteoptionperiod" data-bs-toggle="tooltip" data-bs-placement="right" title="This will delete the entire history on the day that's displayed next to 'Reset date'.">Reset history on specific day</label>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div id="historydeleteoptiondayscontent" class="d-none">
-							<div class="form-group">
+							<div class="mb-3">
 								<div class="input-group">
 									<label class="col-form-label" for="historyretain">Days to keep: </label>
-									<input type="number" name="historyretain" id="historyretain" class="form-control col-sm-2 mx-1" min="0" max="999">
+									<input type="number" name="historyretain" id="historyretain" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="0" max="999">
 								</div>
 							</div>
 						</div>
 						<div id="historydeleteoptionperiodscontent" class="d-none">
-							<div class="form-group">
+							<div class="mb-3">
 								<div class="input-group">
 									<label class="col-form-label" for="historyresetday">Reset on day </label>
-									<input type="number" name="historyresetday" id="historyresetday" class="form-control col-sm-2 mx-1" min="1" max="31" onchange="maxValuesDeleteOption()">
+									<input type="number" name="historyresetday" id="historyresetday" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" max="31" onchange="maxValuesDeleteOption()">
 									<label class="col-form-label" for="historyresetperiod"> of every </label>
-									<input type="number" name="historyresetperiod" id="historyresetperiod" class="form-control col-sm-2 mx-1" min="1" onchange="maxValuesDeleteOption()">
-									<select name="historyresetperiodunit" id="historyresetperiodunit" class="form-control col-sm-2 mx-1" onchange="maxValuesDeleteOption()">
+									<input type="number" name="historyresetperiod" id="historyresetperiod" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" onchange="maxValuesDeleteOption()">
+									<select name="historyresetperiodunit" id="historyresetperiodunit" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" onchange="maxValuesDeleteOption()">
 										<option value="days">days</option>
 										<option value="weeks">weeks</option>
 										<option value="months">months</option>
@@ -207,7 +219,7 @@
 									
 									<div class="input-group my-3">
 										<label class="col-form-label" for="resetdate" id="resetdatelabel">Reset date: </label>
-										<input type="text" name="resetdate" id="resetdate" class="form-control col-sm-5 mx-1" size="20" disabled>
+										<input type="text" name="resetdate" id="resetdate" class="form-control flex-grow-0 w-33 col-sm-5 mx-1" size="20" disabled>
 									</div>
 								</div>
 							</div>
@@ -216,18 +228,18 @@
 				</p>			
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" id="settingsmodalclosebutton" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-danger" id="settingsmodalclosebutton" data-bs-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div id="modalinfo" class="modal fade">
+<div id="modalinfo" class="modal fade" tabindex="-1">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content px-2">
 			<div class="modal-header">
 				<h2>Info</h2>
-				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
+				<button type="button" class="btn float-end" data-bs-dismiss="modal"><i class="fas fa-times float-end"></i></button>
 			</div>
 			<div class="modal-body">
 				<p>
@@ -267,18 +279,18 @@
 				</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div id="modaledithistory" class="modal fade">
+<div id="modaledithistory" class="modal fade" tabindex="-1">
 	<div class="modal-dialog modal-xl">
 		<div class="modal-content px-2">
 			<div class="modal-header">
 				<h2>Edit time history</h2>
-				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
+				<button type="button" class="btn float-end" data-bs-dismiss="modal"><i class="fas fa-times float-end"></i></button>
 			</div>
 			<div class="modal-body">
 				<div id="edit_history_table">
@@ -291,30 +303,28 @@
 					</p>
 					<div class="row align-items-center justify-content-around mb-2">
 						<div class="col-5">
-							<div class="input-group ml-2">
-								<div class="input-group-prepend">
-									<span class="input-group-text rounded-left" id="search-addon1"><i class="fas fa-search" aria-hidden="true"></i></span>
-								</div>
-								<input class="form-control rounded-right" id="edit_history_search" type="search" placeholder="Search dates or corrections" aria-label="Search" aria-describedby="search-addon1">
+							<div class="input-group ms-2">
+								<span class="input-group-text rounded-start" id="history_search"><i class="fas fa-search" aria-hidden="true"></i></span>
+								<input class="form-control rounded-end" id="edit_history_search" type="search" placeholder="Search dates or corrections" aria-label="Search" aria-describedby="history_search">
 							</div>
 						</div>
-						<div class="col-7 text-right">
-							<span class="table-add mr-2">
+						<div class="col-7 text-end">
+							<span class="table-add me-2">
 								<!-- <a href="#!" class="text-info my-0 mx-2" title="Add entry"><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a> -->
-								<button type="button" class="btn btn-info my-1 mx-2"><i class="fa fa-plus"></i> Add New</button>
+								<button type="button" class="btn btn-primary my-1 mx-2"><i class="fa fa-plus"></i> Add New</button>
 							</span>
-							<span class="table-save-all mr-2">
+							<span class="table-save-all me-2">
 								<!-- <a href="#!" class="text-success my-0 mx-2" title="Save all entries"><i class="fas fa-save fa-2x" aria-hidden="true"></i></a> -->
 								<button type="button" class="btn btn-success my-1 mx-2"><i class="fa fa-save"></i> Save all</button>
 							</span>
-							<span class="table-delete-all mr-2">
+							<span class="table-delete-all me-2">
 								<!-- <a href="#!" class="text-danger my-0 mx-2" title="Delete all entries"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a> -->
 								<button type="button" class="btn btn-danger my-1 mx-2"><i class="fa fa-trash"></i> Delete all</button>
 							</span>
 						</div>
 					</div>
-					<table class="table table-responsive-lg table-striped table-hover text-center">
-						<thead class="thead-light">
+					<table id="edit_history_table_object" class="table table-responsive-lg table-striped table-hover align-middle text-center">
+						<thead class="table-light">
 							<tr>
 							<th class="text-center px-5">Date</th>
 							<th class="text-center">Total Time No Break</th>
@@ -331,26 +341,26 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div id="modalreporting" class="modal fade">
+<div id="modalreporting" class="modal fade" tabindex="-1">
 	<div class="modal-dialog modal-xl">
 		<div class="modal-content px-2">
 			<div class="modal-header">
 				<h2>Reporting</h2>
-				<button type="button" class="btn float-right" data-dismiss="modal"><i class="fas fa-times float-right"></i></button>
+				<button type="button" class="btn float-end" data-bs-dismiss="modal"><i class="fas fa-times float-end"></i></button>
 			</div>
 			<div class="modal-body">
-				<div class="form-group">
+				<div class="mb-3">
 					<div class="input-group">
-						<label for="start_reporting_selection" class="col-form-label mr-1">Display history from</label>
-						<input id="start_reporting_selection" class="form-control input-fixedwidth165" type="date" value="" onchange="initGraphs(); drawGraphs();">
-						<label for="end_reporting_selection" class="col-form-label mr-1 ml-1">to</label>
-						<input id="end_reporting_selection" class="form-control input-fixedwidth165" type="date" value="" onchange="initGraphs(); drawGraphs();">
+						<label for="start_reporting_selection" class="col-form-label">Display history from</label>
+						<input id="start_reporting_selection" class="form-control mx-2 input-fixedwidth165" type="date" value="" onchange="initGraphs(); drawGraphs();">
+						<label for="end_reporting_selection" class="col-form-label">to</label>
+						<input id="end_reporting_selection" class="form-control mx-2 input-fixedwidth165" type="date" value="" onchange="initGraphs(); drawGraphs();">
 					</div>
 				</div>
 				<p>
@@ -374,7 +384,7 @@
 				<div id="BreakDec_div"></div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
@@ -383,7 +393,7 @@
 <!-- Page HTML -->
 <div class="container-fluid h-100">
 	<div id="alertcontainer" class="row d-flex justify-content-center">
-		<div id="alertnotification" class="alert alert-danger alert-dismissible fade show my-4 mr-1 alertnotification" role="alert">
+		<div id="alertnotification" class="alert alert-danger alert-dismissible fade show w-75 my-4 me-1 alertnotification" role="alert">
 			<div class="row">
 				<div class="col-lg-2 text-center py-1 px-4 my-auto">
 					<i class="far fa-exclamation-triangle fa-4x pulsate text-warning display-2"></i>
@@ -392,37 +402,37 @@
 					<p>
 						Edit table edits to after-filter formatting and heading
 					</p>
+					<p>
+						Migrate layout to Bootstrap 5!<br>
+						This includes some big changes which may result in broken components. If you encounter one of those, pls leave me a message.
+					</p>
 				</div>
 			</div>
-			<button type="button" class="close" onclick="notificationClosed('click');" data-dismiss="alert" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
+			<button type="button" class="btn-close" onclick="notificationClosed('click');" data-bs-dismiss="alert" aria-label="Close"></button>
 		</div>		
-		<div id="app_alert" class="alert alert-warning alert-dismissible fade show mr-1 alertnotification" role="alert">
+		<div id="app_alert" class="alert alert-warning alert-dismissible fade show w-33 me-1 alertnotification" role="alert">
 			<div id="app_alert_message"></div>
-			<button type="button" class="close" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
+			<button type="button" class="btn-close" aria-label="Close"></button>
 		</div>
 	</div>
 	
 	<div class="row h-100">
 		<div class="row w-100 align-self-center">
 			<div class="col-lg-1 d-none d-lg-block bg-light"></div>
-			<div id="inputarea" class="col-lg-5 rounded-right bg-light">
+			<div id="inputarea" class="col-lg-5 rounded-end bg-light">
 				<form>
-					<div class="form-group pt-3 mr-xs-2 mr-lg-5">
+					<div class="mb-3 pt-3 me-xs-2 me-lg-5">
 						<div id="divstarttime" class="input-group justify-content-end my-1">
-							<label class="col-form-label" for="start_time" data-toggle="tooltip" data-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time</label>
-							<div class="pr-2 pl-3">
+							<label class="col-form-label" for="start_time" data-bs-toggle="tooltip" data-bs-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time</label>
+							<div class="pe-2 ps-3">
 								<input name="start_time" id="start_time" type="time" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 							</div>
 						</div>				
 						<div id="divbreaktime" class="input-group justify-content-end my-3">
-							<label class="col-form-label" for="break_time_default" data-toggle="tooltip" data-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
+							<label class="col-form-label" for="break_time_default" data-bs-toggle="tooltip" data-bs-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
 								Break with default
 							</label>
-							<div class="mb-1 mb-md-0 mx-3 mr-sm-0">
+							<div class="mb-1 mb-md-0 mx-3 me-sm-0">
 								<select name="break_time_default" id="break_time_default" class="form-control mb-md-0 input-fixedwidth90" onchange="addBreakDefault();">
 									<option value="0">0 min</option>
 									<option value="0.25">15 min</option>
@@ -431,142 +441,144 @@
 									<option value="1">1h</option>
 								</select>
 							</div>
-							<div id="breaktime_timeselection_option_timerange_div" class="form-inline pr-2 pl-3 d-none">
+							<div id="breaktime_timeselection_option_timerange_div" class="pe-2 ps-3 d-none">
 								<label class="col-form-label" for="break_time_start">from</label>
 								<input name="break_time_start" id="break_time_start" type="time" value="00:00" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 								<label class="col-form-label" for="break_time_end">to</label>
 								<input name="break_time_end" id="break_time_end" type="time" value="00:00" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 							</div>
-							<div id="breaktime_timeselection_option_duration_div" class="form-inline pr-2 pl-3">
+							<div id="breaktime_timeselection_option_duration_div" class="pe-2 ps-3">
 								<input name="break_time" id="break_time" type="time" value="00:00" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 							</div>
 						</div>
 						<div id="divendtime" class="input-group justify-content-end my-3">
-							<label class="col-form-label" for="end_time" data-toggle="tooltip" data-placement="left" title="You can have this automatically filled in by setting the parameter at the bottom of the box. You can manually enter a value.">Time to go home</label>
-							<div class="pr-2 pl-3">
+							<label class="col-form-label" for="end_time" data-bs-toggle="tooltip" data-bs-placement="left" title="You can have this automatically filled in by setting the parameter at the bottom of the box. You can manually enter a value.">Time to go home</label>
+							<div class="pe-2 ps-3">
 								<input name="end_time" id="end_time" type="time" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 							</div>
 						</div>
 						<div id="divtotalnobreaktime" class="input-group justify-content-end my-3">
-							<label class="col-form-label" for="totalnobreak" data-toggle="tooltip" data-placement="left" title="These hours are your actual working hours.">Total hours (no break)</label>
-							<div class="pr-2 pl-3">
+							<label class="col-form-label" for="totalnobreak" data-bs-toggle="tooltip" data-bs-placement="left" title="These hours are your actual working hours.">Total hours (no break)</label>
+							<div class="pe-2 ps-3">
 								<input name="totalnobreak" id="totalnobreak" type="time" class="form-control mx-1 input-fixedwidth110" value="" disabled>
 								<input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
 							</div>
 						</div>
 						<div id="divovertime" class="collapse input-group justify-content-end my-3">
-							<label class="col-form-label" for="overtime" data-toggle="tooltip" data-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
+							<label class="col-form-label" for="overtime" data-bs-toggle="tooltip" data-bs-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
 								Overtime @
 							</label>
-							<div class="mb-1 mb-md-0 mx-3 mr-sm-0">
-								<select name="hourschedule" id="hourschedule" class="form-control input-fixedwidth90" onchange="calculateTotal();" data-toggle="tooltip" data-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
-									<option value="0">0h				&nbsp;&emsp;&emsp;&emsp;(working overtime)</option>
-									<option value="3.04">3,04h 			&emsp;&emsp;(part-time 2/5, 38h week)</option>
-									<option value="3.12">3,12h 			&emsp;&emsp;(part-time 2/5, 39h week)</option>
-									<option value="3.2">3,2h 			&ensp;&emsp;&emsp;(part-time 2/5, 40h week)</option>
-									<option value="3.8">3,8h 			&ensp;&emsp;&emsp;(half-time, 38h week)</option>
-									<option value="3.9">3,9h 			&ensp;&emsp;&emsp;(half-time, 39h week)</option>
-									<option value="4">4h 				&nbsp;&emsp;&emsp;&emsp;(half-time, 40h week)</option>
-									<option value="4.56">4,56h 			&emsp;&emsp;(part-time 3/5, 38h week)</option>
-									<option value="4.68">4,68h 			&emsp;&emsp;(part-time 3/5, 39h week)</option>
-									<option value="4.8">4,8h 			&ensp;&emsp;&emsp;(part-time 3/5, 40h week)</option>
-									<option value="6.08">6,08h 			&emsp;&emsp;(part-time 4/5, 38h week)</option>
-									<option value="6.24">6,24h 			&emsp;&emsp;(part-time 4/5, 39h week)</option>
-									<option value="6.4">6,4h 			&ensp;&emsp;&emsp;(part-time 4/5, 40h week)</option>
-									<option value="7.6" selected>7,6h 	&ensp;&emsp;&emsp;(full-time, 38h week)</option>
-									<option value="7.8">7,8h 			&ensp;&emsp;&emsp;(full-time, 39h week)</option>
-									<option value="8">8h 				&nbsp;&emsp;&emsp;&emsp;(full-time, 40h week)</option>
+							<div class="mb-1 mb-md-0 mx-3 me-sm-0">
+								<select name="hourschedule" id="hourschedule" class="form-control input-fixedwidth90" onchange="calculateTotal();" data-bs-toggle="tooltip" data-bs-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
+									<option value="0">0h				&ensp;&nbsp;&emsp;&emsp;&emsp;(working overtime)</option>
+									<option value="3.04">3,04h 			&ensp;&emsp;&emsp;(part-time 2/5, 38h week)</option>
+									<option value="3.12">3,12h 			&ensp;&emsp;&emsp;(part-time 2/5, 39h week)</option>
+									<option value="3.2">3,2h 			&ensp;&ensp;&emsp;&emsp;(part-time 2/5, 40h week)</option>
+									<option value="3.8">3,8h 			&ensp;&ensp;&emsp;&emsp;(half-time, 38h week)</option>
+									<option value="3.9">3,9h 			&ensp;&ensp;&emsp;&emsp;(half-time, 39h week)</option>
+									<option value="4">4h 				&ensp;&nbsp;&emsp;&emsp;&emsp;(half-time, 40h week)</option>
+									<option value="4.56">4,56h 			&ensp;&emsp;&emsp;(part-time 3/5, 38h week)</option>
+									<option value="4.68">4,68h 			&ensp;&emsp;&emsp;(part-time 3/5, 39h week)</option>
+									<option value="4.8">4,8h 			&ensp;&ensp;&emsp;&emsp;(part-time 3/5, 40h week)</option>
+									<option value="6.08">6,08h 			&ensp;&emsp;&emsp;(part-time 4/5, 38h week)</option>
+									<option value="6.24">6,24h 			&ensp;&emsp;&emsp;(part-time 4/5, 39h week)</option>
+									<option value="6.4">6,4h 			&ensp;&ensp;&emsp;&emsp;(part-time 4/5, 40h week)</option>
+									<option value="7.6" selected>7,6h 	&ensp;&ensp;&emsp;&emsp;(full-time, 38h week)</option>
+									<option value="7.8">7,8h 			&ensp;&ensp;&emsp;&emsp;(full-time, 39h week)</option>
+									<option value="8">8h 				&ensp;&nbsp;&emsp;&emsp;&emsp;(full-time, 40h week)</option>
 									<!--
 										&nbsp; (adds a single space)
-										&ensp; (it is about the width of two normal spaces)
-										&emsp; (it is roughly four normal spaces)
+										&ensp; (about the width of two normal spaces)
+										&emsp; (roughly four normal spaces)
 									-->
 								</select>
 							</div>
-							<div class="pr-2 pl-3">
+							<div class="pe-2 ps-3">
 								<input name="overtime" id="overtime" type="text" class="form-control mx-1 input-fixedwidth110" disabled>
 								<input name="overtimedec" id="overtimedec" type="text" class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
 							</div>
 						</div>
 						<div id="divtotalhours" class="collapse input-group justify-content-end my-3">
-							<label class="col-form-label" for="total" data-toggle="tooltip" data-placement="left" title="These hours are howmuch time you spent being at your workplace.">Total hours</label>
-							<div class="pr-2 pl-3">
+							<label class="col-form-label" for="total" data-bs-toggle="tooltip" data-bs-placement="left" title="These hours are howmuch time you spent being at your workplace.">Total hours</label>
+							<div class="pe-2 ps-3">
 								<input name="total" id="total" type="time" class="form-control mx-1 input-fixedwidth110" disabled>
 								<input name="totaldec" id="totaldec" type="text" class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
 							</div>
 						</div>
 						<div class="input-group justify-content-end mt-3">
 							<div id="divovertimeweekly" class="collapse input-group justify-content-end mb-1">
-								<label class="col-form-label" for="overtimeweekly" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the current week. This value doesn't include today yet.">Weekly overtime</label>
-								<div class="pr-2 pl-3">
-									<input name="overtimeweekly" id="overtimeweekly" type="text" class="font-weight-bold form-control mx-1 input-fixedwidth110" disabled>
+								<label class="col-form-label" for="overtimeweekly" data-bs-toggle="tooltip" data-bs-placement="left" title="Here you can find howmuch overtime you've built up / used during the current week. This value doesn't include today yet.">Weekly overtime</label>
+								<div class="pe-2 ps-3">
+									<input name="overtimeweekly" id="overtimeweekly" type="text" class="fw-bold form-control mx-1 input-fixedwidth110" disabled>
 								</div>
 							</div>
 							<div id="divovertimetotal" class="collapse input-group justify-content-end mt-1">
-								<label class="col-form-label" for="overtimetotal" data-toggle="tooltip" data-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime</label>
-								<div class="pr-2 pl-3">
-									<input name="overtimetotal" id="overtimetotal" type="text" class="font-weight-bold form-control mx-1 input-fixedwidth110" disabled>
+								<label class="col-form-label" for="overtimetotal" data-bs-toggle="tooltip" data-bs-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime</label>
+								<div class="pe-2 ps-3">
+									<input name="overtimetotal" id="overtimetotal" type="text" class="fw-bold form-control mx-1 input-fixedwidth110" disabled>
 								</div>
 							</div>
 						</div>
-						<div class="form-inline">
-							<button id="btnedithistory" type="button" class="btn btn-outline-secondary fontsize60 ml-auto mr-2 pb-1 px-2" data-toggle="modal" data-target="#modaledithistory"><i class="fas fa-edit"></i></button>
-							<div id="historycontainer" class="collapse my-3 mr-2">
-								<div id="history" class="w-100"></div>
+						<div class="row">
+							<div class="col-2 align-self-center d-flex justify-content-end">
+								<button id="btnedithistory" type="button" class="btn btn-outline-secondary fontsize60 ms-auto me-2 pb-1 px-2" data-bs-toggle="modal" data-bs-target="#modaledithistory"><i class="fas fa-edit"></i></button>
+							</div>
+							<div class="col d-flex justify-content-end">
+								<div id="historycontainer" class="collapse my-3 me-2">
+									<div id="history" class="w-100"></div>
+								</div>
 							</div>
 						</div>
 						
-						<div id="divparameters" class="collapse col mr-5">
-							<div class="input-group justify-content-end">
-								<div class="custom-control custom-switch mx-1">
-									<input type="checkbox" class="custom-control-input" id="nosave">
-									<label class="custom-control-label font-sm checkred" for="nosave" data-toggle="tooltip" data-placement="bottom" title="Won't save today's date for the remainder of the day (until timestamp 00:00) or unless disabled again.">Don't save today</label>
+						<div id="divparameters" class="collapse col me-5 input-group justify-content-end">
+							<div class="form-check form-switch mx-1">
+								<input type="checkbox" class="form-check-input checkred" id="nosave">
+								<label class="form-check-label font-sm" for="nosave" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Won't save today's date for the remainder of the day (until timestamp 00:00) or unless disabled again.">Don't save today</label>
+							</div>
+							<div>
+								<div class="form-check form-switch mx-1">
+									<input type="checkbox" class="form-check-input checkgreen" id="autoend" data-bs-toggle="collapse" data-bs-target="#autoend_today_disabled_div" aria-expanded="true" aria-controls="autoend_today_disabled_div">
+									<label class="form-check-label font-sm" for="autoend" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Will change the end time to the timestamp on which you close or refresh the window and thus overwrite any manual changes you made.">Automatically set end time on close</label>
 								</div>
-								<div>
-									<div class="custom-control custom-switch mx-1">
-										<input type="checkbox" class="custom-control-input" id="autoend" data-toggle="collapse" data-target="#autoend_today_disabled_div" aria-expanded="true" aria-controls="autoend_today_disabled_div">
-										<label class="custom-control-label font-sm checkgreen" for="autoend" data-toggle="tooltip" data-placement="bottom" title="Will change the end time to the timestamp on which you close or refresh the window and thus overwrite any manual changes you made.">Automatically set end time on close</label>
-									</div>
-									<div class="collapse custom-control custom-switch mx-1" id="autoend_today_disabled_div">
-										<input type="checkbox" class="custom-control-input" id="autoend_today_disabled">
-										<label class="custom-control-label font-sm checkred" for="autoend_today_disabled" data-toggle="tooltip" data-placement="bottom" title="Don't change the end time to the timestamp on which you close or refresh the window for today even if the previous checkmark is set.">Don't set end time on close today</label>
-									</div>
+								<div class="collapse form-check form-switch mx-1" id="autoend_today_disabled_div">
+									<input type="checkbox" class="form-check-input checkred" id="autoend_today_disabled">
+									<label class="form-check-label font-sm" for="autoend_today_disabled" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Don't change the end time to the timestamp on which you close or refresh the window for today even if the previous checkmark is set.">Don't set end time on close today</label>
 								</div>
-								<div class="custom-control custom-switch mx-1">
-									<input type="checkbox" class="custom-control-input" id="startminsubtract">
-									<label class="custom-control-label font-sm checkgreen" for="startminsubtract" data-toggle="tooltip" data-placement="bottom" title="Will subtract X min (set in the settings) from the time the page was opened NEXT DAY YOU OPEN THE PAGE. This is to take the time to boot your laptop, ... into account.">Subtract <span id="startminsubtract_span"></span> min from open</label>
-								</div>
+							</div>
+							<div class="form-check form-switch mx-1">
+								<input type="checkbox" class="form-check-input checkgreen" id="startminsubtract">
+								<label class="form-check-label font-sm" for="startminsubtract" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Will subtract X min (set in the settings) from the time the page was opened NEXT DAY YOU OPEN THE PAGE. This is to take the time to boot your laptop, ... into account.">Subtract <span id="startminsubtract_span"></span> min from open</label>
 							</div>
 						</div>
 					</div>
 				</form>
 			</div>
-			<div id="buttonarea" class="col-lg-5 align-self-center text-lg-left text-center">	
+			<div id="buttonarea" class="col-lg-5 align-self-center text-lg-start text-center">	
 				<div class="row">
 					<!-- <div class="col col-sm-1 d-none d-xs-block d-sm-block d-md-block d-lg-block"></div> -->
-					<div class="col ml-xs-2 ml-lg-5">
+					<div class="col ms-xs-2 ms-lg-5">
 						<div class="row">
 							<div class="col my-3">
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-lg btn-success leftbtn px-4 py-3" onclick="add_time(getHourSchedule())" data-toggle="tooltip" data-placement="bottom" title="Adds the time selected in the hour schedule to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> <span id="addtimebutton_span"></span>h</button>
-									<button type="button" class="btn btn-lg btn-success rightbtn px-4 py-3" onclick="end_time()" data-toggle="tooltip" data-placement="bottom" title="Sets the 'Time to go home' field to the current time.">End time now</button>
+									<button type="button" class="btn btn-lg btn-success leftbtn px-4 py-3" onclick="add_time(getHourSchedule())" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Adds the time selected in the hour schedule to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> <span id="addtimebutton_span"></span>h</button>
+									<button type="button" class="btn btn-lg btn-success rightbtn px-4 py-3" onclick="end_time()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sets the 'Time to go home' field to the current time.">End time now</button>
 								</div>
 							</div>
 						</div>
 						<div id="break_btn_div" class="row">
 							<div class="col my-3">
 								<div class="btn-group" role="group">
-									<button id="break_reset_btn" type="button" class="btn btn-lg btn-primary leftbtn px-4 py-3" onclick="reset_break()"data-toggle="tooltip" data-placement="bottom" title="Resets the break time."><i class="fal fa-redo"></i></button>
-									<button id="break_add5_btn" type="button" class="btn btn-lg btn-primary middlebtn px-4 py-3" onclick="add_break(0.084)" data-toggle="tooltip" data-placement="bottom" title="Adds 5min of break time."><i class="fal fa-plus"></i> 5min</button>
-									<button id="break_add30_btn" type="button" class="btn btn-lg btn-primary middlebtn px-4 py-3" onclick="add_break(0.5)" data-toggle="tooltip" data-placement="bottom" title="Adds 30min of break time."><i class="fal fa-plus"></i> 30min</button>
-									<button id="break_counter_btn" type="button" class="btn btn-lg btn-primary rightbtn px-4 py-3" onclick="break_counter()" data-toggle="tooltip" data-placement="bottom" title="Click once to start the break time counter. Click again to stop it. While running, the elapsed time will be displayed in the break time field. To resume the counter click this start button again, to reset click the reset button."><i class="fal fa-stopwatch"></i> Start</button>
+									<button id="break_reset_btn" type="button" class="btn btn-lg btn-primary leftbtn px-4 py-3" onclick="reset_break()"data-bs-toggle="tooltip" data-bs-placement="bottom" title="Resets the break time."><i class="fal fa-redo"></i></button>
+									<button id="break_add5_btn" type="button" class="btn btn-lg btn-primary middlebtn px-4 py-3" onclick="add_break(0.084)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Adds 5min of break time."><i class="fal fa-plus"></i> 5min</button>
+									<button id="break_add30_btn" type="button" class="btn btn-lg btn-primary middlebtn px-4 py-3" onclick="add_break(0.5)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Adds 30min of break time."><i class="fal fa-plus"></i> 30min</button>
+									<button id="break_counter_btn" type="button" class="btn btn-lg btn-primary rightbtn px-4 py-3" onclick="break_counter()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Click once to start the break time counter. Click again to stop it. While running, the elapsed time will be displayed in the break time field. To resume the counter click this start button again, to reset click the reset button."><i class="fal fa-stopwatch"></i> Start</button>
 								</div>						
 							</div>
 						</div>
 						<div class="row">
 							<div class="col my-3">
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-lg btn-danger px-4 py-3" onclick="reset()" data-toggle="tooltip" data-placement="bottom" title="Resets all the timestamps."><i class="fal fa-redo"></i></button>
+									<button type="button" class="btn btn-lg btn-danger px-4 py-3" onclick="reset()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Resets all the timestamps."><i class="fal fa-redo"></i></button>
 								</div>
 							</div>
 						</div>
@@ -584,10 +596,10 @@
 		</div>
 		<div class="col d-flex justify-content-end">
 			<div id="footer_button_group" class="btn-group align-self-center" role="group">
-				<button title="Reporting" type="button" class="btn btn-outline-secondary leftbtn footerbtn py-1 px-4" data-toggle="modal" data-target="#modalreporting"><i class="fas fa-chart-line"></i></button>
-				<button title="About" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4" data-toggle="modal" data-target="#modalabout"><i class="fas fa-info"></i></button>
-				<button title="Info" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4" data-toggle="modal" data-target="#modalinfo"><i class="fas fa-lightbulb"></i></button>
-				<button title="Settings" type="button" class="btn btn-outline-secondary rightbtn footerbtn py-1 px-4" data-toggle="modal" data-target="#modalsettings"><i class="fas fa-cog"></i></button>
+				<button title="Reporting" type="button" class="btn btn-outline-secondary leftbtn footerbtn py-1 px-4" data-bs-toggle="modal" data-bs-target="#modalreporting"><i class="fas fa-chart-line"></i></button>
+				<button title="About" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4" data-bs-toggle="modal" data-bs-target="#modalabout"><i class="fas fa-info"></i></button>
+				<button title="Info" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4" data-bs-toggle="modal" data-bs-target="#modalinfo"><i class="fas fa-lightbulb"></i></button>
+				<button title="Settings" type="button" class="btn btn-outline-secondary rightbtn footerbtn py-1 px-4" data-bs-toggle="modal" data-bs-target="#modalsettings"><i class="fas fa-cog"></i></button>
 			</div>			
 		</div>
 	</div>

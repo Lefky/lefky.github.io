@@ -15,6 +15,12 @@ html, body {
 .h-33 {
 	height: 33% !important;
 }
+.w-f-80{
+    width: 80px !important;
+}
+.w-10 {
+    width: 10% !important;
+}
 .w-33 {
 	width: 33% !important;
 }
@@ -43,13 +49,13 @@ html, body {
 	height: 50%; 
 	font-size: 1.1rem;
 }
-.rounded-right {
+.rounded-end {
     border-bottom-left-radius: 0 !important;
     border-top-left-radius: 0 !important;
 	border-top-right-radius: 1.5rem !important; 
 	border-bottom-right-radius: 1.5rem !important; 
 }
-.rounded-left {
+.rounded-start {
     border-bottom-left-radius: 1.5rem !important;
     border-top-left-radius: 1.5rem !important;
 	border-top-right-radius: 0 !important; 
@@ -68,7 +74,7 @@ html, body {
 	overflow: hidden;
 	border: 1px solid #ced4da;
 	border-radius: .75rem;
-	width: 70%
+	width: 100%
 }
 #history {
 	background-color: #e9ecef;
@@ -108,24 +114,24 @@ html, body {
 ::-webkit-scrollbar-thumb:hover {
   background: #737373; 
 }
-/*::-webkit-scrollbar-button {
-  height: 5px;
-}*/
-.table .thead-light th {
-    color: #495057;
-    background-color: #d3d9df;
-    border-color: #d3d9df;
+.table-striped .table-light {
+    --bs-table-bg: #dddddd;
 }
 .table-striped tbody tr.visible-odd {
     background-color: rgba(0, 0, 0, 0.05);
+    --bs-table-accent-bg: unset;
 }
-
 .table-striped tbody tr.visible-even {
     background-color: rgba(0, 0, 0, 0.00);
+    --bs-table-accent-bg: unset;
 }
-
+.table-hover tbody tr.visible-odd:hover {
+    background-color: rgba(0, 0, 0, 0.075);
+    --bs-table-hover-bg: unset;
+}
 .table-hover tbody tr.visible-even:hover {
     background-color: rgba(0, 0, 0, 0.075);
+    --bs-table-hover-bg: unset;
 }
 .font-sm {
 	font-size: 70%;
@@ -133,20 +139,25 @@ html, body {
 .no-bottom-margin {
 	margin-bottom:0 !important;
 }
-.custom-control-input:checked~.custom-control-label.checkred::before {
+.form-switch .form-check-input:checked.checkred {
 	border-color: #dc3545;
 	background-color: #dc3545;
 }
-.custom-control-input:checked~.custom-control-label.checkgreen::before {
+.form-switch .form-check-input:checked.checkgreen {
 	border-color: #28a745;
 	background-color: #28a745;
 }
-.custom-control-input:checked~.custom-control-label.checkneutral::before {
+.form-switch .form-check-input:checked.checkneutral {
 	border-color: #adb5bd;
 	background-color: #fff;
 }
-.custom-switch .custom-control-input:checked~.custom-control-label.checkneutral::after {
-    background-color: #adb5bd;
+/*
+.form-switch .form-check-input:focus {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='white'/%3e%3c/svg%3e");
+}
+*/
+.form-switch .form-check-input.checkneutral {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='grey'/%3e%3c/svg%3e");
 }
 .form-group label> .description{
     display: none;
@@ -196,80 +207,6 @@ html, body {
 	max-width: 165px;
 }
 
-/* CUSTOM SWITCH SIZES */
-/* for sm */
-.custom-switch.custom-switch-sm .custom-control-label {
-    padding-left: 1rem;
-    padding-bottom: 1rem;
-}
-.custom-switch.custom-switch-sm .custom-control-label::before {
-    height: 1rem;
-    width: calc(1rem + 0.75rem);
-    border-radius: 2rem;
-}
-.custom-switch.custom-switch-sm .custom-control-label::after {
-    width: calc(1rem - 4px);
-    height: calc(1rem - 4px);
-    border-radius: calc(1rem - (1rem / 2));
-}
-.custom-switch.custom-switch-sm .custom-control-input:checked ~ .custom-control-label::after {
-    transform: translateX(calc(1rem - 0.25rem));
-}
-/* for md */
-.custom-switch.custom-switch-md .custom-control-label {
-    padding-left: 2rem;
-    padding-bottom: 1.5rem;
-}
-.custom-switch.custom-switch-md .custom-control-label::before {
-    height: 1.5rem;
-    width: calc(2rem + 0.75rem);
-    border-radius: 3rem;
-}
-.custom-switch.custom-switch-md .custom-control-label::after {
-    width: calc(1.5rem - 4px);
-    height: calc(1.5rem - 4px);
-    border-radius: calc(2rem - (1.5rem / 2));
-}
-.custom-switch.custom-switch-md .custom-control-input:checked ~ .custom-control-label::after {
-    transform: translateX(calc(1.5rem - 0.25rem));
-}
-/* for lg */
-.custom-switch.custom-switch-lg .custom-control-label {
-    padding-left: 3rem;
-    padding-bottom: 2rem;
-}
-.custom-switch.custom-switch-lg .custom-control-label::before {
-    height: 2rem;
-    width: calc(3rem + 0.75rem);
-    border-radius: 4rem;
-}
-.custom-switch.custom-switch-lg .custom-control-label::after {
-    width: calc(2rem - 4px);
-    height: calc(2rem - 4px);
-    border-radius: calc(3rem - (2rem / 2));
-}
-.custom-switch.custom-switch-lg .custom-control-input:checked ~ .custom-control-label::after {
-    transform: translateX(calc(2rem - 0.25rem));
-}
-/* for xl */
-.custom-switch.custom-switch-xl .custom-control-label {
-    padding-left: 4rem;
-    padding-bottom: 2.5rem;
-}
-.custom-switch.custom-switch-xl .custom-control-label::before {
-    height: 2.5rem;
-    width: calc(4rem + 0.75rem);
-    border-radius: 5rem;
-}
-.custom-switch.custom-switch-xl .custom-control-label::after {
-    width: calc(2.5rem - 4px);
-    height: calc(2.5rem - 4px);
-    border-radius: calc(4rem - (2.5rem / 2));
-}
-.custom-switch.custom-switch-xl .custom-control-input:checked ~ .custom-control-label::after {
-    transform: translateX(calc(2.5rem - 0.25rem));
-}
-/* END CUSTOM SWITCH SIZES */
 /* BOOTSTRAP 5 CUSTOM SWITCH SIZES */
 .form-check-input {
   clear: left;

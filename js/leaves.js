@@ -65,7 +65,7 @@ function showLeafMessage(){
 	alertMessage.setAttribute("role", "alert");
 	alertMessage.setAttribute("style", "position: absolute; top: 4rem; right: 4rem; z-index: 2; font-size: 2rem;");
 	
-	alertMessage.innerHTML = "<audio id='audioNotification' src='sounds/pristine-609.mp3' muted></audio><span><i class='fas fa-glass-cheers faa-shake animated'></i> Time to 'LEAF' work <i class='far fa-smile-wink'></i></span>" + "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>" + "<span aria-hidden='true'>&times;</span>" + "</button>";
+	alertMessage.innerHTML = "<audio id='audioNotification' src='sounds/pristine-609.mp3' muted></audio><span><i class='fas fa-glass-cheers faa-shake animated'></i> Time to 'LEAF' work <i class='far fa-smile-wink'></i></span>" + "<button type='button' class='btn-close' style='font-size: 13px' data-bs-dismiss='alert' aria-label='Close'></button>";
 	
 	document.getElementsByTagName("body")[0].appendChild(alertMessage);
 }
