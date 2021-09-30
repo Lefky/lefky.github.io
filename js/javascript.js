@@ -501,10 +501,10 @@ function notificationClosed(event){
 	}
 }
 
-function startminsubtract(){
-	var startminsubtract_value = document.getElementById("startminsubtract_value").value;
+function set_startminsubtract(startminsubtract_value){
 	localStorage.setItem("startminsubtract_value", startminsubtract_value);
 	document.getElementById("startminsubtract_span").innerHTML = startminsubtract_value; 
+	document.getElementById("startminsubtract_value").value = startminsubtract_value;
 }
 
 function hourscheduleAddTimeButton(){
@@ -613,23 +613,6 @@ function deleteHistory(){
 }
 
 function exportHistory(){		
-	/*
-	var _myArray = JSON.stringify(localStorage , null, 4); //indentation in json format, human readable
-	
-	var vLink = document.getElementById('exportHistory');
-	var vBlob = new Blob([_myArray], {type: "octet/stream"});
-	vName = 'working_history_' + todayDate() + '.json';
-	vUrl = window.URL.createObjectURL(vBlob);
-	
-	vLink.setAttribute('href', vUrl);
-	vLink.setAttribute('download', vName);
-	console.log(_myArray);
-	console.log(vLink);
-	console.log(vBlob);
-	console.log(vName);
-	console.log(vUrl);
-	*/
-	
     var _myArray = JSON.stringify(localStorage , null, 4); //indentation in json format, human readable
 
     //Note: We use the anchor tag here instead button.
@@ -805,14 +788,13 @@ function setParameters(){
 
 	showHistorydeleteoptionContent();
 	
-	// Check if custom time to subtract from start is stored, if not take 5 min as default
+	// Check if custom time to subtract from start is stored and set value appropriatly
 	if (!startminsubtract_value) {
-		document.getElementById("startminsubtract_span").innerHTML = "5";
-		document.getElementById("startminsubtract_value").value = "5";
+		set_startminsubtract("5");
 	} else {
-		document.getElementById("startminsubtract_span").innerHTML = startminsubtract_value;
-		document.getElementById("startminsubtract_value").value = startminsubtract_value;
+		set_startminsubtract(startminsubtract_value);
 	}
+	
 	// If subtract from start is checked set UI and deduct the amount of time stored in localstorage
 	// If the page was already opened today, fill in that start time
 	var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
@@ -961,38 +943,6 @@ function break_counter(){
 	}
 	
 }
-/*
-function break_counter(){
-	var break_counter_started = localStorage.getItem("break_counter_started"),
-		break_counter_btn = document.getElementById("break_counter_btn");	
-	if (break_counter_started == "true") {
-		var break_counter_stop_time = moment(),
-			break_counter_start_time = moment(localStorage.getItem("break_counter_start_time"), "HH:mm"),
-			break_time = break_counter_stop_time.diff(break_counter_start_time, 'minutes'),
-			interval = moment().hour(0).minute(break_time),
-			//decimal_time = timeStringToFloat(interval.format("HH:mm"));
-			decimal_time = moment.duration(interval.format("HH:mm")).asHours();
-			
-		localStorage.setItem("break_counter_started", "false");
-		setBreak(decimal_time);
-		add_time(getHourSchedule());
-		
-		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Start";
-		break_counter_btn.classList.remove("btn-warning");
-		break_counter_btn.classList.add("btn-primary");
-		break_counter_btn.classList.remove("pulsate");
-	} else {
-		localStorage.setItem("break_counter_start_time", moment().format("HH:mm"));
-		localStorage.setItem("break_counter_started", "true");
-		
-		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Stop";
-		break_counter_btn.classList.remove("btn-primary");
-		break_counter_btn.classList.add("btn-warning");
-		break_counter_btn.classList.add("pulsate");
-	}
-	
-}
-*/
 
 window.onbeforeunload = function(e){
 	// Set 'dont save today' and 'automatically set end time' parameters in local storage
@@ -1083,10 +1033,7 @@ window.onbeforeunload = function(e){
 // Listeners and initializers
 $(document).ready(function(){
 	reset();
-	//$('[data-toggle="tooltip"]').tooltip({trigger: "hover"}); // Initialize bootstrap tooltips
-	/*$('[data-toggle="tooltip"]').tooltip({
-		'delay': { show: 1000, hide: 0 }
-	});*/
+
 	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 		return new bootstrap.Tooltip(tooltipTriggerEl, {
@@ -1117,6 +1064,14 @@ $(document).ready(function(){
 		var myModal = new bootstrap.Modal(document.getElementById('modalreporting'));
 		myModal.show();
 	}
+
+	var startminsubtract = document.getElementById("startminsubtract");
+	if (startminsubtract.checked == false) {
+		localStorage.setItem("startminsubtract", "false");
+	} else {
+		localStorage.setItem("startminsubtract", "true");
+	}
+
 });
 
 $(window).on("load", function () {
@@ -1158,89 +1113,3 @@ function intervalListener() {
 	}
 }
 setInterval(intervalListener, 5*60000); // (Every 5) * (60 * 1000 milliseconds = 60 seconds = 1 minute)
-
-/*
-// ASYNC loading of JS files
-// When using this comment out the related script file record in index.html
-
-function loadjscssfile(filename, filetype, callback){
-	//source: http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml    
-	if (filesadded.indexOf("["+filename+"]")==-1){
-		if (filetype=="js"){ // If filename is a external JavaScript file
-			// Adding the script tag to the head
-			var fileref=document.createElement('script');
-			fileref.setAttribute("type","text/javascript");
-			fileref.setAttribute("src", filename);
-			fileref.setAttribute("async", false);
-			
-			// Bind the event to the callback function.
-			// There are several events for cross browser compatibility.
-			fileref.onreadystatechange = callback;
-			fileref.onload = callback;	
-		} 
-		else if (filetype=="css"){ // If filename is an external CSS file
-			var fileref=document.createElement("link");
-			fileref.setAttribute("rel", "stylesheet");
-			fileref.setAttribute("type", "text/css");
-			fileref.setAttribute("href", filename);
-		}
-		
-		if (typeof fileref!="undefined"){
-			// Fire the loading
-			document.getElementsByTagName("head")[0].appendChild(fileref);
-			console.log("added to html: " + filename);
-		} 
-		
-		filesadded+="["+filename+"]";
-	} else {
-		callback();
-		console.log("already loaded: " + filename);
-	}
-}
-
-// Change the function in the index page for button id="btn_getting_started" and it's script loading record in index.html when enabling this one
-function initializeIntroduction(){
-	loadjscssfile("js/introduction.js", "js", function(){ startIntroduction(); });
-}
-
-// Disable this function in graphs.js and it's script loading record in index.html when enabling this one
-$('#modalreporting').on('shown.bs.modal', function() {	
-    loadjscssfile("https://www.gstatic.com/charts/loader.js", "js", function () {
-		console.log("loaded https://www.gstatic.com/charts/loader.js");
-		loadjscssfile("js/graphs.js", "js", function() {
-		
-			initGoogleLibraries("googleCharts").then(function () {
-				initGraphs();
-				drawGraphs(); 
-				mobileRotateScreen(true);
-			});
-		});
-    });
-
-//	var filename = "js/graphs.js";
-//	if (filesadded.indexOf("["+filename+"]")==-1){
-//		
-//		setTimeout(function(){
-//			// Wait till the JS is loaded
-//
-//			// Redraw charts on opening modal
-//			initGraphs();
-//			drawGraphs();
-//			
-//			// Rotate screen for mobile users so it displays the entire width
-//			// https://usefulangle.com/post/105/javascript-change-screen-orientation
-//			mobileRotateScreen(true);
-//		}, 500);
-//		
-//	} else {
-//		initGraphs();
-//		drawGraphs();
-//		mobileRotateScreen(true);
-//	}
-});
-
-// Disable this function in editable_table.js and it's script loading record in index.html when enabling this one
-$('#modaledithistory').on('shown.bs.modal', function() {	
-	loadjscssfile("js/editable_table.js", "js", function(){ setHistory(true); });
-});
-*/
