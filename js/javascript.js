@@ -34,8 +34,7 @@ const reverseDateRepresentation = date => {
 // Setters & getters
 function getStart(){
 	var time = document.getElementById("start_time").value;
-	//var time_dec = timeStringToFloat(time);
-	var time_dec = moment.duration(time).asHours();
+	var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours()
 	if (!time_dec) {
 		time_dec = 0;
 	}
@@ -48,8 +47,7 @@ function setStart(time){
 
 function getEnd(){
 	var time = document.getElementById("end_time").value;
-	//var time_dec = timeStringToFloat(time);
-	var time_dec = moment.duration(time).asHours();
+	var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours()
 	if (!time_dec) {
 		time_dec = now();
 	}
@@ -67,13 +65,13 @@ function setEnd(time){
 function getBreak(allowNegative){
 	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
 		var time = document.getElementById("break_time").value;
-		var time_dec = moment.duration(time).asHours();
+		var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours()
 	} else {
 		var break_time_start = document.getElementById("break_time_start").value,
 			break_time_end = document.getElementById("break_time_end").value;
 			
-		break_time_start = moment(break_time_start, "hh:mm");
-		break_time_end = moment(break_time_end, "hh:mm");
+		break_time_start = moment(break_time_start, "HH:mm");
+		break_time_end = moment(break_time_end, "HH:mm");
 				
 		var time_dec = moment.duration(break_time_end.diff(break_time_start)).asHours();
 	}
