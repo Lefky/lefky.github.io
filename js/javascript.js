@@ -568,6 +568,19 @@ function setAlertMessage(app_alert_message) {
 	}
 }
 
+function allCheckBox(allCheckboxInput, elementId) {
+	var checks = document.querySelectorAll('#' + elementId + ' input[type="checkbox"]');
+
+	for (let i = 0; i < checks.length; i++) {
+		if (allCheckboxInput.checked == true && checks[i].checked == false) {
+			checks[i].click();
+		}
+		if (allCheckboxInput.checked == false && checks[i].checked == true) {
+			checks[i].click();
+		}
+	}
+}
+
 // Storage functions
 function cleanLocalStorage() {
 	var keys = Object.keys(localStorage),
@@ -588,8 +601,6 @@ function cleanLocalStorage() {
 			cleaningday = moment(new Date(cleaningdaystored)).format; //momentjs somehow can't parse dates from localstorage
 
 		if (cleaningday <= today) {
-			console.log("gelukt!");
-
 			deleteHistory();
 			//localStorage.setItem("lasthistoryclean", today);
 			localStorage.setItem("cleaningday", calculateCleaningDay());
@@ -748,38 +759,29 @@ function setParameters() {
 	if (historyresetperiodunit)
 		document.getElementById("historyresetperiodunit").value = historyresetperiodunit;
 	// Set UI visibility options
-	if (overtimeoption == "true" || overtimeoption === null) {
-		//document.getElementById("overtimeoption").checked = true;
-		document.getElementById("overtimeoption").click();
-		document.getElementById("divovertime").classList.add("show");
-	}
-	if (totalhoursoption == "true" || totalhoursoption === null) {
-		//document.getElementById("totalhoursoption").checked = true;
-		document.getElementById("totalhoursoption").click();
-		document.getElementById("divtotalhours").classList.add("show");
-	}
-	if (weeklyovertimeoption == "true" || weeklyovertimeoption === null) {
-		//document.getElementById("weeklyovertimeoption").checked = true;
-		document.getElementById("weeklyovertimeoption").click();
-		document.getElementById("divovertimeweekly").classList.add("show");
-	}
-	if (totalovertimeoption == "true" || totalovertimeoption === null) {
-		//document.getElementById("totalovertimeoption").checked = true;
-		document.getElementById("totalovertimeoption").click();
-		document.getElementById("divovertimetotal").classList.add("show");
-	}
-	if (historyoption == "true" || historyoption === null) {
-		//document.getElementById("historyoption").checked = true;
-		document.getElementById("historyoption").click();
-		document.getElementById("historycontainer").classList.add("show");
-	}
-	if (parametersoption == "true" || parametersoption === null) {
-		//document.getElementById("parametersoption").checked = true;
-		document.getElementById("parametersoption").click();
-		document.getElementById("divparameters").classList.add("show");
+	if (overtimeoption == "true" && totalhoursoption == "true" && weeklyovertimeoption == "true" && totalovertimeoption == "true" && historyoption == "true" && parametersoption == "true") {
+		document.getElementById("alloption").click();
+	} else {
+		if (overtimeoption == "true" || overtimeoption === null) {
+			document.getElementById("overtimeoption").click();
+		}
+		if (totalhoursoption == "true" || totalhoursoption === null) {
+			document.getElementById("totalhoursoption").click();
+		}
+		if (weeklyovertimeoption == "true" || weeklyovertimeoption === null) {
+			document.getElementById("weeklyovertimeoption").click();
+		}
+		if (totalovertimeoption == "true" || totalovertimeoption === null) {
+			document.getElementById("totalovertimeoption").click();
+		}
+		if (historyoption == "true" || historyoption === null) {
+			document.getElementById("historyoption").click();
+		}
+		if (parametersoption == "true" || parametersoption === null) {
+			document.getElementById("parametersoption").click();
+		}
 	}
 	if (breaktime_timeselection_option_timerange == "true") {
-		//document.getElementById("breaktime_timeselection_option_timerange").checked = true;
 		document.getElementById("breaktime_timeselection_option_timerange").click();
 		breaktimeTimeselection();
 	}
@@ -931,7 +933,6 @@ function break_counter() {
 			const timeInDecimalHours = moment.duration(moment.utc(timeInSeconds * 1000).format('HH:mm:ss')).asHours();
 			setBreak(timeInDecimalHours);
 			add_time(getHourSchedule());
-			console.log(timeInDecimalHours);
 		}, 1000)
 
 		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch fa-spin'></i> Stop";
