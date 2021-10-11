@@ -1,107 +1,136 @@
-html, body {
+html,
+body {
 	overflow-x: hidden;
 	height: 100%;
-    font-size: 0.9rem;
+	font-size: 0.9rem;
 }
+
 .fontsize60 {
 	font-size: 0.6rem;
 }
+
 .fontsize150 {
-    font-size: 1.5rem;
+	font-size: 1.5rem;
 }
+
 .fontsize200 {
-    font-size: 2rem;
+	font-size: 2rem;
 }
-.form-select { 
-	font-size: inherit; 
+
+.form-select {
+	font-size: inherit;
 }
+
 .h-33 {
 	height: 33% !important;
 }
-.w-f-80{
-    width: 80px !important;
+
+.w-f-80 {
+	width: 80px !important;
 }
+
 .w-10 {
-    width: 10% !important;
+	width: 10% !important;
 }
+
 .w-33 {
 	width: 33% !important;
 }
+
 .w-90 {
 	width: 90% !important;
 }
+
 .w-150 {
 	width: 150% !important;
 }
+
 .btn-lg {
-    font-size: 1.15rem;
+	font-size: 1.15rem;
 }
-.card, .btn, .form-control, .modal-content, .alert, .form-select { 
-	border-radius: 1.5rem !important; 
+
+.card,
+.btn,
+.form-control,
+.modal-content,
+.alert,
+.form-select {
+	border-radius: 1.5rem !important;
 }
+
 .btn-group .btn.leftbtn {
 	border-radius: 1.5rem 0 0 1.5rem !important;
 }
+
 .btn-group .btn.middlebtn {
 	border-radius: 0 !important;
 }
+
 .btn-group .btn.rightbtn {
 	border-radius: 0 1.5rem 1.5rem 0 !important;
 }
+
 .footerbtn {
-	height: 50%; 
+	height: 50%;
 	font-size: 1.1rem;
 }
+
 .rounded-end {
-    border-bottom-left-radius: 0 !important;
-    border-top-left-radius: 0 !important;
-	border-top-right-radius: 1.5rem !important; 
-	border-bottom-right-radius: 1.5rem !important; 
+	border-bottom-left-radius: 0 !important;
+	border-top-left-radius: 0 !important;
+	border-top-right-radius: 1.5rem !important;
+	border-bottom-right-radius: 1.5rem !important;
 }
+
 .rounded-start {
-    border-bottom-left-radius: 1.5rem !important;
-    border-top-left-radius: 1.5rem !important;
-	border-top-right-radius: 0 !important; 
-	border-bottom-right-radius: 0 !important; 
+	border-bottom-left-radius: 1.5rem !important;
+	border-top-left-radius: 1.5rem !important;
+	border-top-right-radius: 0 !important;
+	border-bottom-right-radius: 0 !important;
 }
+
 .bottom-align-text {
 	position: absolute !important;
 	bottom: 0 !important;
 	right: 0 !important;
 }
-.fill { 
-    min-height: 100% !important;
-    height: 100% !important;
+
+.fill {
+	min-height: 100% !important;
+	height: 100% !important;
 }
+
 #historycontainer {
 	overflow: hidden;
 	border: 1px solid #ced4da;
 	border-radius: .75rem;
 	width: 100%
 }
+
 #history {
 	background-color: #e9ecef;
-    opacity: 1;
+	opacity: 1;
 	display: block;
-    width: 100%;
+	width: 100%;
 	overflow-y: auto;
-    padding: .375rem .75rem;
-    /*font-size: 1rem;*/
-    font-weight: 400;
-    line-height: 1.5;
-    color: #495057;
-    background-clip: padding-box;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+	padding: .375rem .75rem;
+	/*font-size: 1rem;*/
+	font-weight: 400;
+	line-height: 1.5;
+	color: #495057;
+	background-clip: padding-box;
+	transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 	height: 150px;
-	margin-left:auto; 
-	margin-right:0; 
-}	
+	margin-left: auto;
+	margin-right: 0;
+}
+
 ::-webkit-scrollbar-track {
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 	border-radius: 4px;
 	background-color: #F5F5F5;
-    margin-top: 10px;
-    margin-bottom: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 ::-webkit-scrollbar {
@@ -111,139 +140,179 @@ html, body {
 
 ::-webkit-scrollbar-thumb {
 	border-radius: 4px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 	background-color: #b3b3b3;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #737373; 
+	background: #737373;
 }
+
 .table-striped .table-light {
-    --bs-table-bg: #dddddd;
+	--bs-table-bg: #dddddd;
 }
+
 .table-striped tbody tr.visible-odd {
-    background-color: rgba(0, 0, 0, 0.05);
-    --bs-table-accent-bg: unset;
+	background-color: rgba(0, 0, 0, 0.05);
+	--bs-table-accent-bg: unset;
 }
+
 .table-striped tbody tr.visible-even {
-    background-color: rgba(0, 0, 0, 0.00);
-    --bs-table-accent-bg: unset;
+	background-color: rgba(0, 0, 0, 0.00);
+	--bs-table-accent-bg: unset;
 }
+
 .table-hover tbody tr.visible-odd:hover {
-    background-color: rgba(0, 0, 0, 0.075);
-    --bs-table-hover-bg: unset;
+	background-color: rgba(0, 0, 0, 0.075);
+	--bs-table-hover-bg: unset;
 }
+
 .table-hover tbody tr.visible-even:hover {
-    background-color: rgba(0, 0, 0, 0.075);
-    --bs-table-hover-bg: unset;
+	background-color: rgba(0, 0, 0, 0.075);
+	--bs-table-hover-bg: unset;
 }
+
 .font-sm {
 	font-size: 70%;
 }
+
 .no-bottom-margin {
-	margin-bottom:0 !important;
+	margin-bottom: 0 !important;
 }
+
 .form-switch .form-check-input:checked.checkred {
 	border-color: #dc3545;
 	background-color: #dc3545;
 }
+
 .form-switch .form-check-input:checked.checkgreen {
 	border-color: #28a745;
 	background-color: #28a745;
 }
+
 .form-switch .form-check-input:checked.checkneutral {
 	border-color: #adb5bd;
 	background-color: #fff;
 }
+
+
 /*
 .form-switch .form-check-input:focus {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='white'/%3e%3c/svg%3e");
 }
 */
+
 .form-switch .form-check-input.checkneutral {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='grey'/%3e%3c/svg%3e");
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='grey'/%3e%3c/svg%3e");
 }
-.form-group label> .description{
-    display: none;
+
+.form-group label>.description {
+	display: none;
 }
-.form-group input[type="radio"]:checked ~ .description{
-    display: block;
+
+.form-group input[type="radio"]:checked~.description {
+	display: block;
 }
+
 .form-control {
-    font-size: 0.9rem;
+	font-size: 0.9rem;
 }
+
 .pulsate {
 	-webkit-animation: pulsate 3s ease-out;
-	-webkit-animation-iteration-count: infinite; 
+	-webkit-animation-iteration-count: infinite;
 	opacity: 0.5;
 }
+
 @-webkit-keyframes pulsate {
-	0% { 
+	0% {
 		opacity: 0.5;
 	}
-	50% { 
+	50% {
 		opacity: 1.0;
 	}
-	100% { 
+	100% {
 		opacity: 0.5;
 	}
 }
+
 .alertnotification {
-	display: none; 
-	position: absolute; 
+	display: none;
+	position: absolute;
 	z-index: 1;
 }
+
 #app_alert {
 	bottom: 0;
 	margin-bottom: 10rem !important;
-    z-index: 2000;
+	z-index: 2000;
 }
+
 .input-fixedwidth90 {
-	min-width: 90px; 
+	min-width: 90px;
 	max-width: 90px;
 }
+
 .input-fixedwidth110 {
-	min-width: 110px; 
+	min-width: 110px;
 	max-width: 110px;
 }
+
 .input-fixedwidth165 {
-	min-width: 165px; 
+	min-width: 165px;
 	max-width: 165px;
 }
 
+
 /* BOOTSTRAP 5 CUSTOM SWITCH SIZES */
+
 .form-check-input {
-  clear: left;
+	clear: left;
 }
+
 .form-switch.form-switch-sm {
-  margin-bottom: 0.5rem; /* JUST FOR STYLING PURPOSE */
+	margin-bottom: 0.5rem;
+	/* JUST FOR STYLING PURPOSE */
 }
+
 .form-switch.form-switch-sm .form-check-input {
-  height: 1rem;
-  width: calc(1rem + 0.75rem);
-  border-radius: 2rem;
+	height: 1rem;
+	width: calc(1rem + 0.75rem);
+	border-radius: 2rem;
 }
+
 .form-switch.form-switch-md {
-  margin-bottom: 1rem; /* JUST FOR STYLING PURPOSE */
+	margin-bottom: 1rem;
+	/* JUST FOR STYLING PURPOSE */
 }
+
 .form-switch.form-switch-md .form-check-input {
-  height: 1.5rem;
-  width: calc(2rem + 0.75rem);
-  border-radius: 3rem;
+	height: 1.5rem;
+	width: calc(2rem + 0.75rem);
+	border-radius: 3rem;
 }
+
 .form-switch.form-switch-lg {
-  margin-bottom: 1.5rem; /* JUST FOR STYLING PURPOSE */
+	margin-bottom: 1.5rem;
+	/* JUST FOR STYLING PURPOSE */
 }
+
 .form-switch.form-switch-lg .form-check-input {
-  height: 2rem;
-  width: calc(3rem + 0.75rem);
-  border-radius: 4rem;
+	height: 2rem;
+	width: calc(3rem + 0.75rem);
+	border-radius: 4rem;
 }
+
 .form-switch.form-switch-xl {
-  margin-bottom: 2rem; /* JUST FOR STYLING PURPOSE */
+	margin-bottom: 2rem;
+	/* JUST FOR STYLING PURPOSE */
 }
+
 .form-switch.form-switch-xl .form-check-input {
-  height: 2.5rem;
-  width: calc(4rem + 0.75rem);
-  border-radius: 5rem;
+	height: 2.5rem;
+	width: calc(4rem + 0.75rem);
+	border-radius: 5rem;
 }
+
+
 /* END BOOTSTRAP 5 CUSTOM SWITCH SIZES */

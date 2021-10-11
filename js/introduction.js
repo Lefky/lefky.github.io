@@ -66,7 +66,7 @@ function playIntroduction() {
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
-			'These are pretty much the only editable fields.<br><br>Start time can be set automatically on opening the app (we\'ll cover parameter later).<br><br>Your break time can be entered in 2 modes: duration and timerange. The timerange mode can be triggered in the settings.<br>You can also set a default breaktime that will get filled in when opening the page.<br><br>The endtime will get filled in automatically based on the hour schedule you entered (let\'s get to that in a second) or by pressing the enter key. It\'s also possible to manually edit the endtime.' +
+			'These are pretty much the only editable fields.<br><br>Start time can be set automatically on opening the app (we\'ll cover parameters later).<br><br>Your break time can be entered in 2 modes: duration and timerange. The timerange mode can be triggered in the settings.<br>You can also set a default breaktime that will get filled in when opening the page.<br><br>The endtime will get filled in automatically based on the hour schedule you entered (let\'s get to that in a second) or by pressing the enter key. It\'s also possible to manually edit the endtime.' +
 			'<div class="d-flex justify-content-end mt-4">' +
 				'<button type="button" class="btn btn-sm btn-primary d-block" onclick=' +
 						'"this.parentElement.parentElement.parentElement.remove();' +
