@@ -25,6 +25,10 @@ body {
 	height: 33% !important;
 }
 
+.h-f-50 {
+	height: 50px;
+}
+
 .w-f-80 {
 	width: 80px !important;
 }

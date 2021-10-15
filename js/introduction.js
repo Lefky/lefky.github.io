@@ -5,7 +5,7 @@ function startIntroduction() {
 	
 	var new_element = document.createElement("div");
 	new_element.id = "overlay";
-	new_element.style.cssText = "z-index: 1090; background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; right: 0; bottom: 0; left: 0;";
+	new_element.style.cssText = "z-index: 1090; background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; min-height: 100%;";
 	document.body.appendChild(new_element);
 
 	var introductioncontainer = document.createElement("div");
@@ -14,7 +14,7 @@ function startIntroduction() {
 	document.getElementById("alertcontainer").appendChild(introductioncontainer);
 
 	new_element = document.createElement("div");
-	new_element.className = "alert alert-primary fade show my-4 w-33";
+	new_element.className = "alert alert-primary fade show my-4 col-11 col-md-4";
 	new_element.style.cssText = "position: absolute; margin-left: 1rem; z-index: 1099;";
 	new_element.setAttribute("role", "alert");
 	new_element.innerHTML =
@@ -41,7 +41,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea";
-	new_element.style.cssText = "max-width: 50%; text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -62,7 +63,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea_start_end";
-	new_element.style.cssText = "max-width: 50%; text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -84,7 +86,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea_total_hours";
-	new_element.style.cssText = "max-width: 50%; text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -104,7 +107,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea_overtime";
-	new_element.style.cssText = "max-width: 50%; text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -124,7 +128,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea_total_weekly_overtime";
-	new_element.style.cssText = "max-width: 50%; text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -144,7 +149,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea_history";
-	new_element.style.cssText = "max-width: 50%; text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -163,7 +169,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea_edit_history";
-	new_element.style.cssText = "max-width: 50%; text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -182,7 +189,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea_parameters";
-	new_element.style.cssText = "max-width: 50%; text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -201,7 +209,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_buttonarea";
-	new_element.style.cssText = "max-width: 50%; text-align: left; position: absolute; left: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-4";
+	new_element.style.cssText = "text-align: left; position: absolute; left: 30px; top: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -295,7 +304,7 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "app_introduction";
-	new_element.className = "alert alert-primary fade show my-4 text-start w-33";
+	new_element.className = "alert alert-primary fade show my-4 text-start col-11 col-md-4";
 	new_element.style.cssText = "position: absolute; margin-left: 1rem; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
