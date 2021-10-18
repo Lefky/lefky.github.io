@@ -18,10 +18,6 @@
 	<!-- Bootstrap -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" defer>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"	crossorigin="anonymous" defer></script>
-	<!-- 
-		https://getbootstrap.com/docs/5.0/migration/
-		https://web3canvas.com/convert-bootstrap-4-to-5-migration-guide/#!
-	-->
 	<!-- jquery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
 	<!-- Font Awsome -->
@@ -50,9 +46,9 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20211015.1</span> <br>
+					Version: <span id="currentappversion">20211018.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
-				</p>	
+				</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
@@ -222,7 +218,7 @@
 										<option value="months">months</option>
 									</select>
 									<button type="button" id="modalsavebutton" class="btn btn-outline-secondary" onclick="saveCleaningDay()">Save</button>
-									
+
 									<div class="input-group my-3">
 										<label class="col-form-label" for="resetdate" id="resetdatelabel">Reset date: </label>
 										<input type="text" name="resetdate" id="resetdate" class="form-control flex-grow-0 w-33 col-sm-5 mx-1" size="20" disabled>
@@ -231,7 +227,7 @@
 							</div>
 						</div>
 					</div>
-				</p>			
+				</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" id="settingsmodalclosebutton" data-bs-dismiss="modal">Close</button>
@@ -252,7 +248,7 @@
 					Here I'm posting good and useful applications for any type of device that are (mostly) free.<br>
 					I'm using these myself on my computer, smartphone or somewhere else.<br>
 					If something does cost money, in most cases, it's well spent :)<br><br>
-				</p>			
+				</p>
 				<p>
 					<h4>Rambox</h4>
 					Rambox is an application that allows you to group multiple other applications into 1.<br>
@@ -260,7 +256,7 @@
 					Furthermore, the amount of services, as they call it, you can add are unlimited. And if something isn't premade you can just <a href="https://github.com/ramboxapp/community-edition/wiki/Add-a-Custom-Service" target="_blank" >add a custom service</a>.<br>
 					<br>
 					<a class="btn btn-outline-success btn-sm" href="https://rambox.pro/" target="_blank" role="button">Rambox website</a>
-				</p>		
+				</p>
 				<p>
 					<h4>Tasker</h4>
 					Tasker makes your Android smartphone smarter.<br>
@@ -270,7 +266,7 @@
 					You see the possibilities are really endless!<br>
 					<br>
 					<a class="btn btn-outline-success btn-sm" href="https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm" target="_blank" role="button">Tasker in the Google playstore</a>
-				</p>	
+				</p>
 				<p>
 					<h4>Rainmeter</h4>
 					Rainmeter is a tool to customize your desktop.<br>
@@ -426,13 +422,13 @@
 				</div>
 			</div>
 			<button type="button" class="btn-close" onclick="notificationClosed('click');" data-bs-dismiss="alert" aria-label="Close"></button>
-		</div>		
+		</div>
 		<div id="app_alert" class="alert alert-warning alert-dismissible fade show w-33 me-1 alertnotification" role="alert">
 			<div id="app_alert_message"></div>
 			<button type="button" class="btn-close" aria-label="Close"></button>
 		</div>
 	</div>
-	
+
 	<div class="row h-100">
 		<div class="row w-100 align-self-center">
 			<div class="col-lg-1 d-none d-lg-block bg-light"></div>
@@ -444,7 +440,7 @@
 							<div class="pe-2 ps-3">
 								<input name="start_time" id="start_time" type="time" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
 							</div>
-						</div>				
+						</div>
 						<div id="divbreaktime" class="input-group justify-content-end my-3">
 							<label class="col-form-label" for="break_time_default" data-bs-toggle="tooltip" data-bs-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
 								Break with default
@@ -546,7 +542,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div id="divparameters" class="collapse col me-5 input-group justify-content-end">
 							<div class="form-check form-switch mx-1">
 								<input type="checkbox" class="form-check-input checkred" id="nosave">
@@ -570,7 +566,7 @@
 					</div>
 				</form>
 			</div>
-			<div id="buttonarea" class="col-lg-5 align-self-center text-lg-start text-center">	
+			<div id="buttonarea" class="col-lg-5 align-self-center text-lg-start text-center">
 				<div class="row">
 					<!-- <div class="col col-sm-1 d-none d-xs-block d-sm-block d-md-block d-lg-block"></div> -->
 					<div class="col ms-xs-2 ms-lg-5">
@@ -589,7 +585,7 @@
 									<button id="break_add5_btn" type="button" class="btn btn-lg btn-primary middlebtn px-4 py-3" onclick="add_break(0.084)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Adds 5min of break time."><i class="fal fa-plus"></i> 5min</button>
 									<button id="break_add30_btn" type="button" class="btn btn-lg btn-primary middlebtn px-4 py-3" onclick="add_break(0.5)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Adds 30min of break time."><i class="fal fa-plus"></i> 30min</button>
 									<button id="break_counter_btn" type="button" class="btn btn-lg btn-primary rightbtn px-4 py-3" onclick="break_counter()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Click once to start the break time counter. Click again to stop it. While running, the elapsed time will be displayed in the break time field. To resume the counter click this start button again, to reset click the reset button."><i class="fal fa-stopwatch"></i> Start</button>
-								</div>						
+								</div>
 							</div>
 						</div>
 						<div class="row">
@@ -606,10 +602,10 @@
 		</div>
 		<div class="row d-block d-lg-none">
 			<!-- Row to keep clear of footer when using small screens -->
-			<div class="col h-f-50 "></div>
+			<div class="col h-f-100 "></div>
 		</div>
 	</div>
-	
+
 	<!-- Footer HTML -->
     <div id="footer" class="row fixed-bottom px-3 py-1">
 		<div class="col d-flex align-self-center">
@@ -621,7 +617,7 @@
 				<button title="About" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4" data-bs-toggle="modal" data-bs-target="#modalabout"><i class="fas fa-info"></i></button>
 				<button title="Info" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4" data-bs-toggle="modal" data-bs-target="#modalinfo"><i class="fas fa-lightbulb"></i></button>
 				<button title="Settings" type="button" class="btn btn-outline-secondary rightbtn footerbtn py-1 px-4" data-bs-toggle="modal" data-bs-target="#modalsettings"><i class="fas fa-cog"></i></button>
-			</div>			
+			</div>
 		</div>
 	</div>
 </div>

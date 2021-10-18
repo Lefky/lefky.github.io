@@ -2,19 +2,16 @@ console.log("loaded introduction.js");
 
 function startIntroduction() {
 	document.getElementById('settingsmodalclosebutton').click();
-	
-	var new_element = document.createElement("div");
-	new_element.id = "overlay";
-	new_element.style.cssText = "z-index: 1090; background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; min-height: 100%;";
-	document.body.appendChild(new_element);
 
+	createOverlay();
+	
 	var introductioncontainer = document.createElement("div");
 	introductioncontainer.id = "introductioncontainer";
 	introductioncontainer.className = "row d-flex justify-content-center";
 	document.getElementById("alertcontainer").appendChild(introductioncontainer);
 
 	new_element = document.createElement("div");
-	new_element.className = "alert alert-primary fade show my-4 col-11 col-md-4";
+	new_element.className = "alert alert-primary fade show my-4 col-11 col-md-7 col-lg-4";
 	new_element.style.cssText = "position: absolute; margin-left: 1rem; z-index: 1099;";
 	new_element.setAttribute("role", "alert");
 	new_element.innerHTML =
@@ -24,6 +21,9 @@ function startIntroduction() {
 			'<button type="button" class="btn btn-sm btn-primary me-2" onclick="stopIntroduction();">Skip introduction</button>' +
 			'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 					'"playIntroduction();' +
+					'$(\'#overlay\').remove();' +
+					'document.getElementById(\'inputarea\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
+					'createOverlay();' +
 					'this.parentElement.parentElement.remove();' +
 					'document.getElementById(\'arrow_inputarea\').style.removeProperty(\'display\');' +
 					'document.getElementById(\'inputarea\').style.cssText = \'z-index: 1095; pointer-events: none;\';">' +
@@ -31,6 +31,13 @@ function startIntroduction() {
 			'</button>' +
 		'</div>'
 	document.getElementById("introductioncontainer").appendChild(new_element);
+}
+
+function createOverlay() {
+	var new_element = document.createElement("div");
+	new_element.id = "overlay";
+	new_element.style.cssText = "z-index: 1090; background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; min-height: 100%;";
+	document.body.appendChild(new_element);
 }
 
 function playIntroduction() {
@@ -41,8 +48,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea";
-	new_element.className = "col-11 col-md-4";
-	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-7 col-lg-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; bottom: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -50,6 +57,9 @@ function playIntroduction() {
 			'<div class="d-flex justify-content-end mt-4">' +
 				'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 						'"this.parentElement.parentElement.parentElement.remove();' +
+						'$(\'#overlay\').remove();' +
+						'document.getElementById(\'inputarea\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
+						'createOverlay();' +
 						'document.getElementById(\'arrow_inputarea_start_end\').style.removeProperty(\'display\');' +
 						'document.getElementById(\'inputarea\').style.cssText = \'z-index: initial; pointer-events: initial;\';' +
 						'document.getElementById(\'divstarttime\').style.cssText = \'background-color: #f8f9fa; z-index: 1095; pointer-events: none;\';' +
@@ -63,8 +73,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea_start_end";
-	new_element.className = "col-11 col-md-4";
-	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-7 col-lg-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; bottom: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -72,6 +82,9 @@ function playIntroduction() {
 			'<div class="d-flex justify-content-end mt-4">' +
 				'<button type="button" class="btn btn-sm btn-primary d-block" onclick=' +
 						'"this.parentElement.parentElement.parentElement.remove();' +
+						'$(\'#overlay\').remove();' +
+						'document.getElementById(\'divendtime\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
+						'createOverlay();' +
 						'document.getElementById(\'arrow_inputarea_total_hours\').style.removeProperty(\'display\');' +
 						'document.getElementById(\'divstarttime\').style.cssText = \'background-color: inherit; z-index: initial; pointer-events: initial;\';' +
 						'document.getElementById(\'divbreaktime\').style.cssText = \'background-color: inherit; z-index: initial; pointer-events: initial;\';' +
@@ -86,8 +99,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea_total_hours";
-	new_element.className = "col-11 col-md-4";
-	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-7 col-lg-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; bottom: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -95,6 +108,9 @@ function playIntroduction() {
 			'<div class="d-flex justify-content-end mt-4">' +
 				'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 						'"this.parentElement.parentElement.parentElement.remove();' +
+						'$(\'#overlay\').remove();' +
+						'document.getElementById(\'divtotalnobreaktime\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
+						'createOverlay();' +
 						'document.getElementById(\'arrow_inputarea_overtime\').style.removeProperty(\'display\');' +
 						'document.getElementById(\'divtotalnobreaktime\').style.cssText = \'background-color: inherit; z-index: initial; pointer-events: initial;\';' +
 						'document.getElementById(\'divtotalhours\').style.cssText = \'background-color: inherit; z-index: initial; pointer-events: initial;\';' +
@@ -107,8 +123,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea_overtime";
-	new_element.className = "col-11 col-md-4";
-	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-7 col-lg-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; bottom: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -116,6 +132,9 @@ function playIntroduction() {
 			'<div class="d-flex justify-content-end mt-4">' +
 				'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 						'"this.parentElement.parentElement.parentElement.remove();' +
+						'$(\'#overlay\').remove();' +
+						'document.getElementById(\'divovertime\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
+						'createOverlay();' +
 						'document.getElementById(\'arrow_inputarea_total_weekly_overtime\').style.removeProperty(\'display\');' +
 						'document.getElementById(\'divovertime\').style.cssText = \'background-color: inherit; z-index: initial; pointer-events: initial;\';' +
 						'document.getElementById(\'divovertimeweekly\').style.cssText = \'background-color: #f8f9fa; z-index: 1095; pointer-events: none;\';' +
@@ -128,8 +147,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea_total_weekly_overtime";
-	new_element.className = "col-11 col-md-4";
-	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-7 col-lg-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; bottom: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -137,6 +156,9 @@ function playIntroduction() {
 			'<div class="d-flex justify-content-end mt-4">' +
 				'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 						'"this.parentElement.parentElement.parentElement.remove();' +
+						'$(\'#overlay\').remove();' +
+						'document.getElementById(\'divovertimetotal\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
+						'createOverlay();' +
 						'document.getElementById(\'arrow_inputarea_history\').style.removeProperty(\'display\');' +
 						'document.getElementById(\'divovertimeweekly\').style.cssText = \'background-color: inherit; z-index: initial; pointer-events: initial;\';' +
 						'document.getElementById(\'divovertimetotal\').style.cssText = \'background-color: inherit; z-index: initial; pointer-events: initial;\';' +
@@ -149,8 +171,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea_history";
-	new_element.className = "col-11 col-md-4";
-	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-7 col-lg-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; bottom: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -158,6 +180,9 @@ function playIntroduction() {
 			'<div class="d-flex justify-content-end mt-4">' +
 				'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 						'"this.parentElement.parentElement.parentElement.remove();' +
+						'$(\'#overlay\').remove();' +
+						'document.getElementById(\'historycontainer\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
+						'createOverlay();' +
 						'document.getElementById(\'arrow_inputarea_edit_history\').style.removeProperty(\'display\');' +
 						'document.getElementById(\'historycontainer\').style.cssText = \'background-color: inherit; z-index: initial; pointer-events: initial;\';' +
 						'document.getElementById(\'btnedithistory\').style.cssText = \'background-color: #f8f9fa; z-index: 1095; pointer-events: none;\';">' +
@@ -169,8 +194,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea_edit_history";
-	new_element.className = "col-11 col-md-4";
-	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-7 col-lg-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; bottom: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -178,6 +203,9 @@ function playIntroduction() {
 			'<div class="d-flex justify-content-end mt-4">' +
 				'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 						'"this.parentElement.parentElement.parentElement.remove();' +
+						'$(\'#overlay\').remove();' +
+						'document.getElementById(\'historycontainer\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
+						'createOverlay();' +
 						'document.getElementById(\'arrow_inputarea_parameters\').style.removeProperty(\'display\');' +
 						'document.getElementById(\'btnedithistory\').style.cssText = \'background-color: inherit; z-index: initial; pointer-events: initial;\';' +
 						'document.getElementById(\'divparameters\').style.cssText = \'background-color: #f8f9fa; z-index: 1095; pointer-events: none;\';">' +
@@ -189,8 +217,8 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea_parameters";
-	new_element.className = "col-11 col-md-4";
-	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; top: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-7 col-lg-4";
+	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; bottom: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -198,6 +226,9 @@ function playIntroduction() {
 			'<div class="d-flex justify-content-end mt-4">' +
 				'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 						'"this.parentElement.parentElement.parentElement.remove();' +
+						'$(\'#overlay\').remove();' +
+						'document.getElementById(\'divparameters\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
+						'createOverlay();' +
 						'document.getElementById(\'arrow_buttonarea\').style.removeProperty(\'display\');' +
 						'document.getElementById(\'divparameters\').style.cssText = \'background-color: inherit; z-index: initial; pointer-events: initial;\';' +
 						'document.getElementById(\'buttonarea\').style.cssText = \'background-color: #f8f9fa; z-index: 1095; pointer-events: none;\';">' +
@@ -209,7 +240,7 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_buttonarea";
-	new_element.className = "col-11 col-md-4";
+	new_element.className = "col-11 col-md-7 col-lg-4";
 	new_element.style.cssText = "text-align: left; position: absolute; left: 30px; top: 45px; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<div class="alert alert-primary fade show text-start">' +
@@ -230,9 +261,10 @@ function playIntroduction() {
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_footer_reporting";
-	new_element.style.cssText = "max-width: 50%; text-align: right; position: absolute; right: 175px; bottom: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-7 col-lg-4";
+	new_element.style.cssText = "text-align: right; z-index: 1099; height: 0; display: none;";
 	new_element.innerHTML =
-		'<div class="alert alert-primary fade show text-start">' +
+		'<div class="alert alert-primary fade show text-start" style="margin-left: 1rem; position: absolute; right: 30px; bottom: 85px;">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
 			'This button houses access to different graphs and visuals on your personal time data.' +
 			'<div class="d-flex justify-content-end mt-4">' +
@@ -243,14 +275,15 @@ function playIntroduction() {
 				'</button>' +
 			'</div>' +
 		'</div><br>' +
-		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white;"></i>'
+		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white; position: absolute; right: 185px; bottom: 50px;"></i>'
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_footer_about";
-	new_element.style.cssText = "max-width: 50%; text-align: right; position: absolute; right: 130px; bottom: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-7 col-lg-4";
+	new_element.style.cssText = "text-align: right; z-index: 1099; height: 0; display: none;";
 	new_element.innerHTML =
-		'<div class="alert alert-primary fade show text-start">' +
+		'<div class="alert alert-primary fade show text-start" style="margin-left: 1rem; position: absolute; right: 30px; bottom: 85px;">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
 			'If you want to know more about the author, version or changelog click this button.' +
 			'<div class="d-flex justify-content-end mt-4">' +
@@ -261,14 +294,15 @@ function playIntroduction() {
 				'</button>' +
 			'</div>' +
 		'</div><br>' +
-		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white;"></i>'
+		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white; position: absolute; right: 135px; bottom: 50px;"></i>'
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_footer_info";
-	new_element.style.cssText = "max-width: 50%; text-align: right; position: absolute; right: 75px; bottom: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-7 col-lg-4";
+	new_element.style.cssText = "text-align: right; z-index: 1099; height: 0; display: none;";
 	new_element.innerHTML =
-		'<div class="alert alert-primary fade show text-start">' +
+		'<div class="alert alert-primary fade show text-start" style="margin-left: 1rem; position: absolute; right: 30px; bottom: 85px;">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
 			'Info on other useful applications and pieces of software can be found here.' +
 			'<div class="d-flex justify-content-end mt-4">' +
@@ -279,14 +313,15 @@ function playIntroduction() {
 				'</button>' +
 			'</div>' +
 		'</div><br>' +
-		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white;"></i>'
+		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white; position: absolute; right: 80px; bottom: 50px;"></i>'
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_footer_settings";
-	new_element.style.cssText = "max-width: 50%; text-align: right; position: absolute; right: 20px; bottom: 45px; z-index: 1099; display: none;";
+	new_element.className = "col-11 col-md-7 col-lg-4";
+	new_element.style.cssText = "text-align: right; z-index: 1099; height: 0; display: none;";
 	new_element.innerHTML =
-		'<div class="alert alert-primary fade show text-start">' +
+		'<div class="alert alert-primary fade show text-start" style="margin-left: 1rem; position: absolute; right: 30px; bottom: 85px;">' +
 			'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
 			'This is where you can change various settings.' +
 			'<div class="d-flex justify-content-end mt-4">' +
@@ -299,12 +334,12 @@ function playIntroduction() {
 				'</button>' +
 			'</div>' +
 		'</div><br>' +
-		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white;"></i>'
+		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white; position: absolute; right: 25px; bottom: 50px;"></i>'
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
 	new_element.id = "app_introduction";
-	new_element.className = "alert alert-primary fade show my-4 text-start col-11 col-md-4";
+	new_element.className = "alert alert-primary fade show my-4 text-start col-11 col-md-7 col-lg-4";
 	new_element.style.cssText = "position: absolute; margin-left: 1rem; z-index: 1099; display: none;";
 	new_element.innerHTML =
 		'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
