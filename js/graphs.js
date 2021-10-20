@@ -22,16 +22,16 @@ var sortedkeys = getHistory(),
 
 
 // SYNC loading
-google.charts.load('current', {packages: ['corechart','gauge']});
+google.charts.load('current', { packages: ['corechart', 'gauge'] });
 
 // ASYNC loading
 function initGoogleLibraries(googleLib) {
-	return new Promise(function(resolve, reject) {
-		if (filesadded.indexOf("["+googleLib+"]")==-1) {
+	return new Promise(function (resolve, reject) {
+		if (filesadded.indexOf("[" + googleLib + "]") == -1) {
 			google.charts.load('current', {
-				packages: ['corechart','gauge']
+				packages: ['corechart', 'gauge']
 			}).then(function () {
-				filesadded+="["+googleLib+"]";
+				filesadded += "[" + googleLib + "]";
 				console.log("loaded google Lib");
 				resolve("loaded google Lib");
 			});
@@ -48,17 +48,17 @@ document.getElementById("start_reporting_selection").addEventListener("load", in
 
 function initGraphs() {
 	numberOfDaysRegistered = 0,
-	datasetOvertimeDec = [],
-	datasetStartDec = [],
-	datasetTotalDec = [],
-	datasetTotalNoBreakDec = [],
-	datasetBreakDec = [],
-	datasetHourscheduleDec = [],
-	positiveOvertimeDays = 0,
-	negativeOvertimeDays = 0,
-	sumStarttime = 0,
-	sumStoptime = 0,
-	sumOvertime = 0;
+		datasetOvertimeDec = [],
+		datasetStartDec = [],
+		datasetTotalDec = [],
+		datasetTotalNoBreakDec = [],
+		datasetBreakDec = [],
+		datasetHourscheduleDec = [],
+		positiveOvertimeDays = 0,
+		negativeOvertimeDays = 0,
+		sumStarttime = 0,
+		sumStoptime = 0,
+		sumOvertime = 0;
 
 	formatJSONdata();
 }
@@ -85,35 +85,35 @@ function initDateSelector() {
 	document.getElementById('end_reporting_selection').value = moment().format('YYYY-MM-DD');
 }
 
-$('#modalreporting').on('shown.bs.modal', function() {
+$('#modalreporting').on('shown.bs.modal', function () {
 	// Redraw charts on opening modal
 	initGraphs();
 	drawGraphs();
-	
+
 	// Rotate screen for mobile users so it displays the entire width
 	// https://usefulangle.com/post/105/javascript-change-screen-orientation
 	mobileRotateScreen(true);
 });
 
-$('#modalreporting').on('hidden.bs.modal', function() {
+$('#modalreporting').on('hidden.bs.modal', function () {
 	// Rotate screen for mobile users so it displays normal again
 	mobileRotateScreen(false);
 });
 
-$(window).resize(function() {
+$(window).resize(function () {
 	drawGraphs();
 });
 
 function mobileRotateScreen(rotate) {
-	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 		if (rotate) {
 			document.documentElement.requestFullscreen();
 			document.documentElement.webkitRequestFullScreen();
-		
+
 			var current_mode = screen.orientation;
 			console.log(current_mode.type)
 			console.log(current_mode.angle)
-			
+
 			screen.orientation.lock("landscape");
 			current_mode = screen.orientation;
 		} else {
@@ -132,27 +132,27 @@ function drawAreagraph(graphtype) {
 	switch (graphtype) {
 		case "OvertimeDec":
 			data.addColumn('number', 'Overtime');
-			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetOvertimeDec);
 			linecolor = ['#28a745'];
 			break;
 		case "StartDec":
 			data.addColumn('number', 'Starttime');
-			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetStartDec);
 			linecolor = ['#007bff'];
 			break;
 		case "StopDec":
 			data.addColumn('number', 'Stoptime');
-			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetStopDec);
 			linecolor = ['#ff9900'];
 			break;
 		case "BreakDec":
 			data.addColumn('number', 'Break');
-			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addColumn('number', 'Hour schedule');
-			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetBreakDec);
 			linecolor = ['#17a2b8', 'black'];
 			break;
@@ -162,15 +162,15 @@ function drawAreagraph(graphtype) {
 	}
 
 	var options = {
-		tooltip: {isHtml: true},
+		tooltip: { isHtml: true },
 		explorer: {
-			axis: 'horizontal', 
+			axis: 'horizontal',
 			actions: ['dragToZoom', 'rightClickToReset'],
 			maxZoomIn: 0.05
 		},
 		hAxis: {
 			//title: 'Date',
-			format:'dd-MM-YYYY',
+			format: 'dd-MM-YYYY',
 			slantedText: true
 			//slantedTextAngle: 60
 		},
@@ -191,7 +191,7 @@ function drawAreagraph(graphtype) {
 			1: {
 				lineWidth: 1,
 				lineDashStyle: [1, 1],
-				areaOpacity : 0
+				areaOpacity: 0
 			}
 		},
 		trendlines: {
@@ -221,17 +221,17 @@ function drawBargraph(graphtype) {
 	switch (graphtype) {
 		case "TotalDec":
 			data.addColumn('number', 'Total');
-			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addColumn('number', 'Hour schedule');
-			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetTotalDec);
 			linecolor = ['#ffc107', 'black'];
 			break;
 		case "TotalNoBreakDec":
 			data.addColumn('number', 'Total no break');
-			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addColumn('number', 'Hour schedule');
-			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetTotalNoBreakDec);
 			linecolor = ['#dc3545', 'black'];
 			break;
@@ -241,15 +241,15 @@ function drawBargraph(graphtype) {
 	}
 
 	var options = {
-		tooltip: {isHtml: true},
+		tooltip: { isHtml: true },
 		explorer: {
-			axis: 'horizontal', 
+			axis: 'horizontal',
 			actions: ['dragToZoom', 'rightClickToReset'],
 			maxZoomIn: 0.05
 		},
 		hAxis: {
 			//title: 'Date',
-			format:'dd-MM-YYYY',
+			format: 'dd-MM-YYYY',
 			slantedText: true
 			//slantedTextAngle: 60
 		},
@@ -329,10 +329,10 @@ function drawPiegraph(graphtype) {
 
 	var chart = new google.visualization.PieChart(document.getElementById(graphtype + '_div'));
 	chart.draw(data, options);
-	
+
 	// If there isn't any data to display, display a notification
 	if (graphtype == "OvertimeDays" && positiveOvertimeDays == 0 && negativeOvertimeDays == 0) {
-		$('#OvertimeDays_div svg g text:first').html("No days of overtime in window"); 
+		$('#OvertimeDays_div svg g text:first').html("No days of overtime in window");
 	}
 }
 
@@ -443,15 +443,15 @@ function drawGaugegraph(graphtype) {
 
 	var chart = new google.visualization.Gauge(document.getElementById(graphtype + '_div'));
 	chart.draw(data, options);
-	
+
 	$('#' + graphtype + '_div svg g text:first').attr('font-size', 20); // change the fontsize of the title, there's no parameter for this
 
 	// change the format of the starttime gauge to non-decimal
 	if (graphtype == "AvgStarttimeGauge") {
-		$('#AvgStarttimeGauge_div svg g g text:first').html(floatToTimeString(avg_starttime)); 
+		$('#AvgStarttimeGauge_div svg g g text:first').html(floatToTimeString(avg_starttime));
 	}
 	if (graphtype == "AvgStoptimeGauge") {
-		$('#AvgStoptimeGauge_div svg g g text:first').html(floatToTimeString(avg_stoptime)); 
+		$('#AvgStoptimeGauge_div svg g g text:first').html(floatToTimeString(avg_stoptime));
 	}
 }
 
@@ -459,25 +459,25 @@ function formatJSONdata() {
 	//var start = sortedkeys.length - datasetlength; // howmany datapoints need to be skipped before starting to draw graphs
 	var start_reporting_selection = moment(document.getElementById('start_reporting_selection').value, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD'),
 		end_reporting_selection = document.getElementById('end_reporting_selection').value;
-	
+
 	var timeinfo,
 		variable,
 		hourschedule,
 		tooltip,
 		hourscheduletooltip,
 		dateKey;
-	
-	for (var i = 0; key = sortedkeys[i]; i++) {		
-		
+
+	for (var i = 0; key = sortedkeys[i]; i++) {
+
 		if (testDateFormat(key)/* && i >= start*/) {
 			timeinfo = JSON.parse(localStorage.getItem(key));
-			dateKey=moment(key, "DD-MM-YYYY");
+			dateKey = moment(key, "DD-MM-YYYY");
 
 			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo['HourSchedule'].toLowerCase() == "correction") {
 				sumOvertime = parseFloat(sumOvertime.toFixed(2)) + parseFloat(timeinfo['OvertimeDec']);
 			}
-			
-			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo['HourSchedule'].toLowerCase() != "correction"){
+
+			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo['HourSchedule'].toLowerCase() != "correction") {
 
 				dateKey = key.split('-');
 				dateKey = new Date(dateKey[2], dateKey[1] - 1, dateKey[0]);
@@ -509,12 +509,12 @@ function formatJSONdata() {
 						datasetStopDec.push([dateKey, variable, tooltip]);
 					}
 				}
-				
+
 				if (timeinfo.hasOwnProperty('HourSchedule')) {
 					hourschedule = parseFloat(timeinfo['HourSchedule']);
 					hourscheduletooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Hourschedule: </span>" + hourschedule + "h</div>";
 				}
-				
+
 				if (timeinfo.hasOwnProperty('TotalDec')) {
 					variable = parseFloat(timeinfo['TotalDec']);
 					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Total time: </span>" + floatToTimeString(variable) + "</div>";
@@ -544,7 +544,7 @@ function formatJSONdata() {
 					}
 				}
 				if (timeinfo.hasOwnProperty('HourSchedule')) {
-					datasetHourscheduleDec = updateArray(datasetHourscheduleDec, timeinfo['HourSchedule'] + "h");											
+					datasetHourscheduleDec = updateArray(datasetHourscheduleDec, timeinfo['HourSchedule'] + "h");
 				}
 				//console.log("accepted value record");
 			}
@@ -554,15 +554,15 @@ function formatJSONdata() {
 }
 
 function updateArray(array, category) {
-    const entry = array.find(([cat]) => cat === category);
-    if (entry) {
-        // Update the value
-        ++entry[1];
-        //console.log("category updated");
-    } else {
-        // Add a new entry
-        array.push([category, 1]);
-        //console.log("category created");
-    }
+	const entry = array.find(([cat]) => cat === category);
+	if (entry) {
+		// Update the value
+		++entry[1];
+		//console.log("category updated");
+	} else {
+		// Add a new entry
+		array.push([category, 1]);
+		//console.log("category created");
+	}
 	return array;
 }

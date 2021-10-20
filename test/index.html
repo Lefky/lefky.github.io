@@ -1,28 +1,30 @@
 <!doctype html>
 
 <html lang="en">
-<head>
-  <meta charset="utf-8">
 
-  <title>test</title>
+<head>
+	<meta charset="utf-8">
+
+	<title>test</title>
 
 </head>
 
 <body>
 	<h1>Loaded!</h1>
-	
+
 	<p>
 		<span id="referrer"></<span>
 	</p>
-	
-	
+
+
 	<script type="text/javascript">
 		var ref = document.referrer;
-		if ( ref == "" ){
+		if (ref == "") {
 			document.getElementById("referrer").innerHTML = "No referrer detected.";
 		} else {
 			document.getElementById("referrer").innerHTML = "Referred by: " + ref;
 		}
 	</script>
 </body>
+
 </html>
