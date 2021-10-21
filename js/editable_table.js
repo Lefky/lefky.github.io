@@ -21,7 +21,7 @@ const newTr = `
 		<a href="#" class="text-success fontsize150 my-0 mx-2 waves-effect waves-light">
 			<i class="fa fa-save"></i>
 		</a>
-	</span> 
+	</span>
 	<span class="record-delete">
 		<a href="#" class="text-danger fontsize150 my-0 mx-2 waves-effect waves-light">
 			<i class="fa fa-trash"></i>
@@ -103,22 +103,22 @@ function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSch
 	var error_message = "";
 
 	if (!testDateFormat(key)) {
-		error_message = error_message + "<br><br>Date for date " + key + "<br><br>is not in the DD-MM-YYYY format.";
+		error_message = error_message + "<br><br>Date for date \"" + key + "\" is not in the DD-MM-YYYY format.";
 	}
 	if (!isnumber.test(TotalNoBreakDec) && TotalNoBreakDec.toLowerCase() != "correction") {
-		error_message = error_message + "<br><br>Total Time No Break for date " + key + "<br><br>is not a (decimal) number.";
+		error_message = error_message + "<br><br>Total Time No Break for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
 	}
 	if (!isnumber.test(OvertimeDec)) {
-		error_message = error_message + "<br><br>Overtime for date " + key + "<br><br>is not a (decimal) number.";
+		error_message = error_message + "<br><br>Overtime for date \"" + key + "\" is not a (decimal) number.";
 	}
 	if (!isnumber.test(TotalDec) && TotalDec.toLowerCase() != "correction") {
-		error_message = error_message + "<br><br>Total Work Time for date " + key + "<br><br>is not a (decimal) number.";
+		error_message = error_message + "<br><br>Total Work Time for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
 	}
 	if (!isnumber.test(StartDec) && StartDec.toLowerCase() != "correction") {
-		error_message = error_message + "<br><br>Start Time for date " + key + "<br><br>is not a (decimal) number.";
+		error_message = error_message + "<br><br>Start Time for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
 	}
 	if (!isnumber.test(HourSchedule) && HourSchedule.toLowerCase() != "correction") {
-		error_message = error_message + "<br><br>Hour Schedule for date " + key + "<br><br>is not a (decimal) number.";
+		error_message = error_message + "<br><br>Hour Schedule for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
 	}
 
 	if (error_message == "") {
@@ -159,7 +159,7 @@ $($tableID).on('click', '.record-save', function () {
 		setHistory(false);
 	} else {
 		currentRow.css("backgroundColor", "#ffcccc");
-		app_alert_message = "<b>Ai caramba!</b> An entry hasn't been saved!";
+		app_alert_message = "<b>Ai caramba!</b><br>An entry hasn't been saved!";
 		setAlertMessage(app_alert_message + returncode);
 	}
 });

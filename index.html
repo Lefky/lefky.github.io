@@ -46,7 +46,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20211018.1</span> <br>
+					Version: <span id="currentappversion">20211021.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>
 			</div>
@@ -303,6 +303,10 @@
 					<p class="text-danger">
 						To save an entry you need to click the save button! If you add a date that already exists it'll be overwritten!
 					</p>
+					<p>
+						You can add corrections by clicking "Add new", entering the date when you want the correction to occur, filling in the overtime (positive or negative depending on the correction you want to do) and entering the word "correction" in every other field.<br>
+						These correction can for example be used when taking up some overtime days, then you just add a negative correction of the hours you should've worked that day.
+					</p>
 					<div class="row align-items-center justify-content-around mb-2">
 						<div class="col-5">
 							<div class="input-group ms-2">
@@ -312,15 +316,12 @@
 						</div>
 						<div class="col-7 text-end">
 							<span class="table-add me-2">
-								<!-- <a href="#!" class="text-info my-0 mx-2" title="Add entry"><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a> -->
 								<button type="button" class="btn btn-primary my-1 mx-2"><i class="fa fa-plus"></i> Add New</button>
 							</span>
 							<span class="table-save-all me-2">
-								<!-- <a href="#!" class="text-success my-0 mx-2" title="Save all entries"><i class="fas fa-save fa-2x" aria-hidden="true"></i></a> -->
 								<button type="button" class="btn btn-success my-1 mx-2"><i class="fa fa-save"></i> Save all</button>
 							</span>
 							<span class="table-delete-all me-2">
-								<!-- <a href="#!" class="text-danger my-0 mx-2" title="Delete all entries"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a> -->
 								<button type="button" class="btn btn-danger my-1 mx-2"><i class="fa fa-trash"></i> Delete all</button>
 							</span>
 						</div>
@@ -402,30 +403,25 @@
 				</div>
 				<div class="col-lg-8 py-1 px-4">
 					<p>
-						Changed table edits to after-filter formatting and heading
+						Added official support for data corrections in the history modal. You can add custom entries to the data to correct the total time.<br>
+						Edited error validation accordingly.
 					</p>
 					<p>
-						Migrate layout to Bootstrap 5!<br>
-						This includes some big changes which may result in broken components. If you encounter one of those, pls leave me a message.
-					</p>
-					<p>
-						Added show/hide all option for time UI components in settings.
+						The provided sample data is now more up to date with the recent changes to the saved dataformat.
 					</p>
 					<p class="mb-0">
 						Bugfixes
 						<ul>
-							<li>Open time subtract not triggering when default value wasn't changed</li>
-							<li>Introduction not restartable</li>
-							<li>Layout fixes for mobile</li>
+							<li></li>
 						</ul>
 					</p>
 				</div>
 			</div>
 			<button type="button" class="btn-close" onclick="notificationClosed('click');" data-bs-dismiss="alert" aria-label="Close"></button>
 		</div>
-		<div id="app_alert" class="alert alert-warning alert-dismissible fade show w-33 me-1 alertnotification" role="alert">
+		<div id="app_alert" class="alert alert-warning alert-dismissible fade show col-10 col-lg-6 me-1 alertnotification" role="alert">
 			<div id="app_alert_message"></div>
-			<button type="button" class="btn-close" aria-label="Close"></button>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 		</div>
 	</div>
 
