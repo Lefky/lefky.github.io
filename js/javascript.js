@@ -3,27 +3,11 @@ console.log("loaded javascript.js");
 // var filesadded="";
 
 // Conversion functions
-/*
-function timeStringToFloat(time) {
-	var hoursMinutes = time.split(/[.:]/);
-	var hours = parseInt(hoursMinutes[0], 10);
-	var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
-	var time = hours + minutes / 60;
-	return Math.round((time + Number.EPSILON) * 100) / 100;
-}
-*/
 function floatToTimeString(timedec) {
 	var sign = timedec < 0 ? "-" : "";
 	var hours = Math.floor(Math.abs(timedec));
 	var minutes = Math.floor((Math.abs(timedec) * 60) % 60);
 	return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
-
-	/*
-	if (timedec < 0) {
-		return "-" + moment().startOf('day').subtract(timedec, 'hours').format('HH:mm')
-	}
-	return moment().startOf('day').add(timedec, 'hours').format('HH:mm')
-	*/
 }
 
 const reverseDateRepresentation = date => {
@@ -84,7 +68,6 @@ function getBreak(allowNegative) {
 
 function getBreakTimeStart() {
 	var time = document.getElementById("break_time_start").value;
-	//var time_dec = timeStringToFloat(time);
 	var time_dec = moment.duration(time).asHours();
 	if (!time_dec) {
 		time_dec = 0;
@@ -114,16 +97,6 @@ function setBreakDefault(time) {
 
 function addBreakDefault() {
 	var break_time_default_init = localStorage.getItem("break_time_default");
-	/*
-	var new_break_dec = getBreak(false) - break_time_default_init + getBreakDefault();
-	console.log("break: "+getBreak(false)+" init: "+break_time_default_init+" default: "+getBreakDefault());
-	
-	if ( new_break_dec > 0 ) {
-		setBreak(new_break_dec);
-	} else {
-		setBreak(0);
-	}
-	*/
 
 	if (getBreak(false) == break_time_default_init) {
 		setBreak(getBreakDefault());
@@ -346,7 +319,6 @@ function showHistorydeleteoptionContent() {
 		document.getElementById("historydeleteoptiondayscontent").classList.add("d-none");
 		document.getElementById("historydeleteoptionperiodscontent").classList.remove("d-none");
 		maxValuesDeleteOption();
-		//localStorage.setItem("lasthistoryclean", moment());
 	}
 }
 
@@ -418,7 +390,6 @@ function setHistory(refresh_edit_table) {
 		timeinfo;
 
 	for (; key = revkeys[i]; i++) {
-		//if (testDateFormat(key)) {
 		timeinfo = JSON.parse(localStorage.getItem(key));
 		if (timeinfo.hasOwnProperty('OvertimeDec')) {
 			if (timeinfo['OvertimeDec'].startsWith("-")) {
@@ -467,7 +438,6 @@ function setHistory(refresh_edit_table) {
 				console.log(new_timeinfo);
 			}
 		}
-		//}
 	}
 
 	if (revkeys == "" || revkeys == null) {
@@ -587,7 +557,6 @@ function cleanLocalStorage() {
 		i = 0,
 		today = moment(),
 		deleteoption = localStorage.getItem("historydeleteoption");
-	//lasthistoryclean = moment(localStorage.getItem("lasthistoryclean"));
 
 	if (deleteoption == "days") {
 		const expiredate = today.subtract(getHistoryRetain(), "days")
@@ -602,7 +571,6 @@ function cleanLocalStorage() {
 
 		if (cleaningday <= today) {
 			deleteHistory();
-			//localStorage.setItem("lasthistoryclean", today);
 			localStorage.setItem("cleaningday", calculateCleaningDay());
 		}
 	}
@@ -616,7 +584,6 @@ function deleteHistory() {
 			}
 		}
 		setHistory(true);
-		//document.getElementById("settingsmodalclosebutton").click();
 		alert("History deleted!");
 	}
 }
@@ -665,6 +632,7 @@ function makeDate(date) {
 
 // Application functions
 function now() {
+	/*
 	var date = new Date();
 	var hour = date.getHours(),
 		min = date.getMinutes();
@@ -673,18 +641,12 @@ function now() {
 	min = (min < 10 ? "0" : "") + min;
 
 	var timestamp = hour + ":" + min;
-	//return timeStringToFloat(timestamp);
 	return moment.duration(timestamp).asHours();
+	*/
+	return moment.duration(moment().startOf('minute').format("HH:mm")).asHours();
 }
 
 function todayDate() {
-	var date = new Date();
-
-	/*var dd = ('0' + date.getDate()).slice(-2),
-		mm = ('0' + (date.getMonth()+1)).slice(-2), //jan is 0
-		yyyy = date.getFullYear();
-	*/
-	//return dd + "-" + mm + "-" + yyyy;
 	return moment().format("DD-MM-YYYY");
 }
 
@@ -729,12 +691,10 @@ function setParameters() {
 		breaktime_timeselection_option_timerange = localStorage.getItem("breaktime_timeselection_option_timerange");
 
 	if (autoend == "true")
-		//document.getElementById("autoend").checked = true;
 		document.getElementById("autoend").click();
 	if (autoend_today_disabled == todayDate())
 		document.getElementById("autoend_today_disabled").click();
 	if (nosave == todayDate())
-		//document.getElementById("nosave").checked = true;
 		document.getElementById("nosave").click();
 	setHourSchedule(hourschedule);
 	if (break_time_default) {
@@ -744,10 +704,8 @@ function setParameters() {
 		document.getElementById("break_time_default").value = 0;
 	}
 	if (historydeleteoption == "days") {
-		//document.getElementById("historydeleteoptiondays").checked = true;
 		document.getElementById("historydeleteoptiondays").click();
 	} else if (historydeleteoption == "period") {
-		//document.getElementById("historydeleteoptionperiod").checked = true;
 		document.getElementById("historydeleteoptionperiod").click();
 	}
 	if (historyretain)
@@ -800,11 +758,9 @@ function setParameters() {
 	var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
 	if (timeinfo == null) {
 		if (startminsubtract == "true") {
-			//document.getElementById("startminsubtract").checked = true;
 			document.getElementById("startminsubtract").click();
 
 			// Fix convert minutes to subtract to decimal
-			//var startminsubtract_value_decimal = timeStringToFloat("00:"+startminsubtract_value);
 			var startminsubtract_value_decimal = moment.duration("00:" + startminsubtract_value).asHours();
 			setStart(now() - startminsubtract_value_decimal);
 		} else {
@@ -817,7 +773,6 @@ function setParameters() {
 		setEnd(parseFloat(timeinfo['StartDec']) + parseFloat(timeinfo['TotalDec']));
 		calculateTotal();
 		if (startminsubtract == "true")
-			//document.getElementById("startminsubtract").checked = true;
 			document.getElementById("startminsubtract").click();
 	}
 }
@@ -901,7 +856,7 @@ class Timer {
 	}
 }
 
-const timer = new Timer(); // Initialize object to 
+const timer = new Timer(); // Initialize object to
 var break_counter_started = false, refreshIntervalId = 0;
 function break_counter() {
 	var break_counter_btn = document.getElementById("break_counter_btn");
