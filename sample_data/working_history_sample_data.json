@@ -21,7 +21,7 @@
     "29-01-2020": "{\"TotalNoBreakDec\": \"7.73\", \"OvertimeDec\": \"0.13\", \"TotalDec\": \"7.98\", \"StartDec\": \"7.33\", \"HourSchedule\": \"8.00\"}",
     "30-01-2020": "{\"TotalNoBreakDec\": \"6.9\", \"OvertimeDec\": \"-0.70\", \"TotalDec\": \"7.15\", \"StartDec\": \"7.97\", \"HourSchedule\": \"8.00\"}",
     "31-01-2020": "{\"TotalNoBreakDec\": \"8.27\", \"OvertimeDec\": \"0.67\", \"TotalDec\": \"8.52\", \"StartDec\": \"7.25\", \"HourSchedule\": \"8.00\"}",
-    "31-01-2020": "{\"TotalNoBreakDec\": \"correction\", \"OvertimeDec\": \"-8.00\", \"TotalDec\": \"correction\", \"StartDec\": \"correction\", \"HourSchedule\": \"correction\"}",
+    "01-02-2020": "{\"TotalNoBreakDec\": \"correction\", \"OvertimeDec\": \"-8.00\", \"TotalDec\": \"correction\", \"StartDec\": \"correction\", \"HourSchedule\": \"correction\"}",
     "autoend": "false",
     "break_counter_start_time": "12:22",
     "break_counter_started": "false",

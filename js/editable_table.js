@@ -47,7 +47,7 @@ $('.table-save-all').on('click', 'button', function () {
 		} else if (state == "check") {
 			abtn.innerHTML = '<i class="fa fa-check"></i>';
 		}
-	}
+	};
 
 	// loop through each row of the table.
 	var returncode,
@@ -68,7 +68,7 @@ $('.table-save-all').on('click', 'button', function () {
 			const btn = currentRow.getElementsByClassName('record-save')[0].firstElementChild;
 			currentRow.style.backgroundColor = "";
 			iconToggle(btn, "check");
-			setTimeout(() => { iconToggle(btn, "save") }, 2000);
+			setTimeout(() => { iconToggle(btn, "save"); }, 2000);
 		} else {
 			currentRow.style.backgroundColor = "#ffcccc";
 			app_alert_message = app_alert_message + returncode;
@@ -82,7 +82,7 @@ $('.table-save-all').on('click', 'button', function () {
 
 	const btn_all = document.getElementsByClassName('table-save-all')[0].firstElementChild;
 	iconToggle(btn_all, "check");
-	setTimeout(() => { iconToggle(btn_all, "save") }, 2000);
+	setTimeout(() => { iconToggle(btn_all, "save"); }, 2000);
 
 	setHistory(false);
 });
@@ -147,11 +147,11 @@ $($tableID).on('click', '.record-save', function () {
 	const iconToggle = () => {
 		const isCheckIcon = btn.find('.fa-check').length > 0;
 		if (isCheckIcon) {
-			btn.html('<i class="fa fa-save fontsize150"></i>')
+			btn.html('<i class="fa fa-save fontsize150"></i>');
 		} else {
-			btn.html('<i class="fa fa-check fontsize150"></i>')
+			btn.html('<i class="fa fa-check fontsize150"></i>');
 		}
-	}
+	};
 	if (!returncode) {
 		currentRow.css("backgroundColor", "");
 		iconToggle();
@@ -188,7 +188,7 @@ $("#edit_history_search").on("input", function () {
 	$($tableID + " tr").filter(function () {
 		$(this).toggle(
 			$(this).text().toLowerCase().indexOf(value) > -1 || $(this).text().toLowerCase().indexOf("edit") > -1
-		)
+		);
 	});
 
 	$("tr:visible").each(function (index, obj) {

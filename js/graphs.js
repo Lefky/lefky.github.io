@@ -47,18 +47,19 @@ document.getElementById("start_reporting_selection").addEventListener("load", in
 //google.charts.setOnLoadCallback(drawAreagraph);
 
 function initGraphs() {
+	/*jshint -W030*/
 	numberOfDaysRegistered = 0,
-		datasetOvertimeDec = [],
-		datasetStartDec = [],
-		datasetTotalDec = [],
-		datasetTotalNoBreakDec = [],
-		datasetBreakDec = [],
-		datasetHourscheduleDec = [],
-		positiveOvertimeDays = 0,
-		negativeOvertimeDays = 0,
-		sumStarttime = 0,
-		sumStoptime = 0,
-		sumOvertime = 0;
+	datasetOvertimeDec = [],
+	datasetStartDec = [],
+	datasetTotalDec = [],
+	datasetTotalNoBreakDec = [],
+	datasetBreakDec = [],
+	datasetHourscheduleDec = [],
+	positiveOvertimeDays = 0,
+	negativeOvertimeDays = 0,
+	sumStarttime = 0,
+	sumStoptime = 0,
+	sumOvertime = 0;
 
 	formatJSONdata();
 }
@@ -111,8 +112,8 @@ function mobileRotateScreen(rotate) {
 			document.documentElement.webkitRequestFullScreen();
 
 			var current_mode = screen.orientation;
-			console.log(current_mode.type)
-			console.log(current_mode.angle)
+			console.log(current_mode.type);
+			console.log(current_mode.angle);
 
 			screen.orientation.lock("landscape");
 			current_mode = screen.orientation;
@@ -352,6 +353,9 @@ function drawGaugegraph(graphtype) {
 		majorTicks,
 		minorTicks = 5;
 
+	var avg_starttime,
+		avg_stoptime;
+
 	switch (graphtype) {
 		case "DaysRegisteredGauge":
 			data.addColumn('string', 'Metric');
@@ -369,7 +373,7 @@ function drawGaugegraph(graphtype) {
 		case "AvgStarttimeGauge":
 			data.addColumn('string', 'Metric');
 			data.addColumn('number', 'Value');
-			var avg_starttime = sumStarttime / numberOfDaysRegistered;
+			avg_starttime = sumStarttime / numberOfDaysRegistered;
 			data.addRows([
 				['Avg starttime', avg_starttime]
 			]);
@@ -388,7 +392,7 @@ function drawGaugegraph(graphtype) {
 		case "AvgStoptimeGauge":
 			data.addColumn('string', 'Metric');
 			data.addColumn('number', 'Value');
-			var avg_stoptime = sumStoptime / numberOfDaysRegistered;
+			avg_stoptime = sumStoptime / numberOfDaysRegistered;
 			data.addRows([
 				['Avg stoptime', avg_stoptime]
 			]);
@@ -467,24 +471,25 @@ function formatJSONdata() {
 		hourscheduletooltip,
 		dateKey;
 
+	/*jshint -W084*/
 	for (var i = 0; key = sortedkeys[i]; i++) {
 
 		if (testDateFormat(key)/* && i >= start*/) {
 			timeinfo = JSON.parse(localStorage.getItem(key));
 			dateKey = moment(key, "DD-MM-YYYY");
 
-			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo['HourSchedule'].toLowerCase() == "correction") {
-				sumOvertime = parseFloat(sumOvertime.toFixed(2)) + parseFloat(timeinfo['OvertimeDec']);
+			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo.HourSchedule.toLowerCase() == "correction") {
+				sumOvertime = parseFloat(sumOvertime.toFixed(2)) + parseFloat(timeinfo.OvertimeDec);
 			}
 
-			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo['HourSchedule'].toLowerCase() != "correction") {
+			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo.HourSchedule.toLowerCase() != "correction") {
 
 				dateKey = key.split('-');
 				dateKey = new Date(dateKey[2], dateKey[1] - 1, dateKey[0]);
 				numberOfDaysRegistered++;
 
 				if (timeinfo.hasOwnProperty('OvertimeDec')) {
-					variable = parseFloat(timeinfo['OvertimeDec']);
+					variable = parseFloat(timeinfo.OvertimeDec);
 					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Overtime: </span>" + floatToTimeString(variable) + "</div>";
 					datasetOvertimeDec.push([dateKey, variable, tooltip]);
 					sumOvertime = sumOvertime + variable;
@@ -495,13 +500,13 @@ function formatJSONdata() {
 					}
 				}
 				if (timeinfo.hasOwnProperty('StartDec')) {
-					variable = parseFloat(timeinfo['StartDec']);
+					variable = parseFloat(timeinfo.StartDec);
 					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Starttime: </span>" + floatToTimeString(variable) + "</div>";
 					sumStarttime = sumStarttime + variable;
 					datasetStartDec.push([dateKey, variable, tooltip]);
 
 					if (timeinfo.hasOwnProperty('TotalDec')) {
-						variable = variable + parseFloat(timeinfo['TotalDec']);
+						variable = variable + parseFloat(timeinfo.TotalDec);
 						tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Stoptime: </span>" + floatToTimeString(variable) + "</div>";
 						sumStoptime = sumStoptime + variable;
 
@@ -511,12 +516,12 @@ function formatJSONdata() {
 				}
 
 				if (timeinfo.hasOwnProperty('HourSchedule')) {
-					hourschedule = parseFloat(timeinfo['HourSchedule']);
+					hourschedule = parseFloat(timeinfo.HourSchedule);
 					hourscheduletooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Hourschedule: </span>" + hourschedule + "h</div>";
 				}
 
 				if (timeinfo.hasOwnProperty('TotalDec')) {
-					variable = parseFloat(timeinfo['TotalDec']);
+					variable = parseFloat(timeinfo.TotalDec);
 					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Total time: </span>" + floatToTimeString(variable) + "</div>";
 					if (timeinfo.hasOwnProperty('HourSchedule')) {
 						datasetTotalDec.push([dateKey, variable, tooltip, hourschedule, hourscheduletooltip]);
@@ -525,7 +530,7 @@ function formatJSONdata() {
 					}
 				}
 				if (timeinfo.hasOwnProperty('TotalNoBreakDec')) {
-					variable = parseFloat(timeinfo['TotalNoBreakDec']);
+					variable = parseFloat(timeinfo.TotalNoBreakDec);
 					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Total time (no break): </span>" + floatToTimeString(variable) + "</div>";
 					if (timeinfo.hasOwnProperty('HourSchedule')) {
 						datasetTotalNoBreakDec.push([dateKey, variable, tooltip, hourschedule, hourscheduletooltip]);
@@ -534,7 +539,7 @@ function formatJSONdata() {
 					}
 				}
 				if (timeinfo.hasOwnProperty('TotalDec') && timeinfo.hasOwnProperty('TotalNoBreakDec')) {
-					variable = Math.abs(parseFloat(timeinfo['TotalDec']) - parseFloat(timeinfo['TotalNoBreakDec']));
+					variable = Math.abs(parseFloat(timeinfo.TotalDec) - parseFloat(timeinfo.TotalNoBreakDec));
 					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Breaktime: </span>" + floatToTimeString(variable) + "</div>";
 					if (timeinfo.hasOwnProperty('HourSchedule')) {
 						//datasetBreakDec.push([dateKey, variable, parseFloat(timeinfo['HourSchedule'])]);
@@ -544,7 +549,7 @@ function formatJSONdata() {
 					}
 				}
 				if (timeinfo.hasOwnProperty('HourSchedule')) {
-					datasetHourscheduleDec = updateArray(datasetHourscheduleDec, timeinfo['HourSchedule'] + "h");
+					datasetHourscheduleDec = updateArray(datasetHourscheduleDec, timeinfo.HourSchedule + "h");
 				}
 				//console.log("accepted value record");
 			}

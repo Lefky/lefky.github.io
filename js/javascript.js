@@ -18,7 +18,7 @@ const reverseDateRepresentation = date => {
 // Setters & getters
 function getStart() {
 	var time = document.getElementById("start_time").value;
-	var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours()
+	var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
 	if (!time_dec) {
 		time_dec = 0;
 	}
@@ -31,7 +31,7 @@ function setStart(time) {
 
 function getEnd() {
 	var time = document.getElementById("end_time").value;
-	var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours()
+	var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
 	if (!time_dec) {
 		time_dec = now();
 	}
@@ -47,9 +47,11 @@ function setEnd(time) {
 }
 
 function getBreak(allowNegative) {
+	var time_dec;
+
 	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
 		var time = document.getElementById("break_time").value;
-		var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours()
+		time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
 	} else {
 		var break_time_start = document.getElementById("break_time_start").value,
 			break_time_end = document.getElementById("break_time_end").value;
@@ -57,7 +59,7 @@ function getBreak(allowNegative) {
 		break_time_start = moment(break_time_start, "HH:mm");
 		break_time_end = moment(break_time_end, "HH:mm");
 
-		var time_dec = moment.duration(break_time_end.diff(break_time_start)).asHours();
+		time_dec = moment.duration(break_time_end.diff(break_time_start)).asHours();
 	}
 
 	if (!allowNegative && (!time_dec || time_dec < 0)) {
@@ -237,9 +239,10 @@ function getHistory() {
 		i = 0,
 		key;
 
+	/*jshint -W084*/
 	for (i = 0; key = sortedkeys[i]; i++) {
 		if (!testDateFormat(key)) {
-			sortedkeys.splice(i, 1)
+			sortedkeys.splice(i, 1);
 			i--;
 		}
 	}
@@ -247,10 +250,11 @@ function getHistory() {
 }
 
 function getHistoryDeleteOption() {
+	var option;
 	if (document.getElementById('historydeleteoptionperiod').checked) {
-		var option = document.getElementById('historydeleteoptionperiod').value;
+		option = document.getElementById('historydeleteoptionperiod').value;
 	} else if (document.getElementById('historydeleteoptiondays').checked) {
-		var option = document.getElementById('historydeleteoptiondays').value;
+		option = document.getElementById('historydeleteoptiondays').value;
 	}
 	if (!option) {
 		option = "days";
@@ -347,7 +351,10 @@ function saveCleaningDay() {
 	localStorage.setItem("cleaningday", moment(getResetDate(), "dddd, DD-MM-YYYY"));
 	document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: #28a745;");
 	document.getElementById("modalsavebutton").innerHTML = '<i class="fas fa-check"></i>';
-	setTimeout('document.getElementById("modalsavebutton").innerHTML = "Save"; document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear;");', 5000);
+	setTimeout(function () {
+		document.getElementById("modalsavebutton").innerHTML = "Save";
+		document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear;");
+	}, 5000);
 }
 
 function calculateCleaningDay() {
@@ -389,26 +396,27 @@ function setHistory(refresh_edit_table) {
 		key,
 		timeinfo;
 
-	for (; key = revkeys[i]; i++) {
+	/*jshint -W084*/
+	for (key = 0; key = revkeys[i]; i++) {
 		timeinfo = JSON.parse(localStorage.getItem(key));
 		if (timeinfo.hasOwnProperty('OvertimeDec')) {
-			if (timeinfo['OvertimeDec'].startsWith("-")) {
-				entry_history = entry_history + "<tr style='color:red;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
-				entry_edit_history = entry_edit_history + "<tr class='hide' style='color:red;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + (timeinfo['StartDec'].toLowerCase() != "correction" ? parseFloat(timeinfo['StartDec']).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td></tr>"
+			if (timeinfo.OvertimeDec.startsWith("-")) {
+				entry_history = entry_history + "<tr style='color:red;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
+				entry_edit_history = entry_edit_history + "<tr class='hide' style='color:red;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td></tr>";
 			} else {
-				entry_history = entry_history + "<tr style='color:green;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
-				entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + (timeinfo['StartDec'].toLowerCase() != "correction" ? parseFloat(timeinfo['StartDec']).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td>"
+				entry_history = entry_history + "<tr style='color:green;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
+				entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td>";
 			}
-			overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo['OvertimeDec']);
+			overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo.OvertimeDec);
 
 			if (moment(key, "DD-MM-YYYY") >= moment().startOf('week')) {
-				overtimeweekly = overtimeweekly + parseFloat(timeinfo['OvertimeDec']);
+				overtimeweekly = overtimeweekly + parseFloat(timeinfo.OvertimeDec);
 			}
 
 			// calculate hour schedule if it's not defined yet
 			// TEMPORARY
-			if (timeinfo['HourSchedule'] == undefined) {
-				var hourschedule = parseFloat(timeinfo['TotalNoBreakDec']) - parseFloat(timeinfo['OvertimeDec']);
+			if (timeinfo.HourSchedule == undefined) {
+				var hourschedule = parseFloat(timeinfo.TotalNoBreakDec) - parseFloat(timeinfo.OvertimeDec);
 
 				if (hourschedule > 0 && hourschedule < 3.1) {
 					hourschedule = 3.04;
@@ -432,7 +440,7 @@ function setHistory(refresh_edit_table) {
 					hourschedule = 8;
 				}
 
-				var new_timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['OvertimeDec'] + '", "TotalDec": "' + timeinfo['TotalDec'] + '", "StartDec": "' + timeinfo['StartDec'] + '", "HourSchedule": "' + hourschedule + '"}';
+				var new_timeinfo = '{"TotalNoBreakDec": "' + timeinfo.TotalNoBreakDec + '", "OvertimeDec": "' + timeinfo.OvertimeDec + '", "TotalDec": "' + timeinfo.TotalDec + '", "StartDec": "' + timeinfo.StartDec + '", "HourSchedule": "' + hourschedule + '"}';
 				localStorage.setItem(key, new_timeinfo);
 				console.log(timeinfo);
 				console.log(new_timeinfo);
@@ -559,8 +567,9 @@ function cleanLocalStorage() {
 		deleteoption = localStorage.getItem("historydeleteoption");
 
 	if (deleteoption == "days") {
-		const expiredate = today.subtract(getHistoryRetain(), "days")
-		for (; key = keys[i]; i++) {
+		const expiredate = today.subtract(getHistoryRetain(), "days");
+		/*jshint -W084*/
+		for (var key = 0; key = keys[i]; i++) {
 			if (moment(key, "DD-MM-YYYY") < expiredate && testDateFormat(key)) { // days to keep data excluding today
 				delete localStorage[key];
 			}
@@ -578,7 +587,7 @@ function cleanLocalStorage() {
 
 function deleteHistory() {
 	if (confirm("Are you sure you wish to delete your history?\nIf you choose not to, then your data will be saved until the next cleaning time.")) {
-		for (key in localStorage) {
+		for (var key in localStorage) {
 			if (testDateFormat(key)) {
 				delete localStorage[key];
 			}
@@ -608,7 +617,7 @@ function exportHistory() {
 var importHistory = document.getElementById('importHistory'),
 	importFile = document.getElementById('importFile');
 importFile.addEventListener("change", importHistoryData, false);
-importHistory.onclick = function () { importFile.click() }
+importHistory.onclick = function () { importFile.click(); };
 function importHistoryData(e) {
 	var files = e.target.files, reader = new FileReader();
 	reader.onload = readerEvent => {
@@ -619,7 +628,7 @@ function importHistoryData(e) {
 		importFile.value = ''; //clear input value after every import
 		setHistory(true);
 		setParameters();
-	}
+	};
 	reader.readAsText(files[0]);
 	document.getElementById("settingsmodalclosebutton").click();
 	alert("Import successful!");
@@ -768,9 +777,9 @@ function setParameters() {
 		}
 		add_time(getHourSchedule());
 	} else {
-		setStart(timeinfo['StartDec']);
-		setBreak(timeinfo['TotalDec'] - timeinfo['TotalNoBreakDec']);
-		setEnd(parseFloat(timeinfo['StartDec']) + parseFloat(timeinfo['TotalDec']));
+		setStart(timeinfo.StartDec);
+		setBreak(timeinfo.TotalDec - timeinfo.TotalNoBreakDec);
+		setEnd(parseFloat(timeinfo.StartDec) + parseFloat(timeinfo.TotalDec));
 		calculateTotal();
 		if (startminsubtract == "true")
 			document.getElementById("startminsubtract").click();
@@ -888,7 +897,7 @@ function break_counter() {
 			const timeInDecimalHours = moment.duration(moment.utc(timeInSeconds * 1000).format('HH:mm:ss')).asHours();
 			setBreak(timeInDecimalHours);
 			add_time(getHourSchedule());
-		}, 1000)
+		}, 1000);
 
 		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch fa-spin'></i> Stop";
 		break_counter_btn.classList.remove("btn-primary");
@@ -988,34 +997,35 @@ window.onbeforeunload = function (e) {
 $(document).ready(function () {
 	reset();
 
-	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 		return new bootstrap.Tooltip(tooltipTriggerEl, {
 			boundary: document.body,
 			'delay': { show: 1000, hide: 0 }
-		})
-	})
+		});
+	});
 
 	moment().format(); // Initialize momentjs
 
+	var myModal;
 	if (window.location.href.indexOf('#about') != -1) {
-		var myModal = new bootstrap.Modal(document.getElementById('modalabout'));
+		myModal = new bootstrap.Modal(document.getElementById('modalabout'));
 		myModal.show();
 	}
 	if (window.location.href.indexOf('#settings') != -1) {
-		var myModal = new bootstrap.Modal(document.getElementById('modalsettings'));
+		myModal = new bootstrap.Modal(document.getElementById('modalsettings'));
 		myModal.show();
 	}
 	if (window.location.href.indexOf('#info') != -1) {
-		var myModal = new bootstrap.Modal(document.getElementById('modalinfo'));
+		myModal = new bootstrap.Modal(document.getElementById('modalinfo'));
 		myModal.show();
 	}
 	if (window.location.href.indexOf('#history') != -1) {
-		var myModal = new bootstrap.Modal(document.getElementById('modaledithistory'));
+		myModal = new bootstrap.Modal(document.getElementById('modaledithistory'));
 		myModal.show();
 	}
 	if (window.location.href.indexOf('#reporting') != -1) {
-		var myModal = new bootstrap.Modal(document.getElementById('modalreporting'));
+		myModal = new bootstrap.Modal(document.getElementById('modalreporting'));
 		myModal.show();
 	}
 
@@ -1050,7 +1060,7 @@ $('#app_alert .close').click(function () {
 });
 
 $("input").focusout(function () {
-	checkInputValues()
+	checkInputValues();
 });
 
 $(".btn").mouseup(function () {

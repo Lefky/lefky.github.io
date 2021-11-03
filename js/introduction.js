@@ -4,7 +4,7 @@ function startIntroduction() {
 	document.getElementById('settingsmodalclosebutton').click();
 
 	createOverlay();
-	
+
 	var introductioncontainer = document.createElement("div");
 	introductioncontainer.id = "introductioncontainer";
 	introductioncontainer.className = "row d-flex justify-content-center";
@@ -29,7 +29,7 @@ function startIntroduction() {
 					'document.getElementById(\'inputarea\').style.cssText = \'z-index: 1095; pointer-events: none;\';">' +
 				'<span aria-hidden="true">Next</span>' +
 			'</button>' +
-		'</div>'
+		'</div>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 }
 
@@ -43,8 +43,8 @@ function createOverlay() {
 function playIntroduction() {
 	// Dismiss the changes notification
 	const alertNode = document.querySelector('#alertnotification');
-	const alert = new bootstrap.Alert(alertNode)
-	alert.close()
+	const alert = new bootstrap.Alert(alertNode);
+	alert.close();
 
 	new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea";
@@ -68,7 +68,7 @@ function playIntroduction() {
 					'<span aria-hidden="true">Next</span>' +
 				'</button>' +
 			'</div>' +
-		'</div>'
+		'</div>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
@@ -94,7 +94,7 @@ function playIntroduction() {
 					'<span aria-hidden="true">Next</span>' +
 				'</button>' +
 			'</div>' +
-		'</div>'
+		'</div>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
@@ -118,7 +118,7 @@ function playIntroduction() {
 					'<span aria-hidden="true">Next</span>' +
 				'</button>' +
 			'</div>' +
-		'</div>'
+		'</div>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
@@ -142,7 +142,7 @@ function playIntroduction() {
 					'<span aria-hidden="true">Next</span>' +
 				'</button>' +
 			'</div>' +
-		'</div>'
+		'</div>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
@@ -166,7 +166,7 @@ function playIntroduction() {
 					'<span aria-hidden="true">Next</span>' +
 				'</button>' +
 			'</div>' +
-		'</div>'
+		'</div>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
@@ -189,7 +189,7 @@ function playIntroduction() {
 					'<span aria-hidden="true">Next</span>' +
 				'</button>' +
 			'</div>' +
-		'</div>'
+		'</div>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
@@ -212,7 +212,7 @@ function playIntroduction() {
 					'<span aria-hidden="true">Next</span>' +
 				'</button>' +
 			'</div>' +
-		'</div>'
+		'</div>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
@@ -235,7 +235,7 @@ function playIntroduction() {
 					'<span aria-hidden="true">Next</span>' +
 				'</button>' +
 			'</div>' +
-		'</div>'
+		'</div>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
@@ -256,7 +256,7 @@ function playIntroduction() {
 					'<span aria-hidden="true">Next</span>' +
 				'</button>' +
 			'</div>' +
-		'</div>'
+		'</div>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
@@ -275,7 +275,7 @@ function playIntroduction() {
 				'</button>' +
 			'</div>' +
 		'</div><br>' +
-		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white; position: absolute; right: 185px; bottom: 50px;"></i>'
+		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white; position: absolute; right: 185px; bottom: 50px;"></i>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
@@ -294,7 +294,7 @@ function playIntroduction() {
 				'</button>' +
 			'</div>' +
 		'</div><br>' +
-		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white; position: absolute; right: 135px; bottom: 50px;"></i>'
+		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white; position: absolute; right: 135px; bottom: 50px;"></i>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
@@ -313,7 +313,7 @@ function playIntroduction() {
 				'</button>' +
 			'</div>' +
 		'</div><br>' +
-		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white; position: absolute; right: 80px; bottom: 50px;"></i>'
+		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white; position: absolute; right: 80px; bottom: 50px;"></i>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
@@ -334,7 +334,7 @@ function playIntroduction() {
 				'</button>' +
 			'</div>' +
 		'</div><br>' +
-		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white; position: absolute; right: 25px; bottom: 50px;"></i>'
+		'<i class="fas fa-arrow-down text-primary pulsate" style="font-size: 3rem; -webkit-text-stroke: 1px white; position: absolute; right: 25px; bottom: 50px;"></i>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 
 	new_element = document.createElement("div");
@@ -350,7 +350,7 @@ function playIntroduction() {
 			'<button type="button" class="btn btn-sm btn-primary" onclick="stopIntroduction()">' +
 				'<span aria-hidden="true">Finish</span>' +
 			'</button>' +
-		'</div>'
+		'</div>';
 	document.getElementById("introductioncontainer").appendChild(new_element);
 }
 

@@ -51,7 +51,7 @@ function loadLeavesCSS() {
 	fileref.setAttribute("href", "css/leaves.css");
 	document.getElementsByTagName("head")[0].appendChild(fileref);
 
-	var fileref = document.createElement("link");
+	fileref = document.createElement("link");
 	fileref.setAttribute("rel", "stylesheet");
 	fileref.setAttribute("type", "text/css");
 	fileref.setAttribute("href", "css/font-awsome-custom-animations.css");
@@ -79,16 +79,16 @@ function playNotificationSound() {
 
 	/*
 		var audio = new Audio('sounds/pristine-609.mp3');
-	
+
 		setTimeout(() => {
 			audio.play();
 		}, 500)
 	*/
 	/*
 		let audioPlay = document.getElementById('audioNotification')
-	
+
 		audioPlay.play()
-	
+
 		setTimeout(() => {
 			audioPlay.pause()
 			audioPlay.load()
