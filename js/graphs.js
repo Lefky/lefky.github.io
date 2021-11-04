@@ -51,6 +51,7 @@ function initGraphs() {
 	numberOfDaysRegistered = 0,
 	datasetOvertimeDec = [],
 	datasetStartDec = [],
+	datasetStopDec = [],
 	datasetTotalDec = [],
 	datasetTotalNoBreakDec = [],
 	datasetBreakDec = [],
