@@ -239,7 +239,7 @@ function getHistory() {
 		i = 0,
 		key;
 
-	/*jshint -W084*/
+	/* jshint -W084 */
 	for (i = 0; key = sortedkeys[i]; i++) {
 		if (!testDateFormat(key)) {
 			sortedkeys.splice(i, 1);
@@ -396,7 +396,7 @@ function setHistory(refresh_edit_table) {
 		key,
 		timeinfo;
 
-	/*jshint -W084*/
+	/* jshint -W084 */
 	for (key = 0; key = revkeys[i]; i++) {
 		timeinfo = JSON.parse(localStorage.getItem(key));
 		if (timeinfo.hasOwnProperty('OvertimeDec')) {
@@ -568,7 +568,7 @@ function cleanLocalStorage() {
 
 	if (deleteoption == "days") {
 		const expiredate = today.subtract(getHistoryRetain(), "days");
-		/*jshint -W084*/
+		/* jshint -W084 */
 		for (var key = 0; key = keys[i]; i++) {
 			if (moment(key, "DD-MM-YYYY") < expiredate && testDateFormat(key)) { // days to keep data excluding today
 				delete localStorage[key];

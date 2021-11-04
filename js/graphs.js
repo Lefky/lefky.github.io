@@ -47,7 +47,7 @@ document.getElementById("start_reporting_selection").addEventListener("load", in
 //google.charts.setOnLoadCallback(drawAreagraph);
 
 function initGraphs() {
-	/*jshint -W030*/
+	/* jshint -W030 */
 	numberOfDaysRegistered = 0,
 	datasetOvertimeDec = [],
 	datasetStartDec = [],
@@ -472,7 +472,7 @@ function formatJSONdata() {
 		hourscheduletooltip,
 		dateKey;
 
-	/*jshint -W084*/
+	/* jshint -W084 */
 	for (var i = 0; key = sortedkeys[i]; i++) {
 
 		if (testDateFormat(key)/* && i >= start*/) {
