@@ -8,6 +8,7 @@ In HTML
 var sortedkeys = getHistory(),
 	numberOfDaysRegistered = 0,
 	datasetOvertimeDec = [],
+	datasetOvertimeCumulative = [],
 	datasetStartDec = [],
 	datasetStopDec = [],
 	datasetTotalDec = [],
@@ -19,7 +20,6 @@ var sortedkeys = getHistory(),
 	sumStarttime = 0,
 	sumStoptime = 0,
 	sumOvertime = 0;
-
 
 // SYNC loading
 google.charts.load('current', { packages: ['corechart', 'gauge'] });
@@ -73,6 +73,7 @@ function drawGraphs() {
 	drawPiegraph("OvertimeDays");
 	drawPiegraph("Hourschedules");
 	drawAreagraph("OvertimeDec");
+	drawAreagraph("OvertimeCumulative");
 	drawAreagraph("StartDec");
 	drawAreagraph("StopDec");
 	drawBargraph("TotalDec");
@@ -136,19 +137,25 @@ function drawAreagraph(graphtype) {
 			data.addColumn('number', 'Overtime');
 			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetOvertimeDec);
-			linecolor = ['#28a745'];
+			linecolor = [bs_blue];
+			break;
+		case "OvertimeCumulative":
+			data.addColumn('number', 'Cumulative Overtime');
+			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
+			data.addRows(datasetOvertimeCumulative);
+			linecolor = [bs_cyan];
 			break;
 		case "StartDec":
 			data.addColumn('number', 'Starttime');
 			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetStartDec);
-			linecolor = ['#007bff'];
+			linecolor = [bs_green];
 			break;
 		case "StopDec":
 			data.addColumn('number', 'Stoptime');
 			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetStopDec);
-			linecolor = ['#ff9900'];
+			linecolor = [bs_red];
 			break;
 		case "BreakDec":
 			data.addColumn('number', 'Break');
@@ -156,7 +163,7 @@ function drawAreagraph(graphtype) {
 			data.addColumn('number', 'Hour schedule');
 			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetBreakDec);
-			linecolor = ['#17a2b8', 'black'];
+			linecolor = [bs_gray_dark, 'black'];
 			break;
 		default:
 			// code block
@@ -227,7 +234,7 @@ function drawBargraph(graphtype) {
 			data.addColumn('number', 'Hour schedule');
 			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetTotalDec);
-			linecolor = ['#ffc107', 'black'];
+			linecolor = [bs_yellow, 'black'];
 			break;
 		case "TotalNoBreakDec":
 			data.addColumn('number', 'Total no break');
@@ -235,7 +242,7 @@ function drawBargraph(graphtype) {
 			data.addColumn('number', 'Hour schedule');
 			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetTotalNoBreakDec);
-			linecolor = ['#dc3545', 'black'];
+			linecolor = [bs_orange, 'black'];
 			break;
 		default:
 			// code block
@@ -307,13 +314,14 @@ function drawPiegraph(graphtype) {
 				['# positive overtime days', positiveOvertimeDays],
 				['# negative overtime days', negativeOvertimeDays]
 			]);
-			slicecolor = ['#28a745', '#dc3545'];
+			slicecolor = [bs_green, bs_red];
 			title = "Days of overtime";
 			break;
 		case "Hourschedules":
 			data.addColumn('string', 'Schedule');
 			data.addColumn('number', 'Value');
 			data.addRows(datasetHourscheduleDec);
+			slicecolor = [bs_red, bs_orange, bs_yellow, bs_green, bs_blue, bs_gray, bs_indigo, bs_purple, bs_pink, bs_teal, bs_cyan, bs_gray_dark];
 			title = "Hourschedules";
 			break;
 		default:
@@ -348,9 +356,9 @@ function drawGaugegraph(graphtype) {
 		yellowTo,
 		greenFrom,
 		greenTo,
-		redColor = 'rgb(251, 216, 208)',
-		yellowColor = 'rgb(255, 235, 204)',
-		greenColor = 'rgb(209, 250, 211)',
+		redColor = bs_washed_red,
+		yellowColor = bs_washed_yellow,
+		greenColor = bs_washed_green,
 		majorTicks,
 		minorTicks = 5;
 
@@ -386,7 +394,7 @@ function drawGaugegraph(graphtype) {
 			yellowTo = 12;
 			greenFrom = 6;
 			greenTo = 10;
-			redColor = 'rgb(255, 235, 204)';
+			redColor = bs_washed_yellow;
 			majorTicks = ["0", "3", "", "", "12", "", "", "21", "24"];
 			minorTicks = 3;
 			break;
@@ -405,7 +413,7 @@ function drawGaugegraph(graphtype) {
 			yellowTo = 20.5;
 			greenFrom = 14.5;
 			greenTo = 18.5;
-			redColor = 'rgb(255, 235, 204)';
+			redColor = bs_washed_yellow;
 			majorTicks = ["0", "3", "", "", "12", "", "", "21", "24"];
 			minorTicks = 3;
 			break;
@@ -491,9 +499,15 @@ function formatJSONdata() {
 
 				if (timeinfo.hasOwnProperty('OvertimeDec')) {
 					variable = parseFloat(timeinfo.OvertimeDec);
+
 					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Overtime: </span>" + floatToTimeString(variable) + "</div>";
 					datasetOvertimeDec.push([dateKey, variable, tooltip]);
+
 					sumOvertime = sumOvertime + variable;
+
+					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Overtime: </span>" + floatToTimeString(sumOvertime) + "</div>";
+					datasetOvertimeCumulative.push([dateKey, sumOvertime, tooltip]);
+
 					if (variable > 0) {
 						positiveOvertimeDays++;
 					} else if (variable < 0) {

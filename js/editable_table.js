@@ -70,7 +70,7 @@ $('.table-save-all').on('click', 'button', function () {
 			iconToggle(btn, "check");
 			setTimeout(() => { iconToggle(btn, "save"); }, 2000);
 		} else {
-			currentRow.style.backgroundColor = "#ffcccc";
+			currentRow.style.backgroundColor = bs_washed_red;
 			app_alert_message = app_alert_message + returncode;
 		}
 	}
@@ -158,7 +158,7 @@ $($tableID).on('click', '.record-save', function () {
 		setTimeout(iconToggle, 2000);
 		setHistory(false);
 	} else {
-		currentRow.css("backgroundColor", "#ffcccc");
+		currentRow.css("backgroundColor", bs_washed_red);
 		app_alert_message = "<b>Ai caramba!</b><br>An entry hasn't been saved!";
 		setAlertMessage(app_alert_message + returncode);
 	}

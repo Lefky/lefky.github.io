@@ -2,6 +2,32 @@ console.log("loaded javascript.js");
 
 // var filesadded="";
 
+// Import Bootstrap colors
+var bs_blue = getComputedStyle(document.documentElement).getPropertyValue('--bs-blue'),
+	bs_indigo = getComputedStyle(document.documentElement).getPropertyValue('--bs-indigo'),
+	bs_purple = getComputedStyle(document.documentElement).getPropertyValue('--bs-purple'),
+	bs_pink = getComputedStyle(document.documentElement).getPropertyValue('--bs-pink'),
+	bs_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-red'),
+	bs_orange = getComputedStyle(document.documentElement).getPropertyValue('--bs-orange'),
+	bs_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-yellow'),
+	bs_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-green'),
+	bs_teal = getComputedStyle(document.documentElement).getPropertyValue('--bs-teal'),
+	bs_cyan = getComputedStyle(document.documentElement).getPropertyValue('--bs-cyan'),
+	bs_white = getComputedStyle(document.documentElement).getPropertyValue('--bs-white'),
+	bs_gray = getComputedStyle(document.documentElement).getPropertyValue('--bs-gray'),
+	bs_gray_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-gray-dark'),
+	bs_primary = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary'),
+	bs_secondary = getComputedStyle(document.documentElement).getPropertyValue('--bs-secondary'),
+	bs_success = getComputedStyle(document.documentElement).getPropertyValue('--bs-success'),
+	bs_info = getComputedStyle(document.documentElement).getPropertyValue('--bs-info'),
+	bs_warning = getComputedStyle(document.documentElement).getPropertyValue('--bs-warning'),
+	bs_danger = getComputedStyle(document.documentElement).getPropertyValue('--bs-danger'),
+	bs_light = getComputedStyle(document.documentElement).getPropertyValue('--bs-light'),
+	bs_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-dark'),
+	bs_washed_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-red').trim(),
+	bs_washed_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-yellow').trim(),
+	bs_washed_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-green').trim();
+
 // Conversion functions
 function floatToTimeString(timedec) {
 	var sign = timedec < 0 ? "-" : "";
@@ -202,18 +228,18 @@ function setOvertimeDec(time) {
 function setOvertimeTotal(time) {
 	document.getElementById("overtimetotal").value = floatToTimeString(time);
 	if (time >= 0) {
-		document.getElementById("overtimetotal").setAttribute("style", "color:green;");
+		document.getElementById("overtimetotal").setAttribute("style", "color: " + bs_green + ";");
 	} else {
-		document.getElementById("overtimetotal").setAttribute("style", "color:red;");
+		document.getElementById("overtimetotal").setAttribute("style", "color: " + bs_red + ";");
 	}
 }
 
 function setOvertimeWeekly(time) {
 	document.getElementById("overtimeweekly").value = floatToTimeString(time);
 	if (time >= 0) {
-		document.getElementById("overtimeweekly").setAttribute("style", "color:green;");
+		document.getElementById("overtimeweekly").setAttribute("style", "color: " + bs_green + ";");
 	} else {
-		document.getElementById("overtimeweekly").setAttribute("style", "color:red;");
+		document.getElementById("overtimeweekly").setAttribute("style", "color: " + bs_red + ";");
 	}
 }
 
@@ -349,7 +375,7 @@ function maxValuesDeleteOption() {
 
 function saveCleaningDay() {
 	localStorage.setItem("cleaningday", moment(getResetDate(), "dddd, DD-MM-YYYY"));
-	document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: #28a745;");
+	document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: " + bs_green + ";");
 	document.getElementById("modalsavebutton").innerHTML = '<i class="fas fa-check"></i>';
 	setTimeout(function () {
 		document.getElementById("modalsavebutton").innerHTML = "Save";
@@ -387,7 +413,7 @@ function testDateFormat(date) {
 }
 
 function setHistory(refresh_edit_table) {
-	var entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
+	var entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid black;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
 		entry_edit_history = "",
 		revkeys = getHistory().reverse(),
 		overtimetotal = 0,
@@ -401,11 +427,11 @@ function setHistory(refresh_edit_table) {
 		timeinfo = JSON.parse(localStorage.getItem(key));
 		if (timeinfo.hasOwnProperty('OvertimeDec')) {
 			if (timeinfo.OvertimeDec.startsWith("-")) {
-				entry_history = entry_history + "<tr style='color:red;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
-				entry_edit_history = entry_edit_history + "<tr class='hide' style='color:red;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td></tr>";
+				entry_history = entry_history + "<tr style='color: " + bs_red + ";'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
+				entry_edit_history = entry_edit_history + "<tr class='hide' style='color: " + bs_red + ";'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td></tr>";
 			} else {
-				entry_history = entry_history + "<tr style='color:green;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
-				entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td>";
+				entry_history = entry_history + "<tr style='color: " + bs_green + ";'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
+				entry_edit_history = entry_edit_history + "<tr class='hide' style='color: " + bs_green + ";'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td>";
 			}
 			overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo.OvertimeDec);
 
