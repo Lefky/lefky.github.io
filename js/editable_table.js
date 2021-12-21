@@ -21,7 +21,7 @@ const newTr = `
 		<a href="#" class="text-success fontsize150 my-0 mx-2 waves-effect waves-light">
 			<i class="fa fa-save"></i>
 		</a>
-	</span> 
+	</span>
 	<span class="record-delete">
 		<a href="#" class="text-danger fontsize150 my-0 mx-2 waves-effect waves-light">
 			<i class="fa fa-trash"></i>
@@ -47,7 +47,7 @@ $('.table-save-all').on('click', 'button', function () {
 		} else if (state == "check") {
 			abtn.innerHTML = '<i class="fa fa-check"></i>';
 		}
-	}
+	};
 
 	// loop through each row of the table.
 	var returncode,
@@ -68,9 +68,9 @@ $('.table-save-all').on('click', 'button', function () {
 			const btn = currentRow.getElementsByClassName('record-save')[0].firstElementChild;
 			currentRow.style.backgroundColor = "";
 			iconToggle(btn, "check");
-			setTimeout(() => { iconToggle(btn, "save") }, 2000);
+			setTimeout(() => { iconToggle(btn, "save"); }, 2000);
 		} else {
-			currentRow.style.backgroundColor = "#ffcccc";
+			currentRow.style.backgroundColor = bs_washed_red;
 			app_alert_message = app_alert_message + returncode;
 		}
 	}
@@ -82,7 +82,7 @@ $('.table-save-all').on('click', 'button', function () {
 
 	const btn_all = document.getElementsByClassName('table-save-all')[0].firstElementChild;
 	iconToggle(btn_all, "check");
-	setTimeout(() => { iconToggle(btn_all, "save") }, 2000);
+	setTimeout(() => { iconToggle(btn_all, "save"); }, 2000);
 
 	setHistory(false);
 });
@@ -103,22 +103,22 @@ function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSch
 	var error_message = "";
 
 	if (!testDateFormat(key)) {
-		error_message = error_message + "<br><br>Date for date " + key + "<br><br>is not in the DD-MM-YYYY format.";
+		error_message = error_message + "<br><br>Date for date \"" + key + "\" is not in the DD-MM-YYYY format.";
 	}
 	if (!isnumber.test(TotalNoBreakDec) && TotalNoBreakDec.toLowerCase() != "correction") {
-		error_message = error_message + "<br><br>Total Time No Break for date " + key + "<br><br>is not a (decimal) number.";
+		error_message = error_message + "<br><br>Total Time No Break for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
 	}
 	if (!isnumber.test(OvertimeDec)) {
-		error_message = error_message + "<br><br>Overtime for date " + key + "<br><br>is not a (decimal) number.";
+		error_message = error_message + "<br><br>Overtime for date \"" + key + "\" is not a (decimal) number.";
 	}
 	if (!isnumber.test(TotalDec) && TotalDec.toLowerCase() != "correction") {
-		error_message = error_message + "<br><br>Total Work Time for date " + key + "<br><br>is not a (decimal) number.";
+		error_message = error_message + "<br><br>Total Work Time for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
 	}
 	if (!isnumber.test(StartDec) && StartDec.toLowerCase() != "correction") {
-		error_message = error_message + "<br><br>Start Time for date " + key + "<br><br>is not a (decimal) number.";
+		error_message = error_message + "<br><br>Start Time for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
 	}
 	if (!isnumber.test(HourSchedule) && HourSchedule.toLowerCase() != "correction") {
-		error_message = error_message + "<br><br>Hour Schedule for date " + key + "<br><br>is not a (decimal) number.";
+		error_message = error_message + "<br><br>Hour Schedule for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
 	}
 
 	if (error_message == "") {
@@ -147,19 +147,19 @@ $($tableID).on('click', '.record-save', function () {
 	const iconToggle = () => {
 		const isCheckIcon = btn.find('.fa-check').length > 0;
 		if (isCheckIcon) {
-			btn.html('<i class="fa fa-save fontsize150"></i>')
+			btn.html('<i class="fa fa-save fontsize150"></i>');
 		} else {
-			btn.html('<i class="fa fa-check fontsize150"></i>')
+			btn.html('<i class="fa fa-check fontsize150"></i>');
 		}
-	}
+	};
 	if (!returncode) {
 		currentRow.css("backgroundColor", "");
 		iconToggle();
 		setTimeout(iconToggle, 2000);
 		setHistory(false);
 	} else {
-		currentRow.css("backgroundColor", "#ffcccc");
-		app_alert_message = "<b>Ai caramba!</b> An entry hasn't been saved!";
+		currentRow.css("backgroundColor", bs_washed_red);
+		app_alert_message = "<b>Ai caramba!</b><br>An entry hasn't been saved!";
 		setAlertMessage(app_alert_message + returncode);
 	}
 });
@@ -188,7 +188,7 @@ $("#edit_history_search").on("input", function () {
 	$($tableID + " tr").filter(function () {
 		$(this).toggle(
 			$(this).text().toLowerCase().indexOf(value) > -1 || $(this).text().toLowerCase().indexOf("edit") > -1
-		)
+		);
 	});
 
 	$("tr:visible").each(function (index, obj) {

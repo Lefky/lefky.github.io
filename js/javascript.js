@@ -2,28 +2,38 @@ console.log("loaded javascript.js");
 
 // var filesadded="";
 
+// Import Bootstrap colors
+var bs_blue = getComputedStyle(document.documentElement).getPropertyValue('--bs-blue'),
+	bs_indigo = getComputedStyle(document.documentElement).getPropertyValue('--bs-indigo'),
+	bs_purple = getComputedStyle(document.documentElement).getPropertyValue('--bs-purple'),
+	bs_pink = getComputedStyle(document.documentElement).getPropertyValue('--bs-pink'),
+	bs_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-red'),
+	bs_orange = getComputedStyle(document.documentElement).getPropertyValue('--bs-orange'),
+	bs_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-yellow'),
+	bs_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-green'),
+	bs_teal = getComputedStyle(document.documentElement).getPropertyValue('--bs-teal'),
+	bs_cyan = getComputedStyle(document.documentElement).getPropertyValue('--bs-cyan'),
+	bs_white = getComputedStyle(document.documentElement).getPropertyValue('--bs-white'),
+	bs_gray = getComputedStyle(document.documentElement).getPropertyValue('--bs-gray'),
+	bs_gray_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-gray-dark'),
+	bs_primary = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary'),
+	bs_secondary = getComputedStyle(document.documentElement).getPropertyValue('--bs-secondary'),
+	bs_success = getComputedStyle(document.documentElement).getPropertyValue('--bs-success'),
+	bs_info = getComputedStyle(document.documentElement).getPropertyValue('--bs-info'),
+	bs_warning = getComputedStyle(document.documentElement).getPropertyValue('--bs-warning'),
+	bs_danger = getComputedStyle(document.documentElement).getPropertyValue('--bs-danger'),
+	bs_light = getComputedStyle(document.documentElement).getPropertyValue('--bs-light'),
+	bs_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-dark'),
+	bs_washed_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-red').trim(),
+	bs_washed_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-yellow').trim(),
+	bs_washed_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-green').trim();
+
 // Conversion functions
-/*
-function timeStringToFloat(time) {
-	var hoursMinutes = time.split(/[.:]/);
-	var hours = parseInt(hoursMinutes[0], 10);
-	var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
-	var time = hours + minutes / 60;
-	return Math.round((time + Number.EPSILON) * 100) / 100;
-}
-*/
 function floatToTimeString(timedec) {
 	var sign = timedec < 0 ? "-" : "";
 	var hours = Math.floor(Math.abs(timedec));
 	var minutes = Math.floor((Math.abs(timedec) * 60) % 60);
 	return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
-
-	/*
-	if (timedec < 0) {
-		return "-" + moment().startOf('day').subtract(timedec, 'hours').format('HH:mm')
-	}
-	return moment().startOf('day').add(timedec, 'hours').format('HH:mm')
-	*/
 }
 
 const reverseDateRepresentation = date => {
@@ -34,7 +44,7 @@ const reverseDateRepresentation = date => {
 // Setters & getters
 function getStart() {
 	var time = document.getElementById("start_time").value;
-	var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours()
+	var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
 	if (!time_dec) {
 		time_dec = 0;
 	}
@@ -47,7 +57,7 @@ function setStart(time) {
 
 function getEnd() {
 	var time = document.getElementById("end_time").value;
-	var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours()
+	var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
 	if (!time_dec) {
 		time_dec = now();
 	}
@@ -63,9 +73,11 @@ function setEnd(time) {
 }
 
 function getBreak(allowNegative) {
+	var time_dec;
+
 	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
 		var time = document.getElementById("break_time").value;
-		var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours()
+		time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
 	} else {
 		var break_time_start = document.getElementById("break_time_start").value,
 			break_time_end = document.getElementById("break_time_end").value;
@@ -73,7 +85,7 @@ function getBreak(allowNegative) {
 		break_time_start = moment(break_time_start, "HH:mm");
 		break_time_end = moment(break_time_end, "HH:mm");
 
-		var time_dec = moment.duration(break_time_end.diff(break_time_start)).asHours();
+		time_dec = moment.duration(break_time_end.diff(break_time_start)).asHours();
 	}
 
 	if (!allowNegative && (!time_dec || time_dec < 0)) {
@@ -84,7 +96,6 @@ function getBreak(allowNegative) {
 
 function getBreakTimeStart() {
 	var time = document.getElementById("break_time_start").value;
-	//var time_dec = timeStringToFloat(time);
 	var time_dec = moment.duration(time).asHours();
 	if (!time_dec) {
 		time_dec = 0;
@@ -114,16 +125,6 @@ function setBreakDefault(time) {
 
 function addBreakDefault() {
 	var break_time_default_init = localStorage.getItem("break_time_default");
-	/*
-	var new_break_dec = getBreak(false) - break_time_default_init + getBreakDefault();
-	console.log("break: "+getBreak(false)+" init: "+break_time_default_init+" default: "+getBreakDefault());
-	
-	if ( new_break_dec > 0 ) {
-		setBreak(new_break_dec);
-	} else {
-		setBreak(0);
-	}
-	*/
 
 	if (getBreak(false) == break_time_default_init) {
 		setBreak(getBreakDefault());
@@ -227,18 +228,18 @@ function setOvertimeDec(time) {
 function setOvertimeTotal(time) {
 	document.getElementById("overtimetotal").value = floatToTimeString(time);
 	if (time >= 0) {
-		document.getElementById("overtimetotal").setAttribute("style", "color:green;");
+		document.getElementById("overtimetotal").setAttribute("style", "color: " + bs_green + ";");
 	} else {
-		document.getElementById("overtimetotal").setAttribute("style", "color:red;");
+		document.getElementById("overtimetotal").setAttribute("style", "color: " + bs_red + ";");
 	}
 }
 
 function setOvertimeWeekly(time) {
 	document.getElementById("overtimeweekly").value = floatToTimeString(time);
 	if (time >= 0) {
-		document.getElementById("overtimeweekly").setAttribute("style", "color:green;");
+		document.getElementById("overtimeweekly").setAttribute("style", "color: " + bs_green + ";");
 	} else {
-		document.getElementById("overtimeweekly").setAttribute("style", "color:red;");
+		document.getElementById("overtimeweekly").setAttribute("style", "color: " + bs_red + ";");
 	}
 }
 
@@ -264,9 +265,10 @@ function getHistory() {
 		i = 0,
 		key;
 
+	/* jshint -W084 */
 	for (i = 0; key = sortedkeys[i]; i++) {
 		if (!testDateFormat(key)) {
-			sortedkeys.splice(i, 1)
+			sortedkeys.splice(i, 1);
 			i--;
 		}
 	}
@@ -274,10 +276,11 @@ function getHistory() {
 }
 
 function getHistoryDeleteOption() {
+	var option;
 	if (document.getElementById('historydeleteoptionperiod').checked) {
-		var option = document.getElementById('historydeleteoptionperiod').value;
+		option = document.getElementById('historydeleteoptionperiod').value;
 	} else if (document.getElementById('historydeleteoptiondays').checked) {
-		var option = document.getElementById('historydeleteoptiondays').value;
+		option = document.getElementById('historydeleteoptiondays').value;
 	}
 	if (!option) {
 		option = "days";
@@ -346,7 +349,6 @@ function showHistorydeleteoptionContent() {
 		document.getElementById("historydeleteoptiondayscontent").classList.add("d-none");
 		document.getElementById("historydeleteoptionperiodscontent").classList.remove("d-none");
 		maxValuesDeleteOption();
-		//localStorage.setItem("lasthistoryclean", moment());
 	}
 }
 
@@ -373,9 +375,12 @@ function maxValuesDeleteOption() {
 
 function saveCleaningDay() {
 	localStorage.setItem("cleaningday", moment(getResetDate(), "dddd, DD-MM-YYYY"));
-	document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: #28a745;");
+	document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: " + bs_green + ";");
 	document.getElementById("modalsavebutton").innerHTML = '<i class="fas fa-check"></i>';
-	setTimeout('document.getElementById("modalsavebutton").innerHTML = "Save"; document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear;");', 5000);
+	setTimeout(function () {
+		document.getElementById("modalsavebutton").innerHTML = "Save";
+		document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear;");
+	}, 5000);
 }
 
 function calculateCleaningDay() {
@@ -408,7 +413,7 @@ function testDateFormat(date) {
 }
 
 function setHistory(refresh_edit_table) {
-	var entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid #000;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
+	var entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid black;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
 		entry_edit_history = "",
 		revkeys = getHistory().reverse(),
 		overtimetotal = 0,
@@ -417,27 +422,27 @@ function setHistory(refresh_edit_table) {
 		key,
 		timeinfo;
 
-	for (; key = revkeys[i]; i++) {
-		//if (testDateFormat(key)) {
+	/* jshint -W084 */
+	for (key = 0; key = revkeys[i]; i++) {
 		timeinfo = JSON.parse(localStorage.getItem(key));
 		if (timeinfo.hasOwnProperty('OvertimeDec')) {
-			if (timeinfo['OvertimeDec'].startsWith("-")) {
-				entry_history = entry_history + "<tr style='color:red;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
-				entry_edit_history = entry_edit_history + "<tr class='hide' style='color:red;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + (timeinfo['StartDec'].toLowerCase() != "correction" ? parseFloat(timeinfo['StartDec']).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td></tr>"
+			if (timeinfo.OvertimeDec.startsWith("-")) {
+				entry_history = entry_history + "<tr style='color: " + bs_red + ";'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
+				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='pt-3-half' contenteditable='false' style='color: " + bs_red + ";'>" + key + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + timeinfo.TotalNoBreakDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + timeinfo.OvertimeDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + timeinfo.TotalDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + timeinfo.HourSchedule + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td></tr>";
 			} else {
-				entry_history = entry_history + "<tr style='color:green;'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo['TotalNoBreakDec'] + "</td><td style='text-align:right;'>" + timeinfo['OvertimeDec'] + "</td></tr>"
-				entry_edit_history = entry_edit_history + "<tr class='hide' style='color:green;'><td class='pt-3-half' contenteditable='false'>" + key + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalNoBreakDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['OvertimeDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['TotalDec'] + "</td><td class='pt-3-half' contenteditable='true'>" + (timeinfo['StartDec'].toLowerCase() != "correction" ? parseFloat(timeinfo['StartDec']).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true'>" + timeinfo['HourSchedule'] + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td>"
+				entry_history = entry_history + "<tr style='color: " + bs_green + ";'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
+				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='pt-3-half' contenteditable='false' style='color: " + bs_green + ";'>" + key + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + timeinfo.TotalNoBreakDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + timeinfo.OvertimeDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + timeinfo.TotalDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + timeinfo.HourSchedule + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td>";
 			}
-			overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo['OvertimeDec']);
+			overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo.OvertimeDec);
 
 			if (moment(key, "DD-MM-YYYY") >= moment().startOf('week')) {
-				overtimeweekly = overtimeweekly + parseFloat(timeinfo['OvertimeDec']);
+				overtimeweekly = overtimeweekly + parseFloat(timeinfo.OvertimeDec);
 			}
 
 			// calculate hour schedule if it's not defined yet
 			// TEMPORARY
-			if (timeinfo['HourSchedule'] == undefined) {
-				var hourschedule = parseFloat(timeinfo['TotalNoBreakDec']) - parseFloat(timeinfo['OvertimeDec']);
+			if (timeinfo.HourSchedule == undefined) {
+				var hourschedule = parseFloat(timeinfo.TotalNoBreakDec) - parseFloat(timeinfo.OvertimeDec);
 
 				if (hourschedule > 0 && hourschedule < 3.1) {
 					hourschedule = 3.04;
@@ -461,13 +466,12 @@ function setHistory(refresh_edit_table) {
 					hourschedule = 8;
 				}
 
-				var new_timeinfo = '{"TotalNoBreakDec": "' + timeinfo['TotalNoBreakDec'] + '", "OvertimeDec": "' + timeinfo['OvertimeDec'] + '", "TotalDec": "' + timeinfo['TotalDec'] + '", "StartDec": "' + timeinfo['StartDec'] + '", "HourSchedule": "' + hourschedule + '"}';
+				var new_timeinfo = '{"TotalNoBreakDec": "' + timeinfo.TotalNoBreakDec + '", "OvertimeDec": "' + timeinfo.OvertimeDec + '", "TotalDec": "' + timeinfo.TotalDec + '", "StartDec": "' + timeinfo.StartDec + '", "HourSchedule": "' + hourschedule + '"}';
 				localStorage.setItem(key, new_timeinfo);
 				console.log(timeinfo);
 				console.log(new_timeinfo);
 			}
 		}
-		//}
 	}
 
 	if (revkeys == "" || revkeys == null) {
@@ -587,11 +591,11 @@ function cleanLocalStorage() {
 		i = 0,
 		today = moment(),
 		deleteoption = localStorage.getItem("historydeleteoption");
-	//lasthistoryclean = moment(localStorage.getItem("lasthistoryclean"));
 
 	if (deleteoption == "days") {
-		const expiredate = today.subtract(getHistoryRetain(), "days")
-		for (; key = keys[i]; i++) {
+		const expiredate = today.subtract(getHistoryRetain(), "days");
+		/* jshint -W084 */
+		for (var key = 0; key = keys[i]; i++) {
 			if (moment(key, "DD-MM-YYYY") < expiredate && testDateFormat(key)) { // days to keep data excluding today
 				delete localStorage[key];
 			}
@@ -602,7 +606,6 @@ function cleanLocalStorage() {
 
 		if (cleaningday <= today) {
 			deleteHistory();
-			//localStorage.setItem("lasthistoryclean", today);
 			localStorage.setItem("cleaningday", calculateCleaningDay());
 		}
 	}
@@ -610,13 +613,12 @@ function cleanLocalStorage() {
 
 function deleteHistory() {
 	if (confirm("Are you sure you wish to delete your history?\nIf you choose not to, then your data will be saved until the next cleaning time.")) {
-		for (key in localStorage) {
+		for (var key in localStorage) {
 			if (testDateFormat(key)) {
 				delete localStorage[key];
 			}
 		}
 		setHistory(true);
-		//document.getElementById("settingsmodalclosebutton").click();
 		alert("History deleted!");
 	}
 }
@@ -641,7 +643,7 @@ function exportHistory() {
 var importHistory = document.getElementById('importHistory'),
 	importFile = document.getElementById('importFile');
 importFile.addEventListener("change", importHistoryData, false);
-importHistory.onclick = function () { importFile.click() }
+importHistory.onclick = function () { importFile.click(); };
 function importHistoryData(e) {
 	var files = e.target.files, reader = new FileReader();
 	reader.onload = readerEvent => {
@@ -652,7 +654,7 @@ function importHistoryData(e) {
 		importFile.value = ''; //clear input value after every import
 		setHistory(true);
 		setParameters();
-	}
+	};
 	reader.readAsText(files[0]);
 	document.getElementById("settingsmodalclosebutton").click();
 	alert("Import successful!");
@@ -665,6 +667,7 @@ function makeDate(date) {
 
 // Application functions
 function now() {
+	/*
 	var date = new Date();
 	var hour = date.getHours(),
 		min = date.getMinutes();
@@ -673,18 +676,12 @@ function now() {
 	min = (min < 10 ? "0" : "") + min;
 
 	var timestamp = hour + ":" + min;
-	//return timeStringToFloat(timestamp);
 	return moment.duration(timestamp).asHours();
+	*/
+	return moment.duration(moment().startOf('minute').format("HH:mm")).asHours();
 }
 
 function todayDate() {
-	var date = new Date();
-
-	/*var dd = ('0' + date.getDate()).slice(-2),
-		mm = ('0' + (date.getMonth()+1)).slice(-2), //jan is 0
-		yyyy = date.getFullYear();
-	*/
-	//return dd + "-" + mm + "-" + yyyy;
 	return moment().format("DD-MM-YYYY");
 }
 
@@ -729,12 +726,10 @@ function setParameters() {
 		breaktime_timeselection_option_timerange = localStorage.getItem("breaktime_timeselection_option_timerange");
 
 	if (autoend == "true")
-		//document.getElementById("autoend").checked = true;
 		document.getElementById("autoend").click();
 	if (autoend_today_disabled == todayDate())
 		document.getElementById("autoend_today_disabled").click();
 	if (nosave == todayDate())
-		//document.getElementById("nosave").checked = true;
 		document.getElementById("nosave").click();
 	setHourSchedule(hourschedule);
 	if (break_time_default) {
@@ -744,10 +739,8 @@ function setParameters() {
 		document.getElementById("break_time_default").value = 0;
 	}
 	if (historydeleteoption == "days") {
-		//document.getElementById("historydeleteoptiondays").checked = true;
 		document.getElementById("historydeleteoptiondays").click();
 	} else if (historydeleteoption == "period") {
-		//document.getElementById("historydeleteoptionperiod").checked = true;
 		document.getElementById("historydeleteoptionperiod").click();
 	}
 	if (historyretain)
@@ -800,11 +793,9 @@ function setParameters() {
 	var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
 	if (timeinfo == null) {
 		if (startminsubtract == "true") {
-			//document.getElementById("startminsubtract").checked = true;
 			document.getElementById("startminsubtract").click();
 
 			// Fix convert minutes to subtract to decimal
-			//var startminsubtract_value_decimal = timeStringToFloat("00:"+startminsubtract_value);
 			var startminsubtract_value_decimal = moment.duration("00:" + startminsubtract_value).asHours();
 			setStart(now() - startminsubtract_value_decimal);
 		} else {
@@ -812,12 +803,11 @@ function setParameters() {
 		}
 		add_time(getHourSchedule());
 	} else {
-		setStart(timeinfo['StartDec']);
-		setBreak(timeinfo['TotalDec'] - timeinfo['TotalNoBreakDec']);
-		setEnd(parseFloat(timeinfo['StartDec']) + parseFloat(timeinfo['TotalDec']));
+		setStart(timeinfo.StartDec);
+		setBreak(timeinfo.TotalDec - timeinfo.TotalNoBreakDec);
+		setEnd(parseFloat(timeinfo.StartDec) + parseFloat(timeinfo.TotalDec));
 		calculateTotal();
 		if (startminsubtract == "true")
-			//document.getElementById("startminsubtract").checked = true;
 			document.getElementById("startminsubtract").click();
 	}
 }
@@ -901,7 +891,7 @@ class Timer {
 	}
 }
 
-const timer = new Timer(); // Initialize object to 
+const timer = new Timer(); // Initialize object to
 var break_counter_started = false, refreshIntervalId = 0;
 function break_counter() {
 	var break_counter_btn = document.getElementById("break_counter_btn");
@@ -933,7 +923,7 @@ function break_counter() {
 			const timeInDecimalHours = moment.duration(moment.utc(timeInSeconds * 1000).format('HH:mm:ss')).asHours();
 			setBreak(timeInDecimalHours);
 			add_time(getHourSchedule());
-		}, 1000)
+		}, 1000);
 
 		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch fa-spin'></i> Stop";
 		break_counter_btn.classList.remove("btn-primary");
@@ -1033,34 +1023,35 @@ window.onbeforeunload = function (e) {
 $(document).ready(function () {
 	reset();
 
-	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 		return new bootstrap.Tooltip(tooltipTriggerEl, {
 			boundary: document.body,
 			'delay': { show: 1000, hide: 0 }
-		})
-	})
+		});
+	});
 
 	moment().format(); // Initialize momentjs
 
+	var myModal;
 	if (window.location.href.indexOf('#about') != -1) {
-		var myModal = new bootstrap.Modal(document.getElementById('modalabout'));
+		myModal = new bootstrap.Modal(document.getElementById('modalabout'));
 		myModal.show();
 	}
 	if (window.location.href.indexOf('#settings') != -1) {
-		var myModal = new bootstrap.Modal(document.getElementById('modalsettings'));
+		myModal = new bootstrap.Modal(document.getElementById('modalsettings'));
 		myModal.show();
 	}
 	if (window.location.href.indexOf('#info') != -1) {
-		var myModal = new bootstrap.Modal(document.getElementById('modalinfo'));
+		myModal = new bootstrap.Modal(document.getElementById('modalinfo'));
 		myModal.show();
 	}
 	if (window.location.href.indexOf('#history') != -1) {
-		var myModal = new bootstrap.Modal(document.getElementById('modaledithistory'));
+		myModal = new bootstrap.Modal(document.getElementById('modaledithistory'));
 		myModal.show();
 	}
 	if (window.location.href.indexOf('#reporting') != -1) {
-		var myModal = new bootstrap.Modal(document.getElementById('modalreporting'));
+		myModal = new bootstrap.Modal(document.getElementById('modalreporting'));
 		myModal.show();
 	}
 
@@ -1095,7 +1086,7 @@ $('#app_alert .close').click(function () {
 });
 
 $("input").focusout(function () {
-	checkInputValues()
+	checkInputValues();
 });
 
 $(".btn").mouseup(function () {
