@@ -30,9 +30,9 @@ var bs_blue = getComputedStyle(document.documentElement).getPropertyValue('--bs-
 
 // Conversion functions
 function floatToTimeString(timedec) {
-	var sign = timedec < 0 ? "-" : "";
-	var hours = Math.floor(Math.abs(timedec));
-	var minutes = Math.floor((Math.abs(timedec) * 60) % 60);
+	const sign = timedec < 0 ? "-" : "",
+		hours = Math.floor(Math.abs(timedec)),
+		minutes = Math.floor((Math.abs(timedec) * 60) % 60);
 	return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
 }
 
@@ -43,8 +43,8 @@ const reverseDateRepresentation = date => {
 
 // Setters & getters
 function getStart() {
-	var time = document.getElementById("start_time").value;
-	var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
+	const time = document.getElementById("start_time").value;
+	let time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
 	if (!time_dec) {
 		time_dec = 0;
 	}
@@ -56,8 +56,8 @@ function setStart(time) {
 }
 
 function getEnd() {
-	var time = document.getElementById("end_time").value;
-	var time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
+	const time = document.getElementById("end_time").value;
+	let time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
 	if (!time_dec) {
 		time_dec = now();
 	}
@@ -73,13 +73,13 @@ function setEnd(time) {
 }
 
 function getBreak(allowNegative) {
-	var time_dec;
+	let time_dec;
 
 	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
-		var time = document.getElementById("break_time").value;
+		const time = document.getElementById("break_time").value;
 		time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
 	} else {
-		var break_time_start = document.getElementById("break_time_start").value,
+		let break_time_start = document.getElementById("break_time_start").value,
 			break_time_end = document.getElementById("break_time_end").value;
 
 		break_time_start = moment(break_time_start, "HH:mm");
@@ -95,8 +95,8 @@ function getBreak(allowNegative) {
 }
 
 function getBreakTimeStart() {
-	var time = document.getElementById("break_time_start").value;
-	var time_dec = moment.duration(time).asHours();
+	const time = document.getElementById("break_time_start").value;
+	let time_dec = moment.duration(time).asHours();
 	if (!time_dec) {
 		time_dec = 0;
 	}
@@ -111,8 +111,8 @@ function setBreak(time) {
 }
 
 function getBreakDefault() {
-	var e = document.getElementById("break_time_default");
-	var time = e.options[e.selectedIndex].value;
+	const break_time = document.getElementById("break_time_default");
+	let time = break_time.options[break_time.selectedIndex].value;
 	if (!time) {
 		time = 0;
 	}
@@ -124,7 +124,7 @@ function setBreakDefault(time) {
 }
 
 function addBreakDefault() {
-	var break_time_default_init = localStorage.getItem("break_time_default");
+	const break_time_default_init = localStorage.getItem("break_time_default");
 
 	if (getBreak(false) == break_time_default_init) {
 		setBreak(getBreakDefault());
@@ -136,8 +136,8 @@ function addBreakDefault() {
 }
 
 function getHourSchedule() {
-	var e = document.getElementById("hourschedule");
-	var time = e.options[e.selectedIndex].value;
+	const hourschedule = document.getElementById("hourschedule");
+	let time = hourschedule.options[hourschedule.selectedIndex].value;
 	if (!time) {
 		time = 0;
 	}
@@ -154,7 +154,7 @@ function setHourSchedule(time) {
 }
 
 function getWorktime() {
-	var worktime = 0;
+	let worktime = 0;
 	if (getEnd() < getStart()) {
 		worktime = 24 + getEnd() - getStart();
 		if (Math.abs(worktime - getHourSchedule()) <= 0.02) {
@@ -171,7 +171,7 @@ function getWorktime() {
 }
 
 function calculateTotal() {
-	var worktime = getWorktime(),
+	let worktime = getWorktime(),
 		overtimedec = getOvertimeDec(),
 		totalnobreakdec = getTotalNoBreakDec();
 
@@ -194,7 +194,7 @@ function setTotal(time) {
 }
 
 function getTotalDec() {
-	var worktime = getWorktime();
+	const worktime = getWorktime();
 	return parseFloat(worktime).toFixed(2);
 }
 
@@ -210,9 +210,8 @@ function setOvertime(time) {
 }
 
 function getOvertimeDec() {
-	var worktime = getWorktime(),
-		overtime = worktime - getBreak(false) - getHourSchedule();
-	overtime = overtime.toFixed(2);
+	const worktime = getWorktime(),
+		overtime = (worktime - getBreak(false) - getHourSchedule()).toFixed(2);
 
 	if (overtime.toString() == "-0.00") {
 		return "0.00";
@@ -248,7 +247,7 @@ function setTotalNoBreak(time) {
 }
 
 function getTotalNoBreakDec() {
-	var worktime = getWorktime();
+	const worktime = getWorktime();
 	return Math.abs(parseFloat(worktime - getBreak(false))).toFixed(2);
 }
 
@@ -260,7 +259,7 @@ function setTotalNoBreakDec(time) {
 }
 
 function getHistory() {
-	var keys = Object.keys(localStorage),
+	let keys = Object.keys(localStorage),
 		sortedkeys = keys.map(reverseDateRepresentation).sort().map(reverseDateRepresentation), // don't do reverse() here to have dates ascending
 		i = 0,
 		key;
@@ -276,7 +275,7 @@ function getHistory() {
 }
 
 function getHistoryDeleteOption() {
-	var option;
+	let option;
 	if (document.getElementById('historydeleteoptionperiod').checked) {
 		option = document.getElementById('historydeleteoptionperiod').value;
 	} else if (document.getElementById('historydeleteoptiondays').checked) {
@@ -289,7 +288,7 @@ function getHistoryDeleteOption() {
 }
 
 function getHistoryRetain() {
-	var days = document.getElementById("historyretain").value;
+	let days = document.getElementById("historyretain").value;
 	if (!days) {
 		days = 999;
 	}
@@ -300,7 +299,7 @@ function getHistoryRetain() {
 }
 
 function getHistoryResetDay() {
-	var day = document.getElementById("historyresetday").value;
+	let day = document.getElementById("historyresetday").value;
 	if (!day) {
 		day = 31;
 	}
@@ -311,7 +310,7 @@ function getHistoryResetDay() {
 }
 
 function getHistoryResetPeriod() {
-	var period = document.getElementById("historyresetperiod").value,
+	let period = document.getElementById("historyresetperiod").value,
 		historyresetperiodunit = getHistoryResetPeriodUnit();
 
 	if (historyresetperiodunit == "days") {
@@ -328,8 +327,8 @@ function getHistoryResetPeriod() {
 }
 
 function getHistoryResetPeriodUnit() {
-	var e = document.getElementById("historyresetperiodunit");
-	return e.options[e.selectedIndex].value;
+	const historyresetperiodunit = document.getElementById("historyresetperiodunit");
+	return historyresetperiodunit.options[historyresetperiodunit.selectedIndex].value;
 }
 
 function setResetDate(date) {
@@ -338,6 +337,10 @@ function setResetDate(date) {
 
 function getResetDate() {
 	return document.getElementById("resetdate").value;
+}
+
+function getCountry() {
+	return document.getElementById("reporting_country").value;
 }
 
 // UI
@@ -353,7 +356,7 @@ function showHistorydeleteoptionContent() {
 }
 
 function maxValuesDeleteOption() {
-	var historyresetperiodunit = getHistoryResetPeriodUnit(),
+	const historyresetperiodunit = getHistoryResetPeriodUnit(),
 		cleaningday = calculateCleaningDay(),
 		historyresetperiod = document.getElementById("historyresetperiod"),
 		historyresetday = document.getElementById("historyresetday");
@@ -384,11 +387,11 @@ function saveCleaningDay() {
 }
 
 function calculateCleaningDay() {
-	var historyretain = getHistoryRetain(),
+	const historyretain = getHistoryRetain(),
 		historyresetday = getHistoryResetDay(),
 		historyresetperiod = getHistoryResetPeriod(),
-		historyresetperiodunit = getHistoryResetPeriodUnit(),
-		cleaningday = moment();
+		historyresetperiodunit = getHistoryResetPeriodUnit();
+	let cleaningday = moment();
 
 	if (historyresetperiodunit == "days") {
 		cleaningday = cleaningday.add(historyresetperiod, 'days');
@@ -413,7 +416,7 @@ function testDateFormat(date) {
 }
 
 function setHistory(refresh_edit_table) {
-	var entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid black;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
+	let entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid black;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
 		entry_edit_history = "",
 		revkeys = getHistory().reverse(),
 		overtimetotal = 0,
@@ -442,7 +445,7 @@ function setHistory(refresh_edit_table) {
 			// calculate hour schedule if it's not defined yet
 			// TEMPORARY
 			if (timeinfo.HourSchedule == undefined) {
-				var hourschedule = parseFloat(timeinfo.TotalNoBreakDec) - parseFloat(timeinfo.OvertimeDec);
+				let hourschedule = parseFloat(timeinfo.TotalNoBreakDec) - parseFloat(timeinfo.OvertimeDec);
 
 				if (hourschedule > 0 && hourschedule < 3.1) {
 					hourschedule = 3.04;
@@ -466,7 +469,7 @@ function setHistory(refresh_edit_table) {
 					hourschedule = 8;
 				}
 
-				var new_timeinfo = '{"TotalNoBreakDec": "' + timeinfo.TotalNoBreakDec + '", "OvertimeDec": "' + timeinfo.OvertimeDec + '", "TotalDec": "' + timeinfo.TotalDec + '", "StartDec": "' + timeinfo.StartDec + '", "HourSchedule": "' + hourschedule + '"}';
+				const new_timeinfo = '{"TotalNoBreakDec": "' + timeinfo.TotalNoBreakDec + '", "OvertimeDec": "' + timeinfo.OvertimeDec + '", "TotalDec": "' + timeinfo.TotalDec + '", "StartDec": "' + timeinfo.StartDec + '", "HourSchedule": "' + hourschedule + '"}';
 				localStorage.setItem(key, new_timeinfo);
 				console.log(timeinfo);
 				console.log(new_timeinfo);
@@ -491,7 +494,7 @@ function setHistory(refresh_edit_table) {
 }
 
 function notificationClosed(event) {
-	var version = document.getElementById("currentappversion").innerHTML,
+	const version = document.getElementById("currentappversion").innerHTML,
 		lastnotifversion = localStorage.getItem("lastnotifversion");
 
 	if (event == "click") {
@@ -510,7 +513,7 @@ function set_startminsubtract(startminsubtract_value) {
 }
 
 function hourscheduleAddTimeButton() {
-	var hourschedule = getHourSchedule(),
+	const hourschedule = getHourSchedule(),
 		addtimebutton_span = document.getElementById("addtimebutton_span");
 	localStorage.setItem("hourschedule", hourschedule);
 	addtimebutton_span.innerHTML = hourschedule;
@@ -555,7 +558,7 @@ function breaktimeTimeselection() {
 }
 
 function checkInputValues() {
-	var app_alert_message = "";
+	let app_alert_message = "";
 
 	if (getBreak(true) < 0 && getBreakTimeStart() > 0) {
 		document.getElementById("break_time_end").value = document.getElementById("break_time_start").value;
@@ -573,7 +576,7 @@ function setAlertMessage(app_alert_message) {
 }
 
 function allCheckBox(allCheckboxInput, elementId) {
-	var checks = document.querySelectorAll('#' + elementId + ' input[type="checkbox"]');
+	const checks = document.querySelectorAll('#' + elementId + ' input[type="checkbox"]');
 
 	for (let i = 0; i < checks.length; i++) {
 		if (allCheckboxInput.checked == true && checks[i].checked == false) {
@@ -585,9 +588,21 @@ function allCheckBox(allCheckboxInput, elementId) {
 	}
 }
 
+function populateWorkdayCountCountries(callback) {
+	$.getJSON('https://date.nager.at/api/v3/AvailableCountries', function (response) {
+		// JSON result in `response` variable
+		let listitems = '<option value=none>None</option>';
+		$.each(response, function (key, value) {
+			listitems += '<option value=' + value.countryCode + '>' + value.name + '</option>';
+		});
+		$('#reporting_country').empty().append(listitems);
+		callback();
+	});
+}
+
 // Storage functions
 function cleanLocalStorage() {
-	var keys = Object.keys(localStorage),
+	let keys = Object.keys(localStorage),
 		i = 0,
 		today = moment(),
 		deleteoption = localStorage.getItem("historydeleteoption");
@@ -595,13 +610,13 @@ function cleanLocalStorage() {
 	if (deleteoption == "days") {
 		const expiredate = today.subtract(getHistoryRetain(), "days");
 		/* jshint -W084 */
-		for (var key = 0; key = keys[i]; i++) {
+		for (let key = 0; key = keys[i]; i++) {
 			if (moment(key, "DD-MM-YYYY") < expiredate && testDateFormat(key)) { // days to keep data excluding today
 				delete localStorage[key];
 			}
 		}
 	} else if (deleteoption == "period") {
-		var cleaningdaystored = localStorage.getItem("cleaningday"),
+		let cleaningdaystored = localStorage.getItem("cleaningday"),
 			cleaningday = moment(new Date(cleaningdaystored)).format; //momentjs somehow can't parse dates from localstorage
 
 		if (cleaningday <= today) {
@@ -613,7 +628,7 @@ function cleanLocalStorage() {
 
 function deleteHistory() {
 	if (confirm("Are you sure you wish to delete your history?\nIf you choose not to, then your data will be saved until the next cleaning time.")) {
-		for (var key in localStorage) {
+		for (let key in localStorage) {
 			if (testDateFormat(key)) {
 				delete localStorage[key];
 			}
@@ -624,12 +639,12 @@ function deleteHistory() {
 }
 
 function exportHistory() {
-	var _myArray = JSON.stringify(localStorage, null, 4); //indentation in json format, human readable
+	const _myArray = JSON.stringify(localStorage, null, 4); //indentation in json format, human readable
 
 	//Note: We use the anchor tag here instead button.
-	var vLink = document.getElementById('exportHistoryLink');
+	const vLink = document.getElementById('exportHistoryLink');
 
-	var vBlob = new Blob([_myArray], { type: "octet/stream" });
+	const vBlob = new Blob([_myArray], { type: "octet/stream" });
 	vName = 'working_history_' + todayDate() + '.json';
 	vUrl = window.URL.createObjectURL(vBlob);
 
@@ -640,14 +655,15 @@ function exportHistory() {
 	vLink.click();
 }
 
-var importHistory = document.getElementById('importHistory'),
+const importHistory = document.getElementById('importHistory'),
 	importFile = document.getElementById('importFile');
 importFile.addEventListener("change", importHistoryData, false);
 importHistory.onclick = function () { importFile.click(); };
 function importHistoryData(e) {
-	var files = e.target.files, reader = new FileReader();
+	const files = e.target.files,
+		reader = new FileReader();
 	reader.onload = readerEvent => {
-		var content = JSON.parse(readerEvent.target.result); // this is the content!
+		const content = JSON.parse(readerEvent.target.result); // this is the content!
 		Object.keys(content).forEach(function (k) {
 			localStorage.setItem(k, content[k]);
 		});
@@ -661,23 +677,12 @@ function importHistoryData(e) {
 }
 
 function makeDate(date) {
-	var parts = date.split("-");
+	const parts = date.split("-");
 	return new Date(parts[2], parts[1] - 1, parts[0]);
 }
 
 // Application functions
 function now() {
-	/*
-	var date = new Date();
-	var hour = date.getHours(),
-		min = date.getMinutes();
-
-	hour = (hour < 10 ? "0" : "") + hour;
-	min = (min < 10 ? "0" : "") + min;
-
-	var timestamp = hour + ":" + min;
-	return moment.duration(timestamp).asHours();
-	*/
 	return moment.duration(moment().startOf('minute').format("HH:mm")).asHours();
 }
 
@@ -704,7 +709,7 @@ function reset() {
 
 function setParameters() {
 	// Set options to parameters from localStorage
-	var alertnotification = localStorage.getItem("alertnotification"),
+	const alertnotification = localStorage.getItem("alertnotification"),
 		autoend = localStorage.getItem("autoend"),
 		autoend_today_disabled = localStorage.getItem("autoend_today_disabled"),
 		nosave = localStorage.getItem("nosave"),
@@ -712,6 +717,7 @@ function setParameters() {
 		break_time_default = localStorage.getItem("break_time_default"),
 		startminsubtract = localStorage.getItem("startminsubtract"),
 		startminsubtract_value = localStorage.getItem("startminsubtract_value"),
+		reporting_country = localStorage.getItem("country"),
 		historydeleteoption = localStorage.getItem("historydeleteoption"),
 		historyretain = localStorage.getItem("historyretain"),
 		historyresetday = localStorage.getItem("historyresetday"),
@@ -743,6 +749,12 @@ function setParameters() {
 	} else if (historydeleteoption == "period") {
 		document.getElementById("historydeleteoptionperiod").click();
 	}
+	populateWorkdayCountCountries(function () {
+		if (reporting_country) {
+			//$("#reporting_country").val(reporting_country);
+			document.getElementById("reporting_country").value = reporting_country;
+		}
+	});
 	if (historyretain)
 		document.getElementById("historyretain").value = historyretain;
 	if (historyresetday)
@@ -790,13 +802,13 @@ function setParameters() {
 
 	// If subtract from start is checked set UI and deduct the amount of time stored in localstorage
 	// If the page was already opened today, fill in that start time
-	var timeinfo = JSON.parse(localStorage.getItem(todayDate()));
+	const timeinfo = JSON.parse(localStorage.getItem(todayDate()));
 	if (timeinfo == null) {
 		if (startminsubtract == "true") {
 			document.getElementById("startminsubtract").click();
 
 			// Fix convert minutes to subtract to decimal
-			var startminsubtract_value_decimal = moment.duration("00:" + startminsubtract_value).asHours();
+			const startminsubtract_value_decimal = moment.duration("00:" + startminsubtract_value).asHours();
 			setStart(now() - startminsubtract_value_decimal);
 		} else {
 			setStart(now());
@@ -892,9 +904,10 @@ class Timer {
 }
 
 const timer = new Timer(); // Initialize object to
-var break_counter_started = false, refreshIntervalId = 0;
+let break_counter_started = false,
+	refreshIntervalId = 0;
 function break_counter() {
-	var break_counter_btn = document.getElementById("break_counter_btn");
+	const break_counter_btn = document.getElementById("break_counter_btn");
 
 	// Delete old localstorage entries for previous version timer
 	localStorage.removeItem("break_counter_start_time");
@@ -905,8 +918,8 @@ function break_counter() {
 		timer.stop();
 		clearInterval(refreshIntervalId);
 
-		const timeInSeconds = Math.round(timer.getTime() / 1000);
-		const timeInDecimalHours = moment.duration(moment.utc(timeInSeconds * 1000).format('HH:mm:ss')).asHours();
+		const timeInSeconds = Math.round(timer.getTime() / 1000),
+			timeInDecimalHours = moment.duration(moment.utc(timeInSeconds * 1000).format('HH:mm:ss')).asHours();
 		setBreak(timeInDecimalHours);
 		add_time(getHourSchedule());
 
@@ -919,8 +932,8 @@ function break_counter() {
 		timer.start();
 
 		refreshIntervalId = setInterval(() => {
-			const timeInSeconds = Math.round(timer.getTime() / 1000);
-			const timeInDecimalHours = moment.duration(moment.utc(timeInSeconds * 1000).format('HH:mm:ss')).asHours();
+			const timeInSeconds = Math.round(timer.getTime() / 1000),
+				timeInDecimalHours = moment.duration(moment.utc(timeInSeconds * 1000).format('HH:mm:ss')).asHours();
 			setBreak(timeInDecimalHours);
 			add_time(getHourSchedule());
 		}, 1000);
@@ -935,7 +948,7 @@ function break_counter() {
 
 window.onbeforeunload = function (e) {
 	// Set 'dont save today' and 'automatically set end time' parameters in local storage
-	var nosave = document.getElementById("nosave"),
+	const nosave = document.getElementById("nosave"),
 		autoend = document.getElementById("autoend"),
 		autoend_today_disabled = document.getElementById("autoend_today_disabled");
 	if (nosave.checked == false) {
@@ -951,7 +964,7 @@ window.onbeforeunload = function (e) {
 			}
 			localStorage.setItem("autoend", "true");
 		}
-		var timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule().toFixed(2) + '"}';
+		const timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule().toFixed(2) + '"}';
 		localStorage.setItem(todayDate(), timeinfo);
 		localStorage.setItem("nosave", "false");
 	} else {
@@ -963,7 +976,7 @@ window.onbeforeunload = function (e) {
 		localStorage.setItem("nosave", todayDate());
 	}
 	// Set 'subtract 5 min from start time' parameter in local storage
-	var startminsubtract = document.getElementById("startminsubtract");
+	const startminsubtract = document.getElementById("startminsubtract");
 	if (startminsubtract.checked == false) {
 		localStorage.setItem("startminsubtract", "false");
 	} else {
@@ -981,6 +994,8 @@ window.onbeforeunload = function (e) {
 	localStorage.setItem("historyresetday", getHistoryResetDay());
 	localStorage.setItem("historyresetperiod", getHistoryResetPeriod());
 	localStorage.setItem("historyresetperiodunit", getHistoryResetPeriodUnit());
+	// Set 'default break time' parameter in local storage
+	localStorage.setItem("country", getCountry());
 	// Set UI visibility options
 	if (document.getElementById("overtimeoption").checked == false) {
 		localStorage.setItem("overtimeoption", "false");
@@ -1023,8 +1038,8 @@ window.onbeforeunload = function (e) {
 $(document).ready(function () {
 	reset();
 
-	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+	const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 		return new bootstrap.Tooltip(tooltipTriggerEl, {
 			boundary: document.body,
 			'delay': { show: 1000, hide: 0 }
@@ -1033,7 +1048,7 @@ $(document).ready(function () {
 
 	moment().format(); // Initialize momentjs
 
-	var myModal;
+	let myModal;
 	if (window.location.href.indexOf('#about') != -1) {
 		myModal = new bootstrap.Modal(document.getElementById('modalabout'));
 		myModal.show();
@@ -1055,7 +1070,7 @@ $(document).ready(function () {
 		myModal.show();
 	}
 
-	var startminsubtract = document.getElementById("startminsubtract");
+	const startminsubtract = document.getElementById("startminsubtract");
 	if (startminsubtract.checked == false) {
 		localStorage.setItem("startminsubtract", "false");
 	} else {
@@ -1095,7 +1110,6 @@ $(".btn").mouseup(function () {
 });
 
 function intervalListener() {
-	// runs every 60 sec
 	if (getEnd() <= now() && !startedLeaves) {
 		startLeaves();
 	} else if (getEnd() > now() && startedLeaves) {

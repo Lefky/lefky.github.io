@@ -22,9 +22,9 @@ var sortedkeys = getHistory(),
 	sumOvertime = 0;
 
 // SYNC loading
-google.charts.load('current', { packages: ['corechart', 'gauge'] });
+google.charts.load('current', { packages: ['corechart', 'gauge', 'timeline'] });
 
-// ASYNC loading
+// ASYNC loading - unused atm
 function initGoogleLibraries(googleLib) {
 	return new Promise(function (resolve, reject) {
 		if (filesadded.indexOf("[" + googleLib + "]") == -1) {
@@ -50,6 +50,7 @@ function initGraphs() {
 	/* jshint -W030 */
 	numberOfDaysRegistered = 0,
 	datasetOvertimeDec = [],
+	datasetOvertimeCumulative = [],
 	datasetStartDec = [],
 	datasetStopDec = [],
 	datasetTotalDec = [],
@@ -66,6 +67,7 @@ function initGraphs() {
 }
 
 function drawGraphs() {
+	drawTimelinegraph("Workdays");
 	drawGaugegraph("DaysRegisteredGauge");
 	drawGaugegraph("AvgStarttimeGauge");
 	drawGaugegraph("AvgStoptimeGauge");
@@ -113,7 +115,7 @@ function mobileRotateScreen(rotate) {
 			document.documentElement.requestFullscreen();
 			document.documentElement.webkitRequestFullScreen();
 
-			var current_mode = screen.orientation;
+			let current_mode = screen.orientation;
 			console.log(current_mode.type);
 			console.log(current_mode.angle);
 
@@ -128,8 +130,8 @@ function mobileRotateScreen(rotate) {
 }
 
 function drawAreagraph(graphtype) {
-	var data = new google.visualization.DataTable(),
-		linecolor = "";
+	const data = new google.visualization.DataTable();
+	let linecolor = "";
 	data.addColumn('date', 'X');
 
 	switch (graphtype) {
@@ -170,7 +172,7 @@ function drawAreagraph(graphtype) {
 			console.log("No valid graphtype entered");
 	}
 
-	var options = {
+	const options = {
 		tooltip: { isHtml: true },
 		explorer: {
 			axis: 'horizontal',
@@ -218,13 +220,13 @@ function drawAreagraph(graphtype) {
 		height: 500
 	};
 
-	var chart = new google.visualization.AreaChart(document.getElementById(graphtype + '_div'));
+	const chart = new google.visualization.AreaChart(document.getElementById(graphtype + '_div'));
 	chart.draw(data, options);
 }
 
 function drawBargraph(graphtype) {
-	var data = new google.visualization.DataTable(),
-		linecolor = "";
+	const data = new google.visualization.DataTable();
+	let linecolor = "";
 	data.addColumn('date', 'X');
 
 	switch (graphtype) {
@@ -249,7 +251,7 @@ function drawBargraph(graphtype) {
 			console.log("No valid graphtype entered");
 	}
 
-	var options = {
+	const options = {
 		tooltip: { isHtml: true },
 		explorer: {
 			axis: 'horizontal',
@@ -297,13 +299,13 @@ function drawBargraph(graphtype) {
 		height: 500
 	};
 
-	var chart = new google.visualization.ComboChart(document.getElementById(graphtype + '_div'));
+	const chart = new google.visualization.ComboChart(document.getElementById(graphtype + '_div'));
 	chart.draw(data, options);
 }
 
 function drawPiegraph(graphtype) {
-	var data = new google.visualization.DataTable(),
-		slicecolor,
+	const data = new google.visualization.DataTable();
+	let slicecolor,
 		title = "";
 
 	switch (graphtype) {
@@ -329,7 +331,7 @@ function drawPiegraph(graphtype) {
 			console.log("No valid graphtype entered");
 	}
 
-	var options = {
+	const options = {
 		//pieStartAngle: 270,
 		title: title,
 		colors: slicecolor,
@@ -337,7 +339,7 @@ function drawPiegraph(graphtype) {
 		height: 300
 	};
 
-	var chart = new google.visualization.PieChart(document.getElementById(graphtype + '_div'));
+	const chart = new google.visualization.PieChart(document.getElementById(graphtype + '_div'));
 	chart.draw(data, options);
 
 	// If there isn't any data to display, display a notification
@@ -347,8 +349,8 @@ function drawPiegraph(graphtype) {
 }
 
 function drawGaugegraph(graphtype) {
-	var data = new google.visualization.DataTable(),
-		min = 0,
+	const data = new google.visualization.DataTable();
+	let min = 0,
 		max = 0,
 		redFrom,
 		redTo,
@@ -362,7 +364,7 @@ function drawGaugegraph(graphtype) {
 		majorTicks,
 		minorTicks = 5;
 
-	var avg_starttime,
+	let avg_starttime,
 		avg_stoptime;
 
 	switch (graphtype) {
@@ -435,7 +437,7 @@ function drawGaugegraph(graphtype) {
 			console.log("No valid graphtype entered");
 	}
 
-	var options = {
+	const options = {
 		/* https://developers.google.com/chart/interactive/docs/gallery/gauge#configuration-options */
 		redFrom: redFrom,
 		redTo: redTo,
@@ -454,7 +456,7 @@ function drawGaugegraph(graphtype) {
 		height: 250
 	};
 
-	var chart = new google.visualization.Gauge(document.getElementById(graphtype + '_div'));
+	const chart = new google.visualization.Gauge(document.getElementById(graphtype + '_div'));
 	chart.draw(data, options);
 
 	$('#' + graphtype + '_div svg g text:first').attr('font-size', 20); // change the fontsize of the title, there's no parameter for this
@@ -468,12 +470,67 @@ function drawGaugegraph(graphtype) {
 	}
 }
 
+async function drawTimelinegraph(graphtype) {
+	const data = new google.visualization.DataTable();
+	let title = "";
+
+	switch (graphtype) {
+		case "Workdays":
+			data.addColumn({ type: 'string', id: 'Day' });
+			data.addColumn({ type: 'string', id: 'dummy bar label' });
+			data.addColumn({ type: 'string', role: 'tooltip' });
+			data.addColumn({ type: 'date', id: 'Start' });
+			data.addColumn({ type: 'date', id: 'End' });
+
+			const calendar = await businessDays(getCountry(), todayDate(), "31-12-" + moment().format('YYYY'));
+			calendar.forEach(function (element) {
+				let type = "Workday";
+				if (element[1])
+					type = "Weekend";
+				else if (element[2])
+					type = "Holiday";
+
+				const tooltip = "<b>" + element[0] + "</b><br><br>Weekend: " + element[1] + "<br>Holiday: " + element[2];
+
+				data.addRows([
+					[type, "", tooltip, new Date(moment(element[0], 'DD-MM-YYYY').format('YYYY-MM-DD')), new Date(moment(element[0], 'DD-MM-YYYY').add(1, 'd').format('YYYY-MM-DD'))]
+				]);
+			});
+
+			break;
+		default:
+			// code block
+			console.log("No valid graphtype entered");
+	}
+
+	const options = {
+		//pieStartAngle: 270,
+		title: title,
+		width: document.getElementById("OvertimeDec_div").offsetWidth,
+		tooltip: {
+			isHtml: true
+		}
+		//height: 300
+	};
+
+	const chart = new google.visualization.Timeline(document.getElementById(graphtype + '_div'));
+	chart.draw(data, options);
+}
+
+function getReportingStartDate() {
+	return moment(document.getElementById('start_reporting_selection').value, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD');
+}
+
+function getReportingEndDate() {
+	return document.getElementById('end_reporting_selection').value;;
+}
+
 function formatJSONdata() {
 	//var start = sortedkeys.length - datasetlength; // howmany datapoints need to be skipped before starting to draw graphs
-	var start_reporting_selection = moment(document.getElementById('start_reporting_selection').value, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD'),
-		end_reporting_selection = document.getElementById('end_reporting_selection').value;
+	const start_reporting_selection = getReportingStartDate(),
+			end_reporting_selection = getReportingEndDate();
 
-	var timeinfo,
+	let timeinfo,
 		variable,
 		hourschedule,
 		tooltip,
@@ -481,7 +538,7 @@ function formatJSONdata() {
 		dateKey;
 
 	/* jshint -W084 */
-	for (var i = 0; key = sortedkeys[i]; i++) {
+	for (let i = 0; key = sortedkeys[i]; i++) {
 
 		if (testDateFormat(key)/* && i >= start*/) {
 			timeinfo = JSON.parse(localStorage.getItem(key));
@@ -586,3 +643,70 @@ function updateArray(array, category) {
 	}
 	return array;
 }
+
+async function calcBusinessDays(country, start, end) {
+	// Takes start date into account, if it's a workday it gets added
+	let day = moment(start),
+		businessDays = 0;
+
+	return new Promise(resolve => $.getJSON('https://date.nager.at/api/v3/PublicHolidays/' + moment().format('YYYY') + '/' + country, function (response) {
+		// JSON result in `response` variable
+
+		let holidays = [];
+		response.forEach(function (element) {
+			holidays.push(element.date);
+		});
+
+		while (day.isSameOrBefore(end, 'day')) {
+			const isholiday = holidays.indexOf(day.format('YYYY-MM-DD')) > -1;
+			//console.log(day.day() + " != 0 && " + day.day() + " != 6 && " + !isholiday);
+			if (day.day() != 0 && day.day() != 6 && !isholiday)
+				businessDays++;
+			//console.log(businessDays);
+
+			day.add(1, 'd');
+		}
+		console.log("final: " + businessDays);
+		resolve(businessDays);
+	}));
+}
+
+async function businessDays(country, start, end){
+	// Takes start date into account, if it's a workday it gets added
+	return new Promise(resolve => $.getJSON('https://date.nager.at/api/v3/PublicHolidays/' + moment().format('YYYY') + '/' + country, function (response) {
+		// JSON result in `response` variable
+
+		let holidays = [],
+			calendar = [],
+			day = moment(start, 'DD-MM-YYYY'),
+			lastDay = moment(end, 'DD-MM-YYYY');
+
+		response.forEach(function (element) {
+			holidays.push(element.date);
+		});
+
+		while (day.isSameOrBefore(lastDay, 'day')) {
+			const isholiday = holidays.indexOf(day.format('YYYY-MM-DD')) > -1,
+				  isweekend = day.day() == 0 || day.day() == 6 ? true : false;
+
+			calendar.push([day.format('DD-MM-YYYY'), isweekend, isholiday]);
+			day.add(1, 'd');
+		}
+
+		resolve(calendar);
+	}));
+}
+
+// testing
+setTimeout(async function () {
+	var f = 'DD-MM-YYYY',
+		start = moment("15-08-2022", f),
+		end = moment("21-08-2022", f);
+	var country = "BE";
+	//var calculated = await calcBusinessDays(country, start, end);
+
+	//console.log('from: ' + start.format(f), 'to: ' + end.format(f), 'is ' + calculated + ' workday(s)');
+
+
+	//console.log(await businessDays(country, start, end));
+}, 600);

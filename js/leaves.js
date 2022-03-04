@@ -2,19 +2,19 @@ console.log("loaded leaves.js");
 
 // source: https://codepen.io/uurrnn/pen/Kuylr?editors=1100
 
-var startedLeaves = false;
-var interval = "";
+let startedLeaves = false;
+let interval = "";
 
 function startLeaves() {
 	loadLeavesCSS();
 
 	startedLeaves = true;
 
-	var leaves_div = document.createElement("div");
+	const leaves_div = document.createElement("div");
 	leaves_div.id = "leaves";
 
-	for (var i = 0; i <= 15; i++) {
-		var leaves_element = document.createElement("i");
+	for (let i = 0; i <= 15; i++) {
+		const leaves_element = document.createElement("i");
 		leaves_element.id = "leaf " + i;
 		leaves_div.appendChild(leaves_element);
 	}
@@ -45,7 +45,7 @@ function stopLeaves() {
 }
 
 function loadLeavesCSS() {
-	var fileref = document.createElement("link");
+	let fileref = document.createElement("link");
 	fileref.setAttribute("rel", "stylesheet");
 	fileref.setAttribute("type", "text/css");
 	fileref.setAttribute("href", "css/leaves.css");
@@ -59,7 +59,7 @@ function loadLeavesCSS() {
 }
 
 function showLeafMessage() {
-	var alertMessage = document.createElement("div");
+	const alertMessage = document.createElement("div");
 	alertMessage.id = "leaves_alert";
 	alertMessage.classList = "alert alert-success alert-dismissible fade show mr-1";
 	alertMessage.setAttribute("role", "alert");

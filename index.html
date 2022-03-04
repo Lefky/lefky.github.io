@@ -46,7 +46,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20211220.1</span> <br>
+					Version: <span id="currentappversion">20220106.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>
 			</div>
@@ -120,6 +120,18 @@
 							<input type="number" name="startminsubtract_value" id="startminsubtract_value" class="form-control flex-grow-0 w-f-80 col-2 mx-1" placeholder="5" min="0" max="60" onchange="set_startminsubtract(this.value)">
 						</div>
 					</div>
+				</p>
+				<p>
+					<h4>Reporting settings</h4>
+					Settings for the reporting view.
+					<p>
+						<div class="input-group">
+							<label class="col-form-label" for="reporting_country">Country: </label>
+							<select name="reporting_country" id="reporting_country" class="form-select flex-grow-0 w-f-120 col-sm-2 mx-1">
+								<option value="none" selected>None</option>
+							</select>
+						</div>
+					</p>
 				</p>
 				<p>
 					<h4>User interface</h4>
@@ -369,6 +381,9 @@
 					You can zoom in to certain graphs by dragging the area you want to zoom in on.<br>
 					Click right to reset the zoom level.
 				</p>
+				<div class="d-flex justify-content-center w-100 h-100">
+					<div id="Workdays_div"></div>
+				</div>
 				<div class="d-flex justify-content-center w-100 h-100">
 					<div id="DaysRegisteredGauge_div" class="d-flex justify-content-center w-25"></div>
 					<div id="SumOvertimeGauge_div" class="d-flex justify-content-center w-25"></div>

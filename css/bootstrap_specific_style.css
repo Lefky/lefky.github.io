@@ -114,6 +114,14 @@ body {
 	width: 80px !important;
 }
 
+.w-f-100 {
+	width: 100px !important;
+}
+
+.w-f-120 {
+	width: 120px !important;
+}
+
 .w-10 {
 	width: 10% !important;
 }
@@ -133,6 +141,11 @@ body {
 .fill {
 	min-height: 100% !important;
 	height: 100% !important;
+}
+
+.google-visualization-tooltip {
+  white-space: nowrap;
+  padding: 10px !important;
 }
 
 /*
