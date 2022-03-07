@@ -1,7 +1,5 @@
 console.log("loaded javascript.js");
 
-// var filesadded="";
-
 // Import Bootstrap colors
 var bs_blue = getComputedStyle(document.documentElement).getPropertyValue('--bs-blue'),
 	bs_indigo = getComputedStyle(document.documentElement).getPropertyValue('--bs-indigo'),
@@ -339,6 +337,47 @@ function getResetDate() {
 	return document.getElementById("resetdate").value;
 }
 
+function getAutobackupDay() {
+	let day = document.getElementById("autobackupday").value;
+	if (!day) {
+		day = 31;
+	}
+	if (day > 31) {
+		day = 31;
+	}
+	return day;
+}
+
+function getAutobackupPeriod() {
+	let period = document.getElementById("autobackupperiod").value,
+		periodunit = getAutobackupPeriodUnit();
+
+	if (periodunit == "days") {
+		if (period > 31)
+			period = 31;
+	} else if (periodunit == "weeks") {
+		if (period > 4)
+			period = 4;
+	} else if (periodunit == "months") {
+		if (period > 48)
+			period = 48;
+	}
+	return period;
+}
+
+function getAutobackupPeriodUnit() {
+	const periodunit = document.getElementById("autobackupperiodunit");
+	return periodunit.options[periodunit.selectedIndex].value;
+}
+
+function setBackupDate(date) {
+	document.getElementById("autobackupdate").value = date;
+}
+
+function getBackupDate() {
+	return document.getElementById("autobackupdate").value;
+}
+
 function getCountry() {
 	return document.getElementById("reporting_country").value;
 }
@@ -351,63 +390,76 @@ function showHistorydeleteoptionContent() {
 	} else {
 		document.getElementById("historydeleteoptiondayscontent").classList.add("d-none");
 		document.getElementById("historydeleteoptionperiodscontent").classList.remove("d-none");
-		maxValuesDeleteOption();
+		maxValuesCustomTimeOption("cleaning", getHistoryResetPeriodUnit(), calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()), document.getElementById("historyresetperiod"), document.getElementById("historyresetday"));
 	}
 }
 
-function maxValuesDeleteOption() {
-	const historyresetperiodunit = getHistoryResetPeriodUnit(),
-		cleaningday = calculateCleaningDay(),
-		historyresetperiod = document.getElementById("historyresetperiod"),
-		historyresetday = document.getElementById("historyresetday");
-	if (historyresetperiodunit == "days") {
-		historyresetperiod.setAttribute("max", "31");
-		historyresetday.value = "1";
-		historyresetday.disabled = true;
-	} else if (historyresetperiodunit == "weeks") {
-		historyresetperiod.setAttribute("max", "4");
-		historyresetday.setAttribute("max", "7");
-		historyresetday.disabled = false;
-	} else if (historyresetperiodunit == "months") {
-		historyresetperiod.setAttribute("max", "48");
-		historyresetday.setAttribute("max", "31");
-		historyresetday.disabled = false;
+function maxValuesCustomTimeOption(type, periodunit, executionday, elem_period, elem_executionday) {
+	if (periodunit == "days") {
+		elem_period.setAttribute("max", "31");
+		elem_executionday.value = "1";
+		elem_executionday.disabled = true;
+	} else if (periodunit == "weeks") {
+		elem_period.setAttribute("max", "4");
+		elem_executionday.setAttribute("max", "7");
+		elem_executionday.disabled = false;
+	} else if (periodunit == "months") {
+		elem_period.setAttribute("max", "48");
+		elem_executionday.setAttribute("max", "31");
+		elem_executionday.disabled = false;
 	}
-	setResetDate(cleaningday.format("dddd, DD-MM-YYYY"));
+	if (type == "cleaning")
+		setResetDate(executionday.format("dddd, DD-MM-YYYY"));
+	else if (type == "autobackup"){
+		setBackupDate(executionday.format("dddd, DD-MM-YYYY"));
+	}
 }
 
 function saveCleaningDay() {
-	localStorage.setItem("cleaningday", moment(getResetDate(), "dddd, DD-MM-YYYY"));
-	document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: " + bs_green + ";");
-	document.getElementById("modalsavebutton").innerHTML = '<i class="fas fa-check"></i>';
+	maxValuesCustomTimeOption("cleaning", getHistoryResetPeriodUnit(), calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()), document.getElementById("historyresetperiod"), document.getElementById("historyresetday"));
+	localStorage.setItem("cleaningday", moment(getResetDate(), "dddd, DD-MM-YYYY").format("DD-MM-YYYY"));
+	localStorage.setItem("historyresetday", getHistoryResetDay());
+	localStorage.setItem("historyresetperiod", getHistoryResetPeriod());
+	localStorage.setItem("historyresetperiodunit", getHistoryResetPeriodUnit());
+
+	document.getElementById("cleaningdaysavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: " + bs_green + ";");
+	document.getElementById("cleaningdaysavebutton").innerHTML = '<i class="fas fa-check"></i>';
 	setTimeout(function () {
-		document.getElementById("modalsavebutton").innerHTML = "Save";
-		document.getElementById("modalsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear;");
+		document.getElementById("cleaningdaysavebutton").innerHTML = "Save";
+		document.getElementById("cleaningdaysavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear;");
 	}, 5000);
 }
 
-function calculateCleaningDay() {
-	const historyretain = getHistoryRetain(),
-		historyresetday = getHistoryResetDay(),
-		historyresetperiod = getHistoryResetPeriod(),
-		historyresetperiodunit = getHistoryResetPeriodUnit();
-	let cleaningday = moment();
+function saveBackupDay() {
+	maxValuesCustomTimeOption("autobackup", getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById("autobackupperiod"), document.getElementById("autobackupday"));
+	localStorage.setItem("autobackupdate", moment(getBackupDate(), "dddd, DD-MM-YYYY").format("DD-MM-YYYY"));
+	localStorage.setItem("autobackupday", getAutobackupDay());
+	localStorage.setItem("autobackupperiod", getAutobackupPeriod());
+	localStorage.setItem("autobackupperiodunit", getAutobackupPeriodUnit());
+	//localStorage.setItem("autobackupdate", moment(todayDate(), "dddd, DD-MM-YYYY").subtract(1, "days").format("DD-MM-YYYY"));
 
-	if (historyresetperiodunit == "days") {
-		cleaningday = cleaningday.add(historyresetperiod, 'days');
-	} else if (historyresetperiodunit == "weeks") {
-		cleaningday = cleaningday.add(historyresetperiod, 'weeks');
-		cleaningday = cleaningday.day(historyresetday);
-	} else if (historyresetperiodunit == "months") {
-		cleaningday = cleaningday.add(historyresetperiod, 'months');
-		cleaningday = cleaningday.date(historyresetday);
+	document.getElementById("autobackupsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: " + bs_green + ";");
+	document.getElementById("autobackupsavebutton").innerHTML = '<i class="fas fa-check"></i>';
+	setTimeout(function () {
+		document.getElementById("autobackupsavebutton").innerHTML = "Save";
+		document.getElementById("autobackupsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear;");
+	}, 5000);
+}
+
+function calculateExecutionDay(executionday, period, periodunit) {
+	let date = moment();
+
+	if (periodunit == "days") {
+		date = date.add(period, 'days');
+	} else if (periodunit == "weeks") {
+		date = date.add(period, 'weeks');
+		date = date.day(executionday);
+	} else if (periodunit == "months") {
+		date = date.add(period, 'months');
+		date = date.date(executionday);
 	}
-	localStorage.setItem("historyretain", historyretain);
-	localStorage.setItem("historyresetday", historyresetday);
-	localStorage.setItem("historyresetperiod", historyresetperiod);
-	localStorage.setItem("historyresetperiodunit", historyresetperiodunit);
 
-	return cleaningday;
+	return date;
 }
 
 function testDateFormat(date) {
@@ -616,13 +668,26 @@ function cleanLocalStorage() {
 			}
 		}
 	} else if (deleteoption == "period") {
-		let cleaningdaystored = localStorage.getItem("cleaningday"),
-			cleaningday = moment(new Date(cleaningdaystored)).format; //momentjs somehow can't parse dates from localstorage
+		const cleaningdaystored = localStorage.getItem("cleaningday"),
+			  cleaningday = moment(cleaningdaystored, "DD-MM-YYYY");
 
-		if (cleaningday <= today) {
+		if (cleaningday.isSameOrBefore(today)) {
 			deleteHistory();
-			localStorage.setItem("cleaningday", calculateCleaningDay());
+			localStorage.setItem("cleaningday", calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()).format("DD-MM-YYYY"));
 		}
+	}
+}
+
+function autoBackup() {
+	const today = moment(),
+		  backupsenabled = localStorage.getItem("autobackupoption"),
+		  autobackupdaystored = localStorage.getItem("autobackupdate"),
+		  autobackupday = moment(autobackupdaystored, "DD-MM-YYYY");
+
+	if (backupsenabled == "true" && autobackupday.isSameOrBefore(today)) {
+		alert("Performing autobackup");
+		exportHistory();
+		localStorage.setItem("autobackupdate", calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()).format("DD-MM-YYYY"));
 	}
 }
 
@@ -656,7 +721,7 @@ function exportHistory() {
 }
 
 const importHistory = document.getElementById('importHistory'),
-	importFile = document.getElementById('importFile');
+	  importFile = document.getElementById('importFile');
 importFile.addEventListener("change", importHistoryData, false);
 importHistory.onclick = function () { importFile.click(); };
 function importHistoryData(e) {
@@ -702,6 +767,7 @@ function reset() {
 	notificationClosed("onload");
 	setParameters();
 	cleanLocalStorage();
+	autoBackup();
 	if (localStorage.length < 10) {
 		startIntroduction();
 	}
@@ -723,6 +789,10 @@ function setParameters() {
 		historyresetday = localStorage.getItem("historyresetday"),
 		historyresetperiod = localStorage.getItem("historyresetperiod"),
 		historyresetperiodunit = localStorage.getItem("historyresetperiodunit"),
+		autobackupoption = localStorage.getItem("autobackupoption"),
+		autobackupday = localStorage.getItem("autobackupday"),
+		autobackupperiod = localStorage.getItem("autobackupperiod"),
+		autobackupperiodunit = localStorage.getItem("autobackupperiodunit"),
 		overtimeoption = localStorage.getItem("overtimeoption"),
 		totalhoursoption = localStorage.getItem("totalhoursoption"),
 		historyoption = localStorage.getItem("historyoption"),
@@ -744,17 +814,17 @@ function setParameters() {
 	} else {
 		document.getElementById("break_time_default").value = 0;
 	}
-	if (historydeleteoption == "days") {
-		document.getElementById("historydeleteoptiondays").click();
-	} else if (historydeleteoption == "period") {
-		document.getElementById("historydeleteoptionperiod").click();
-	}
 	populateWorkdayCountCountries(function () {
 		if (reporting_country) {
 			//$("#reporting_country").val(reporting_country);
 			document.getElementById("reporting_country").value = reporting_country;
 		}
 	});
+	if (historydeleteoption == "days") {
+		document.getElementById("historydeleteoptiondays").click();
+	} else if (historydeleteoption == "period") {
+		document.getElementById("historydeleteoptionperiod").click();
+	}
 	if (historyretain)
 		document.getElementById("historyretain").value = historyretain;
 	if (historyresetday)
@@ -763,6 +833,16 @@ function setParameters() {
 		document.getElementById("historyresetperiod").value = historyresetperiod;
 	if (historyresetperiodunit)
 		document.getElementById("historyresetperiodunit").value = historyresetperiodunit;
+	showHistorydeleteoptionContent();
+	if (autobackupoption == "true")
+		document.getElementById("autobackupoption").click();
+	if (autobackupday)
+		document.getElementById("autobackupday").value = autobackupday;
+	if (autobackupperiod)
+		document.getElementById("autobackupperiod").value = autobackupperiod;
+	if (autobackupperiodunit)
+		document.getElementById("autobackupperiodunit").value = autobackupperiodunit;
+	maxValuesCustomTimeOption("autobackup", getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById("autobackupperiod"), document.getElementById("autobackupday"));
 	// Set UI visibility options
 	if (overtimeoption == "true" && totalhoursoption == "true" && weeklyovertimeoption == "true" && totalovertimeoption == "true" && historyoption == "true" && parametersoption == "true") {
 		document.getElementById("alloption").click();
@@ -790,8 +870,6 @@ function setParameters() {
 		document.getElementById("breaktime_timeselection_option_timerange").click();
 		breaktimeTimeselection();
 	}
-
-	showHistorydeleteoptionContent();
 
 	// Check if custom time to subtract from start is stored and set value appropriatly
 	if (!startminsubtract_value) {
@@ -949,8 +1027,8 @@ function break_counter() {
 window.onbeforeunload = function (e) {
 	// Set 'dont save today' and 'automatically set end time' parameters in local storage
 	const nosave = document.getElementById("nosave"),
-		autoend = document.getElementById("autoend"),
-		autoend_today_disabled = document.getElementById("autoend_today_disabled");
+		  autoend = document.getElementById("autoend"),
+		  autoend_today_disabled = document.getElementById("autoend_today_disabled");
 	if (nosave.checked == false) {
 		if (autoend.checked == false) {
 			localStorage.setItem("autoend", "false");
@@ -991,9 +1069,6 @@ window.onbeforeunload = function (e) {
 	// Set 'history retain time' parameter in local storage
 	localStorage.setItem("historydeleteoption", getHistoryDeleteOption());
 	localStorage.setItem("historyretain", getHistoryRetain());
-	localStorage.setItem("historyresetday", getHistoryResetDay());
-	localStorage.setItem("historyresetperiod", getHistoryResetPeriod());
-	localStorage.setItem("historyresetperiodunit", getHistoryResetPeriodUnit());
 	// Set 'default break time' parameter in local storage
 	localStorage.setItem("country", getCountry());
 	// Set UI visibility options
@@ -1021,6 +1096,11 @@ window.onbeforeunload = function (e) {
 		localStorage.setItem("historyoption", "false");
 	} else {
 		localStorage.setItem("historyoption", "true");
+	}
+	if (document.getElementById("autobackupoption").checked == false) {
+		localStorage.setItem("autobackupoption", "false");
+	} else {
+		localStorage.setItem("autobackupoption", "true");
 	}
 	if (document.getElementById("parametersoption").checked == false) {
 		localStorage.setItem("parametersoption", "false");

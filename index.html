@@ -46,7 +46,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20220106.1</span> <br>
+					Version: <span id="currentappversion">20220307.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>
 			</div>
@@ -82,6 +82,8 @@
 						<div class="row">
 							<div class="col-sm-auto justify-content-center text-center">
 								<button class="btn btn-outline-secondary btn-sm" id="exportHistory" onclick="exportHistory()">Export History</button>
+								<a id="exportHistoryLink" class="d-none">Export</a>
+								<input type="file" id="importFile" accept=".json" class="d-none" />
 							</div>
 							<div class="col-sm justify-content-center text-center">
 								<button class="btn btn-outline-secondary btn-sm" id="importHistory">Import History</button>
@@ -95,9 +97,31 @@
 						</div>
 					</div>
 					<br>
+					<form class="mb-3">
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="autobackupoption" name="autobackupoption" data-bs-toggle="collapse" data-bs-target="#divautobackup">
+							<label class="form-check-label" for="autobackupoption">Enable semi-automatic backups.</label>
+						</div>
+						<div class="collapse" id="divautobackup">
+							<div class="input-group">
+								<label class="col-form-label" for="autobackupday">Backup on day </label>
+								<input type="number" name="autobackupday" id="autobackupday" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" max="31" onchange="maxValuesCustomTimeOption('autobackup', getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById('autobackupperiod'), document.getElementById('autobackupday'))">
+								<label class="col-form-label" for="autobackupperiod"> of every </label>
+								<input type="number" name="autobackupperiod" id="autobackupperiod" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" onchange="maxValuesCustomTimeOption('autobackup', getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById('autobackupperiod'), document.getElementById('autobackupday'))">
+								<select name="autobackupperiodunit" id="autobackupperiodunit" class="form-select flex-grow-0 w-f-100 col-sm-2 mx-1" onchange="maxValuesCustomTimeOption('autobackup', getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById('autobackupperiod'), document.getElementById('autobackupday'))">
+									<option value="days">days</option>
+									<option value="weeks">weeks</option>
+									<option value="months">months</option>
+								</select>
+								<button type="button" id="autobackupsavebutton" class="btn btn-outline-secondary" onclick="saveBackupDay()">Save</button>
+								<div class="input-group my-3">
+									<label class="col-form-label" for="autobackupdate" id="autobackupdatelabel">Backup date: </label>
+									<input type="text" name="autobackupdate" id="autobackupdate" class="form-control flex-grow-0 w-33 col-sm-5 mx-1" size="20" disabled>
+								</div>
+							</div>
+						</div>
+					</form>
 					You can download the example as a '.json' file and import it into the application.
-					<a id="exportHistoryLink" class="d-none">Export</a>
-					<input type="file" id="importFile" accept=".json" class="d-none" />
 				</p>
 				<p>
 					<h4>Parameters</h4>
@@ -220,16 +244,15 @@
 							<div class="mb-3">
 								<div class="input-group">
 									<label class="col-form-label" for="historyresetday">Reset on day </label>
-									<input type="number" name="historyresetday" id="historyresetday" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" max="31" onchange="maxValuesDeleteOption()">
+									<input type="number" name="historyresetday" id="historyresetday" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" max="31" onchange="maxValuesCustomTimeOption('cleaning', getHistoryResetPeriodUnit(), calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()), document.getElementById('historyresetperiod'), document.getElementById('historyresetday'))">
 									<label class="col-form-label" for="historyresetperiod"> of every </label>
-									<input type="number" name="historyresetperiod" id="historyresetperiod" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" onchange="maxValuesDeleteOption()">
-									<select name="historyresetperiodunit" id="historyresetperiodunit" class="form-select flex-grow-0 w-f-80 col-sm-2 mx-1" onchange="maxValuesDeleteOption()">
+									<input type="number" name="historyresetperiod" id="historyresetperiod" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" onchange="maxValuesCustomTimeOption('cleaning', getHistoryResetPeriodUnit(), calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()), document.getElementById('historyresetperiod'), document.getElementById('historyresetday'))">
+									<select name="historyresetperiodunit" id="historyresetperiodunit" class="form-select flex-grow-0 w-f-100 col-sm-2 mx-1" onchange="maxValuesCustomTimeOption('cleaning', getHistoryResetPeriodUnit(), calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()), document.getElementById('historyresetperiod'), document.getElementById('historyresetday'))">
 										<option value="days">days</option>
 										<option value="weeks">weeks</option>
 										<option value="months">months</option>
 									</select>
-									<button type="button" id="modalsavebutton" class="btn btn-outline-secondary" onclick="saveCleaningDay()">Save</button>
-
+									<button type="button" id="cleaningdaysavebutton" class="btn btn-outline-secondary" onclick="saveCleaningDay()">Save</button>
 									<div class="input-group my-3">
 										<label class="col-form-label" for="resetdate" id="resetdatelabel">Reset date: </label>
 										<input type="text" name="resetdate" id="resetdate" class="form-control flex-grow-0 w-33 col-sm-5 mx-1" size="20" disabled>
@@ -418,23 +441,22 @@
 				</div>
 				<div class="col-lg-8 py-1 px-4">
 					<p>
-						Added official support for data corrections in the history modal. You can add custom entries to the data to correct the total time.<br>
-						Edited error validation accordingly.
+						Improved memory management resulting in improved performance.
 					</p>
 					<p>
-						The provided sample data is now more up to date with the recent changes to the saved dataformat.
+						Added graph in the reporting section displaying the official workdays remaining.<br>
+						Also added a country selector in the settings to get the official holidays for your country to take into account during the calculation.
 					</p>
 					<p>
-						Added Cumulative overtime graph in reporting.
-					</p>
-					<p>
-						Brought colors in line by dynamically linking them to the theme colors.
+						Added semi-automatic backup functionality.<br>
+						You still have to approve the download of this data because it wouldn't be safe if every website could just download files to your computer ;)<br>
+						But in settings you can now configure a recurrent time-schedule to backup your data.
 					</p>
 					<p class="mb-0">
 						Bugfixes
 						<ul>
-							<li>Made background javascript more conventional using javascript linting.</li>
-							<li>Fixed stoptime graph not respecting the selected date boundries.</li>
+							<li>Cumulative reporting graph didn't respect the timerange that was selected.</li>
+							<li>Automatic scheduled cleanup not executing.</li>
 						</ul>
 					</p>
 				</div>
