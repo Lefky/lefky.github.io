@@ -5,7 +5,7 @@ function startIntroduction() {
 
 	createOverlay();
 
-	var introductioncontainer = document.createElement("div");
+	const introductioncontainer = document.createElement("div");
 	introductioncontainer.id = "introductioncontainer";
 	introductioncontainer.className = "row d-flex justify-content-center";
 	document.getElementById("alertcontainer").appendChild(introductioncontainer);
@@ -34,7 +34,7 @@ function startIntroduction() {
 }
 
 function createOverlay() {
-	var new_element = document.createElement("div");
+	const new_element = document.createElement("div");
 	new_element.id = "overlay";
 	new_element.style.cssText = "z-index: 1090; background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; min-height: 100%;";
 	document.body.appendChild(new_element);

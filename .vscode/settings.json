@@ -1,0 +1,7 @@
+{
+    "files.trimTrailingWhitespace": true,
+    "editor.formatOnSave": true,
+    "editor.showFoldingControls": "always",
+    "editor.folding": true,
+    "editor.foldingStrategy": "indentation"
+}
