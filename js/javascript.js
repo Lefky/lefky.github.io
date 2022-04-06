@@ -1,30 +1,33 @@
 console.log("loaded javascript.js");
 
 // Import Bootstrap colors
-var bs_blue = getComputedStyle(document.documentElement).getPropertyValue('--bs-blue'),
-	bs_indigo = getComputedStyle(document.documentElement).getPropertyValue('--bs-indigo'),
-	bs_purple = getComputedStyle(document.documentElement).getPropertyValue('--bs-purple'),
-	bs_pink = getComputedStyle(document.documentElement).getPropertyValue('--bs-pink'),
-	bs_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-red'),
-	bs_orange = getComputedStyle(document.documentElement).getPropertyValue('--bs-orange'),
-	bs_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-yellow'),
-	bs_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-green'),
-	bs_teal = getComputedStyle(document.documentElement).getPropertyValue('--bs-teal'),
-	bs_cyan = getComputedStyle(document.documentElement).getPropertyValue('--bs-cyan'),
-	bs_white = getComputedStyle(document.documentElement).getPropertyValue('--bs-white'),
-	bs_gray = getComputedStyle(document.documentElement).getPropertyValue('--bs-gray'),
-	bs_gray_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-gray-dark'),
-	bs_primary = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary'),
-	bs_secondary = getComputedStyle(document.documentElement).getPropertyValue('--bs-secondary'),
-	bs_success = getComputedStyle(document.documentElement).getPropertyValue('--bs-success'),
-	bs_info = getComputedStyle(document.documentElement).getPropertyValue('--bs-info'),
-	bs_warning = getComputedStyle(document.documentElement).getPropertyValue('--bs-warning'),
-	bs_danger = getComputedStyle(document.documentElement).getPropertyValue('--bs-danger'),
-	bs_light = getComputedStyle(document.documentElement).getPropertyValue('--bs-light'),
-	bs_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-dark'),
-	bs_washed_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-red').trim(),
-	bs_washed_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-yellow').trim(),
+var bs_blue, bs_indigo, bs_purple, bs_pink, bs_red, bs_orange, bs_yellow, bs_gray, bs_teal, bs_cyan, bs_white, bs_gray, bs_gray_dark, bs_primary, bs_secondary, bs_success, bs_info, bs_warning, bs_danger, bs_light, bs_dark, bs_washed_red, bs_washed_yellow, bs_washed_green;
+function importBootstrapColors(){
+	bs_blue = getComputedStyle(document.documentElement).getPropertyValue('--bs-blue');
+	bs_indigo = getComputedStyle(document.documentElement).getPropertyValue('--bs-indigo');
+	bs_purple = getComputedStyle(document.documentElement).getPropertyValue('--bs-purple');
+	bs_pink = getComputedStyle(document.documentElement).getPropertyValue('--bs-pink');
+	bs_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-red');
+	bs_orange = getComputedStyle(document.documentElement).getPropertyValue('--bs-orange');
+	bs_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-yellow');
+	bs_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-green');
+	bs_teal = getComputedStyle(document.documentElement).getPropertyValue('--bs-teal');
+	bs_cyan = getComputedStyle(document.documentElement).getPropertyValue('--bs-cyan');
+	bs_white = getComputedStyle(document.documentElement).getPropertyValue('--bs-white');
+	bs_gray = getComputedStyle(document.documentElement).getPropertyValue('--bs-gray');
+	bs_gray_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-gray-dark');
+	bs_primary = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary');
+	bs_secondary = getComputedStyle(document.documentElement).getPropertyValue('--bs-secondary');
+	bs_success = getComputedStyle(document.documentElement).getPropertyValue('--bs-success');
+	bs_info = getComputedStyle(document.documentElement).getPropertyValue('--bs-info');
+	bs_warning = getComputedStyle(document.documentElement).getPropertyValue('--bs-warning');
+	bs_danger = getComputedStyle(document.documentElement).getPropertyValue('--bs-danger');
+	bs_light = getComputedStyle(document.documentElement).getPropertyValue('--bs-light');
+	bs_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-dark');
+	bs_washed_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-red').trim();
+	bs_washed_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-yellow').trim();
 	bs_washed_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-green').trim();
+}
 
 // Conversion functions
 function floatToTimeString(timedec) {
@@ -378,9 +381,9 @@ function getBackupDate() {
 	return document.getElementById("autobackupdate").value;
 }
 
-function getCountry() {
+/*function getCountry() {
 	return document.getElementById("reporting_country").value;
-}
+}*/
 
 // UI
 function showHistorydeleteoptionContent() {
@@ -468,7 +471,7 @@ function testDateFormat(date) {
 }
 
 function setHistory(refresh_edit_table) {
-	let entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid black;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
+	let entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid var(--bs-secondary);'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
 		entry_edit_history = "",
 		revkeys = getHistory().reverse(),
 		overtimetotal = 0,
@@ -482,11 +485,11 @@ function setHistory(refresh_edit_table) {
 		timeinfo = JSON.parse(localStorage.getItem(key));
 		if (timeinfo.hasOwnProperty('OvertimeDec')) {
 			if (timeinfo.OvertimeDec.startsWith("-")) {
-				entry_history = entry_history + "<tr style='color: " + bs_red + ";'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
-				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='pt-3-half' contenteditable='false' style='color: " + bs_red + ";'>" + key + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + timeinfo.TotalNoBreakDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + timeinfo.OvertimeDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + timeinfo.TotalDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + timeinfo.HourSchedule + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td></tr>";
+				entry_history = entry_history + "<tr class='text-danger'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
+				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-danger pt-3-half' contenteditable='false'>" + key + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
 			} else {
-				entry_history = entry_history + "<tr style='color: " + bs_green + ";'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
-				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='pt-3-half' contenteditable='false' style='color: " + bs_green + ";'>" + key + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + timeinfo.TotalNoBreakDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + timeinfo.OvertimeDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + timeinfo.TotalDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + timeinfo.HourSchedule + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td>";
+				entry_history = entry_history + "<tr class='text-success'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
+				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-success pt-3-half' contenteditable='false'>" + key + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
 			}
 			overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo.OvertimeDec);
 
@@ -640,7 +643,7 @@ function allCheckBox(allCheckboxInput, elementId) {
 	}
 }
 
-function populateWorkdayCountCountries(callback) {
+/*function populateWorkdayCountCountries(callback) {
 	$.getJSON('https://date.nager.at/api/v3/AvailableCountries', function (response) {
 		// JSON result in `response` variable
 		let listitems = '<option value=none>None</option>';
@@ -650,7 +653,7 @@ function populateWorkdayCountCountries(callback) {
 		$('#reporting_country').empty().append(listitems);
 		callback();
 	});
-}
+}*/
 
 // Storage functions
 function cleanLocalStorage() {
@@ -783,7 +786,7 @@ function setParameters() {
 		break_time_default = localStorage.getItem("break_time_default"),
 		startminsubtract = localStorage.getItem("startminsubtract"),
 		startminsubtract_value = localStorage.getItem("startminsubtract_value"),
-		reporting_country = localStorage.getItem("country"),
+		/*reporting_country = localStorage.getItem("country"),*/
 		historydeleteoption = localStorage.getItem("historydeleteoption"),
 		historyretain = localStorage.getItem("historyretain"),
 		historyresetday = localStorage.getItem("historyresetday"),
@@ -814,12 +817,12 @@ function setParameters() {
 	} else {
 		document.getElementById("break_time_default").value = 0;
 	}
-	populateWorkdayCountCountries(function () {
+	/*populateWorkdayCountCountries(function () {
 		if (reporting_country) {
 			//$("#reporting_country").val(reporting_country);
 			document.getElementById("reporting_country").value = reporting_country;
 		}
-	});
+	});*/
 	if (historydeleteoption == "days") {
 		document.getElementById("historydeleteoptiondays").click();
 	} else if (historydeleteoption == "period") {
@@ -950,14 +953,14 @@ class Timer {
 	}
 	start() {
 		if (this.isRunning) {
-			return console.error('Timer is already running');
+			return console.warn('Timer is already running');
 		}
 		this.isRunning = true;
 		this.startTime = Date.now();
 	}
 	stop() {
 		if (!this.isRunning) {
-			return console.error('Timer is already stopped');
+			return console.warn('Timer is already stopped');
 		}
 		this.isRunning = false;
 		this.overallTime = this.overallTime + this._getTimeElapsedSinceLastStart();
@@ -1116,6 +1119,7 @@ window.onbeforeunload = function (e) {
 
 // Listeners and initializers
 $(document).ready(function () {
+	importBootstrapColors();
 	reset();
 
 	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -1156,7 +1160,6 @@ $(document).ready(function () {
 	} else {
 		localStorage.setItem("startminsubtract", "true");
 	}
-
 });
 
 $(window).on("load", function () {

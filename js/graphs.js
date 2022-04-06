@@ -67,7 +67,7 @@ function initGraphs() {
 }
 
 function drawGraphs() {
-	drawTimelinegraph("Workdays");
+	//drawTimelinegraph("Workdays");
 	drawGaugegraph("DaysRegisteredGauge");
 	drawGaugegraph("AvgStarttimeGauge");
 	drawGaugegraph("AvgStoptimeGauge");
@@ -139,7 +139,7 @@ function drawAreagraph(graphtype) {
 			data.addColumn('number', 'Overtime');
 			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetOvertimeDec);
-			linecolor = [bs_blue];
+			linecolor = [bs_teal];
 			break;
 		case "OvertimeCumulative":
 			data.addColumn('number', 'Cumulative Overtime');
@@ -165,7 +165,7 @@ function drawAreagraph(graphtype) {
 			data.addColumn('number', 'Hour schedule');
 			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetBreakDec);
-			linecolor = [bs_gray_dark, 'black'];
+			linecolor = colorScheme == "light" ? [bs_gray, bs_gray_dark] : [bs_light, bs_pink];
 			break;
 		default:
 			// code block
@@ -182,11 +182,20 @@ function drawAreagraph(graphtype) {
 		hAxis: {
 			//title: 'Date',
 			format: 'dd-MM-YYYY',
-			slantedText: true
+			slantedText: true,
+			textStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			}
 			//slantedTextAngle: 60
 		},
 		vAxis: {
-			title: 'Time (decimal hours)'
+			title: 'Time (decimal hours)',
+			titleTextStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			},
+			textStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			}
 		},
 		chartArea: {
 			// leave room for y-axis labels
@@ -195,13 +204,16 @@ function drawAreagraph(graphtype) {
 		},
 		legend: {
 			position: 'top',
-			alignment: 'center'
+			alignment: 'center',
+			textStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			}
 		},
 		series: {
 			0: {},
 			1: {
 				lineWidth: 1,
-				lineDashStyle: [1, 1],
+				lineDashStyle: [5, 1],
 				areaOpacity: 0
 			}
 		},
@@ -209,15 +221,16 @@ function drawAreagraph(graphtype) {
 			0: {
 				labelInLegend: 'Trend',
 				visibleInLegend: true,
-				color: 'purple',
+				color: bs_indigo,
 				lineWidth: 3,
-				opacity: 0.2,
+				opacity: colorScheme == "light" ? 0.2 : 1,
 				type: 'linear'
 			}
 		},
 		colors: linecolor,
 		width: '100%',
-		height: 500
+		height: 500,
+		backgroundColor: colorScheme == "light" ? bs_white : '#2f2f2f'
 	};
 
 	const chart = new google.visualization.AreaChart(document.getElementById(graphtype + '_div'));
@@ -236,7 +249,7 @@ function drawBargraph(graphtype) {
 			data.addColumn('number', 'Hour schedule');
 			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetTotalDec);
-			linecolor = [bs_yellow, 'black'];
+			linecolor = colorScheme == "light" ? [bs_yellow, bs_gray_dark] : [bs_yellow, bs_pink];
 			break;
 		case "TotalNoBreakDec":
 			data.addColumn('number', 'Total no break');
@@ -244,7 +257,7 @@ function drawBargraph(graphtype) {
 			data.addColumn('number', 'Hour schedule');
 			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetTotalNoBreakDec);
-			linecolor = [bs_orange, 'black'];
+			linecolor = colorScheme == "light" ? [bs_orange, bs_gray_dark] : [bs_orange, bs_pink];
 			break;
 		default:
 			// code block
@@ -261,11 +274,20 @@ function drawBargraph(graphtype) {
 		hAxis: {
 			//title: 'Date',
 			format: 'dd-MM-YYYY',
-			slantedText: true
+			slantedText: true,
+			textStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			}
 			//slantedTextAngle: 60
 		},
 		vAxis: {
-			title: 'Time (decimal hours)'
+			title: 'Time (decimal hours)',
+			titleTextStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			},
+			textStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			}
 		},
 		chartArea: {
 			// leave room for y-axis labels
@@ -274,29 +296,33 @@ function drawBargraph(graphtype) {
 		},
 		legend: {
 			position: 'top',
-			alignment: 'center'
+			alignment: 'center',
+			textStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			}
 		},
 		seriesType: 'bars',
 		series: {
 			1: {
 				type: 'line',
 				lineWidth: 1,
-				lineDashStyle: [1, 1]
+				lineDashStyle: [5, 1]
 			}
 		},
 		trendlines: {
 			0: {
 				labelInLegend: 'Trend',
 				visibleInLegend: true,
-				color: 'purple',
+				color: bs_indigo,
 				lineWidth: 3,
-				opacity: 0.2,
+				opacity: colorScheme == "light" ? 0.2 : 1,
 				type: 'linear'
 			}
 		},
 		colors: linecolor,
 		width: '100%',
-		height: 500
+		height: 500,
+		backgroundColor: colorScheme == "light" ? bs_white : '#2f2f2f'
 	};
 
 	const chart = new google.visualization.ComboChart(document.getElementById(graphtype + '_div'));
@@ -333,10 +359,19 @@ function drawPiegraph(graphtype) {
 
 	const options = {
 		//pieStartAngle: 270,
+		legend: {
+			textStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			}
+		},
+		titleTextStyle: {
+			color: colorScheme == "light" ? bs_gray_dark : bs_white
+		},
 		title: title,
 		colors: slicecolor,
 		width: '100%',
-		height: 300
+		height: 300,
+		backgroundColor: colorScheme == "light" ? bs_white : '#2f2f2f'
 	};
 
 	const chart = new google.visualization.PieChart(document.getElementById(graphtype + '_div'));
@@ -470,7 +505,7 @@ function drawGaugegraph(graphtype) {
 	}
 }
 
-async function drawTimelinegraph(graphtype) {
+/*async function drawTimelinegraph(graphtype) {
 	const data = new google.visualization.DataTable();
 	let title = "";
 
@@ -515,7 +550,7 @@ async function drawTimelinegraph(graphtype) {
 
 	const chart = new google.visualization.Timeline(document.getElementById(graphtype + '_div'));
 	chart.draw(data, options);
-}
+}*/
 
 function getReportingStartDate() {
 	return moment(document.getElementById('start_reporting_selection').value, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD');
