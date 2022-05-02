@@ -142,13 +142,13 @@ $($tableID).on('click', '.record-save', function () {
 
 	returncode = save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule);
 
-	const btn = $(this).find("a:eq(0)");
+	const btn = $(this).find("button:eq(0)");
 	const iconToggle = () => {
 		const isCheckIcon = btn.find('.fa-check').length > 0;
 		if (isCheckIcon) {
-			btn.html('<i class="fa fa-save fontsize150"></i>');
+			btn.html('<i class="fa fa-save"></i>');
 		} else {
-			btn.html('<i class="fa fa-check fontsize150"></i>');
+			btn.html('<i class="fa fa-check"></i>');
 		}
 	};
 	if (!returncode) {
