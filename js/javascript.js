@@ -1191,12 +1191,3 @@ $(".btn").mouseup(function () {
 	// Fix buttons keeping focus after being clicked
 	this.blur();
 });
-
-function intervalListener() {
-	if (getEnd() <= now() && !startedLeaves) {
-		startLeaves();
-	} else if (getEnd() > now() && startedLeaves) {
-		stopLeaves();
-	}
-}
-setInterval(intervalListener, 5 * 60000); // (Every 5) * (60 * 1000 milliseconds = 60 seconds = 1 minute)

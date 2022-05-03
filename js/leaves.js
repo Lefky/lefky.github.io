@@ -2,8 +2,18 @@ console.log("loaded leaves.js");
 
 // source: https://codepen.io/uurrnn/pen/Kuylr?editors=1100
 
-let startedLeaves = false;
-let interval = "";
+let startedLeaves = false,
+	interval = "",
+	manualStoppedLeaves = false;
+
+function intervalListener() {
+	if (getEnd() <= now() && !startedLeaves && !manualStoppedLeaves) {
+		startLeaves();
+	} else if (getEnd() > now() && startedLeaves) {
+		stopLeaves();
+	}
+}
+setInterval(intervalListener, 1 * 60000); // (Every 5) * (60 * 1000 milliseconds = 60 seconds = 1 minute)
 
 function startLeaves() {
 	loadLeavesCSS();
@@ -22,8 +32,9 @@ function startLeaves() {
 	document.getElementsByTagName("body")[0].appendChild(leaves_div);
 
 	showLeafMessage();
-
+	createNotification("Done for the day!", "You did your time. Time to drink!");
 	playNotificationSound();
+
 	document.title = "Done for the day!";
 
 	interval = setInterval(function () {
@@ -65,7 +76,7 @@ function showLeafMessage() {
 	alertMessage.setAttribute("role", "alert");
 	alertMessage.setAttribute("style", "position: absolute; top: 4rem; right: 4rem; z-index: 2; font-size: 2rem;");
 
-	alertMessage.innerHTML = "<audio id='audioNotification' src='sounds/pristine-609.mp3' muted></audio><span><i class='fas fa-glass-cheers faa-shake animated'></i> Time to 'LEAF' work <i class='far fa-smile-wink'></i></span>" + "<button type='button' class='btn-close' style='font-size: 13px' data-bs-dismiss='alert' aria-label='Close'></button>";
+	alertMessage.innerHTML = "<audio id='audioNotification' src='sounds/pristine-609.mp3' muted></audio><span><i class='fas fa-glass-cheers faa-shake animated'></i> Time to 'LEAF' work <i class='far fa-smile-wink'></i></span>" + "<button type='button' class='btn-close' style='font-size: 13px' onclick='stopLeaves(); manualStoppedLeaves = true;' data-bs-dismiss='alert' aria-label='Close'></button>";
 
 	document.getElementsByTagName("body")[0].appendChild(alertMessage);
 }

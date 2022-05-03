@@ -36,6 +36,7 @@
 	<script type="text/javascript" src="js/introduction.js" defer></script>
 	<script type="text/javascript" src="js/leaves.js" async></script>
 	<script type="text/javascript" src="js/dark_mode.js" defer></script><!-- Dark mode JS -->
+	<script type="text/javascript" src="js/notifications.js" async></script>
 </head>
 <body>
 <!-- Modal HTML -->
@@ -49,7 +50,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20220502.1</span> <br>
+					Version: <span id="currentappversion">20220503.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>
 			</div>
@@ -147,6 +148,14 @@
 							<input type="number" name="startminsubtract_value" id="startminsubtract_value" class="form-control flex-grow-0 w-f-80 col-2 mx-1" placeholder="5" min="0" max="60" onchange="set_startminsubtract(this.value)">
 						</div>
 					</div>
+				</p>
+				<p>
+					<form class="mb-3">
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="notificationsoption" name="notificationsoption">
+							<label class="form-check-label" for="notificationsoption">Enable notifications</label>
+						</div>
+					</form>
 				</p>
 				<!--<p>
 					<h4>Reporting settings</h4>
@@ -474,12 +483,16 @@
 							<li>
 								Changed coloring to be more consistent. Only 1 definition of green, red, blue, ... exists now resulting in the same colors being used everywhere even after modifications.
 							</li>
+							<li>
+								Added a desktop notification when the current time matches / exceeds the 'time to go home'.
+							</li>
 						</ul>
 					</p>
 					<p class="mb-0">
 						Bugfixes
 						<ul>
 							<li>Remove partly implemented features from being accessible. It remains to be seen if these will be added later or not.</li>
+							<li>Dismissing the leaves notification now also stops the effect from happening.</li>
 						</ul>
 					</p>
 				</div>
