@@ -10,24 +10,24 @@ const $tableID = '#edit_history_table';
 
 const newTr = `
 <tr class="hide">
-  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>01-01-1900</td>
-  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Total Time No Break</td>
-  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Overtime</td>
-  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Total Work Time</td>
-  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Start Time</td>
-  <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Hour Schedule</td>
-  <td>
-	<span class="record-save">
-		<a href="#" class="text-success fontsize150 my-0 mx-2 waves-effect waves-light">
-			<i class="fa fa-save"></i>
-		</a>
-	</span>
-	<span class="record-delete">
-		<a href="#" class="text-danger fontsize150 my-0 mx-2 waves-effect waves-light">
-			<i class="fa fa-trash"></i>
-		</a>
-	</span>
-  </td>
+    <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>01-01-1900</td>
+    <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Total Time No Break</td>
+    <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Overtime</td>
+    <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Total Work Time</td>
+    <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Start Time</td>
+    <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Hour Schedule</td>
+    <td>
+        <span class="record-save">
+            <button type="button" class="btn btn-outline-success">
+                <i class="fa fa-save"></i>
+            </button>
+        </span>
+        <span class="record-delete">
+            <button type="button" class="btn btn-outline-danger">
+                <i class="fa fa-trash"></i>
+            </button>
+        </span>
+    </td>
 </tr>`;
 
 $('.table-add').on('click', 'button', function () {
@@ -98,7 +98,7 @@ function clearPlaceholder(cell) {
 }
 
 function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule) {
-	const isnumber = /^(?<=^| )(-?)\d+(\.\d+)?(?=$| )$/;
+	const isnumber = /^(-?)\d+(\.\d+)?$/;
 	let error_message = "";
 
 	if (!testDateFormat(key)) {
