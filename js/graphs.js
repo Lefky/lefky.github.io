@@ -41,8 +41,6 @@ function initGoogleLibraries(googleLib) {
 	});
 }
 
-document.getElementById("start_reporting_selection").addEventListener("load", initDateSelector());
-
 // In comment to not load on page load, only when modal is opened
 //google.charts.setOnLoadCallback(drawAreagraph);
 
@@ -84,30 +82,16 @@ function drawGraphs() {
 }
 
 function initDateSelector() {
-	//document.getElementById('start_reporting_selection').value = moment().startOf('year').subtract(1, 'year').format('YYYY-MM-DD');
 	document.getElementById('start_reporting_selection').value = moment(sortedkeys[0], 'DD-MM-YYYY').format('YYYY-MM-DD');
-
 	document.getElementById('end_reporting_selection').value = moment().format('YYYY-MM-DD');
 }
 
-$('#modalreporting').on('shown.bs.modal', function () {
-	// Redraw charts on opening modal
+function setDateSelector(start, end) {
+	document.getElementById('start_reporting_selection').value = moment(start).format('YYYY-MM-DD');
+	document.getElementById('end_reporting_selection').value = moment(end).format('YYYY-MM-DD');
 	initGraphs();
 	drawGraphs();
-
-	// Rotate screen for mobile users so it displays the entire width
-	// https://usefulangle.com/post/105/javascript-change-screen-orientation
-	mobileRotateScreen(true);
-});
-
-$('#modalreporting').on('hidden.bs.modal', function () {
-	// Rotate screen for mobile users so it displays normal again
-	mobileRotateScreen(false);
-});
-
-$(window).resize(function () {
-	drawGraphs();
-});
+}
 
 function mobileRotateScreen(rotate) {
 	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -557,7 +541,7 @@ function getReportingStartDate() {
 }
 
 function getReportingEndDate() {
-	return document.getElementById('end_reporting_selection').value;;
+	return document.getElementById('end_reporting_selection').value;
 }
 
 function formatJSONdata() {
@@ -732,6 +716,53 @@ async function businessDays(country, start, end){
 	}));
 }
 
+// Listeners
+document.getElementById("start_reporting_selection").addEventListener("load", initDateSelector());
+
+$('#modalreporting').on('shown.bs.modal', function () {
+	// Redraw charts on opening modal
+	initGraphs();
+	drawGraphs();
+
+	// Rotate screen for mobile users so it displays the entire width
+	// https://usefulangle.com/post/105/javascript-change-screen-orientation
+	mobileRotateScreen(true);
+});
+
+$('#modalreporting').on('hidden.bs.modal', function () {
+	// Rotate screen for mobile users so it displays normal again
+	mobileRotateScreen(false);
+});
+
+$(window).resize(function () {
+	drawGraphs();
+});
+
+$('#reporting_weektodate').on('click', function () {
+	setDateSelector(moment().startOf('week').add(1, 'day'), moment());
+});
+
+$('#reporting_previousweek').on('click', function () {
+	setDateSelector(moment().subtract(1, 'week').startOf('week').add(1, 'day'), moment().subtract(1, 'week').endOf('week').add(1, 'day'));
+});
+
+$('#reporting_monthtodate').on('click', function () {
+	setDateSelector(moment().startOf('month'), moment());
+});
+
+$('#reporting_previousmonth').on('click', function () {
+	setDateSelector(moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month'));
+});
+
+$('#reporting_yeartodate').on('click', function () {
+	setDateSelector(moment().startOf('year'), moment());
+});
+
+$('#reporting_alltime').on('click', function () {
+	setDateSelector(moment(sortedkeys[0], 'DD-MM-YYYY'), moment());
+});
+
+/*
 // testing
 setTimeout(async function () {
 	var f = 'DD-MM-YYYY',
@@ -745,3 +776,4 @@ setTimeout(async function () {
 
 	//console.log(await businessDays(country, start, end));
 }, 600);
+*/

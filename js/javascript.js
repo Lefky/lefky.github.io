@@ -1049,20 +1049,11 @@ window.onbeforeunload = function (e) {
 		localStorage.setItem(todayDate(), timeinfo);
 		localStorage.setItem("nosave", "false");
 	} else {
-		if (autoend.checked == false) {
-			localStorage.setItem("autoend", "false");
-		} else {
-			localStorage.setItem("autoend", "true");
-		}
+		localStorage.setItem("autoend", autoend.checked.toString());
 		localStorage.setItem("nosave", todayDate());
 	}
 	// Set 'subtract 5 min from start time' parameter in local storage
-	const startminsubtract = document.getElementById("startminsubtract");
-	if (startminsubtract.checked == false) {
-		localStorage.setItem("startminsubtract", "false");
-	} else {
-		localStorage.setItem("startminsubtract", "true");
-	}
+	localStorage.setItem("startminsubtract", document.getElementById("startminsubtract").checked.toString());
 	// Set 'hour schedule' parameter in local storage
 	localStorage.setItem("hourschedule", getHourSchedule());
 	// Set 'default break time' parameter in local storage
@@ -1073,48 +1064,16 @@ window.onbeforeunload = function (e) {
 	localStorage.setItem("historydeleteoption", getHistoryDeleteOption());
 	localStorage.setItem("historyretain", getHistoryRetain());
 	// Set 'default break time' parameter in local storage
-	localStorage.setItem("country", getCountry());
+	//localStorage.setItem("country", getCountry());
 	// Set UI visibility options
-	if (document.getElementById("overtimeoption").checked == false) {
-		localStorage.setItem("overtimeoption", "false");
-	} else {
-		localStorage.setItem("overtimeoption", "true");
-	}
-	if (document.getElementById("totalhoursoption").checked == false) {
-		localStorage.setItem("totalhoursoption", "false");
-	} else {
-		localStorage.setItem("totalhoursoption", "true");
-	}
-	if (document.getElementById("weeklyovertimeoption").checked == false) {
-		localStorage.setItem("weeklyovertimeoption", "false");
-	} else {
-		localStorage.setItem("weeklyovertimeoption", "true");
-	}
-	if (document.getElementById("totalovertimeoption").checked == false) {
-		localStorage.setItem("totalovertimeoption", "false");
-	} else {
-		localStorage.setItem("totalovertimeoption", "true");
-	}
-	if (document.getElementById("historyoption").checked == false) {
-		localStorage.setItem("historyoption", "false");
-	} else {
-		localStorage.setItem("historyoption", "true");
-	}
-	if (document.getElementById("autobackupoption").checked == false) {
-		localStorage.setItem("autobackupoption", "false");
-	} else {
-		localStorage.setItem("autobackupoption", "true");
-	}
-	if (document.getElementById("parametersoption").checked == false) {
-		localStorage.setItem("parametersoption", "false");
-	} else {
-		localStorage.setItem("parametersoption", "true");
-	}
-	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
-		localStorage.setItem("breaktime_timeselection_option_timerange", "false");
-	} else {
-		localStorage.setItem("breaktime_timeselection_option_timerange", "true");
-	}
+	localStorage.setItem("overtimeoption", document.getElementById("overtimeoption").checked.toString());
+	localStorage.setItem("totalhoursoption", document.getElementById("totalhoursoption").checked.toString());
+	localStorage.setItem("weeklyovertimeoption", document.getElementById("weeklyovertimeoption").checked.toString());
+	localStorage.setItem("totalovertimeoption", document.getElementById("totalovertimeoption").checked.toString());
+	localStorage.setItem("historyoption", document.getElementById("historyoption").checked.toString());
+	localStorage.setItem("autobackupoption", document.getElementById("autobackupoption").checked.toString());
+	localStorage.setItem("parametersoption", document.getElementById("parametersoption").checked.toString());
+	localStorage.setItem("breaktime_timeselection_option_timerange", document.getElementById("breaktime_timeselection_option_timerange").checked.toString());
 };
 
 // Listeners and initializers
@@ -1153,13 +1112,6 @@ $(document).ready(function () {
 		myModal = new bootstrap.Modal(document.getElementById('modalreporting'));
 		myModal.show();
 	}
-
-	const startminsubtract = document.getElementById("startminsubtract");
-	if (startminsubtract.checked == false) {
-		localStorage.setItem("startminsubtract", "false");
-	} else {
-		localStorage.setItem("startminsubtract", "true");
-	}
 });
 
 $(window).on("load", function () {
@@ -1179,10 +1131,6 @@ $(document).on('keydown', function (e) {
 	}
 });
 
-$('#app_alert .close').click(function () {
-	$(this).parent().fadeOut();
-});
-
 $("input").focusout(function () {
 	checkInputValues();
 });
@@ -1190,4 +1138,9 @@ $("input").focusout(function () {
 $(".btn").mouseup(function () {
 	// Fix buttons keeping focus after being clicked
 	this.blur();
+});
+
+$("#app_alert").on("close.bs.alert", function () {
+	$(this).hide();
+	return false;
 });

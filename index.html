@@ -50,7 +50,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20220503.1</span> <br>
+					Version: <span id="currentappversion">20220510.2</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>
 			</div>
@@ -430,6 +430,14 @@
 						<input id="end_reporting_selection" class="form-control mx-2 input-fixedwidth165" type="date" value="" onchange="initGraphs(); drawGraphs();">
 					</div>
 				</div>
+				<div class="mb-3">
+					<button type="button" class="btn btn-primary my-1" id="reporting_weektodate">Week to date</button>
+					<button type="button" class="btn btn-primary my-1" id="reporting_previousweek">Previous week</button>
+					<button type="button" class="btn btn-primary my-1" id="reporting_monthtodate">Month to date</button>
+					<button type="button" class="btn btn-primary my-1" id="reporting_previousmonth">Previous month</button>
+					<button type="button" class="btn btn-primary my-1" id="reporting_yeartodate">Year to date</button>
+					<button type="button" class="btn btn-primary my-1" id="reporting_alltime">All time</button>
+				</div>
 				<p>
 					You can zoom in to certain graphs by dragging the area you want to zoom in on.<br>
 					Click right to reset the zoom level.
@@ -486,6 +494,9 @@
 							<li>
 								Added a desktop notification when the current time matches / exceeds the 'time to go home'.
 							</li>
+							<li>
+								Added reporting quick selection buttons for frequent timeframe selections.
+							</li>
 						</ul>
 					</p>
 					<p class="mb-0">
@@ -493,6 +504,9 @@
 						<ul>
 							<li>Remove partly implemented features from being accessible. It remains to be seen if these will be added later or not.</li>
 							<li>Dismissing the leaves notification now also stops the effect from happening.</li>
+							<li>Safari bugfix for the history view. (Safari doesn't support a certain regex ATM resulting in the history buttons doing nothing)</li>
+							<li>Fixed the alerting message box (when you do something wrong) being removed instead of hidden. This resulted in new alerts not being able to display.</li>
+							<li>Fixed new history entry not being in line with recent UI changes.</li>
 						</ul>
 					</p>
 				</div>
