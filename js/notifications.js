@@ -8,35 +8,32 @@ notificationBtn.addEventListener('change', function () {
         askNotificationPermission();
 });
 
-if (Notification.permission === 'denied' || Notification.permission === 'default') {
+if (Notification.permission === 'denied' || Notification.permission === 'default')
     notificationBtn.style.disabled = false;
-} else {
+else
     notificationBtn.style.disabled = true;
-}
-if (Notification.permission === 'granted') {
+
+if (Notification.permission === 'granted')
     notificationBtn.checked = true;
-}
 
 // askNotificationPermission function to ask for permission when the "Enable notifications" button is clicked
 function askNotificationPermission() {
     // function to actually ask the permissions
     function handlePermission(permission) {
         // Whatever the user answers, we make sure Chrome stores the information
-        if (!('permission' in Notification)) {
+        if (!('permission' in Notification))
             Notification.permission = permission;
-        }
 
         // set the button to shown or hidden, depending on what the user answers
-        if (Notification.permission === 'denied' || Notification.permission === 'default') {
+        if (Notification.permission === 'denied' || Notification.permission === 'default')
             notificationBtn.style.disabled = false;
-        } else {
+        else
             notificationBtn.style.disabled = true;
-        }
     }
 
     // Let's check if the browser supports notifications
     /* jshint -W018 */
-    if (!"Notification" in window) {
+    if ("Notification" in window === false) {
         console.warn("This browser does not support notifications.");
     } else {
         if (checkNotificationPromise()) {
@@ -69,7 +66,7 @@ function createNotification(title, text) {
     if (Notification.permission === 'granted') {
         // Create and show the notification
         const img = '/images/clock128.png',
-                notification = new Notification(title, { body: text, icon: img, silent: false });
+            notification = new Notification(title, { body: text, icon: img, silent: false });
         // https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API
     }
 }

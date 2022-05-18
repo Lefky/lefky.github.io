@@ -39,14 +39,12 @@ $('.table-save-all').on('click', 'button', function () {
 
 	const iconToggle = (abtn, state) => {
 		if (state == "save") {
-			if (abtn.tagName == "BUTTON") {
+			if (abtn.tagName == "BUTTON")
 				abtn.innerHTML = '<i class="fa fa-save"></i> Save all';
-			} else {
+			else
 				abtn.innerHTML = '<i class="fa fa-save"></i>';
-			}
-		} else if (state == "check") {
+		} else if (state == "check")
 			abtn.innerHTML = '<i class="fa fa-check"></i>';
-		}
 	};
 
 	// loop through each row of the table.
@@ -55,11 +53,11 @@ $('.table-save-all').on('click', 'button', function () {
 		const currentRow = table.rows.item(row);
 
 		const key = currentRow.cells.item(0).innerHTML,
-				TotalNoBreakDec = currentRow.cells.item(1).innerHTML,
-				OvertimeDec = currentRow.cells.item(2).innerHTML,
-				TotalDec = currentRow.cells.item(3).innerHTML,
-				StartDec = currentRow.cells.item(4).innerHTML,
-				HourSchedule = currentRow.cells.item(5).innerHTML;
+			TotalNoBreakDec = currentRow.cells.item(1).innerHTML,
+			OvertimeDec = currentRow.cells.item(2).innerHTML,
+			TotalDec = currentRow.cells.item(3).innerHTML,
+			StartDec = currentRow.cells.item(4).innerHTML,
+			HourSchedule = currentRow.cells.item(5).innerHTML;
 
 		const returncode = save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule);
 
@@ -101,24 +99,24 @@ function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSch
 	const isnumber = /^(-?)\d+(\.\d+)?$/;
 	let error_message = "";
 
-	if (!testDateFormat(key)) {
+	if (!testDateFormat(key))
 		error_message = error_message + "<br><br>Date for date \"" + key + "\" is not in the DD-MM-YYYY format.";
-	}
-	if (!isnumber.test(TotalNoBreakDec) && TotalNoBreakDec.toLowerCase() != "correction") {
+
+	if (!isnumber.test(TotalNoBreakDec) && TotalNoBreakDec.toLowerCase() != "correction")
 		error_message = error_message + "<br><br>Total Time No Break for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
-	}
-	if (!isnumber.test(OvertimeDec)) {
+
+	if (!isnumber.test(OvertimeDec))
 		error_message = error_message + "<br><br>Overtime for date \"" + key + "\" is not a (decimal) number.";
-	}
-	if (!isnumber.test(TotalDec) && TotalDec.toLowerCase() != "correction") {
+
+	if (!isnumber.test(TotalDec) && TotalDec.toLowerCase() != "correction")
 		error_message = error_message + "<br><br>Total Work Time for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
-	}
-	if (!isnumber.test(StartDec) && StartDec.toLowerCase() != "correction") {
+
+	if (!isnumber.test(StartDec) && StartDec.toLowerCase() != "correction")
 		error_message = error_message + "<br><br>Start Time for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
-	}
-	if (!isnumber.test(HourSchedule) && HourSchedule.toLowerCase() != "correction") {
+
+	if (!isnumber.test(HourSchedule) && HourSchedule.toLowerCase() != "correction")
 		error_message = error_message + "<br><br>Hour Schedule for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
-	}
+
 
 	if (error_message == "") {
 		const timeinfo = '{"TotalNoBreakDec": "' + (TotalNoBreakDec.toLowerCase() != "correction" ? parseFloat(TotalNoBreakDec).toFixed(2) : "correction") + '", "OvertimeDec": "' + parseFloat(OvertimeDec).toFixed(2) + '", "TotalDec": "' + (TotalDec.toLowerCase() != "correction" ? parseFloat(TotalDec).toFixed(2) : "correction") + '", "StartDec": "' + (StartDec.toLowerCase() != "correction" ? parseFloat(StartDec).toFixed(2) : "correction") + '", "HourSchedule": "' + (HourSchedule.toLowerCase() != "correction" ? parseFloat(HourSchedule).toFixed(2) : "correction") + '"}';
@@ -134,22 +132,21 @@ $($tableID).on('click', '.record-save', function () {
 	const currentRow = $(this).closest("tr");
 
 	const key = currentRow.find("td:eq(0)").text(), // get current row 1st TD value
-			TotalNoBreakDec = currentRow.find("td:eq(1)").text(), // get current row 2nd TD
-			OvertimeDec = currentRow.find("td:eq(2)").text(), // get current row 3rd TD
-			TotalDec = currentRow.find("td:eq(3)").text(), // get current row 4th TD
-			StartDec = currentRow.find("td:eq(4)").text(), // get current row 5th TD
-			HourSchedule = currentRow.find("td:eq(5)").text(), // get current row 6th
+		TotalNoBreakDec = currentRow.find("td:eq(1)").text(), // get current row 2nd TD
+		OvertimeDec = currentRow.find("td:eq(2)").text(), // get current row 3rd TD
+		TotalDec = currentRow.find("td:eq(3)").text(), // get current row 4th TD
+		StartDec = currentRow.find("td:eq(4)").text(), // get current row 5th TD
+		HourSchedule = currentRow.find("td:eq(5)").text(), // get current row 6th
 
 	returncode = save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule);
 
 	const btn = $(this).find("button:eq(0)");
 	const iconToggle = () => {
 		const isCheckIcon = btn.find('.fa-check').length > 0;
-		if (isCheckIcon) {
+		if (isCheckIcon)
 			btn.html('<i class="fa fa-save"></i>');
-		} else {
+		else
 			btn.html('<i class="fa fa-check"></i>');
-		}
 	};
 	if (!returncode) {
 		currentRow.css("backgroundColor", "");
@@ -167,11 +164,11 @@ $($tableID).on('click', '.record-delete', function () {
 	const currentRow = $(this).closest("tr");
 
 	const key = currentRow.find("td:eq(0)").text(), // get current row 1st TD value
-			TotalNoBreakDec = currentRow.find("td:eq(1)").text(), // get current row 2nd TD
-			OvertimeDec = currentRow.find("td:eq(2)").text(), // get current row 3rd TD
-			TotalDec = currentRow.find("td:eq(3)").text(), // get current row 4th TD
-			StartDec = currentRow.find("td:eq(4)").text(), // get current row 5th TD
-			HourSchedule = currentRow.find("td:eq(5)").text(); // get current row 6th TD
+		TotalNoBreakDec = currentRow.find("td:eq(1)").text(), // get current row 2nd TD
+		OvertimeDec = currentRow.find("td:eq(2)").text(), // get current row 3rd TD
+		TotalDec = currentRow.find("td:eq(3)").text(), // get current row 4th TD
+		StartDec = currentRow.find("td:eq(4)").text(), // get current row 5th TD
+		HourSchedule = currentRow.find("td:eq(5)").text(); // get current row 6th TD
 	const record = "\nDelete history record with \n \nDate:                             " + key + "\nTotal Time No Break:    " + TotalNoBreakDec + "\nOvertime:                      " + OvertimeDec + "\nTotal Work Time:          " + TotalDec + "\nStart Time:                    " + StartDec + "\nHour Schedule:            " + HourSchedule;
 
 	const confirm_response = confirm(record);
@@ -191,10 +188,9 @@ $("#edit_history_search").on("input", function () {
 	});
 
 	$("tr:visible").each(function (index, obj) {
-		if (index % 2) {
+		if (index % 2)
 			$(this).addClass('visible-odd').removeClass('visible-even');
-		} else {
+		else
 			$(this).addClass('visible-even').removeClass('visible-odd');
-		}
 	});
 });

@@ -7,11 +7,10 @@ let startedLeaves = false,
 	manualStoppedLeaves = false;
 
 function intervalListener() {
-	if (getEnd() <= now() && !startedLeaves && !manualStoppedLeaves) {
+	if (getEnd() <= now() && !startedLeaves && !manualStoppedLeaves)
 		startLeaves();
-	} else if (getEnd() > now() && startedLeaves) {
+	else if (getEnd() > now() && startedLeaves)
 		stopLeaves();
-	}
 }
 setInterval(intervalListener, 1 * 60000); // (Every 5) * (60 * 1000 milliseconds = 60 seconds = 1 minute)
 
@@ -38,11 +37,10 @@ function startLeaves() {
 	document.title = "Done for the day!";
 
 	interval = setInterval(function () {
-		if (document.title == "Working hours") {
+		if (document.title == "Working hours")
 			document.title = "Done for the day!";
-		} else {
+		else
 			document.title = "Working hours";
-		}
 	}, 1000);
 }
 

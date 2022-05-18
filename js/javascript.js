@@ -46,9 +46,9 @@ const reverseDateRepresentation = date => {
 function getStart() {
 	const time = document.getElementById("start_time").value;
 	let time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
-	if (!time_dec) {
+	if (!time_dec)
 		time_dec = 0;
-	}
+
 	return time_dec;
 }
 
@@ -59,17 +59,16 @@ function setStart(time) {
 function getEnd() {
 	const time = document.getElementById("end_time").value;
 	let time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
-	if (!time_dec) {
+	if (!time_dec)
 		time_dec = now();
-	}
 
 	return time_dec;
 }
 
 function setEnd(time) {
-	if (time > 24) {
+	if (time > 24)
 		time = time - 24;
-	}
+
 	document.getElementById("end_time").value = floatToTimeString(time);
 }
 
@@ -89,18 +88,18 @@ function getBreak(allowNegative) {
 		time_dec = moment.duration(break_time_end.diff(break_time_start)).asHours();
 	}
 
-	if (!allowNegative && (!time_dec || time_dec < 0)) {
+	if (!allowNegative && (!time_dec || time_dec < 0))
 		time_dec = 0;
-	}
+
 	return time_dec;
 }
 
 function getBreakTimeStart() {
 	const time = document.getElementById("break_time_start").value;
 	let time_dec = moment.duration(time).asHours();
-	if (!time_dec) {
+	if (!time_dec)
 		time_dec = 0;
-	}
+
 	return time_dec;
 }
 
@@ -114,9 +113,9 @@ function setBreak(time) {
 function getBreakDefault() {
 	const break_time = document.getElementById("break_time_default");
 	let time = break_time.options[break_time.selectedIndex].value;
-	if (!time) {
+	if (!time)
 		time = 0;
-	}
+
 	return time;
 }
 
@@ -139,40 +138,34 @@ function addBreakDefault() {
 function getHourSchedule() {
 	const hourschedule = document.getElementById("hourschedule");
 	let time = hourschedule.options[hourschedule.selectedIndex].value;
-	if (!time) {
+	if (!time)
 		time = 0;
-	}
+
 	return parseFloat(time);
 }
 
 function setHourSchedule(time) {
-	if (time) {
+	if (time)
 		document.getElementById("hourschedule").value = time;
-	} else {
+	else
 		document.getElementById("hourschedule").value = "7.6";
-	}
+
 	hourscheduleAddTimeButton();
 }
 
 function getWorktime() {
-	let worktime = 0;
-	if (getEnd() < getStart()) {
-		worktime = 24 + getEnd() - getStart();
-		if (Math.abs(worktime - getHourSchedule()) <= 0.02) {
-			worktime = getHourSchedule();
-		}
-		return worktime.toFixed(2);
-	}
+	let worktime = getEnd() - getStart();
+	if (getEnd() < getStart())
+		worktime = 24 + worktime;
 
-	worktime = getEnd() - getStart();
-	if (Math.abs(worktime - getHourSchedule()) <= 0.02) {
+	if (Math.abs(worktime - getHourSchedule()) <= 0.02)
 		worktime = getHourSchedule();
-	}
+
 	return worktime.toFixed(2);
 }
 
 function calculateTotal() {
-	let worktime = getWorktime(),
+	const worktime = getWorktime(),
 		overtimedec = getOvertimeDec(),
 		totalnobreakdec = getTotalNoBreakDec();
 
@@ -188,15 +181,14 @@ function calculateTotal() {
 }
 
 function setTotal(time) {
-	if (time < 0) {
+	if (time < 0)
 		time = time + 24;
-	}
+
 	document.getElementById("total").value = floatToTimeString(time);
 }
 
 function getTotalDec() {
-	const worktime = getWorktime();
-	return parseFloat(worktime).toFixed(2);
+	return parseFloat(getWorktime()).toFixed(2);
 }
 
 function setTotalDec(time) {
@@ -214,11 +206,10 @@ function getOvertimeDec() {
 	const worktime = getWorktime(),
 		overtime = (worktime - getBreak(false) - getHourSchedule()).toFixed(2);
 
-	if (overtime.toString() == "-0.00") {
+	if (overtime.toString() == "-0.00")
 		return "0.00";
-	} else {
+	else
 		return overtime;
-	}
 }
 
 function setOvertimeDec(time) {
@@ -227,20 +218,20 @@ function setOvertimeDec(time) {
 
 function setOvertimeTotal(time) {
 	document.getElementById("overtimetotal").value = floatToTimeString(time);
-	if (time >= 0) {
+
+	if (time >= 0)
 		document.getElementById("overtimetotal").setAttribute("style", "color: " + bs_green + ";");
-	} else {
+	else
 		document.getElementById("overtimetotal").setAttribute("style", "color: " + bs_red + ";");
-	}
 }
 
 function setOvertimeWeekly(time) {
 	document.getElementById("overtimeweekly").value = floatToTimeString(time);
-	if (time >= 0) {
+
+	if (time >= 0)
 		document.getElementById("overtimeweekly").setAttribute("style", "color: " + bs_green + ";");
-	} else {
+	else
 		document.getElementById("overtimeweekly").setAttribute("style", "color: " + bs_red + ";");
-	}
 }
 
 function setTotalNoBreak(time) {
@@ -248,8 +239,7 @@ function setTotalNoBreak(time) {
 }
 
 function getTotalNoBreakDec() {
-	const worktime = getWorktime();
-	return Math.abs(parseFloat(worktime - getBreak(false))).toFixed(2);
+	return Math.abs(parseFloat(getWorktime() - getBreak(false))).toFixed(2);
 }
 
 function setTotalNoBreakDec(time) {
@@ -277,36 +267,36 @@ function getHistory() {
 
 function getHistoryDeleteOption() {
 	let option;
-	if (document.getElementById('historydeleteoptionperiod').checked) {
+	if (document.getElementById('historydeleteoptionperiod').checked)
 		option = document.getElementById('historydeleteoptionperiod').value;
-	} else if (document.getElementById('historydeleteoptiondays').checked) {
+	else if (document.getElementById('historydeleteoptiondays').checked)
 		option = document.getElementById('historydeleteoptiondays').value;
-	}
-	if (!option) {
+
+	if (!option)
 		option = "days";
-	}
+
 	return option;
 }
 
 function getHistoryRetain() {
 	let days = document.getElementById("historyretain").value;
-	if (!days) {
+
+	if (!days)
 		days = 999;
-	}
-	if (days > 999) {
+	else if (days > 999)
 		days = 999;
-	}
+
 	return days;
 }
 
 function getHistoryResetDay() {
 	let day = document.getElementById("historyresetday").value;
-	if (!day) {
+
+	if (!day)
 		day = 31;
-	}
-	if (day > 31) {
+	else if (day > 31)
 		day = 31;
-	}
+
 	return day;
 }
 
@@ -314,16 +304,13 @@ function getHistoryResetPeriod() {
 	let period = document.getElementById("historyresetperiod").value,
 		historyresetperiodunit = getHistoryResetPeriodUnit();
 
-	if (historyresetperiodunit == "days") {
-		if (period > 31)
-			period = 31;
-	} else if (historyresetperiodunit == "weeks") {
-		if (period > 4)
-			period = 4;
-	} else if (historyresetperiodunit == "months") {
-		if (period > 48)
-			period = 48;
-	}
+	if (historyresetperiodunit == "days")
+		period = period > 31 ? 31 : period;
+	else if (historyresetperiodunit == "weeks")
+		period = period > 4 ? 4 : period;
+	else if (historyresetperiodunit == "months")
+		period = period > 48 ? 48 : period;
+
 	return period;
 }
 
@@ -342,12 +329,12 @@ function getResetDate() {
 
 function getAutobackupDay() {
 	let day = document.getElementById("autobackupday").value;
-	if (!day) {
+
+	if (!day)
 		day = 31;
-	}
-	if (day > 31) {
+	else if (day > 31)
 		day = 31;
-	}
+
 	return day;
 }
 
@@ -355,16 +342,13 @@ function getAutobackupPeriod() {
 	let period = document.getElementById("autobackupperiod").value,
 		periodunit = getAutobackupPeriodUnit();
 
-	if (periodunit == "days") {
-		if (period > 31)
-			period = 31;
-	} else if (periodunit == "weeks") {
-		if (period > 4)
-			period = 4;
-	} else if (periodunit == "months") {
-		if (period > 48)
-			period = 48;
-	}
+	if (historyresetperiodunit == "days")
+		period = period > 31 ? 31 : period;
+	else if (historyresetperiodunit == "weeks")
+		period = period > 4 ? 4 : period;
+	else if (historyresetperiodunit == "months")
+		period = period > 48 ? 48 : period;
+
 	return period;
 }
 
@@ -411,6 +395,7 @@ function maxValuesCustomTimeOption(type, periodunit, executionday, elem_period, 
 		elem_executionday.setAttribute("max", "31");
 		elem_executionday.disabled = false;
 	}
+
 	if (type == "cleaning")
 		setResetDate(executionday.format("dddd, DD-MM-YYYY"));
 	else if (type == "autobackup"){
@@ -493,42 +478,8 @@ function setHistory(refresh_edit_table) {
 			}
 			overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo.OvertimeDec);
 
-			if (moment(key, "DD-MM-YYYY") >= moment().startOf('week')) {
+			if (moment(key, "DD-MM-YYYY") >= moment().startOf('week'))
 				overtimeweekly = overtimeweekly + parseFloat(timeinfo.OvertimeDec);
-			}
-
-			// calculate hour schedule if it's not defined yet
-			// TEMPORARY
-			if (timeinfo.HourSchedule == undefined) {
-				let hourschedule = parseFloat(timeinfo.TotalNoBreakDec) - parseFloat(timeinfo.OvertimeDec);
-
-				if (hourschedule > 0 && hourschedule < 3.1) {
-					hourschedule = 3.04;
-				} else if (hourschedule > 3.1 && hourschedule < 3.5) {
-					hourschedule = 3.2;
-				} else if (hourschedule > 3.5 && hourschedule < 3.9) {
-					hourschedule = 3.8;
-				} else if (hourschedule > 3.9 && hourschedule < 4.25) {
-					hourschedule = 4;
-				} else if (hourschedule > 4.25 && hourschedule < 4.7) {
-					hourschedule = 4.56;
-				} else if (hourschedule > 4.7 && hourschedule < 5.55) {
-					hourschedule = 4.8;
-				} else if (hourschedule > 5.55 && hourschedule < 6.23) {
-					hourschedule = 6.08;
-				} else if (hourschedule > 6.23 && hourschedule < 7) {
-					hourschedule = 6.4;
-				} else if (hourschedule > 7 && hourschedule < 7.8) {
-					hourschedule = 7.6;
-				} else if (hourschedule > 7.8 && hourschedule < 10) {
-					hourschedule = 8;
-				}
-
-				const new_timeinfo = '{"TotalNoBreakDec": "' + timeinfo.TotalNoBreakDec + '", "OvertimeDec": "' + timeinfo.OvertimeDec + '", "TotalDec": "' + timeinfo.TotalDec + '", "StartDec": "' + timeinfo.StartDec + '", "HourSchedule": "' + hourschedule + '"}';
-				localStorage.setItem(key, new_timeinfo);
-				console.log(timeinfo);
-				console.log(new_timeinfo);
-			}
 		}
 	}
 
@@ -540,9 +491,8 @@ function setHistory(refresh_edit_table) {
 	}
 	document.getElementById("history").innerHTML = entry_history;
 
-	if (refresh_edit_table) {
+	if (refresh_edit_table)
 		document.getElementById("edit_history_table_body").innerHTML = entry_edit_history;
-	}
 
 	setOvertimeTotal(overtimetotal);
 	setOvertimeWeekly(overtimeweekly);
@@ -552,13 +502,11 @@ function notificationClosed(event) {
 	const version = document.getElementById("currentappversion").innerHTML,
 		lastnotifversion = localStorage.getItem("lastnotifversion");
 
-	if (event == "click") {
+	if (event == "click")
 		localStorage.setItem("lastnotifversion", version);
-	}
 
-	if (event == "onload" && version != lastnotifversion) {
+	if (event == "onload" && version != lastnotifversion)
 		$("#alertnotification").show();
-	}
 }
 
 function set_startminsubtract(startminsubtract_value) {
@@ -634,12 +582,10 @@ function allCheckBox(allCheckboxInput, elementId) {
 	const checks = document.querySelectorAll('#' + elementId + ' input[type="checkbox"]');
 
 	for (let i = 0; i < checks.length; i++) {
-		if (allCheckboxInput.checked == true && checks[i].checked == false) {
+		if (allCheckboxInput.checked == true && checks[i].checked == false)
 			checks[i].click();
-		}
-		if (allCheckboxInput.checked == false && checks[i].checked == true) {
+		else if (allCheckboxInput.checked == false && checks[i].checked == true)
 			checks[i].click();
-		}
 	}
 }
 
@@ -666,13 +612,12 @@ function cleanLocalStorage() {
 		const expiredate = today.subtract(getHistoryRetain(), "days");
 		/* jshint -W084 */
 		for (let key = 0; key = keys[i]; i++) {
-			if (moment(key, "DD-MM-YYYY") < expiredate && testDateFormat(key)) { // days to keep data excluding today
+			if (moment(key, "DD-MM-YYYY") < expiredate && testDateFormat(key)) // days to keep data excluding today
 				delete localStorage[key];
-			}
 		}
 	} else if (deleteoption == "period") {
 		const cleaningdaystored = localStorage.getItem("cleaningday"),
-			  cleaningday = moment(cleaningdaystored, "DD-MM-YYYY");
+			cleaningday = moment(cleaningdaystored, "DD-MM-YYYY");
 
 		if (cleaningday.isSameOrBefore(today)) {
 			deleteHistory();
@@ -683,9 +628,9 @@ function cleanLocalStorage() {
 
 function autoBackup() {
 	const today = moment(),
-		  backupsenabled = localStorage.getItem("autobackupoption"),
-		  autobackupdaystored = localStorage.getItem("autobackupdate"),
-		  autobackupday = moment(autobackupdaystored, "DD-MM-YYYY");
+		backupsenabled = localStorage.getItem("autobackupoption"),
+		autobackupdaystored = localStorage.getItem("autobackupdate"),
+		autobackupday = moment(autobackupdaystored, "DD-MM-YYYY");
 
 	if (backupsenabled == "true" && autobackupday.isSameOrBefore(today)) {
 		alert("Performing autobackup");
@@ -697,9 +642,8 @@ function autoBackup() {
 function deleteHistory() {
 	if (confirm("Are you sure you wish to delete your history?\nIf you choose not to, then your data will be saved until the next cleaning time.")) {
 		for (let key in localStorage) {
-			if (testDateFormat(key)) {
+			if (testDateFormat(key))
 				delete localStorage[key];
-			}
 		}
 		setHistory(true);
 		alert("History deleted!");
@@ -771,9 +715,8 @@ function reset() {
 	setParameters();
 	cleanLocalStorage();
 	autoBackup();
-	if (localStorage.length < 10) {
+	if (localStorage.length < 10)
 		startIntroduction();
-	}
 }
 
 function setParameters() {
@@ -875,11 +818,10 @@ function setParameters() {
 	}
 
 	// Check if custom time to subtract from start is stored and set value appropriatly
-	if (!startminsubtract_value) {
+	if (!startminsubtract_value)
 		set_startminsubtract("5");
-	} else {
+	else
 		set_startminsubtract(startminsubtract_value);
-	}
 
 	// If subtract from start is checked set UI and deduct the amount of time stored in localstorage
 	// If the page was already opened today, fill in that start time
@@ -1126,9 +1068,8 @@ $(window).on("load", function () {
 });
 
 $(document).on('keydown', function (e) {
-	if (e.keyCode === 13) { //ENTER key code
+	if (e.keyCode === 13) //ENTER key code
 		add_time(getHourSchedule());
-	}
 });
 
 $("input").focusout(function () {

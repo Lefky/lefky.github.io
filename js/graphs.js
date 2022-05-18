@@ -563,9 +563,8 @@ function formatJSONdata() {
 			timeinfo = JSON.parse(localStorage.getItem(key));
 			dateKey = moment(key, "DD-MM-YYYY");
 
-			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo.HourSchedule.toLowerCase() == "correction") {
+			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo.HourSchedule.toLowerCase() == "correction")
 				sumOvertime = parseFloat(sumOvertime.toFixed(2)) + parseFloat(timeinfo.OvertimeDec);
-			}
 
 			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo.HourSchedule.toLowerCase() != "correction") {
 
@@ -584,11 +583,10 @@ function formatJSONdata() {
 					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Overtime: </span>" + floatToTimeString(sumOvertime) + "</div>";
 					datasetOvertimeCumulative.push([dateKey, sumOvertime, tooltip]);
 
-					if (variable > 0) {
+					if (variable > 0)
 						positiveOvertimeDays++;
-					} else if (variable < 0) {
+					else if (variable < 0)
 						negativeOvertimeDays++;
-					}
 				}
 				if (timeinfo.hasOwnProperty('StartDec')) {
 					variable = parseFloat(timeinfo.StartDec);
@@ -614,11 +612,10 @@ function formatJSONdata() {
 				if (timeinfo.hasOwnProperty('TotalDec')) {
 					variable = parseFloat(timeinfo.TotalDec);
 					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Total time: </span>" + floatToTimeString(variable) + "</div>";
-					if (timeinfo.hasOwnProperty('HourSchedule')) {
+					if (timeinfo.hasOwnProperty('HourSchedule'))
 						datasetTotalDec.push([dateKey, variable, tooltip, hourschedule, hourscheduletooltip]);
-					} else {
+					else
 						datasetTotalDec.push([dateKey, variable, null]);
-					}
 				}
 				if (timeinfo.hasOwnProperty('TotalNoBreakDec')) {
 					variable = parseFloat(timeinfo.TotalNoBreakDec);
@@ -639,9 +636,8 @@ function formatJSONdata() {
 						datasetBreakDec.push([dateKey, variable, tooltip, null]);
 					}
 				}
-				if (timeinfo.hasOwnProperty('HourSchedule')) {
+				if (timeinfo.hasOwnProperty('HourSchedule'))
 					datasetHourscheduleDec = updateArray(datasetHourscheduleDec, timeinfo.HourSchedule + "h");
-				}
 				//console.log("accepted value record");
 			}
 		}
