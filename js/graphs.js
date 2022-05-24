@@ -41,8 +41,6 @@ function initGoogleLibraries(googleLib) {
 	});
 }
 
-document.getElementById("start_reporting_selection").addEventListener("load", initDateSelector());
-
 // In comment to not load on page load, only when modal is opened
 //google.charts.setOnLoadCallback(drawAreagraph);
 
@@ -67,7 +65,7 @@ function initGraphs() {
 }
 
 function drawGraphs() {
-	drawTimelinegraph("Workdays");
+	//drawTimelinegraph("Workdays");
 	drawGaugegraph("DaysRegisteredGauge");
 	drawGaugegraph("AvgStarttimeGauge");
 	drawGaugegraph("AvgStoptimeGauge");
@@ -84,30 +82,16 @@ function drawGraphs() {
 }
 
 function initDateSelector() {
-	//document.getElementById('start_reporting_selection').value = moment().startOf('year').subtract(1, 'year').format('YYYY-MM-DD');
 	document.getElementById('start_reporting_selection').value = moment(sortedkeys[0], 'DD-MM-YYYY').format('YYYY-MM-DD');
-
 	document.getElementById('end_reporting_selection').value = moment().format('YYYY-MM-DD');
 }
 
-$('#modalreporting').on('shown.bs.modal', function () {
-	// Redraw charts on opening modal
+function setDateSelector(start, end) {
+	document.getElementById('start_reporting_selection').value = moment(start).format('YYYY-MM-DD');
+	document.getElementById('end_reporting_selection').value = moment(end).format('YYYY-MM-DD');
 	initGraphs();
 	drawGraphs();
-
-	// Rotate screen for mobile users so it displays the entire width
-	// https://usefulangle.com/post/105/javascript-change-screen-orientation
-	mobileRotateScreen(true);
-});
-
-$('#modalreporting').on('hidden.bs.modal', function () {
-	// Rotate screen for mobile users so it displays normal again
-	mobileRotateScreen(false);
-});
-
-$(window).resize(function () {
-	drawGraphs();
-});
+}
 
 function mobileRotateScreen(rotate) {
 	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -139,7 +123,7 @@ function drawAreagraph(graphtype) {
 			data.addColumn('number', 'Overtime');
 			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetOvertimeDec);
-			linecolor = [bs_blue];
+			linecolor = [bs_teal];
 			break;
 		case "OvertimeCumulative":
 			data.addColumn('number', 'Cumulative Overtime');
@@ -165,7 +149,7 @@ function drawAreagraph(graphtype) {
 			data.addColumn('number', 'Hour schedule');
 			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetBreakDec);
-			linecolor = [bs_gray_dark, 'black'];
+			linecolor = colorScheme == "light" ? [bs_gray, bs_gray_dark] : [bs_light, bs_pink];
 			break;
 		default:
 			// code block
@@ -182,11 +166,20 @@ function drawAreagraph(graphtype) {
 		hAxis: {
 			//title: 'Date',
 			format: 'dd-MM-YYYY',
-			slantedText: true
+			slantedText: true,
+			textStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			}
 			//slantedTextAngle: 60
 		},
 		vAxis: {
-			title: 'Time (decimal hours)'
+			title: 'Time (decimal hours)',
+			titleTextStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			},
+			textStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			}
 		},
 		chartArea: {
 			// leave room for y-axis labels
@@ -195,13 +188,16 @@ function drawAreagraph(graphtype) {
 		},
 		legend: {
 			position: 'top',
-			alignment: 'center'
+			alignment: 'center',
+			textStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			}
 		},
 		series: {
 			0: {},
 			1: {
 				lineWidth: 1,
-				lineDashStyle: [1, 1],
+				lineDashStyle: [5, 1],
 				areaOpacity: 0
 			}
 		},
@@ -209,15 +205,16 @@ function drawAreagraph(graphtype) {
 			0: {
 				labelInLegend: 'Trend',
 				visibleInLegend: true,
-				color: 'purple',
+				color: bs_indigo,
 				lineWidth: 3,
-				opacity: 0.2,
+				opacity: colorScheme == "light" ? 0.2 : 1,
 				type: 'linear'
 			}
 		},
 		colors: linecolor,
 		width: '100%',
-		height: 500
+		height: 500,
+		backgroundColor: colorScheme == "light" ? bs_white : '#2f2f2f'
 	};
 
 	const chart = new google.visualization.AreaChart(document.getElementById(graphtype + '_div'));
@@ -236,7 +233,7 @@ function drawBargraph(graphtype) {
 			data.addColumn('number', 'Hour schedule');
 			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetTotalDec);
-			linecolor = [bs_yellow, 'black'];
+			linecolor = colorScheme == "light" ? [bs_yellow, bs_gray_dark] : [bs_yellow, bs_pink];
 			break;
 		case "TotalNoBreakDec":
 			data.addColumn('number', 'Total no break');
@@ -244,7 +241,7 @@ function drawBargraph(graphtype) {
 			data.addColumn('number', 'Hour schedule');
 			data.addColumn({ 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } });
 			data.addRows(datasetTotalNoBreakDec);
-			linecolor = [bs_orange, 'black'];
+			linecolor = colorScheme == "light" ? [bs_orange, bs_gray_dark] : [bs_orange, bs_pink];
 			break;
 		default:
 			// code block
@@ -261,11 +258,20 @@ function drawBargraph(graphtype) {
 		hAxis: {
 			//title: 'Date',
 			format: 'dd-MM-YYYY',
-			slantedText: true
+			slantedText: true,
+			textStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			}
 			//slantedTextAngle: 60
 		},
 		vAxis: {
-			title: 'Time (decimal hours)'
+			title: 'Time (decimal hours)',
+			titleTextStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			},
+			textStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			}
 		},
 		chartArea: {
 			// leave room for y-axis labels
@@ -274,29 +280,33 @@ function drawBargraph(graphtype) {
 		},
 		legend: {
 			position: 'top',
-			alignment: 'center'
+			alignment: 'center',
+			textStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			}
 		},
 		seriesType: 'bars',
 		series: {
 			1: {
 				type: 'line',
 				lineWidth: 1,
-				lineDashStyle: [1, 1]
+				lineDashStyle: [5, 1]
 			}
 		},
 		trendlines: {
 			0: {
 				labelInLegend: 'Trend',
 				visibleInLegend: true,
-				color: 'purple',
+				color: bs_indigo,
 				lineWidth: 3,
-				opacity: 0.2,
+				opacity: colorScheme == "light" ? 0.2 : 1,
 				type: 'linear'
 			}
 		},
 		colors: linecolor,
 		width: '100%',
-		height: 500
+		height: 500,
+		backgroundColor: colorScheme == "light" ? bs_white : '#2f2f2f'
 	};
 
 	const chart = new google.visualization.ComboChart(document.getElementById(graphtype + '_div'));
@@ -333,10 +343,19 @@ function drawPiegraph(graphtype) {
 
 	const options = {
 		//pieStartAngle: 270,
+		legend: {
+			textStyle: {
+				color: colorScheme == "light" ? bs_gray_dark : bs_white
+			}
+		},
+		titleTextStyle: {
+			color: colorScheme == "light" ? bs_gray_dark : bs_white
+		},
 		title: title,
 		colors: slicecolor,
 		width: '100%',
-		height: 300
+		height: 300,
+		backgroundColor: colorScheme == "light" ? bs_white : '#2f2f2f'
 	};
 
 	const chart = new google.visualization.PieChart(document.getElementById(graphtype + '_div'));
@@ -470,7 +489,7 @@ function drawGaugegraph(graphtype) {
 	}
 }
 
-async function drawTimelinegraph(graphtype) {
+/*async function drawTimelinegraph(graphtype) {
 	const data = new google.visualization.DataTable();
 	let title = "";
 
@@ -515,14 +534,14 @@ async function drawTimelinegraph(graphtype) {
 
 	const chart = new google.visualization.Timeline(document.getElementById(graphtype + '_div'));
 	chart.draw(data, options);
-}
+}*/
 
 function getReportingStartDate() {
 	return moment(document.getElementById('start_reporting_selection').value, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD');
 }
 
 function getReportingEndDate() {
-	return document.getElementById('end_reporting_selection').value;;
+	return document.getElementById('end_reporting_selection').value;
 }
 
 function formatJSONdata() {
@@ -544,9 +563,8 @@ function formatJSONdata() {
 			timeinfo = JSON.parse(localStorage.getItem(key));
 			dateKey = moment(key, "DD-MM-YYYY");
 
-			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo.HourSchedule.toLowerCase() == "correction") {
+			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo.HourSchedule.toLowerCase() == "correction")
 				sumOvertime = parseFloat(sumOvertime.toFixed(2)) + parseFloat(timeinfo.OvertimeDec);
-			}
 
 			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo.HourSchedule.toLowerCase() != "correction") {
 
@@ -565,11 +583,10 @@ function formatJSONdata() {
 					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Overtime: </span>" + floatToTimeString(sumOvertime) + "</div>";
 					datasetOvertimeCumulative.push([dateKey, sumOvertime, tooltip]);
 
-					if (variable > 0) {
+					if (variable > 0)
 						positiveOvertimeDays++;
-					} else if (variable < 0) {
+					else if (variable < 0)
 						negativeOvertimeDays++;
-					}
 				}
 				if (timeinfo.hasOwnProperty('StartDec')) {
 					variable = parseFloat(timeinfo.StartDec);
@@ -595,11 +612,10 @@ function formatJSONdata() {
 				if (timeinfo.hasOwnProperty('TotalDec')) {
 					variable = parseFloat(timeinfo.TotalDec);
 					tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Total time: </span>" + floatToTimeString(variable) + "</div>";
-					if (timeinfo.hasOwnProperty('HourSchedule')) {
+					if (timeinfo.hasOwnProperty('HourSchedule'))
 						datasetTotalDec.push([dateKey, variable, tooltip, hourschedule, hourscheduletooltip]);
-					} else {
+					else
 						datasetTotalDec.push([dateKey, variable, null]);
-					}
 				}
 				if (timeinfo.hasOwnProperty('TotalNoBreakDec')) {
 					variable = parseFloat(timeinfo.TotalNoBreakDec);
@@ -620,9 +636,8 @@ function formatJSONdata() {
 						datasetBreakDec.push([dateKey, variable, tooltip, null]);
 					}
 				}
-				if (timeinfo.hasOwnProperty('HourSchedule')) {
+				if (timeinfo.hasOwnProperty('HourSchedule'))
 					datasetHourscheduleDec = updateArray(datasetHourscheduleDec, timeinfo.HourSchedule + "h");
-				}
 				//console.log("accepted value record");
 			}
 		}
@@ -697,6 +712,53 @@ async function businessDays(country, start, end){
 	}));
 }
 
+// Listeners
+document.getElementById("start_reporting_selection").addEventListener("load", initDateSelector());
+
+$('#modalreporting').on('shown.bs.modal', function () {
+	// Redraw charts on opening modal
+	initGraphs();
+	drawGraphs();
+
+	// Rotate screen for mobile users so it displays the entire width
+	// https://usefulangle.com/post/105/javascript-change-screen-orientation
+	mobileRotateScreen(true);
+});
+
+$('#modalreporting').on('hidden.bs.modal', function () {
+	// Rotate screen for mobile users so it displays normal again
+	mobileRotateScreen(false);
+});
+
+$(window).resize(function () {
+	drawGraphs();
+});
+
+$('#reporting_weektodate').on('click', function () {
+	setDateSelector(moment().startOf('week').add(1, 'day'), moment());
+});
+
+$('#reporting_previousweek').on('click', function () {
+	setDateSelector(moment().subtract(1, 'week').startOf('week').add(1, 'day'), moment().subtract(1, 'week').endOf('week').add(1, 'day'));
+});
+
+$('#reporting_monthtodate').on('click', function () {
+	setDateSelector(moment().startOf('month'), moment());
+});
+
+$('#reporting_previousmonth').on('click', function () {
+	setDateSelector(moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month'));
+});
+
+$('#reporting_yeartodate').on('click', function () {
+	setDateSelector(moment().startOf('year'), moment());
+});
+
+$('#reporting_alltime').on('click', function () {
+	setDateSelector(moment(sortedkeys[0], 'DD-MM-YYYY'), moment());
+});
+
+/*
 // testing
 setTimeout(async function () {
 	var f = 'DD-MM-YYYY',
@@ -710,3 +772,4 @@ setTimeout(async function () {
 
 	//console.log(await businessDays(country, start, end));
 }, 600);
+*/

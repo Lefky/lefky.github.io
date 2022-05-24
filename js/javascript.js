@@ -1,30 +1,33 @@
 console.log("loaded javascript.js");
 
 // Import Bootstrap colors
-var bs_blue = getComputedStyle(document.documentElement).getPropertyValue('--bs-blue'),
-	bs_indigo = getComputedStyle(document.documentElement).getPropertyValue('--bs-indigo'),
-	bs_purple = getComputedStyle(document.documentElement).getPropertyValue('--bs-purple'),
-	bs_pink = getComputedStyle(document.documentElement).getPropertyValue('--bs-pink'),
-	bs_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-red'),
-	bs_orange = getComputedStyle(document.documentElement).getPropertyValue('--bs-orange'),
-	bs_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-yellow'),
-	bs_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-green'),
-	bs_teal = getComputedStyle(document.documentElement).getPropertyValue('--bs-teal'),
-	bs_cyan = getComputedStyle(document.documentElement).getPropertyValue('--bs-cyan'),
-	bs_white = getComputedStyle(document.documentElement).getPropertyValue('--bs-white'),
-	bs_gray = getComputedStyle(document.documentElement).getPropertyValue('--bs-gray'),
-	bs_gray_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-gray-dark'),
-	bs_primary = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary'),
-	bs_secondary = getComputedStyle(document.documentElement).getPropertyValue('--bs-secondary'),
-	bs_success = getComputedStyle(document.documentElement).getPropertyValue('--bs-success'),
-	bs_info = getComputedStyle(document.documentElement).getPropertyValue('--bs-info'),
-	bs_warning = getComputedStyle(document.documentElement).getPropertyValue('--bs-warning'),
-	bs_danger = getComputedStyle(document.documentElement).getPropertyValue('--bs-danger'),
-	bs_light = getComputedStyle(document.documentElement).getPropertyValue('--bs-light'),
-	bs_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-dark'),
-	bs_washed_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-red').trim(),
-	bs_washed_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-yellow').trim(),
+var bs_blue, bs_indigo, bs_purple, bs_pink, bs_red, bs_orange, bs_yellow, bs_gray, bs_teal, bs_cyan, bs_white, bs_gray, bs_gray_dark, bs_primary, bs_secondary, bs_success, bs_info, bs_warning, bs_danger, bs_light, bs_dark, bs_washed_red, bs_washed_yellow, bs_washed_green;
+function importBootstrapColors(){
+	bs_blue = getComputedStyle(document.documentElement).getPropertyValue('--bs-blue');
+	bs_indigo = getComputedStyle(document.documentElement).getPropertyValue('--bs-indigo');
+	bs_purple = getComputedStyle(document.documentElement).getPropertyValue('--bs-purple');
+	bs_pink = getComputedStyle(document.documentElement).getPropertyValue('--bs-pink');
+	bs_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-red');
+	bs_orange = getComputedStyle(document.documentElement).getPropertyValue('--bs-orange');
+	bs_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-yellow');
+	bs_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-green');
+	bs_teal = getComputedStyle(document.documentElement).getPropertyValue('--bs-teal');
+	bs_cyan = getComputedStyle(document.documentElement).getPropertyValue('--bs-cyan');
+	bs_white = getComputedStyle(document.documentElement).getPropertyValue('--bs-white');
+	bs_gray = getComputedStyle(document.documentElement).getPropertyValue('--bs-gray');
+	bs_gray_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-gray-dark');
+	bs_primary = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary');
+	bs_secondary = getComputedStyle(document.documentElement).getPropertyValue('--bs-secondary');
+	bs_success = getComputedStyle(document.documentElement).getPropertyValue('--bs-success');
+	bs_info = getComputedStyle(document.documentElement).getPropertyValue('--bs-info');
+	bs_warning = getComputedStyle(document.documentElement).getPropertyValue('--bs-warning');
+	bs_danger = getComputedStyle(document.documentElement).getPropertyValue('--bs-danger');
+	bs_light = getComputedStyle(document.documentElement).getPropertyValue('--bs-light');
+	bs_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-dark');
+	bs_washed_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-red').trim();
+	bs_washed_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-yellow').trim();
 	bs_washed_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-green').trim();
+}
 
 // Conversion functions
 function floatToTimeString(timedec) {
@@ -43,9 +46,9 @@ const reverseDateRepresentation = date => {
 function getStart() {
 	const time = document.getElementById("start_time").value;
 	let time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
-	if (!time_dec) {
+	if (!time_dec)
 		time_dec = 0;
-	}
+
 	return time_dec;
 }
 
@@ -56,17 +59,16 @@ function setStart(time) {
 function getEnd() {
 	const time = document.getElementById("end_time").value;
 	let time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
-	if (!time_dec) {
+	if (!time_dec)
 		time_dec = now();
-	}
 
 	return time_dec;
 }
 
 function setEnd(time) {
-	if (time > 24) {
+	if (time > 24)
 		time = time - 24;
-	}
+
 	document.getElementById("end_time").value = floatToTimeString(time);
 }
 
@@ -86,18 +88,18 @@ function getBreak(allowNegative) {
 		time_dec = moment.duration(break_time_end.diff(break_time_start)).asHours();
 	}
 
-	if (!allowNegative && (!time_dec || time_dec < 0)) {
+	if (!allowNegative && (!time_dec || time_dec < 0))
 		time_dec = 0;
-	}
+
 	return time_dec;
 }
 
 function getBreakTimeStart() {
 	const time = document.getElementById("break_time_start").value;
 	let time_dec = moment.duration(time).asHours();
-	if (!time_dec) {
+	if (!time_dec)
 		time_dec = 0;
-	}
+
 	return time_dec;
 }
 
@@ -111,9 +113,9 @@ function setBreak(time) {
 function getBreakDefault() {
 	const break_time = document.getElementById("break_time_default");
 	let time = break_time.options[break_time.selectedIndex].value;
-	if (!time) {
+	if (!time)
 		time = 0;
-	}
+
 	return time;
 }
 
@@ -136,40 +138,34 @@ function addBreakDefault() {
 function getHourSchedule() {
 	const hourschedule = document.getElementById("hourschedule");
 	let time = hourschedule.options[hourschedule.selectedIndex].value;
-	if (!time) {
+	if (!time)
 		time = 0;
-	}
+
 	return parseFloat(time);
 }
 
 function setHourSchedule(time) {
-	if (time) {
+	if (time)
 		document.getElementById("hourschedule").value = time;
-	} else {
+	else
 		document.getElementById("hourschedule").value = "7.6";
-	}
+
 	hourscheduleAddTimeButton();
 }
 
 function getWorktime() {
-	let worktime = 0;
-	if (getEnd() < getStart()) {
-		worktime = 24 + getEnd() - getStart();
-		if (Math.abs(worktime - getHourSchedule()) <= 0.02) {
-			worktime = getHourSchedule();
-		}
-		return worktime.toFixed(2);
-	}
+	let worktime = getEnd() - getStart();
+	if (getEnd() < getStart())
+		worktime = 24 + worktime;
 
-	worktime = getEnd() - getStart();
-	if (Math.abs(worktime - getHourSchedule()) <= 0.02) {
+	if (Math.abs(worktime - getHourSchedule()) <= 0.02)
 		worktime = getHourSchedule();
-	}
+
 	return worktime.toFixed(2);
 }
 
 function calculateTotal() {
-	let worktime = getWorktime(),
+	const worktime = getWorktime(),
 		overtimedec = getOvertimeDec(),
 		totalnobreakdec = getTotalNoBreakDec();
 
@@ -185,15 +181,14 @@ function calculateTotal() {
 }
 
 function setTotal(time) {
-	if (time < 0) {
+	if (time < 0)
 		time = time + 24;
-	}
+
 	document.getElementById("total").value = floatToTimeString(time);
 }
 
 function getTotalDec() {
-	const worktime = getWorktime();
-	return parseFloat(worktime).toFixed(2);
+	return parseFloat(getWorktime()).toFixed(2);
 }
 
 function setTotalDec(time) {
@@ -211,11 +206,10 @@ function getOvertimeDec() {
 	const worktime = getWorktime(),
 		overtime = (worktime - getBreak(false) - getHourSchedule()).toFixed(2);
 
-	if (overtime.toString() == "-0.00") {
+	if (overtime.toString() == "-0.00")
 		return "0.00";
-	} else {
+	else
 		return overtime;
-	}
 }
 
 function setOvertimeDec(time) {
@@ -224,20 +218,20 @@ function setOvertimeDec(time) {
 
 function setOvertimeTotal(time) {
 	document.getElementById("overtimetotal").value = floatToTimeString(time);
-	if (time >= 0) {
+
+	if (time >= 0)
 		document.getElementById("overtimetotal").setAttribute("style", "color: " + bs_green + ";");
-	} else {
+	else
 		document.getElementById("overtimetotal").setAttribute("style", "color: " + bs_red + ";");
-	}
 }
 
 function setOvertimeWeekly(time) {
 	document.getElementById("overtimeweekly").value = floatToTimeString(time);
-	if (time >= 0) {
+
+	if (time >= 0)
 		document.getElementById("overtimeweekly").setAttribute("style", "color: " + bs_green + ";");
-	} else {
+	else
 		document.getElementById("overtimeweekly").setAttribute("style", "color: " + bs_red + ";");
-	}
 }
 
 function setTotalNoBreak(time) {
@@ -245,8 +239,7 @@ function setTotalNoBreak(time) {
 }
 
 function getTotalNoBreakDec() {
-	const worktime = getWorktime();
-	return Math.abs(parseFloat(worktime - getBreak(false))).toFixed(2);
+	return Math.abs(parseFloat(getWorktime() - getBreak(false))).toFixed(2);
 }
 
 function setTotalNoBreakDec(time) {
@@ -274,36 +267,36 @@ function getHistory() {
 
 function getHistoryDeleteOption() {
 	let option;
-	if (document.getElementById('historydeleteoptionperiod').checked) {
+	if (document.getElementById('historydeleteoptionperiod').checked)
 		option = document.getElementById('historydeleteoptionperiod').value;
-	} else if (document.getElementById('historydeleteoptiondays').checked) {
+	else if (document.getElementById('historydeleteoptiondays').checked)
 		option = document.getElementById('historydeleteoptiondays').value;
-	}
-	if (!option) {
+
+	if (!option)
 		option = "days";
-	}
+
 	return option;
 }
 
 function getHistoryRetain() {
 	let days = document.getElementById("historyretain").value;
-	if (!days) {
+
+	if (!days)
 		days = 999;
-	}
-	if (days > 999) {
+	else if (days > 999)
 		days = 999;
-	}
+
 	return days;
 }
 
 function getHistoryResetDay() {
 	let day = document.getElementById("historyresetday").value;
-	if (!day) {
+
+	if (!day)
 		day = 31;
-	}
-	if (day > 31) {
+	else if (day > 31)
 		day = 31;
-	}
+
 	return day;
 }
 
@@ -311,16 +304,13 @@ function getHistoryResetPeriod() {
 	let period = document.getElementById("historyresetperiod").value,
 		historyresetperiodunit = getHistoryResetPeriodUnit();
 
-	if (historyresetperiodunit == "days") {
-		if (period > 31)
-			period = 31;
-	} else if (historyresetperiodunit == "weeks") {
-		if (period > 4)
-			period = 4;
-	} else if (historyresetperiodunit == "months") {
-		if (period > 48)
-			period = 48;
-	}
+	if (historyresetperiodunit == "days")
+		period = period > 31 ? 31 : period;
+	else if (historyresetperiodunit == "weeks")
+		period = period > 4 ? 4 : period;
+	else if (historyresetperiodunit == "months")
+		period = period > 48 ? 48 : period;
+
 	return period;
 }
 
@@ -339,12 +329,12 @@ function getResetDate() {
 
 function getAutobackupDay() {
 	let day = document.getElementById("autobackupday").value;
-	if (!day) {
+
+	if (!day)
 		day = 31;
-	}
-	if (day > 31) {
+	else if (day > 31)
 		day = 31;
-	}
+
 	return day;
 }
 
@@ -352,16 +342,13 @@ function getAutobackupPeriod() {
 	let period = document.getElementById("autobackupperiod").value,
 		periodunit = getAutobackupPeriodUnit();
 
-	if (periodunit == "days") {
-		if (period > 31)
-			period = 31;
-	} else if (periodunit == "weeks") {
-		if (period > 4)
-			period = 4;
-	} else if (periodunit == "months") {
-		if (period > 48)
-			period = 48;
-	}
+	if (historyresetperiodunit == "days")
+		period = period > 31 ? 31 : period;
+	else if (historyresetperiodunit == "weeks")
+		period = period > 4 ? 4 : period;
+	else if (historyresetperiodunit == "months")
+		period = period > 48 ? 48 : period;
+
 	return period;
 }
 
@@ -378,9 +365,9 @@ function getBackupDate() {
 	return document.getElementById("autobackupdate").value;
 }
 
-function getCountry() {
+/*function getCountry() {
 	return document.getElementById("reporting_country").value;
-}
+}*/
 
 // UI
 function showHistorydeleteoptionContent() {
@@ -408,6 +395,7 @@ function maxValuesCustomTimeOption(type, periodunit, executionday, elem_period, 
 		elem_executionday.setAttribute("max", "31");
 		elem_executionday.disabled = false;
 	}
+
 	if (type == "cleaning")
 		setResetDate(executionday.format("dddd, DD-MM-YYYY"));
 	else if (type == "autobackup"){
@@ -468,7 +456,7 @@ function testDateFormat(date) {
 }
 
 function setHistory(refresh_edit_table) {
-	let entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid black;'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
+	let entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid var(--bs-secondary);'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
 		entry_edit_history = "",
 		revkeys = getHistory().reverse(),
 		overtimetotal = 0,
@@ -482,50 +470,16 @@ function setHistory(refresh_edit_table) {
 		timeinfo = JSON.parse(localStorage.getItem(key));
 		if (timeinfo.hasOwnProperty('OvertimeDec')) {
 			if (timeinfo.OvertimeDec.startsWith("-")) {
-				entry_history = entry_history + "<tr style='color: " + bs_red + ";'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
-				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='pt-3-half' contenteditable='false' style='color: " + bs_red + ";'>" + key + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + timeinfo.TotalNoBreakDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + timeinfo.OvertimeDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + timeinfo.TotalDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_red + ";'>" + timeinfo.HourSchedule + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td></tr>";
+				entry_history = entry_history + "<tr class='text-danger'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
+				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-danger pt-3-half' contenteditable='false'>" + key + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
 			} else {
-				entry_history = entry_history + "<tr style='color: " + bs_green + ";'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
-				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='pt-3-half' contenteditable='false' style='color: " + bs_green + ";'>" + key + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + timeinfo.TotalNoBreakDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + timeinfo.OvertimeDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + timeinfo.TotalDec + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='pt-3-half' contenteditable='true' style='color: " + bs_green + ";'>" + timeinfo.HourSchedule + "</td><td><span class='record-save'><a href='#' class='text-success fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-save'></i></a></span> <span class='record-delete'><a href='#' class='text-danger fontsize150 my-0 mx-2 waves-effect waves-light'><i class='fa fa-trash'></i></a></span></td>";
+				entry_history = entry_history + "<tr class='text-success'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
+				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-success pt-3-half' contenteditable='false'>" + key + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
 			}
 			overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo.OvertimeDec);
 
-			if (moment(key, "DD-MM-YYYY") >= moment().startOf('week')) {
+			if (moment(key, "DD-MM-YYYY") >= moment().startOf('week'))
 				overtimeweekly = overtimeweekly + parseFloat(timeinfo.OvertimeDec);
-			}
-
-			// calculate hour schedule if it's not defined yet
-			// TEMPORARY
-			if (timeinfo.HourSchedule == undefined) {
-				let hourschedule = parseFloat(timeinfo.TotalNoBreakDec) - parseFloat(timeinfo.OvertimeDec);
-
-				if (hourschedule > 0 && hourschedule < 3.1) {
-					hourschedule = 3.04;
-				} else if (hourschedule > 3.1 && hourschedule < 3.5) {
-					hourschedule = 3.2;
-				} else if (hourschedule > 3.5 && hourschedule < 3.9) {
-					hourschedule = 3.8;
-				} else if (hourschedule > 3.9 && hourschedule < 4.25) {
-					hourschedule = 4;
-				} else if (hourschedule > 4.25 && hourschedule < 4.7) {
-					hourschedule = 4.56;
-				} else if (hourschedule > 4.7 && hourschedule < 5.55) {
-					hourschedule = 4.8;
-				} else if (hourschedule > 5.55 && hourschedule < 6.23) {
-					hourschedule = 6.08;
-				} else if (hourschedule > 6.23 && hourschedule < 7) {
-					hourschedule = 6.4;
-				} else if (hourschedule > 7 && hourschedule < 7.8) {
-					hourschedule = 7.6;
-				} else if (hourschedule > 7.8 && hourschedule < 10) {
-					hourschedule = 8;
-				}
-
-				const new_timeinfo = '{"TotalNoBreakDec": "' + timeinfo.TotalNoBreakDec + '", "OvertimeDec": "' + timeinfo.OvertimeDec + '", "TotalDec": "' + timeinfo.TotalDec + '", "StartDec": "' + timeinfo.StartDec + '", "HourSchedule": "' + hourschedule + '"}';
-				localStorage.setItem(key, new_timeinfo);
-				console.log(timeinfo);
-				console.log(new_timeinfo);
-			}
 		}
 	}
 
@@ -537,9 +491,8 @@ function setHistory(refresh_edit_table) {
 	}
 	document.getElementById("history").innerHTML = entry_history;
 
-	if (refresh_edit_table) {
+	if (refresh_edit_table)
 		document.getElementById("edit_history_table_body").innerHTML = entry_edit_history;
-	}
 
 	setOvertimeTotal(overtimetotal);
 	setOvertimeWeekly(overtimeweekly);
@@ -549,13 +502,11 @@ function notificationClosed(event) {
 	const version = document.getElementById("currentappversion").innerHTML,
 		lastnotifversion = localStorage.getItem("lastnotifversion");
 
-	if (event == "click") {
+	if (event == "click")
 		localStorage.setItem("lastnotifversion", version);
-	}
 
-	if (event == "onload" && version != lastnotifversion) {
+	if (event == "onload" && version != lastnotifversion)
 		$("#alertnotification").show();
-	}
 }
 
 function set_startminsubtract(startminsubtract_value) {
@@ -631,16 +582,14 @@ function allCheckBox(allCheckboxInput, elementId) {
 	const checks = document.querySelectorAll('#' + elementId + ' input[type="checkbox"]');
 
 	for (let i = 0; i < checks.length; i++) {
-		if (allCheckboxInput.checked == true && checks[i].checked == false) {
+		if (allCheckboxInput.checked == true && checks[i].checked == false)
 			checks[i].click();
-		}
-		if (allCheckboxInput.checked == false && checks[i].checked == true) {
+		else if (allCheckboxInput.checked == false && checks[i].checked == true)
 			checks[i].click();
-		}
 	}
 }
 
-function populateWorkdayCountCountries(callback) {
+/*function populateWorkdayCountCountries(callback) {
 	$.getJSON('https://date.nager.at/api/v3/AvailableCountries', function (response) {
 		// JSON result in `response` variable
 		let listitems = '<option value=none>None</option>';
@@ -650,7 +599,7 @@ function populateWorkdayCountCountries(callback) {
 		$('#reporting_country').empty().append(listitems);
 		callback();
 	});
-}
+}*/
 
 // Storage functions
 function cleanLocalStorage() {
@@ -663,13 +612,12 @@ function cleanLocalStorage() {
 		const expiredate = today.subtract(getHistoryRetain(), "days");
 		/* jshint -W084 */
 		for (let key = 0; key = keys[i]; i++) {
-			if (moment(key, "DD-MM-YYYY") < expiredate && testDateFormat(key)) { // days to keep data excluding today
+			if (moment(key, "DD-MM-YYYY") < expiredate && testDateFormat(key)) // days to keep data excluding today
 				delete localStorage[key];
-			}
 		}
 	} else if (deleteoption == "period") {
 		const cleaningdaystored = localStorage.getItem("cleaningday"),
-			  cleaningday = moment(cleaningdaystored, "DD-MM-YYYY");
+			cleaningday = moment(cleaningdaystored, "DD-MM-YYYY");
 
 		if (cleaningday.isSameOrBefore(today)) {
 			deleteHistory();
@@ -680,9 +628,9 @@ function cleanLocalStorage() {
 
 function autoBackup() {
 	const today = moment(),
-		  backupsenabled = localStorage.getItem("autobackupoption"),
-		  autobackupdaystored = localStorage.getItem("autobackupdate"),
-		  autobackupday = moment(autobackupdaystored, "DD-MM-YYYY");
+		backupsenabled = localStorage.getItem("autobackupoption"),
+		autobackupdaystored = localStorage.getItem("autobackupdate"),
+		autobackupday = moment(autobackupdaystored, "DD-MM-YYYY");
 
 	if (backupsenabled == "true" && autobackupday.isSameOrBefore(today)) {
 		alert("Performing autobackup");
@@ -694,9 +642,8 @@ function autoBackup() {
 function deleteHistory() {
 	if (confirm("Are you sure you wish to delete your history?\nIf you choose not to, then your data will be saved until the next cleaning time.")) {
 		for (let key in localStorage) {
-			if (testDateFormat(key)) {
+			if (testDateFormat(key))
 				delete localStorage[key];
-			}
 		}
 		setHistory(true);
 		alert("History deleted!");
@@ -768,9 +715,8 @@ function reset() {
 	setParameters();
 	cleanLocalStorage();
 	autoBackup();
-	if (localStorage.length < 10) {
+	if (localStorage.length < 10)
 		startIntroduction();
-	}
 }
 
 function setParameters() {
@@ -783,7 +729,7 @@ function setParameters() {
 		break_time_default = localStorage.getItem("break_time_default"),
 		startminsubtract = localStorage.getItem("startminsubtract"),
 		startminsubtract_value = localStorage.getItem("startminsubtract_value"),
-		reporting_country = localStorage.getItem("country"),
+		/*reporting_country = localStorage.getItem("country"),*/
 		historydeleteoption = localStorage.getItem("historydeleteoption"),
 		historyretain = localStorage.getItem("historyretain"),
 		historyresetday = localStorage.getItem("historyresetday"),
@@ -814,12 +760,12 @@ function setParameters() {
 	} else {
 		document.getElementById("break_time_default").value = 0;
 	}
-	populateWorkdayCountCountries(function () {
+	/*populateWorkdayCountCountries(function () {
 		if (reporting_country) {
 			//$("#reporting_country").val(reporting_country);
 			document.getElementById("reporting_country").value = reporting_country;
 		}
-	});
+	});*/
 	if (historydeleteoption == "days") {
 		document.getElementById("historydeleteoptiondays").click();
 	} else if (historydeleteoption == "period") {
@@ -872,11 +818,10 @@ function setParameters() {
 	}
 
 	// Check if custom time to subtract from start is stored and set value appropriatly
-	if (!startminsubtract_value) {
+	if (!startminsubtract_value)
 		set_startminsubtract("5");
-	} else {
+	else
 		set_startminsubtract(startminsubtract_value);
-	}
 
 	// If subtract from start is checked set UI and deduct the amount of time stored in localstorage
 	// If the page was already opened today, fill in that start time
@@ -950,14 +895,14 @@ class Timer {
 	}
 	start() {
 		if (this.isRunning) {
-			return console.error('Timer is already running');
+			return console.warn('Timer is already running');
 		}
 		this.isRunning = true;
 		this.startTime = Date.now();
 	}
 	stop() {
 		if (!this.isRunning) {
-			return console.error('Timer is already stopped');
+			return console.warn('Timer is already stopped');
 		}
 		this.isRunning = false;
 		this.overallTime = this.overallTime + this._getTimeElapsedSinceLastStart();
@@ -1046,20 +991,11 @@ window.onbeforeunload = function (e) {
 		localStorage.setItem(todayDate(), timeinfo);
 		localStorage.setItem("nosave", "false");
 	} else {
-		if (autoend.checked == false) {
-			localStorage.setItem("autoend", "false");
-		} else {
-			localStorage.setItem("autoend", "true");
-		}
+		localStorage.setItem("autoend", autoend.checked.toString());
 		localStorage.setItem("nosave", todayDate());
 	}
 	// Set 'subtract 5 min from start time' parameter in local storage
-	const startminsubtract = document.getElementById("startminsubtract");
-	if (startminsubtract.checked == false) {
-		localStorage.setItem("startminsubtract", "false");
-	} else {
-		localStorage.setItem("startminsubtract", "true");
-	}
+	localStorage.setItem("startminsubtract", document.getElementById("startminsubtract").checked.toString());
 	// Set 'hour schedule' parameter in local storage
 	localStorage.setItem("hourschedule", getHourSchedule());
 	// Set 'default break time' parameter in local storage
@@ -1070,52 +1006,21 @@ window.onbeforeunload = function (e) {
 	localStorage.setItem("historydeleteoption", getHistoryDeleteOption());
 	localStorage.setItem("historyretain", getHistoryRetain());
 	// Set 'default break time' parameter in local storage
-	localStorage.setItem("country", getCountry());
+	//localStorage.setItem("country", getCountry());
 	// Set UI visibility options
-	if (document.getElementById("overtimeoption").checked == false) {
-		localStorage.setItem("overtimeoption", "false");
-	} else {
-		localStorage.setItem("overtimeoption", "true");
-	}
-	if (document.getElementById("totalhoursoption").checked == false) {
-		localStorage.setItem("totalhoursoption", "false");
-	} else {
-		localStorage.setItem("totalhoursoption", "true");
-	}
-	if (document.getElementById("weeklyovertimeoption").checked == false) {
-		localStorage.setItem("weeklyovertimeoption", "false");
-	} else {
-		localStorage.setItem("weeklyovertimeoption", "true");
-	}
-	if (document.getElementById("totalovertimeoption").checked == false) {
-		localStorage.setItem("totalovertimeoption", "false");
-	} else {
-		localStorage.setItem("totalovertimeoption", "true");
-	}
-	if (document.getElementById("historyoption").checked == false) {
-		localStorage.setItem("historyoption", "false");
-	} else {
-		localStorage.setItem("historyoption", "true");
-	}
-	if (document.getElementById("autobackupoption").checked == false) {
-		localStorage.setItem("autobackupoption", "false");
-	} else {
-		localStorage.setItem("autobackupoption", "true");
-	}
-	if (document.getElementById("parametersoption").checked == false) {
-		localStorage.setItem("parametersoption", "false");
-	} else {
-		localStorage.setItem("parametersoption", "true");
-	}
-	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
-		localStorage.setItem("breaktime_timeselection_option_timerange", "false");
-	} else {
-		localStorage.setItem("breaktime_timeselection_option_timerange", "true");
-	}
+	localStorage.setItem("overtimeoption", document.getElementById("overtimeoption").checked.toString());
+	localStorage.setItem("totalhoursoption", document.getElementById("totalhoursoption").checked.toString());
+	localStorage.setItem("weeklyovertimeoption", document.getElementById("weeklyovertimeoption").checked.toString());
+	localStorage.setItem("totalovertimeoption", document.getElementById("totalovertimeoption").checked.toString());
+	localStorage.setItem("historyoption", document.getElementById("historyoption").checked.toString());
+	localStorage.setItem("autobackupoption", document.getElementById("autobackupoption").checked.toString());
+	localStorage.setItem("parametersoption", document.getElementById("parametersoption").checked.toString());
+	localStorage.setItem("breaktime_timeselection_option_timerange", document.getElementById("breaktime_timeselection_option_timerange").checked.toString());
 };
 
 // Listeners and initializers
 $(document).ready(function () {
+	importBootstrapColors();
 	reset();
 
 	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -1149,14 +1054,6 @@ $(document).ready(function () {
 		myModal = new bootstrap.Modal(document.getElementById('modalreporting'));
 		myModal.show();
 	}
-
-	const startminsubtract = document.getElementById("startminsubtract");
-	if (startminsubtract.checked == false) {
-		localStorage.setItem("startminsubtract", "false");
-	} else {
-		localStorage.setItem("startminsubtract", "true");
-	}
-
 });
 
 $(window).on("load", function () {
@@ -1171,13 +1068,8 @@ $(window).on("load", function () {
 });
 
 $(document).on('keydown', function (e) {
-	if (e.keyCode === 13) { //ENTER key code
+	if (e.keyCode === 13) //ENTER key code
 		add_time(getHourSchedule());
-	}
-});
-
-$('#app_alert .close').click(function () {
-	$(this).parent().fadeOut();
 });
 
 $("input").focusout(function () {
@@ -1189,11 +1081,7 @@ $(".btn").mouseup(function () {
 	this.blur();
 });
 
-function intervalListener() {
-	if (getEnd() <= now() && !startedLeaves) {
-		startLeaves();
-	} else if (getEnd() > now() && startedLeaves) {
-		stopLeaves();
-	}
-}
-setInterval(intervalListener, 5 * 60000); // (Every 5) * (60 * 1000 milliseconds = 60 seconds = 1 minute)
+$("#app_alert").on("close.bs.alert", function () {
+	$(this).hide();
+	return false;
+});
