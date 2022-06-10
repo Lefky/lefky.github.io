@@ -1054,6 +1054,10 @@ $(document).ready(function () {
 		myModal = new bootstrap.Modal(document.getElementById('modalreporting'));
 		myModal.show();
 	}
+	if (window.location.href.indexOf('#policy') != -1) {
+		myModal = new bootstrap.Modal(document.getElementById('modalpolicy'));
+		myModal.show();
+	}
 });
 
 $(window).on("load", function () {
