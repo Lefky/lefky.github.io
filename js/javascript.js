@@ -684,6 +684,7 @@ function importHistoryData(e) {
 		setParameters();
 	};
 	reader.readAsText(files[0]);
+	setParameters();
 	document.getElementById("settingsmodalclosebutton").click();
 	alert("Import successful!");
 }

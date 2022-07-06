@@ -659,6 +659,7 @@ function updateArray(array, category) {
 	return array;
 }
 
+/*
 async function calcBusinessDays(country, start, end) {
 	// Takes start date into account, if it's a workday it gets added
 	let day = moment(start),
@@ -711,6 +712,7 @@ async function businessDays(country, start, end){
 		resolve(calendar);
 	}));
 }
+*/
 
 // Listeners
 document.getElementById("start_reporting_selection").addEventListener("load", initDateSelector());
