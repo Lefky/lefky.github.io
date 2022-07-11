@@ -225,6 +225,10 @@ body {
 	margin-bottom: 0 !important;
 }
 
+.glowCookies__banner {
+	z-index: 2000 !important;
+}
+
 /*
 	Scrollbar customisations
 */
