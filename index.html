@@ -62,7 +62,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> (Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20220709.1</span> <br>
+					Version: <span id="currentappversion">20220726.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>
 			</div>
@@ -551,7 +551,7 @@
 								<button type="button" class="btn btn-primary my-1 mx-2"><i class="fa fa-plus"></i> Add New</button>
 							</span>
 							<span class="table-save-all me-2">
-								<button type="button" class="btn btn-success my-1 mx-2"><i class="fa fa-save"></i> Save all</button>
+								<button id="btn_save_all" type="button" class="btn btn-success my-1 mx-2"><i class="fa fa-save"></i> Save all</button>
 							</span>
 							<span class="table-delete-all me-2">
 								<button type="button" class="btn btn-danger my-1 mx-2"><i class="fa fa-trash"></i> Delete all</button>
@@ -666,6 +666,7 @@
 						<ul>
 							<li>MomentJS code is now provided by a CDN for ease of use in the backend.</li>
 							<li>When importing data parameters are now also automatically set.</li>
+							<li>Fix edit history modal save buttons returning to unintended state after pressing 'save all'.</li>
 						</ul>
 					</p>
 				</div>

@@ -37,14 +37,14 @@ $('.table-add').on('click', 'button', function () {
 $('.table-save-all').on('click', 'button', function () {
 	const table = document.getElementById('edit_history_table_body');
 
-	const iconToggle = (abtn, state) => {
+	const iconToggle = (btn, state) => {
 		if (state == "save") {
-			if (abtn.tagName == "BUTTON")
-				abtn.innerHTML = '<i class="fa fa-save"></i> Save all';
+			if (btn.id == "btn_save_all")
+				btn.innerHTML = '<i class="fa fa-save"></i> Save all';
 			else
-				abtn.innerHTML = '<i class="fa fa-save"></i>';
+				btn.innerHTML = '<i class="fa fa-save"></i>';
 		} else if (state == "check")
-			abtn.innerHTML = '<i class="fa fa-check"></i>';
+			btn.innerHTML = '<i class="fa fa-check"></i>';
 	};
 
 	// loop through each row of the table.
