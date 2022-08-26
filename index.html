@@ -8,18 +8,30 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script src="https://www.googletagmanager.com/gtag/js?id=UA-160200625-1" async></script>
+	<!-- <script src="https://www.googletagmanager.com/gtag/js?id=UA-160200625-1" async></script>
 	<script>
 	  window.dataLayer = window.dataLayer || [];
 	  function gtag(){dataLayer.push(arguments);}
 	  gtag('js', new Date());
 	  gtag('config', 'UA-160200625-1');
-	</script>
+	</script>-->
 	<!-- Bootstrap -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 		<!-- Bootstrap dark mode (https://github.com/vinorodrigues/bootstrap-dark-5): add the Bootstrap-Dark-plugin Variant CSS -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/css/bootstrap-dark-plugin.min.css" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous" defer></script>
+	<!-- Glow Cookies -->
+	<script src="https://cdn.jsdelivr.net/gh/manucaralmo/GlowCookies@3.1.7/src/glowCookies.min.js"></script>
+	<script>
+		glowCookies.start('en', {
+			style: 1,
+			analytics: 'G-LDC8QVPCMG',
+			policyLink: '#policy',
+			hideAfterClick: true,
+			border: 'none',
+			acceptBtnBackground: getComputedStyle(document.documentElement).getPropertyValue('--bs-blue')
+		});
+	</script>
 	<!-- jquery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
 	<!-- Font Awsome -->
@@ -27,7 +39,7 @@
 	<!-- Custom Styles -->
 	<link href="css/bootstrap_specific_style.css" rel="stylesheet" defer>
 	<!-- Moment.js -->
-	<script type="text/javascript" src="js/moment.min.js" defer></script><!-- https://momentjs.com/docs -->
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.29.3/min/moment.min.js" defer></script><!-- https://momentjs.com/docs -->
 	<!-- Custom scripting -->
 	<script type="text/javascript" src="js/javascript.js" defer></script>
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" defer></script>
@@ -49,10 +61,157 @@
 			</div>
 			<div class="modal-body">
 				<p>
-					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> ( Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20220510.2</span> <br>
+					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> (Send me a message with feedback or suggestions ;) )<br>
+					Version: <span id="currentappversion">20220726.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="modalpolicy" class="modal fade" tabindex="-1">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content px-2">
+			<div class="modal-header">
+				<h2>Cookie policy</h2>
+				<button type="button" class="btn float-end" data-bs-dismiss="modal"><i class="fas fa-times float-end"></i></button>
+			</div>
+			<div class="modal-body">
+				<div class="l-section-h i-cf">
+					<p><strong>What are cookies?</strong></p>
+					<p>
+						Cookies are small pieces of data that a website asks your browser to store on your computer or mobile device when
+						you visit the website or certain pages. The cookie allows the website to “remember” your actions or preferences
+						over time. Most browsers support cookies, but users can set their browsers to decline them and can delete them
+						whenever they like.
+					</p>
+					<p>
+						Cookies will usually contain the name of the website where the cookie has come from, how long the cookie will
+						remain on your device, and a value which is usually a randomly generated unique number.
+					</p>
+					<p>
+						Some cookies will be deleted as soon as you leave the website (the so-called “session cookies”), other cookies
+						will remain stored on your computer or mobile device and will help us identify you as a visitor of our website
+						(the so-called “permanent cookies”).
+					</p>
+					<p><strong>Why do we use cookies?</strong></p>
+					<p>Cookies on our Website are used for a variety of different purposes.</p>
+					<p>
+						We use cookies to improve the user-experience on the Website and to map your surfing behaviour (e.g. the pages
+						you have visited and the time you spent on that page). Cookies make our Website easier to use and allow us to
+						better tailor our Website to your interests and needs. Cookies are also used to help speed up your future
+						activities and experience on the Website. We use cookies, for example, to remember your language preferences.
+					</p>
+					<p>
+						We also use cookies to compile anonymous, aggregated statistics that allow us to understand how our Website is
+						being used and how we can improve our services.
+					</p>
+					<p><strong>Which cookies do we use?</strong></p>
+					<p>We use first party and third party cookies:</p>
+					<p>First party cookies are cookies created by the Website itself. These cookies are used to optimize your user-experience.</p>
+					<p>
+						Third party cookies are cookies created by parties other than the Website. Third party cookies in relation to our
+						Website are Facebook, Twitter, LinkedIn and Google Analytics. Google Analytics is Google’s analytics tool which
+						helps us understand how you engage with the Website. It may use a set of cookies to collect information and
+						report Website usage statistics without personally identifying individual visitors to Google. We mask your
+						IP-address, have a data processing amendment with Google and don&#8217;t share your data with Google. If you
+						want to opt out for Google Analytics click this <a>button</a>. The main cookie used by Google Analytics is the
+						‘___ga’ cookie.
+					</p>
+					<p>A further distinction can be made between the following types of cookies:</p>
+					<ul>
+						<li>
+							<p>Necessary cookies: These are required for the operation of our Website. They include for example cookies
+							that enable you to log in.</p>
+							<p>Our necessary cookies are named here:</p>
+							<table class="table table-borderless">
+								<tbody>
+									<tr>
+										<td class="w-100">None</td>
+									</tr>
+								</tbody>
+							</table>
+						</li>
+						<li>
+							<p>Analytical/performance cookies: These cookies allow us to analyse our webtraffic, to see the number of users
+							of our Website and how the users navigate through our Website.</p>
+							<p>Our analytical/performance cookies are named here:</p>
+							<table class="table">
+								<tbody>
+									<tr>
+										<th class="w-25">Cookie name</td>
+										<th class="w-25">Default expiration time</td>
+										<th class="w-25">Description</td>
+										<th class="w-25">Domain</td>
+									</tr>
+									<tr>
+										<td class="w-25">_gid</td>
+										<td class="w-25">2 hours</td>
+										<td class="w-25">Used to distinguish users.</td>
+										<td class="w-25">.lefky.github.io</td>
+									</tr>
+									<tr>
+										<td class="w-25">_ga</td>
+										<td class="w-25">2 years</td>
+										<td class="w-25">Used to distinguish users.</td>
+										<td class="w-25">.lefky.github.io</td>
+									</tr>
+									<tr>
+										<td class="w-25">_ga_&lt;container-id&gt;</td>
+										<td class="w-25">2 years</td>
+										<td class="w-25">Used to persist session state.</td>
+										<td class="w-25">.lefky.github.io</td>
+									</tr>
+
+								</tbody>
+							</table>
+						</li>
+						<li>
+							<p>Functional cookies: These cookies ‘remember’ the choices you made on our Website (e.g. language preference)
+							making the Website more user-friendly and enhancing your user experience.</p>
+							<p>Our functional cookies are named here:</p>
+							<table class="table table-borderless">
+								<tbody>
+									<tr>
+										<td class="w-100">None</td>
+									</tr>
+								</tbody>
+							</table>
+						</li>
+						<li>
+							<p>Targeting cookies: These show us the pages you have visited and the links you have followed, making
+							advertisements more relevant to your interests.</p>
+							<p>Our targeting cookies are named here:</p>
+							<table class="table table-borderless">
+								<tbody>
+									<tr>
+										<td class="w-100">None</td>
+									</tr>
+								</tbody>
+							</table>
+						</li>
+					</ul>
+					<p><strong>How can you manage or delete cookies?</strong></p>
+					<p>
+						You can at any time manage or delete cookies using the settings on your internet browser, allowing you to refuse
+						some or all cookies. Turning off cookies will limit the service that we are able to provide and may affect your
+						user-experience. Deleting cookies may result in manually adjusting preferences every time you visit our Website.
+						For more details about controlling and/or deleting cookies, visit the page corresponding to your browser for
+						more information:
+					</p>
+					<p>
+						<a href="https://support.apple.com/kb/ph19214?locale=en_US" target="_blank" rel="noopener noreferrer">Safari</a><br />
+						<a href="https://support.google.com/chrome/answer/95647?co=GENIE.Platform%3DDesktop&amp;hl=en" target="_blank" rel="noopener noreferrer">Google Chrome</a><br />
+						<a href="https://support.mozilla.org/en-US/kb/cookies-information-websites-store-on-your-computer" target="_blank" rel="noopener noreferrer">Mozilla Firefox</a><br />
+						<a href="https://support.microsoft.com/en-us/kb/260971" target="_blank" rel="noopener noreferrer">Internet Explorer</a><br />
+						<a href="https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener noreferrer">Edge</a>
+					</p>
+					<p>For other browsers, please consult the documentation provided by the browser operator.</p>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
@@ -77,7 +236,16 @@
 					Hitting "ENTER" will add the time corresponding to the selected value next to 'Overtime' to the end date (and break time if defined).
 				</p>
 				<p>
-					<button id="btn_getting_started" class="btn btn-outline-secondary btn-sm" onclick="startIntroduction();">Run through the "Get started" wizard.</button>
+					<div class="container">
+						<div class="row">
+							<div class="col-sm justify-content-center text-center">
+								<button id="btn_getting_started" class="btn btn-outline-secondary btn-sm" onclick="startIntroduction();">Run through the "Get started" wizard.</button>
+							</div>
+							<div class="col-sm justify-content-center text-center">
+								<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalpolicy">Cookie policy</button>
+							</div>
+						</div>
+					</div>
 				</p>
 				<p>
 					<h4>Import / export / delete</h4>
@@ -383,7 +551,7 @@
 								<button type="button" class="btn btn-primary my-1 mx-2"><i class="fa fa-plus"></i> Add New</button>
 							</span>
 							<span class="table-save-all me-2">
-								<button type="button" class="btn btn-success my-1 mx-2"><i class="fa fa-save"></i> Save all</button>
+								<button id="btn_save_all" type="button" class="btn btn-success my-1 mx-2"><i class="fa fa-save"></i> Save all</button>
 							</span>
 							<span class="table-delete-all me-2">
 								<button type="button" class="btn btn-danger my-1 mx-2"><i class="fa fa-trash"></i> Delete all</button>
@@ -482,31 +650,23 @@
 						Changes
 						<ul>
 							<li>
-								Added a temporary dark mode.<br>
-								Bootstrap is working on a fairly easy way to implement dark mode. Making it flexible and easy to handle.<br>
-								So for now a basic dark mode has been added to this project that only triggers depending on your OS settings.<br>
-								If your OS is set to a light or dark theme the app will respond accordingly. When it is set to auto the app will also automatically transition to the new mode.<br>
-								In a later stage I plan on making it possible to set a preference and/or manually switch between these modes.
+								On small screens the distinction between the footer and content is more clear for UX purposes.
 							</li>
 							<li>
-								Changed coloring to be more consistent. Only 1 definition of green, red, blue, ... exists now resulting in the same colors being used everywhere even after modifications.
+								Added cookie banner.<br>
+								Including the required <a href="#policy" data-bs-toggle="modal" data-bs-target="#modalpolicy">cookie policy</a> to be GDPR compliant (as far as it's needed for this since no data is being stored externally besides google analytics).
 							</li>
 							<li>
-								Added a desktop notification when the current time matches / exceeds the 'time to go home'.
-							</li>
-							<li>
-								Added reporting quick selection buttons for frequent timeframe selections.
+								Converted history overview to actual timestamps instead of decimal numbers.
 							</li>
 						</ul>
 					</p>
 					<p class="mb-0">
 						Bugfixes
 						<ul>
-							<li>Remove partly implemented features from being accessible. It remains to be seen if these will be added later or not.</li>
-							<li>Dismissing the leaves notification now also stops the effect from happening.</li>
-							<li>Safari bugfix for the history view. (Safari doesn't support a certain regex ATM resulting in the history buttons doing nothing)</li>
-							<li>Fixed the alerting message box (when you do something wrong) being removed instead of hidden. This resulted in new alerts not being able to display.</li>
-							<li>Fixed new history entry not being in line with recent UI changes.</li>
+							<li>MomentJS code is now provided by a CDN for ease of use in the backend.</li>
+							<li>When importing data parameters are now also automatically set.</li>
+							<li>Fix edit history modal save buttons returning to unintended state after pressing 'save all'.</li>
 						</ul>
 					</p>
 				</div>
@@ -699,7 +859,7 @@
 	<!-- Footer HTML -->
     <div id="footer" class="row fixed-bottom px-3 py-1">
 		<div class="col d-flex align-self-center">
-			<span class="mx-2">Senne Janssens &#169; 2021</span>
+			<span class="mx-2">Senne Janssens &#169; 2022</span>
 		</div>
 		<div class="col d-flex justify-content-end">
 			<div id="footer_button_group" class="btn-group align-self-center" role="group">

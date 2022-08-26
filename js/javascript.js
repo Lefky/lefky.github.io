@@ -470,10 +470,10 @@ function setHistory(refresh_edit_table) {
 		timeinfo = JSON.parse(localStorage.getItem(key));
 		if (timeinfo.hasOwnProperty('OvertimeDec')) {
 			if (timeinfo.OvertimeDec.startsWith("-")) {
-				entry_history = entry_history + "<tr class='text-danger'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
+				entry_history = entry_history + "<tr class='text-danger'><td>" + key + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.TotalNoBreakDec) + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.OvertimeDec) + "</td></tr>";
 				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-danger pt-3-half' contenteditable='false'>" + key + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
 			} else {
-				entry_history = entry_history + "<tr class='text-success'><td>" + key + "</td><td style='text-align:right;'>" + timeinfo.TotalNoBreakDec + "</td><td style='text-align:right;'>" + timeinfo.OvertimeDec + "</td></tr>";
+				entry_history = entry_history + "<tr class='text-success'><td>" + key + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.TotalNoBreakDec) + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.OvertimeDec) + "</td></tr>";
 				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-success pt-3-half' contenteditable='false'>" + key + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
 			}
 			overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo.OvertimeDec);
@@ -684,6 +684,7 @@ function importHistoryData(e) {
 		setParameters();
 	};
 	reader.readAsText(files[0]);
+	setParameters();
 	document.getElementById("settingsmodalclosebutton").click();
 	alert("Import successful!");
 }
@@ -1052,6 +1053,10 @@ $(document).ready(function () {
 	}
 	if (window.location.href.indexOf('#reporting') != -1) {
 		myModal = new bootstrap.Modal(document.getElementById('modalreporting'));
+		myModal.show();
+	}
+	if (window.location.href.indexOf('#policy') != -1) {
+		myModal = new bootstrap.Modal(document.getElementById('modalpolicy'));
 		myModal.show();
 	}
 });
