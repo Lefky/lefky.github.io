@@ -2,8 +2,12 @@ console.log("loaded editable_table.js");
 // source: https://mdbootstrap.com/docs/jquery/tables/editable/
 
 // Redraw table on opening modal
-$('#modaledithistory').on('shown.bs.modal', function () {
+$('#modaledithistory').on('show.bs.modal', function () {
 	setHistory(true);
+});
+
+$('#modaledithistory').on('hide.bs.modal', function () {
+	setHistory(false);
 });
 
 const $tableID = '#edit_history_table';
@@ -16,6 +20,7 @@ const newTr = `
     <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Total Work Time</td>
     <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Start Time</td>
     <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Hour Schedule</td>
+	<td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Summary</td>
     <td>
         <span class="record-save">
             <button type="button" class="btn btn-outline-success">
@@ -57,9 +62,10 @@ $('.table-save-all').on('click', 'button', function () {
 			OvertimeDec = currentRow.cells.item(2).innerHTML,
 			TotalDec = currentRow.cells.item(3).innerHTML,
 			StartDec = currentRow.cells.item(4).innerHTML,
-			HourSchedule = currentRow.cells.item(5).innerHTML;
+			HourSchedule = currentRow.cells.item(5).innerHTML,
+			Summary = currentRow.cells.item(6).innerHTML;
 
-		const returncode = save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule);
+		const returncode = save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule, Summary);
 
 		if (!returncode) {
 			const btn = currentRow.getElementsByClassName('record-save')[0].firstElementChild;
@@ -95,9 +101,13 @@ function clearPlaceholder(cell) {
 	}
 }
 
-function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule) {
+function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule, Summary) {
 	const isnumber = /^(-?)\d+(\.\d+)?$/;
+	const istext = /^[.\\\s\w\d]*$/;
 	let error_message = "";
+
+	Summary = Summary.replace(/\n/g, '\\n');
+	console.log(Summary);
 
 	if (!testDateFormat(key))
 		error_message = error_message + "<br><br>Date for date \"" + key + "\" is not in the DD-MM-YYYY format.";
@@ -117,10 +127,15 @@ function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSch
 	if (!isnumber.test(HourSchedule) && HourSchedule.toLowerCase() != "correction")
 		error_message = error_message + "<br><br>Hour Schedule for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
 
+	if (!istext.test(Summary) && Summary.toLowerCase() != "correction")
+		error_message = error_message + "<br><br>Summary for date \"" + key + "\" is not a valid text or the word \"correction\".";
+
 
 	if (error_message == "") {
-		const timeinfo = '{"TotalNoBreakDec": "' + (TotalNoBreakDec.toLowerCase() != "correction" ? parseFloat(TotalNoBreakDec).toFixed(2) : "correction") + '", "OvertimeDec": "' + parseFloat(OvertimeDec).toFixed(2) + '", "TotalDec": "' + (TotalDec.toLowerCase() != "correction" ? parseFloat(TotalDec).toFixed(2) : "correction") + '", "StartDec": "' + (StartDec.toLowerCase() != "correction" ? parseFloat(StartDec).toFixed(2) : "correction") + '", "HourSchedule": "' + (HourSchedule.toLowerCase() != "correction" ? parseFloat(HourSchedule).toFixed(2) : "correction") + '"}';
+		Summary = Summary == "Summary" ? "" : Summary;
+		const timeinfo = '{"TotalNoBreakDec": "' + (TotalNoBreakDec.toLowerCase() != "correction" ? parseFloat(TotalNoBreakDec).toFixed(2) : "correction") + '", "OvertimeDec": "' + parseFloat(OvertimeDec).toFixed(2) + '", "TotalDec": "' + (TotalDec.toLowerCase() != "correction" ? parseFloat(TotalDec).toFixed(2) : "correction") + '", "StartDec": "' + (StartDec.toLowerCase() != "correction" ? parseFloat(StartDec).toFixed(2) : "correction") + '", "HourSchedule": "' + (HourSchedule.toLowerCase() != "correction" ? parseFloat(HourSchedule).toFixed(2) : "correction") + '", "Summary": "' + (Summary.toLowerCase() != "correction" ? Summary : "correction") + '"}';
 		localStorage.setItem(key, timeinfo);
+		console.log(Summary);
 	} else {
 		error_message = error_message + "<br><br>Please correct your entry and try again.";
 		return error_message;
@@ -137,8 +152,8 @@ $($tableID).on('click', '.record-save', function () {
 		TotalDec = currentRow.find("td:eq(3)").text(), // get current row 4th TD
 		StartDec = currentRow.find("td:eq(4)").text(), // get current row 5th TD
 		HourSchedule = currentRow.find("td:eq(5)").text(), // get current row 6th
-
-	returncode = save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule);
+		Summary = currentRow.find("td:eq(6)").text(), // get current row 7th
+		returncode = save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule, Summary);
 
 	const btn = $(this).find("button:eq(0)");
 	const iconToggle = () => {
@@ -168,8 +183,9 @@ $($tableID).on('click', '.record-delete', function () {
 		OvertimeDec = currentRow.find("td:eq(2)").text(), // get current row 3rd TD
 		TotalDec = currentRow.find("td:eq(3)").text(), // get current row 4th TD
 		StartDec = currentRow.find("td:eq(4)").text(), // get current row 5th TD
-		HourSchedule = currentRow.find("td:eq(5)").text(); // get current row 6th TD
-	const record = "\nDelete history record with \n \nDate:                             " + key + "\nTotal Time No Break:    " + TotalNoBreakDec + "\nOvertime:                      " + OvertimeDec + "\nTotal Work Time:          " + TotalDec + "\nStart Time:                    " + StartDec + "\nHour Schedule:            " + HourSchedule;
+		HourSchedule = currentRow.find("td:eq(5)").text(), // get current row 6th TD
+		Summary = currentRow.find("td:eq(6)").text(); // get current row 7th TD
+	const record = "\nDelete history record with \n \nDate:                             " + key + "\nTotal Time No Break:    " + TotalNoBreakDec + "\nOvertime:                      " + OvertimeDec + "\nTotal Work Time:          " + TotalDec + "\nStart Time:                    " + StartDec + "\nHour Schedule:            " + HourSchedule + "\nSummary:\n" + Summary;
 
 	const confirm_response = confirm(record);
 	if (confirm_response == true) {

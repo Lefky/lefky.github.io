@@ -249,6 +249,16 @@ function setTotalNoBreakDec(time) {
 		document.getElementById("totalnobreakdec").value = time;
 }
 
+function getSummary() {
+	return document.getElementById("summary").value.replace(/\n/g, '\\n');
+}
+
+function setSummary(summary) {
+	if (summary.trim().length > 0) {
+		document.getElementById("summary").value = summary.replace(/\\n/g, '\n');
+	}
+}
+
 function getHistory() {
 	let keys = Object.keys(localStorage),
 		sortedkeys = keys.map(reverseDateRepresentation).sort().map(reverseDateRepresentation), // don't do reverse() here to have dates ascending
@@ -471,10 +481,10 @@ function setHistory(refresh_edit_table) {
 		if (timeinfo.hasOwnProperty('OvertimeDec')) {
 			if (timeinfo.OvertimeDec.startsWith("-")) {
 				entry_history = entry_history + "<tr class='text-danger'><td>" + key + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.TotalNoBreakDec) + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.OvertimeDec) + "</td></tr>";
-				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-danger pt-3-half' contenteditable='false'>" + key + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
+				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-danger pt-3-half' contenteditable='false'>" + key + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class='text-danger pt-3-half' contenteditable='true' style='white-space: pre-wrap; word-wrap: break-word'>" + timeinfo.Summary.replace(/\\n/g, '\n') + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
 			} else {
 				entry_history = entry_history + "<tr class='text-success'><td>" + key + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.TotalNoBreakDec) + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.OvertimeDec) + "</td></tr>";
-				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-success pt-3-half' contenteditable='false'>" + key + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
+				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-success pt-3-half' contenteditable='false'>" + key + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class='text-success pt-3-half' contenteditable='true' style='white-space: pre-wrap; word-wrap: break-word'>" + timeinfo.Summary.replace(/\\n/g, '\n') + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
 			}
 			overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo.OvertimeDec);
 
@@ -742,6 +752,7 @@ function setParameters() {
 		autobackupperiodunit = localStorage.getItem("autobackupperiodunit"),
 		overtimeoption = localStorage.getItem("overtimeoption"),
 		totalhoursoption = localStorage.getItem("totalhoursoption"),
+		summaryoption = localStorage.getItem("summaryoption"),
 		historyoption = localStorage.getItem("historyoption"),
 		weeklyovertimeoption = localStorage.getItem("weeklyovertimeoption"),
 		totalovertimeoption = localStorage.getItem("totalovertimeoption"),
@@ -791,7 +802,7 @@ function setParameters() {
 		document.getElementById("autobackupperiodunit").value = autobackupperiodunit;
 	maxValuesCustomTimeOption("autobackup", getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById("autobackupperiod"), document.getElementById("autobackupday"));
 	// Set UI visibility options
-	if (overtimeoption == "true" && totalhoursoption == "true" && weeklyovertimeoption == "true" && totalovertimeoption == "true" && historyoption == "true" && parametersoption == "true") {
+	if (overtimeoption == "true" && totalhoursoption == "true" && weeklyovertimeoption == "true" && totalovertimeoption == "true" && summaryoption == "true" && historyoption == "true" && parametersoption == "true") {
 		document.getElementById("alloption").click();
 	} else {
 		if (overtimeoption == "true" || overtimeoption === null) {
@@ -805,6 +816,9 @@ function setParameters() {
 		}
 		if (totalovertimeoption == "true" || totalovertimeoption === null) {
 			document.getElementById("totalovertimeoption").click();
+		}
+		if (summaryoption == "true" || summaryoption === null) {
+			document.getElementById("summaryoption").click();
 		}
 		if (historyoption == "true" || historyoption === null) {
 			document.getElementById("historyoption").click();
@@ -842,6 +856,7 @@ function setParameters() {
 		setStart(timeinfo.StartDec);
 		setBreak(timeinfo.TotalDec - timeinfo.TotalNoBreakDec);
 		setEnd(parseFloat(timeinfo.StartDec) + parseFloat(timeinfo.TotalDec));
+		setSummary(timeinfo.Summary);
 		calculateTotal();
 		if (startminsubtract == "true")
 			document.getElementById("startminsubtract").click();
@@ -988,7 +1003,7 @@ window.onbeforeunload = function (e) {
 			}
 			localStorage.setItem("autoend", "true");
 		}
-		const timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule().toFixed(2) + '"}';
+		const timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule().toFixed(2) + '", "Summary": "' + getSummary() + '"}';
 		localStorage.setItem(todayDate(), timeinfo);
 		localStorage.setItem("nosave", "false");
 	} else {
@@ -1013,6 +1028,7 @@ window.onbeforeunload = function (e) {
 	localStorage.setItem("totalhoursoption", document.getElementById("totalhoursoption").checked.toString());
 	localStorage.setItem("weeklyovertimeoption", document.getElementById("weeklyovertimeoption").checked.toString());
 	localStorage.setItem("totalovertimeoption", document.getElementById("totalovertimeoption").checked.toString());
+	localStorage.setItem("summaryoption", document.getElementById("summaryoption").checked.toString());
 	localStorage.setItem("historyoption", document.getElementById("historyoption").checked.toString());
 	localStorage.setItem("autobackupoption", document.getElementById("autobackupoption").checked.toString());
 	localStorage.setItem("parametersoption", document.getElementById("parametersoption").checked.toString());

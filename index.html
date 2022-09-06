@@ -62,7 +62,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> (Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20220726.1</span> <br>
+					Version: <span id="currentappversion">20220905.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>
 			</div>
@@ -384,6 +384,10 @@
 							<label class="form-check-label" for="totalovertimeoption">Show total overtime balance</label>
 						</div>
 						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="summaryoption" name="summaryoption" data-bs-toggle="collapse" data-bs-target="#divsummary">
+							<label class="form-check-label" for="summaryoption">Show summary</label>
+						</div>
+						<div class="form-check">
 							<input type="checkbox" class="form-check-input" id="historyoption" name="historyoption" data-bs-toggle="collapse" data-bs-target="#historygroup">
 							<label class="form-check-label" for="historyoption">Show history</label>
 						</div>
@@ -567,6 +571,7 @@
 							<th class="text-center">Total Work Time</th>
 							<th class="text-center">Start Time</th>
 							<th class="text-center">Hour Schedule</th>
+							<th class="text-center">Summary</th>
 							<th class="text-center">Edit</th>
 							</tr>
 						</thead>
@@ -650,23 +655,17 @@
 						Changes
 						<ul>
 							<li>
-								On small screens the distinction between the footer and content is more clear for UX purposes.
+								Added more default break times.
 							</li>
 							<li>
-								Added cookie banner.<br>
-								Including the required <a href="#policy" data-bs-toggle="modal" data-bs-target="#modalpolicy">cookie policy</a> to be GDPR compliant (as far as it's needed for this since no data is being stored externally besides google analytics).
-							</li>
-							<li>
-								Converted history overview to actual timestamps instead of decimal numbers.
+								Added a day summary to saved data. This allows for better tracking and to add notes to your registrations.
 							</li>
 						</ul>
 					</p>
 					<p class="mb-0">
 						Bugfixes
 						<ul>
-							<li>MomentJS code is now provided by a CDN for ease of use in the backend.</li>
-							<li>When importing data parameters are now also automatically set.</li>
-							<li>Fix edit history modal save buttons returning to unintended state after pressing 'save all'.</li>
+							<li></li>
 						</ul>
 					</p>
 				</div>
@@ -702,6 +701,10 @@
 									<option value="0.5">30 min</option>
 									<option value="0.75">45 min</option>
 									<option value="1">1h</option>
+									<option value="1">1h 15</option>
+									<option value="1">1h 30</option>
+									<option value="1">1h 45</option>
+									<option value="1">2h</option>
 								</select>
 							</div>
 							<div id="breaktime_timeselection_option_timerange_div" class="pe-2 ps-3 d-none">
@@ -768,7 +771,7 @@
 								<input name="totaldec" id="totaldec" type="text" class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
 							</div>
 						</div>
-						<div class="input-group justify-content-end mt-3">
+						<div class="input-group justify-content-end my-3">
 							<div id="divovertimeweekly" class="collapse input-group justify-content-end mb-1">
 								<label class="col-form-label" for="overtimeweekly" data-bs-toggle="tooltip" data-bs-placement="left" title="Here you can find howmuch overtime you've built up / used during the current week. This value doesn't include today yet.">Weekly overtime</label>
 								<div class="pe-2 ps-3">
@@ -782,7 +785,13 @@
 								</div>
 							</div>
 						</div>
-						<div class="row collapse" id="historygroup">
+						<div id="divsummary" class="input-group justify-content-end mt-3 pe-1">
+							<label class="col-form-label d-flex align-items-center w-15" for="summary" data-bs-toggle="tooltip" data-bs-placement="left" title="Write down a summary of your day. You can input multiple lines. If left blank no summary will be saved.">Day summary</label>
+							<div class="pe-2 ps-3">
+								<textarea name="summary" id="summary" class="form-control mx-1" rows="3" cols="30"></textarea>
+							</div>
+						</div>
+						<div id="historygroup" class="row collapse">
 							<div class="col-2 align-self-center d-flex justify-content-end">
 								<button id="btnedithistory" type="button" class="btn btn-outline-secondary fontsize60 ms-auto me-2 pb-1 px-2" data-bs-toggle="modal" data-bs-target="#modaledithistory"><i class="fas fa-edit"></i></button>
 							</div>
