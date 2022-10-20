@@ -150,7 +150,7 @@ function setHourSchedule(time) {
 	else
 		document.getElementById("hourschedule").value = "7.6";
 
-	hourscheduleAddTimeButton();
+	hourscheduleAddTimeButton(getHourSchedule());
 }
 
 function getWorktime() {
@@ -177,7 +177,7 @@ function calculateTotal() {
 	setOvertimeDec(overtimedec);
 	setTotalNoBreakDec(totalnobreakdec);
 
-	hourscheduleAddTimeButton();
+	hourscheduleAddTimeButton(getHourSchedule());
 }
 
 function setTotal(time) {
@@ -525,11 +525,8 @@ function set_startminsubtract(startminsubtract_value) {
 	document.getElementById("startminsubtract_value").value = startminsubtract_value;
 }
 
-function hourscheduleAddTimeButton() {
-	const hourschedule = getHourSchedule(),
-		addtimebutton_span = document.getElementById("addtimebutton_span");
-	localStorage.setItem("hourschedule", hourschedule);
-	addtimebutton_span.innerHTML = hourschedule;
+function hourscheduleAddTimeButton(hourSchedule) {
+	document.getElementById("addtimebutton_span").innerHTML = hourSchedule;
 }
 
 function breaktimeTimeselection() {
@@ -597,6 +594,20 @@ function allCheckBox(allCheckboxInput, elementId) {
 		else if (allCheckboxInput.checked == false && checks[i].checked == true)
 			checks[i].click();
 	}
+}
+
+function activateConfirmationModal(message, callback) {
+	$("#modalconfirm").find(".modal-body").html("<p>" + message + "</p>");
+
+	const modal = new bootstrap.Modal(document.getElementById('modalconfirm'), {});
+	modal.show();
+
+	$("#modalconfirm").on('shown.bs.modal', function (event) {
+		let buttons = this.querySelectorAll('.btn');
+		buttons.forEach(btn => {
+			btn.onclick = () => callback(btn.innerText.toLowerCase());
+		});
+	});
 }
 
 /*function populateWorkdayCountCountries(callback) {
@@ -1012,8 +1023,7 @@ window.onbeforeunload = function (e) {
 	}
 	// Set 'subtract 5 min from start time' parameter in local storage
 	localStorage.setItem("startminsubtract", document.getElementById("startminsubtract").checked.toString());
-	// Set 'hour schedule' parameter in local storage
-	localStorage.setItem("hourschedule", getHourSchedule());
+	// Set 'hour schedule' parameter in local storage get set in #hourschedule listener
 	// Set 'default break time' parameter in local storage
 	localStorage.setItem("break_time_default", getBreakDefault());
 	// Clear break counter
@@ -1106,3 +1116,11 @@ $("#app_alert").on("close.bs.alert", function () {
 	$(this).hide();
 	return false;
 });
+
+$("#hourschedule").on('change', function (e) {
+	activateConfirmationModal("Do you want to set the hour schedule for every day?<br>If not, the selected value will only be applicable today.", choice => {
+		if (choice == "yes")
+			localStorage.setItem("hourschedule", getHourSchedule());
+	});
+});
+
