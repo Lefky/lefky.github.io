@@ -563,10 +563,20 @@ function formatJSONdata() {
 			timeinfo = JSON.parse(localStorage.getItem(key));
 			dateKey = moment(key, "DD-MM-YYYY");
 
-			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo.HourSchedule.toLowerCase() == "correction")
+			try {
+				// replace by const
+				var in_range = dateKey.isBetween(start_reporting_selection, end_reporting_selection) ? true : false,
+					correction = timeinfo.HourSchedule.toLowerCase() == "correction" ? true : false;
+			} catch (err) {
+				console.log(err);
+				console.log(dateKey);
+				console.log(timeinfo);
+			}
+
+			if (in_range && correction)
 				sumOvertime = parseFloat(sumOvertime.toFixed(2)) + parseFloat(timeinfo.OvertimeDec);
 
-			if (dateKey.isBetween(start_reporting_selection, end_reporting_selection) && timeinfo.HourSchedule.toLowerCase() != "correction") {
+			if (in_range && !correction) {
 
 				dateKey = key.split('-');
 				dateKey = new Date(dateKey[2], dateKey[1] - 1, dateKey[0]);
