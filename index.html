@@ -277,13 +277,13 @@
 						<div class="collapse" id="divautobackup">
 							<div class="input-group">
 								<label class="col-form-label" for="autobackupday">Backup on day </label>
-								<input type="number" name="autobackupday" id="autobackupday" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" max="31" onchange="maxValuesCustomTimeOption('autobackup', getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById('autobackupperiod'), document.getElementById('autobackupday'))">
+								<input type="number" name="autobackupday" id="autobackupday" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" max="31" value="1" onchange="maxValuesCustomTimeOption('autobackup', getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById('autobackupperiod'), document.getElementById('autobackupday'))">
 								<label class="col-form-label" for="autobackupperiod"> of every </label>
-								<input type="number" name="autobackupperiod" id="autobackupperiod" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" onchange="maxValuesCustomTimeOption('autobackup', getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById('autobackupperiod'), document.getElementById('autobackupday'))">
+								<input type="number" name="autobackupperiod" id="autobackupperiod" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" value="1" onchange="maxValuesCustomTimeOption('autobackup', getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById('autobackupperiod'), document.getElementById('autobackupday'))">
 								<select name="autobackupperiodunit" id="autobackupperiodunit" class="form-select flex-grow-0 w-f-100 col-sm-2 mx-1" onchange="maxValuesCustomTimeOption('autobackup', getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById('autobackupperiod'), document.getElementById('autobackupday'))">
 									<option value="days">days</option>
 									<option value="weeks">weeks</option>
-									<option value="months">months</option>
+									<option value="months" selected>months</option>
 								</select>
 								<button type="button" id="autobackupsavebutton" class="btn btn-outline-secondary" onclick="saveBackupDay()">Save</button>
 								<div class="input-group my-3">
