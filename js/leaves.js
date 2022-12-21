@@ -12,7 +12,7 @@ function intervalListener() {
 	else if (getEnd() > now() && startedLeaves)
 		stopLeaves();
 }
-setInterval(intervalListener, 1 * 60000); // (Every 5) * (60 * 1000 milliseconds = 60 seconds = 1 minute)
+setInterval(intervalListener, 1 * 10000); // (Every 5) * (60 * 1000 milliseconds = 60 seconds = 1 minute)
 
 function startLeaves() {
 	loadLeavesCSS();
@@ -30,9 +30,15 @@ function startLeaves() {
 
 	document.getElementsByTagName("body")[0].appendChild(leaves_div);
 
+	const bb8_div = document.createElement("div");
+	bb8_div.classList = "bb8";
+	bb8_div.id = "bb8";
+	document.getElementsByTagName("body")[0].appendChild(bb8_div);
+
 	showLeafMessage();
 	createNotification("Done for the day!", "You did your time. Time to drink!");
 	playNotificationSound();
+	$(".bb8").css({ animation: "moving 3s infinite linear" });
 
 	document.title = "Done for the day!";
 
@@ -48,6 +54,7 @@ function stopLeaves() {
 	startedLeaves = false;
 	document.getElementById("leaves_alert").remove();
 	document.getElementById("leaves").remove();
+	document.getElementById("bb8").remove();
 
 	clearInterval(interval);
 	document.title = "Working hours";
@@ -58,6 +65,12 @@ function loadLeavesCSS() {
 	fileref.setAttribute("rel", "stylesheet");
 	fileref.setAttribute("type", "text/css");
 	fileref.setAttribute("href", "css/leaves.css");
+	document.getElementsByTagName("head")[0].appendChild(fileref);
+
+	fileref = document.createElement("link");
+	fileref.setAttribute("rel", "stylesheet");
+	fileref.setAttribute("type", "text/css");
+	fileref.setAttribute("href", "css/bb8.css");
 	document.getElementsByTagName("head")[0].appendChild(fileref);
 
 	fileref = document.createElement("link");
