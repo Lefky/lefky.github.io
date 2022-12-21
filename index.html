@@ -62,7 +62,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> (Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20221206.1</span> <br>
+					Version: <span id="currentappversion">20221221.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>
 			</div>
@@ -690,7 +690,8 @@
 					<p class="mb-0">
 						Bugfixes
 						<ul>
-							<li>NONE!</li>
+							<li>Hotfix for records made before the summary field was present.</li>
+							<li>Hotfix for summary field always being show.</li>
 						</ul>
 					</p>
 				</div>
@@ -810,7 +811,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="divsummary" class="input-group justify-content-end mt-3 pe-1">
+						<div id="divsummary" class="collapse input-group justify-content-end mt-3 pe-1">
 							<label class="col-form-label d-flex align-items-center w-15" for="summary" data-bs-toggle="tooltip" data-bs-placement="left" title="Write down a summary of your day. You can input multiple lines. If left blank no summary will be saved.">Day summary</label>
 							<div class="pe-2 ps-3">
 								<textarea name="summary" id="summary" class="form-control mx-1" rows="3" cols="30"></textarea>
