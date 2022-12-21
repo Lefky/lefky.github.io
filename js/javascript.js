@@ -479,6 +479,11 @@ function setHistory(refresh_edit_table) {
 	for (key = 0; key = revkeys[i]; i++) {
 		timeinfo = JSON.parse(localStorage.getItem(key));
 		if (timeinfo.hasOwnProperty('OvertimeDec')) {
+
+			// Fix for records made before the summary field was present
+			timeinfo.Summary = timeinfo.Summary !== undefined ? timeinfo.Summary : "";
+			localStorage.setItem(key, JSON.stringify(timeinfo));
+
 			if (timeinfo.OvertimeDec.startsWith("-")) {
 				entry_history = entry_history + "<tr class='text-danger'><td>" + key + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.TotalNoBreakDec) + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.OvertimeDec) + "</td></tr>";
 				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-danger pt-3-half' contenteditable='false'>" + key + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class='text-danger pt-3-half' contenteditable='true' style='white-space: pre-wrap; word-wrap: break-word'>" + timeinfo.Summary.replace(/\\n/g, '\n') + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
