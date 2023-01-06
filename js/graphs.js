@@ -5,7 +5,7 @@ In HTML
   <div id="div_where_graph_comes"></div>
 */
 
-var sortedkeys = getHistory(),
+var sortedkeys = getHistoryKeys(),
 	numberOfDaysRegistered = 0,
 	datasetOvertimeDec = [],
 	datasetOvertimeCumulative = [],

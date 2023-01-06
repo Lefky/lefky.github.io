@@ -259,7 +259,7 @@ function setSummary(summary) {
 	}
 }
 
-function getHistory() {
+function getHistoryKeys() {
 	let keys = Object.keys(localStorage),
 		sortedkeys = keys.map(reverseDateRepresentation).sort().map(reverseDateRepresentation), // don't do reverse() here to have dates ascending
 		i = 0,
@@ -468,7 +468,7 @@ function testDateFormat(date) {
 function setHistory(refresh_edit_table) {
 	let entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid var(--bs-secondary);'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
 		entry_edit_history = "",
-		revkeys = getHistory().reverse(),
+		revkeys = getHistoryKeys().reverse(),
 		overtimetotal = 0,
 		overtimeweekly = 0,
 		i = 0,
@@ -687,6 +687,45 @@ function exportHistory() {
 	const vBlob = new Blob([_myArray], { type: "octet/stream" });
 	vName = 'working_history_' + todayDate() + '.json';
 	vUrl = window.URL.createObjectURL(vBlob);
+
+	vLink.setAttribute('href', vUrl);
+	vLink.setAttribute('download', vName);
+
+	//Note: Programmatically click the link to download the file
+	vLink.click();
+}
+
+function exportCSV() {
+	let keys = getHistoryKeys(),
+		i = 0,
+		key,
+		timeinfo,
+		items = [];
+
+	/* jshint -W084 */
+	for (key = 0; key = keys[i]; i++) {
+		timeinfo = JSON.parse(localStorage.getItem(key));
+		if (timeinfo.hasOwnProperty('OvertimeDec')) {
+			timeinfo = Object.assign({Date: key}, timeinfo); // Add date at the beginning of the json record
+			//timeinfo.Date = key;
+			items.push(timeinfo);
+		}
+	}
+
+	//const items = json3.items;
+	// https://stackoverflow.com/a/31536517
+	const replacer = (key, value) => value === null ? '' : value; // Specify how you want to handle null values
+	const header = Object.keys(items[0]);
+	const csv = [
+		header.join(','), // header row first
+		...items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
+	].join('\r\n');
+
+	//Note: We use the anchor tag here instead button.
+	const vLink = document.getElementById('exportCSVLink');
+
+	vName = 'working_history_' + todayDate() + '.csv';
+	vUrl = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
 
 	vLink.setAttribute('href', vUrl);
 	vLink.setAttribute('download', vName);
