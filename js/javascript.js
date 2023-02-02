@@ -1,7 +1,12 @@
 console.log("loaded javascript.js");
 
+/*global $, moment, bootstrap, historyresetperiodunit, break_counter_btn */
+/*eslint no-undef: "error"*/
+/*exported setBreakDefault, addBreakDefault, saveCleaningDay, saveBackupDay, allCheckBox, exportCSV, makeDate, break_counter, tooltipList */
+
 // Import Bootstrap colors
-var bs_blue, bs_indigo, bs_purple, bs_pink, bs_red, bs_orange, bs_yellow, bs_gray, bs_teal, bs_cyan, bs_white, bs_gray, bs_gray_dark, bs_primary, bs_secondary, bs_success, bs_info, bs_warning, bs_danger, bs_light, bs_dark, bs_washed_red, bs_washed_yellow, bs_washed_green;
+// eslint-disable-next-line no-unused-vars
+var bs_blue, bs_indigo, bs_purple, bs_pink, bs_red, bs_orange, bs_yellow, bs_green, bs_gray, bs_teal, bs_cyan, bs_white, bs_gray_dark, bs_primary, bs_secondary, bs_success, bs_info, bs_warning, bs_danger, bs_light, bs_dark, bs_washed_red, bs_washed_yellow, bs_washed_green;
 function importBootstrapColors(){
 	bs_blue = getComputedStyle(document.documentElement).getPropertyValue('--bs-blue');
 	bs_indigo = getComputedStyle(document.documentElement).getPropertyValue('--bs-indigo');
@@ -265,7 +270,7 @@ function getHistoryKeys() {
 		i = 0,
 		key;
 
-	/* jshint -W084 */
+	// eslint-disable-next-line no-cond-assign
 	for (i = 0; key = sortedkeys[i]; i++) {
 		if (!testDateFormat(key)) {
 			sortedkeys.splice(i, 1);
@@ -349,8 +354,7 @@ function getAutobackupDay() {
 }
 
 function getAutobackupPeriod() {
-	let period = document.getElementById("autobackupperiod").value,
-		periodunit = getAutobackupPeriodUnit();
+	let period = document.getElementById("autobackupperiod").value;
 
 	if (historyresetperiodunit == "days")
 		period = period > 31 ? 31 : period;
@@ -475,10 +479,10 @@ function setHistory(refresh_edit_table) {
 		key,
 		timeinfo;
 
-	/* jshint -W084 */
+	// eslint-disable-next-line no-cond-assign
 	for (key = 0; key = revkeys[i]; i++) {
 		timeinfo = JSON.parse(localStorage.getItem(key));
-		if (timeinfo.hasOwnProperty('OvertimeDec')) {
+		if (Object.prototype.hasOwnProperty.call(timeinfo, "OvertimeDec")) {
 
 			// Fix for records made before the summary field was present
 			if (timeinfo.Summary == undefined) {
@@ -551,9 +555,14 @@ function breaktimeTimeselection() {
 		document.getElementById("break_add30_btn").disabled = false;
 		document.getElementById("break_counter_btn").disabled = false;
 		// re-initialize tooltips to pickup the changes
-		$('[data-toggle="tooltip"]').tooltip({
-			'delay': { show: 1000, hide: 0 }
-		});
+		const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')),
+			// eslint-disable-next-line no-unused-vars
+			tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+				return new bootstrap.Tooltip(tooltipTriggerEl, {
+					boundary: document.body,
+					'delay': { show: 1000, hide: 0 }
+				});
+			});
 	} else {
 		document.getElementById("breaktime_timeselection_option_timerange_div").classList.remove("d-none");
 		document.getElementById("breaktime_timeselection_option_duration_div").classList.add("d-none");
@@ -568,9 +577,14 @@ function breaktimeTimeselection() {
 		document.getElementById("break_add30_btn").disabled = true;
 		document.getElementById("break_counter_btn").disabled = true;
 		// re-initialize tooltips to pickup the changes
-		$('[data-toggle="tooltip"]').tooltip({
-			'delay': { show: 1000, hide: 0 }
-		});
+		const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')),
+			// eslint-disable-next-line no-unused-vars
+			tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+				return new bootstrap.Tooltip(tooltipTriggerEl, {
+					boundary: document.body,
+					'delay': { show: 1000, hide: 0 }
+				});
+			});
 	}
 }
 
@@ -609,7 +623,7 @@ function activateConfirmationModal(message, callback) {
 	const modal = new bootstrap.Modal(document.getElementById('modalconfirm'), {});
 	modal.show();
 
-	$("#modalconfirm").on('shown.bs.modal', function (event) {
+	$("#modalconfirm").on('shown.bs.modal', function () {
 		let buttons = this.querySelectorAll('.btn');
 		buttons.forEach(btn => {
 			btn.onclick = () => callback(btn.innerText.toLowerCase());
@@ -638,7 +652,7 @@ function cleanLocalStorage() {
 
 	if (deleteoption == "days") {
 		const expiredate = today.subtract(getHistoryRetain(), "days");
-		/* jshint -W084 */
+		// eslint-disable-next-line no-cond-assign
 		for (let key = 0; key = keys[i]; i++) {
 			if (moment(key, "DD-MM-YYYY") < expiredate && testDateFormat(key)) // days to keep data excluding today
 				delete localStorage[key];
@@ -684,9 +698,9 @@ function exportHistory() {
 	//Note: We use the anchor tag here instead button.
 	const vLink = document.getElementById('exportHistoryLink');
 
-	const vBlob = new Blob([_myArray], { type: "octet/stream" });
-	vName = 'working_history_' + todayDate() + '.json';
-	vUrl = window.URL.createObjectURL(vBlob);
+	const vBlob = new Blob([_myArray], { type: "octet/stream" }),
+		vName = 'working_history_' + todayDate() + '.json',
+		vUrl = window.URL.createObjectURL(vBlob);
 
 	vLink.setAttribute('href', vUrl);
 	vLink.setAttribute('download', vName);
@@ -702,10 +716,10 @@ function exportCSV() {
 		timeinfo,
 		items = [];
 
-	/* jshint -W084 */
+	// eslint-disable-next-line no-cond-assign
 	for (key = 0; key = keys[i]; i++) {
 		timeinfo = JSON.parse(localStorage.getItem(key));
-		if (timeinfo.hasOwnProperty('OvertimeDec')) {
+		if (Object.prototype.hasOwnProperty.call(timeinfo, "OvertimeDec")) {
 			timeinfo = Object.assign({Date: key}, timeinfo); // Add date at the beginning of the json record
 			//timeinfo.Date = key;
 			items.push(timeinfo);
@@ -724,8 +738,8 @@ function exportCSV() {
 	//Note: We use the anchor tag here instead button.
 	const vLink = document.getElementById('exportCSVLink');
 
-	vName = 'working_history_' + todayDate() + '.csv';
-	vUrl = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+	const vName = 'working_history_' + todayDate() + '.csv',
+		vUrl = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
 
 	vLink.setAttribute('href', vUrl);
 	vLink.setAttribute('download', vName);
@@ -735,7 +749,7 @@ function exportCSV() {
 }
 
 const importHistory = document.getElementById('importHistory'),
-	  importFile = document.getElementById('importFile');
+	importFile = document.getElementById('importFile');
 importFile.addEventListener("change", importHistoryData, false);
 importHistory.onclick = function () { importFile.click(); };
 function importHistoryData(e) {
@@ -784,13 +798,13 @@ function reset() {
 	cleanLocalStorage();
 	autoBackup();
 	if (localStorage.length < 10)
+		// eslint-disable-next-line no-undef
 		startIntroduction();
 }
 
 function setParameters() {
 	// Set options to parameters from localStorage
-	const alertnotification = localStorage.getItem("alertnotification"),
-		autoend = localStorage.getItem("autoend"),
+	const autoend = localStorage.getItem("autoend"),
 		autoend_today_disabled = localStorage.getItem("autoend_today_disabled"),
 		nosave = localStorage.getItem("nosave"),
 		hourschedule = localStorage.getItem("hourschedule"),
@@ -920,6 +934,7 @@ function setParameters() {
 	}
 }
 
+// eslint-disable-next-line no-unused-vars
 function end_time() {
 	setEnd(now());
 	calculateTotal();
@@ -930,6 +945,7 @@ function add_time(time) {
 	calculateTotal();
 }
 
+// eslint-disable-next-line no-unused-vars
 function add_break(time) {
 	setBreak(time + getBreak(false));
 	setEnd(time + getEnd());
@@ -1042,11 +1058,11 @@ function break_counter() {
 
 }
 
-window.onbeforeunload = function (e) {
+window.onbeforeunload = function () {
 	// Set 'dont save today' and 'automatically set end time' parameters in local storage
 	const nosave = document.getElementById("nosave"),
-		  autoend = document.getElementById("autoend"),
-		  autoend_today_disabled = document.getElementById("autoend_today_disabled");
+		autoend = document.getElementById("autoend"),
+		autoend_today_disabled = document.getElementById("autoend_today_disabled");
 	if (nosave.checked == false) {
 		if (autoend.checked == false) {
 			localStorage.setItem("autoend", "false");
@@ -1096,8 +1112,9 @@ $(document).ready(function () {
 	importBootstrapColors();
 	reset();
 
-	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-	const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')),
+		// eslint-disable-next-line no-unused-vars
+		tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 		return new bootstrap.Tooltip(tooltipTriggerEl, {
 			boundary: document.body,
 			'delay': { show: 1000, hide: 0 }
@@ -1135,11 +1152,11 @@ $(document).ready(function () {
 
 $(window).on("load", function () {
 	if ("serviceWorker" in navigator) {
-		navigator.serviceWorker.register("service-worker.js", { scope: '/' })
+		navigator.serviceWorker.register("service-worker.js", { scope: "/" })
 			.then(function (registration) {
-				console.log('Service worker registered successfully');
+				console.log("Service worker registered successfully:", registration);
 			}).catch(function (e) {
-				console.error('Error during service worker registration:', e);
+				console.error("Error during service worker registration:", e);
 			});
 	}
 });
@@ -1163,7 +1180,7 @@ $("#app_alert").on("close.bs.alert", function () {
 	return false;
 });
 
-$("#hourschedule").on('change', function (e) {
+$("#hourschedule").on('change', function () {
 	activateConfirmationModal("Do you want to set the hour schedule for every day?<br>If not, the selected value will only be applicable today.", choice => {
 		if (choice == "yes")
 			localStorage.setItem("hourschedule", getHourSchedule());

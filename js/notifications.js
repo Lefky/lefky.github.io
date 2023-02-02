@@ -32,7 +32,6 @@ function askNotificationPermission() {
     }
 
     // Let's check if the browser supports notifications
-    /* jshint -W018 */
     if ("Notification" in window === false) {
         console.warn("This browser does not support notifications.");
     } else {
@@ -62,10 +61,12 @@ function checkNotificationPromise() {
 
 
 // Function for creating the notification
+// eslint-disable-next-line no-unused-vars
 function createNotification(title, text) {
     if (Notification.permission === 'granted') {
         // Create and show the notification
         const img = '/images/clock128.png',
+            // eslint-disable-next-line no-unused-vars
             notification = new Notification(title, { body: text, icon: img, silent: false });
         // https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API
     }

@@ -1,5 +1,9 @@
 console.log("loaded introduction.js");
 
+/*global $, bootstrap, bs_light */
+/*eslint no-undef: "error"*/
+
+// eslint-disable-next-line no-unused-vars
 function startIntroduction() {
 	document.getElementById('settingsmodalclosebutton').click();
 
@@ -10,7 +14,7 @@ function startIntroduction() {
 	introductioncontainer.className = "row d-flex justify-content-center";
 	document.getElementById("alertcontainer").appendChild(introductioncontainer);
 
-	new_element = document.createElement("div");
+	const new_element = document.createElement("div");
 	new_element.className = "alert alert-primary fade show my-4 col-11 col-md-7 col-lg-4";
 	new_element.style.cssText = "position: absolute; margin-left: 1rem; z-index: 1099;";
 	new_element.setAttribute("role", "alert");
@@ -40,13 +44,14 @@ function createOverlay() {
 	document.body.appendChild(new_element);
 }
 
+// eslint-disable-next-line no-unused-vars
 function playIntroduction() {
 	// Dismiss the changes notification
 	const alertNode = document.querySelector('#alertnotification');
 	const alert = new bootstrap.Alert(alertNode);
 	alert.close();
 
-	new_element = document.createElement("div");
+	let new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea";
 	new_element.className = "col-11 col-md-7 col-lg-4";
 	new_element.style.cssText = "text-align: right; position: absolute; right: 30px; bottom: 45px; z-index: 1099; display: none;";
@@ -354,6 +359,7 @@ function playIntroduction() {
 	document.getElementById("introductioncontainer").appendChild(new_element);
 }
 
+// eslint-disable-next-line no-unused-vars
 function stopIntroduction() {
 	$("#overlay").remove();
 	$("#introductioncontainer").remove();

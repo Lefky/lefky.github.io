@@ -1,4 +1,8 @@
 console.log("loaded editable_table.js");
+
+/*global $, app_alert_message, testDateFormat, setHistory, setAlertMessage, deleteHistory, bs_washed_red */
+/*eslint no-undef: "error"*/
+
 // source: https://mdbootstrap.com/docs/jquery/tables/editable/
 
 // Redraw table on opening modal
@@ -54,7 +58,7 @@ $('.table-save-all').on('click', 'button', function () {
 
 	// loop through each row of the table.
 	let app_alert_message = "";
-	for (row = 0; row < table.rows.length; row++) {
+	for (let row = 0; row < table.rows.length; row++) {
 		const currentRow = table.rows.item(row);
 
 		const key = currentRow.cells.item(0).innerHTML,
@@ -94,6 +98,7 @@ $('.table-delete-all').on('click', 'button', function () {
 	deleteHistory();
 });
 
+// eslint-disable-next-line no-unused-vars
 function clearPlaceholder(cell) {
 	if (cell.classList.contains("text-black-50")) {
 		cell.innerHTML = "";
@@ -107,7 +112,6 @@ function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSch
 	let error_message = "";
 
 	Summary = Summary.replace(/\n/g, '\\n');
-	console.log(Summary);
 
 	if (!testDateFormat(key))
 		error_message = error_message + "<br><br>Date for date \"" + key + "\" is not in the DD-MM-YYYY format.";
@@ -170,6 +174,7 @@ $($tableID).on('click', '.record-save', function () {
 		setHistory(false);
 	} else {
 		currentRow.css("backgroundColor", bs_washed_red);
+		// eslint-disable-next-line no-global-assign
 		app_alert_message = "<b>Ai caramba!</b><br>An entry hasn't been saved!";
 		setAlertMessage(app_alert_message + returncode);
 	}
@@ -203,7 +208,7 @@ $("#edit_history_search").on("input", function () {
 		);
 	});
 
-	$("tr:visible").each(function (index, obj) {
+	$("tr:visible").each(function (index) {
 		if (index % 2)
 			$(this).addClass('visible-odd').removeClass('visible-even');
 		else
