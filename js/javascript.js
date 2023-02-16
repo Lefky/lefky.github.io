@@ -2,7 +2,7 @@ console.log("loaded javascript.js");
 
 /*global $, moment, bootstrap, historyresetperiodunit, break_counter_btn */
 /*eslint no-undef: "error"*/
-/*exported setBreakDefault, addBreakDefault, saveCleaningDay, saveBackupDay, allCheckBox, exportCSV, makeDate, break_counter, tooltipList */
+/*exported reset, setBreakDefault, addBreakDefault, saveCleaningDay, saveBackupDay, allCheckBox, exportCSV, makeDate, break_counter, tooltipList */
 
 // Import Bootstrap colors
 // eslint-disable-next-line no-unused-vars
@@ -784,7 +784,7 @@ function todayDate() {
 	return moment().format("DD-MM-YYYY");
 }
 
-function reset() {
+function loadApp() {
 	setEnd(0);
 	setTotal(0);
 	setTotalDec(0);
@@ -800,6 +800,27 @@ function reset() {
 	if (localStorage.length < 10)
 		// eslint-disable-next-line no-undef
 		startIntroduction();
+}
+
+function reset() {
+	setEnd(0);
+	setTotal(0);
+	setTotalDec(0);
+	setTotalNoBreak(0);
+	setTotalNoBreakDec(0);
+	setHistory(true);
+
+	const timeinfo = JSON.parse(localStorage.getItem(todayDate()));
+	if (timeinfo == null) {
+		setStart(now());
+		add_time(getHourSchedule());
+	} else {
+		setStart(timeinfo.StartDec);
+		setBreak(timeinfo.TotalDec - timeinfo.TotalNoBreakDec);
+		setEnd(parseFloat(timeinfo.StartDec) + parseFloat(timeinfo.TotalDec));
+		setSummary(timeinfo.Summary);
+		calculateTotal();
+	}
 }
 
 function setParameters() {
@@ -1110,7 +1131,7 @@ window.onbeforeunload = function () {
 // Listeners and initializers
 $(document).ready(function () {
 	importBootstrapColors();
-	reset();
+	loadApp();
 
 	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')),
 		// eslint-disable-next-line no-unused-vars
