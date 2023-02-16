@@ -62,7 +62,7 @@
 			<div class="modal-body">
 				<p>
 					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> (Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20221221.1</span> <br>
+					Version: <span id="currentappversion">20230216.1</span> <br>
 					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
 				</p>
 			</div>
@@ -258,6 +258,10 @@
 								<input type="file" id="importFile" accept=".json" class="d-none" />
 							</div>
 							<div class="col-sm justify-content-center text-center">
+								<button class="btn btn-outline-secondary btn-sm" id="exportCSV" onclick="exportCSV()">Export as csv<br>(not importable!)</button>
+								<a id="exportCSVLink" class="d-none">Export</a>
+							</div>
+							<div class="col-sm justify-content-center text-center">
 								<button class="btn btn-outline-secondary btn-sm" id="importHistory">Import History</button>
 							</div>
 							<div class="col-sm justify-content-center text-center">
@@ -438,7 +442,7 @@
 							<div class="mb-3">
 								<div class="input-group">
 									<label class="col-form-label" for="historyretain">Days to keep: </label>
-									<input type="number" name="historyretain" id="historyretain" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="0" max="999">
+									<input type="number" name="historyretain" id="historyretain" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="0" max="99999">
 								</div>
 							</div>
 						</div>
@@ -671,27 +675,21 @@
 						Changes
 						<ul>
 							<li>
-								Added more default break times.
+								The first update of the year...
 							</li>
 							<li>
-								Added a day summary to saved data. This allows for better tracking and to add notes to your registrations.
-							</li>
-							<li>
-								Added a new easter egg when your day is done.
-							</li>
-							<li>
-								Added option to make hourschedule change temporary or permanent.
-							</li>
-							<li>
-								Updated bootstrap to latest stable version. Next bootstrap update there will be a built-in dark mode!
+								Now it's possible to export your data in CSV format. CSV is a more supported format when it comes to data analyzers like spreadsheets so you can make some graphs yourself.<br>
+								Keep in mind that this <b><u>is not a supported type for backups</u></b>!
 							</li>
 						</ul>
 					</p>
 					<p class="mb-0">
 						Bugfixes
 						<ul>
-							<li>Hotfix for records made before the summary field was present.</li>
-							<li>Hotfix for summary field always being show.</li>
+							<li>Replaced obsolete jshint checks for eslint.</li>
+							<li>Make it possible to store up to 99999 days instead of 999.</li>
+							<li>Fix footer on small screens overlapping functionality.</li>
+							<li>Reset button still held old functionality resulting in unwanted behaviour of the current of the app.</li>
 						</ul>
 					</p>
 				</div>
@@ -885,7 +883,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row d-block d-lg-none">
+		<div class="row d-block d-md-none">
 			<!-- Row to keep clear of footer when using small screens -->
 			<div class="col h-f-100 "></div>
 		</div>

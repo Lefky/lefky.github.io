@@ -1,5 +1,8 @@
 console.log("loaded leaves.js");
 
+/*global $, now, getEnd, createNotification */
+/*eslint no-undef: "error"*/
+
 // source: https://codepen.io/uurrnn/pen/Kuylr?editors=1100
 
 let startedLeaves = false,

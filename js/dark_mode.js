@@ -1,5 +1,9 @@
 console.log("loaded dark_mode.js");
 
+/*global $, importBootstrapColors */
+/*eslint no-undef: "error"*/
+
+// eslint-disable-next-line no-unused-vars
 var colorScheme; // Variable to know if in dark or light mode
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
