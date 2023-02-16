@@ -297,9 +297,9 @@ function getHistoryRetain() {
 	let days = document.getElementById("historyretain").value;
 
 	if (!days)
-		days = 999;
-	else if (days > 999)
-		days = 999;
+		days = 99999;
+	else if (days > 99999)
+		days = 99999;
 
 	return days;
 }
