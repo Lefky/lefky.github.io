@@ -7,7 +7,7 @@ console.log("loaded javascript.js");
 // Import Bootstrap colors
 // eslint-disable-next-line no-unused-vars
 var bs_blue, bs_indigo, bs_purple, bs_pink, bs_red, bs_orange, bs_yellow, bs_green, bs_gray, bs_teal, bs_cyan, bs_white, bs_gray_dark, bs_primary, bs_secondary, bs_success, bs_info, bs_warning, bs_danger, bs_light, bs_dark, bs_washed_red, bs_washed_yellow, bs_washed_green;
-function importBootstrapColors(){
+function importBootstrapColors() {
 	bs_blue = getComputedStyle(document.documentElement).getPropertyValue('--bs-blue');
 	bs_indigo = getComputedStyle(document.documentElement).getPropertyValue('--bs-indigo');
 	bs_purple = getComputedStyle(document.documentElement).getPropertyValue('--bs-purple');
@@ -63,7 +63,7 @@ function setStart(time) {
 
 function getEnd() {
 	const time = document.getElementById("end_time").value;
-	let time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
+	let time_dec = moment.duration(moment(time, "HH:mm").endOf('minute').format("HH:mm")).asHours();
 	if (!time_dec)
 		time_dec = now();
 
@@ -225,18 +225,18 @@ function setOvertimeTotal(time) {
 	document.getElementById("overtimetotal").value = floatToTimeString(time);
 
 	if (time >= 0)
-		document.getElementById("overtimetotal").setAttribute("style", "color: " + bs_green + ";");
+		document.getElementById("overtimetotal").setAttribute("style", "color: var(--bs-success);");
 	else
-		document.getElementById("overtimetotal").setAttribute("style", "color: " + bs_red + ";");
+		document.getElementById("overtimetotal").setAttribute("style", "color: var(--bs-danger);");
 }
 
 function setOvertimeWeekly(time) {
 	document.getElementById("overtimeweekly").value = floatToTimeString(time);
 
 	if (time >= 0)
-		document.getElementById("overtimeweekly").setAttribute("style", "color: " + bs_green + ";");
+		document.getElementById("overtimeweekly").setAttribute("style", "color: var(--bs-success);");
 	else
-		document.getElementById("overtimeweekly").setAttribute("style", "color: " + bs_red + ";");
+		document.getElementById("overtimeweekly").setAttribute("style", "color: var(--bs-danger);");
 }
 
 function setTotalNoBreak(time) {
@@ -412,7 +412,7 @@ function maxValuesCustomTimeOption(type, periodunit, executionday, elem_period, 
 
 	if (type == "cleaning")
 		setResetDate(executionday.format("dddd, DD-MM-YYYY"));
-	else if (type == "autobackup"){
+	else if (type == "autobackup") {
 		setBackupDate(executionday.format("dddd, DD-MM-YYYY"));
 	}
 }
@@ -424,7 +424,7 @@ function saveCleaningDay() {
 	localStorage.setItem("historyresetperiod", getHistoryResetPeriod());
 	localStorage.setItem("historyresetperiodunit", getHistoryResetPeriodUnit());
 
-	document.getElementById("cleaningdaysavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: " + bs_green + ";");
+	document.getElementById("cleaningdaysavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: var(--bs-success);");
 	document.getElementById("cleaningdaysavebutton").innerHTML = '<i class="fas fa-check"></i>';
 	setTimeout(function () {
 		document.getElementById("cleaningdaysavebutton").innerHTML = "Save";
@@ -440,7 +440,8 @@ function saveBackupDay() {
 	localStorage.setItem("autobackupperiodunit", getAutobackupPeriodUnit());
 	//localStorage.setItem("autobackupdate", moment(todayDate(), "dddd, DD-MM-YYYY").subtract(1, "days").format("DD-MM-YYYY"));
 
-	document.getElementById("autobackupsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: " + bs_green + ";");
+	document.getElementById("autobackupsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: var(--bs-success);");
+	document.getElementById("autobackupsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: var(--bs-success);");
 	document.getElementById("autobackupsavebutton").innerHTML = '<i class="fas fa-check"></i>';
 	setTimeout(function () {
 		document.getElementById("autobackupsavebutton").innerHTML = "Save";
@@ -720,7 +721,7 @@ function exportCSV() {
 	for (key = 0; key = keys[i]; i++) {
 		timeinfo = JSON.parse(localStorage.getItem(key));
 		if (Object.prototype.hasOwnProperty.call(timeinfo, "OvertimeDec")) {
-			timeinfo = Object.assign({Date: key}, timeinfo); // Add date at the beginning of the json record
+			timeinfo = Object.assign({ Date: key }, timeinfo); // Add date at the beginning of the json record
 			//timeinfo.Date = key;
 			items.push(timeinfo);
 		}
@@ -1133,16 +1134,24 @@ $(document).ready(function () {
 	importBootstrapColors();
 	loadApp();
 
+	if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+		//colorScheme = "dark";
+		document.querySelector("html").setAttribute("data-bs-theme", "dark");
+	else
+		//colorScheme = "light";
+		document.querySelector("html").setAttribute("data-bs-theme", "light");
+
 	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')),
 		// eslint-disable-next-line no-unused-vars
 		tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-		return new bootstrap.Tooltip(tooltipTriggerEl, {
-			boundary: document.body,
-			'delay': { show: 1000, hide: 0 }
+			return new bootstrap.Tooltip(tooltipTriggerEl, {
+				boundary: document.body,
+				'delay': { show: 1000, hide: 0 }
+			});
 		});
-	});
 
 	moment().format(); // Initialize momentjs
+	document.getElementById("year_span").innerHTML = moment().year();
 
 	let myModal;
 	if (window.location.href.indexOf('#about') != -1) {
@@ -1187,6 +1196,13 @@ $(document).on('keydown', function (e) {
 		add_time(getHourSchedule());
 });
 
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+	if (event.matches)
+		document.querySelector("html").setAttribute("data-bs-theme", "dark");
+	else
+		document.querySelector("html").setAttribute("data-bs-theme", "light");
+});
+
 $("input").focusout(function () {
 	checkInputValues();
 });
@@ -1207,4 +1223,3 @@ $("#hourschedule").on('change', function () {
 			localStorage.setItem("hourschedule", getHourSchedule());
 	});
 });
-
