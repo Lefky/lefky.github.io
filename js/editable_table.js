@@ -1,6 +1,6 @@
 console.log("loaded editable_table.js");
 
-/*global $, app_alert_message, testDateFormat, setHistory, setAlertMessage, deleteHistory, bs_washed_red */
+/*global $, app_alert_message, testDateFormat, setHistory, setAlertMessage, deleteHistory */
 /*eslint no-undef: "error"*/
 
 // source: https://mdbootstrap.com/docs/jquery/tables/editable/
@@ -73,11 +73,12 @@ $('.table-save-all').on('click', 'button', function () {
 
 		if (!returncode) {
 			const btn = currentRow.getElementsByClassName('record-save')[0].firstElementChild;
-			currentRow.style.backgroundColor = "";
+			//currentRow.style.backgroundColor = "";
+			currentRow.classList.remove("bg-washed-red");
 			iconToggle(btn, "check");
 			setTimeout(() => { iconToggle(btn, "save"); }, 2000);
 		} else {
-			currentRow.style.backgroundColor = bs_washed_red;
+			currentRow.classList.add("bg-washed-red");
 			app_alert_message = app_alert_message + returncode;
 		}
 	}
@@ -139,7 +140,7 @@ function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSch
 		Summary = Summary == "Summary" ? "" : Summary;
 		const timeinfo = '{"TotalNoBreakDec": "' + (TotalNoBreakDec.toLowerCase() != "correction" ? parseFloat(TotalNoBreakDec).toFixed(2) : "correction") + '", "OvertimeDec": "' + parseFloat(OvertimeDec).toFixed(2) + '", "TotalDec": "' + (TotalDec.toLowerCase() != "correction" ? parseFloat(TotalDec).toFixed(2) : "correction") + '", "StartDec": "' + (StartDec.toLowerCase() != "correction" ? parseFloat(StartDec).toFixed(2) : "correction") + '", "HourSchedule": "' + (HourSchedule.toLowerCase() != "correction" ? parseFloat(HourSchedule).toFixed(2) : "correction") + '", "Summary": "' + (Summary.toLowerCase() != "correction" ? Summary : "correction") + '"}';
 		localStorage.setItem(key, timeinfo);
-		console.log(Summary);
+		//console.log(Summary);
 	} else {
 		error_message = error_message + "<br><br>Please correct your entry and try again.";
 		return error_message;
@@ -168,12 +169,14 @@ $($tableID).on('click', '.record-save', function () {
 			btn.html('<i class="fa fa-check"></i>');
 	};
 	if (!returncode) {
-		currentRow.css("backgroundColor", "");
+		//currentRow.css("backgroundColor", "");
+		currentRow[0].classList.remove("bg-washed-red");
 		iconToggle();
 		setTimeout(iconToggle, 2000);
 		setHistory(false);
 	} else {
-		currentRow.css("backgroundColor", bs_washed_red);
+		currentRow[0].classList.add("bg-washed-red");
+
 		// eslint-disable-next-line no-global-assign
 		app_alert_message = "<b>Ai caramba!</b><br>An entry hasn't been saved!";
 		setAlertMessage(app_alert_message + returncode);

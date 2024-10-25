@@ -1,27 +1,21 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>Working hours</title>
-	<link rel="shortcut icon" type="image/png" href="images/clock64.png"/>
+	<link rel="shortcut icon" type="image/png" href="images/clock64.png" />
 	<link rel="manifest" href="manifest.json" crossorigin="anonymous">
 	<meta name="robots" content="index">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<!-- <script src="https://www.googletagmanager.com/gtag/js?id=UA-160200625-1" async></script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
-	  gtag('config', 'UA-160200625-1');
-	</script>-->
 	<!-- Bootstrap -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-		<!-- Bootstrap dark mode (https://github.com/vinorodrigues/bootstrap-dark-5): add the Bootstrap-Dark-plugin Variant CSS -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/css/bootstrap-dark-plugin.min.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous" defer></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"
+		defer></script>
 	<!-- Glow Cookies -->
-	<script src="https://cdn.jsdelivr.net/gh/manucaralmo/GlowCookies@3.1.7/src/glowCookies.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/manucaralmo/GlowCookies@3.1.8/src/glowCookies.min.js"></script>
 	<script>
 		glowCookies.start('en', {
 			style: 1,
@@ -33,13 +27,14 @@
 		});
 	</script>
 	<!-- jquery -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
 	<!-- Font Awsome -->
 	<link href="css/all.min.css" rel="stylesheet" defer>
 	<!-- Custom Styles -->
 	<link href="css/bootstrap_specific_style.css" rel="stylesheet" defer>
 	<!-- Moment.js -->
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.29.3/min/moment.min.js" defer></script><!-- https://momentjs.com/docs -->
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.30.1/min/moment.min.js" defer></script>
+	<!-- https://momentjs.com/docs -->
 	<!-- Custom scripting -->
 	<script type="text/javascript" src="js/javascript.js" defer></script>
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" defer></script>
@@ -47,289 +42,350 @@
 	<script type="text/javascript" src="js/editable_table.js" defer></script>
 	<script type="text/javascript" src="js/introduction.js" defer></script>
 	<script type="text/javascript" src="js/leaves.js" async></script>
-	<script type="text/javascript" src="js/dark_mode.js" defer></script><!-- Dark mode JS -->
 	<script type="text/javascript" src="js/notifications.js" async></script>
 </head>
+
 <body>
-<!-- Modal HTML -->
-<div id="modalabout" class="modal fade" tabindex="-1">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content px-2">
-			<div class="modal-header">
-				<h2>About</h2>
-				<button type="button" class="btn float-end" data-bs-dismiss="modal"><i class="fas fa-times float-end"></i></button>
-			</div>
-			<div class="modal-body">
-				<p>
-					Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a> (Send me a message with feedback or suggestions ;) )<br>
-					Version: <span id="currentappversion">20230216.1</span> <br>
-					Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master" target="_blank">Check the master branch on Github</a>
-				</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div id="modalpolicy" class="modal fade" tabindex="-1">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content px-2">
-			<div class="modal-header">
-				<h2>Cookie policy</h2>
-				<button type="button" class="btn float-end" data-bs-dismiss="modal"><i class="fas fa-times float-end"></i></button>
-			</div>
-			<div class="modal-body">
-				<div class="l-section-h i-cf">
-					<p><strong>What are cookies?</strong></p>
+	<!-- Modal HTML -->
+	<div id="modalabout" class="modal fade" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content px-2">
+				<div class="modal-header">
+					<h2>About</h2>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
 					<p>
-						Cookies are small pieces of data that a website asks your browser to store on your computer or mobile device when
-						you visit the website or certain pages. The cookie allows the website to “remember” your actions or preferences
-						over time. Most browsers support cookies, but users can set their browsers to decline them and can delete them
-						whenever they like.
+						Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a>
+						(Send me a message with feedback or suggestions ;) )<br>
+						Version: <span id="currentappversion">20241025.1</span> <br>
+						Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"
+							target="_blank">Check the master branch on Github</a>
 					</p>
-					<p>
-						Cookies will usually contain the name of the website where the cookie has come from, how long the cookie will
-						remain on your device, and a value which is usually a randomly generated unique number.
-					</p>
-					<p>
-						Some cookies will be deleted as soon as you leave the website (the so-called “session cookies”), other cookies
-						will remain stored on your computer or mobile device and will help us identify you as a visitor of our website
-						(the so-called “permanent cookies”).
-					</p>
-					<p><strong>Why do we use cookies?</strong></p>
-					<p>Cookies on our Website are used for a variety of different purposes.</p>
-					<p>
-						We use cookies to improve the user-experience on the Website and to map your surfing behaviour (e.g. the pages
-						you have visited and the time you spent on that page). Cookies make our Website easier to use and allow us to
-						better tailor our Website to your interests and needs. Cookies are also used to help speed up your future
-						activities and experience on the Website. We use cookies, for example, to remember your language preferences.
-					</p>
-					<p>
-						We also use cookies to compile anonymous, aggregated statistics that allow us to understand how our Website is
-						being used and how we can improve our services.
-					</p>
-					<p><strong>Which cookies do we use?</strong></p>
-					<p>We use first party and third party cookies:</p>
-					<p>First party cookies are cookies created by the Website itself. These cookies are used to optimize your user-experience.</p>
-					<p>
-						Third party cookies are cookies created by parties other than the Website. Third party cookies in relation to our
-						Website are Facebook, Twitter, LinkedIn and Google Analytics. Google Analytics is Google’s analytics tool which
-						helps us understand how you engage with the Website. It may use a set of cookies to collect information and
-						report Website usage statistics without personally identifying individual visitors to Google. We mask your
-						IP-address, have a data processing amendment with Google and don&#8217;t share your data with Google. If you
-						want to opt out for Google Analytics click this <a>button</a>. The main cookie used by Google Analytics is the
-						‘___ga’ cookie.
-					</p>
-					<p>A further distinction can be made between the following types of cookies:</p>
-					<ul>
-						<li>
-							<p>Necessary cookies: These are required for the operation of our Website. They include for example cookies
-							that enable you to log in.</p>
-							<p>Our necessary cookies are named here:</p>
-							<table class="table table-borderless">
-								<tbody>
-									<tr>
-										<td class="w-100">None</td>
-									</tr>
-								</tbody>
-							</table>
-						</li>
-						<li>
-							<p>Analytical/performance cookies: These cookies allow us to analyse our webtraffic, to see the number of users
-							of our Website and how the users navigate through our Website.</p>
-							<p>Our analytical/performance cookies are named here:</p>
-							<table class="table">
-								<tbody>
-									<tr>
-										<th class="w-25">Cookie name</td>
-										<th class="w-25">Default expiration time</td>
-										<th class="w-25">Description</td>
-										<th class="w-25">Domain</td>
-									</tr>
-									<tr>
-										<td class="w-25">_gid</td>
-										<td class="w-25">2 hours</td>
-										<td class="w-25">Used to distinguish users.</td>
-										<td class="w-25">.lefky.github.io</td>
-									</tr>
-									<tr>
-										<td class="w-25">_ga</td>
-										<td class="w-25">2 years</td>
-										<td class="w-25">Used to distinguish users.</td>
-										<td class="w-25">.lefky.github.io</td>
-									</tr>
-									<tr>
-										<td class="w-25">_ga_&lt;container-id&gt;</td>
-										<td class="w-25">2 years</td>
-										<td class="w-25">Used to persist session state.</td>
-										<td class="w-25">.lefky.github.io</td>
-									</tr>
-
-								</tbody>
-							</table>
-						</li>
-						<li>
-							<p>Functional cookies: These cookies ‘remember’ the choices you made on our Website (e.g. language preference)
-							making the Website more user-friendly and enhancing your user experience.</p>
-							<p>Our functional cookies are named here:</p>
-							<table class="table table-borderless">
-								<tbody>
-									<tr>
-										<td class="w-100">None</td>
-									</tr>
-								</tbody>
-							</table>
-						</li>
-						<li>
-							<p>Targeting cookies: These show us the pages you have visited and the links you have followed, making
-							advertisements more relevant to your interests.</p>
-							<p>Our targeting cookies are named here:</p>
-							<table class="table table-borderless">
-								<tbody>
-									<tr>
-										<td class="w-100">None</td>
-									</tr>
-								</tbody>
-							</table>
-						</li>
-					</ul>
-					<p><strong>How can you manage or delete cookies?</strong></p>
-					<p>
-						You can at any time manage or delete cookies using the settings on your internet browser, allowing you to refuse
-						some or all cookies. Turning off cookies will limit the service that we are able to provide and may affect your
-						user-experience. Deleting cookies may result in manually adjusting preferences every time you visit our Website.
-						For more details about controlling and/or deleting cookies, visit the page corresponding to your browser for
-						more information:
-					</p>
-					<p>
-						<a href="https://support.apple.com/kb/ph19214?locale=en_US" target="_blank" rel="noopener noreferrer">Safari</a><br />
-						<a href="https://support.google.com/chrome/answer/95647?co=GENIE.Platform%3DDesktop&amp;hl=en" target="_blank" rel="noopener noreferrer">Google Chrome</a><br />
-						<a href="https://support.mozilla.org/en-US/kb/cookies-information-websites-store-on-your-computer" target="_blank" rel="noopener noreferrer">Mozilla Firefox</a><br />
-						<a href="https://support.microsoft.com/en-us/kb/260971" target="_blank" rel="noopener noreferrer">Internet Explorer</a><br />
-						<a href="https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener noreferrer">Edge</a>
-					</p>
-					<p>For other browsers, please consult the documentation provided by the browser operator.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 				</div>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+		</div>
+	</div>
+
+	<div id="modalpolicy" class="modal fade" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content px-2">
+				<div class="modal-header">
+					<h2>Cookie policy</h2>
+					<button type="button" class="btn float-end" data-bs-dismiss="modal"><i
+							class="fas fa-times float-end"></i></button>
+				</div>
+				<div class="modal-body">
+					<div class="l-section-h i-cf">
+						<p><strong>What are cookies?</strong></p>
+						<p>
+							Cookies are small pieces of data that a website asks your browser to store on your computer
+							or mobile device when
+							you visit the website or certain pages. The cookie allows the website to “remember” your
+							actions or preferences
+							over time. Most browsers support cookies, but users can set their browsers to decline them
+							and can delete them
+							whenever they like.
+						</p>
+						<p>
+							Cookies will usually contain the name of the website where the cookie has come from, how
+							long the cookie will
+							remain on your device, and a value which is usually a randomly generated unique number.
+						</p>
+						<p>
+							Some cookies will be deleted as soon as you leave the website (the so-called “session
+							cookies”), other cookies
+							will remain stored on your computer or mobile device and will help us identify you as a
+							visitor of our website
+							(the so-called “permanent cookies”).
+						</p>
+						<p><strong>Why do we use cookies?</strong></p>
+						<p>Cookies on our Website are used for a variety of different purposes.</p>
+						<p>
+							We use cookies to improve the user-experience on the Website and to map your surfing
+							behaviour (e.g. the pages
+							you have visited and the time you spent on that page). Cookies make our Website easier to
+							use and allow us to
+							better tailor our Website to your interests and needs. Cookies are also used to help speed
+							up your future
+							activities and experience on the Website. We use cookies, for example, to remember your
+							language preferences.
+						</p>
+						<p>
+							We also use cookies to compile anonymous, aggregated statistics that allow us to understand
+							how our Website is
+							being used and how we can improve our services.
+						</p>
+						<p><strong>Which cookies do we use?</strong></p>
+						<p>We use first party and third party cookies:</p>
+						<p>First party cookies are cookies created by the Website itself. These cookies are used to
+							optimize your user-experience.</p>
+						<p>
+							Third party cookies are cookies created by parties other than the Website. Third party
+							cookies in relation to our
+							Website are Facebook, Twitter, LinkedIn and Google Analytics. Google Analytics is Google’s
+							analytics tool which
+							helps us understand how you engage with the Website. It may use a set of cookies to collect
+							information and
+							report Website usage statistics without personally identifying individual visitors to
+							Google. We mask your
+							IP-address, have a data processing amendment with Google and don&#8217;t share your data
+							with Google. If you
+							want to opt out for Google Analytics click this <a>button</a>. The main cookie used by
+							Google Analytics is the
+							‘___ga’ cookie.
+						</p>
+						<p>A further distinction can be made between the following types of cookies:</p>
+						<ul>
+							<li>
+								<p>Necessary cookies: These are required for the operation of our Website. They include
+									for example cookies
+									that enable you to log in.</p>
+								<p>Our necessary cookies are named here:</p>
+								<table class="table table-borderless">
+									<tbody>
+										<tr>
+											<td class="w-100">None</td>
+										</tr>
+									</tbody>
+								</table>
+							</li>
+							<li>
+								<p>Analytical/performance cookies: These cookies allow us to analyse our webtraffic, to
+									see the number of users
+									of our Website and how the users navigate through our Website.</p>
+								<p>Our analytical/performance cookies are named here:</p>
+								<table class="table">
+									<tbody>
+										<tr>
+											<th class="w-25">Cookie name</td>
+											<th class="w-25">Default expiration time</td>
+											<th class="w-25">Description</td>
+											<th class="w-25">Domain</td>
+										</tr>
+										<tr>
+											<td class="w-25">_gid</td>
+											<td class="w-25">2 hours</td>
+											<td class="w-25">Used to distinguish users.</td>
+											<td class="w-25">.lefky.github.io</td>
+										</tr>
+										<tr>
+											<td class="w-25">_ga</td>
+											<td class="w-25">2 years</td>
+											<td class="w-25">Used to distinguish users.</td>
+											<td class="w-25">.lefky.github.io</td>
+										</tr>
+										<tr>
+											<td class="w-25">_ga_&lt;container-id&gt;</td>
+											<td class="w-25">2 years</td>
+											<td class="w-25">Used to persist session state.</td>
+											<td class="w-25">.lefky.github.io</td>
+										</tr>
+
+									</tbody>
+								</table>
+							</li>
+							<li>
+								<p>Functional cookies: These cookies ‘remember’ the choices you made on our Website
+									(e.g. language preference)
+									making the Website more user-friendly and enhancing your user experience.</p>
+								<p>Our functional cookies are named here:</p>
+								<table class="table table-borderless">
+									<tbody>
+										<tr>
+											<td class="w-100">None</td>
+										</tr>
+									</tbody>
+								</table>
+							</li>
+							<li>
+								<p>Targeting cookies: These show us the pages you have visited and the links you have
+									followed, making
+									advertisements more relevant to your interests.</p>
+								<p>Our targeting cookies are named here:</p>
+								<table class="table table-borderless">
+									<tbody>
+										<tr>
+											<td class="w-100">None</td>
+										</tr>
+									</tbody>
+								</table>
+							</li>
+						</ul>
+						<p><strong>How can you manage or delete cookies?</strong></p>
+						<p>
+							You can at any time manage or delete cookies using the settings on your internet browser,
+							allowing you to refuse
+							some or all cookies. Turning off cookies will limit the service that we are able to provide
+							and may affect your
+							user-experience. Deleting cookies may result in manually adjusting preferences every time
+							you visit our Website.
+							For more details about controlling and/or deleting cookies, visit the page corresponding to
+							your browser for
+							more information:
+						</p>
+						<p>
+							<a href="https://support.apple.com/kb/ph19214?locale=en_US" target="_blank"
+								rel="noopener noreferrer">Safari</a><br />
+							<a href="https://support.google.com/chrome/answer/95647?co=GENIE.Platform%3DDesktop&amp;hl=en"
+								target="_blank" rel="noopener noreferrer">Google Chrome</a><br />
+							<a href="https://support.mozilla.org/en-US/kb/cookies-information-websites-store-on-your-computer"
+								target="_blank" rel="noopener noreferrer">Mozilla Firefox</a><br />
+							<a href="https://support.microsoft.com/en-us/kb/260971" target="_blank"
+								rel="noopener noreferrer">Internet Explorer</a><br />
+							<a href="https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09"
+								target="_blank" rel="noopener noreferrer">Edge</a>
+						</p>
+						<p>For other browsers, please consult the documentation provided by the browser operator.</p>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<div id="modalsettings" class="modal fade" tabindex="-1">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content px-2">
-			<div class="modal-header">
-				<h2>Settings</h2>
-				<button type="button" class="btn float-end" data-bs-dismiss="modal"><i class="fas fa-times float-end"></i></button>
-			</div>
-			<div class="modal-body">
-				<p>
-					Use Google Chrome or Firefox for optimal results. Let's be honest here... Edge or IE are crap.
-				<p>
-				<p>
-					Set this page as your browser startup page or pin the tab to automatically start counting when you open your browser.<br><br>
-					Hitting "ENTER" will add the time corresponding to the selected value next to 'Overtime' to the end date (and break time if defined).
-				</p>
-				<p>
+	<div id="modalsettings" class="modal fade" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content px-2">
+				<div class="modal-header">
+					<h2>Settings</h2>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<p>
+						Use Google Chrome or Firefox for optimal results. Let's be honest here... Edge or IE are crap.
+					<p>
+					<p>
+						Set this page as your browser startup page or pin the tab to automatically start counting when
+						you open your browser.<br><br>
+						Hitting "ENTER" will add the time corresponding to the selected value next to 'Overtime' to the
+						end date (and break time if defined).
+					</p>
+					<p>
 					<div class="container">
 						<div class="row">
 							<div class="col-sm justify-content-center text-center">
-								<button id="btn_getting_started" class="btn btn-outline-secondary btn-sm" onclick="startIntroduction();">Run through the "Get started" wizard.</button>
+								<button id="btn_getting_started" class="btn btn-outline-secondary btn-sm"
+									onclick="startIntroduction();">Run through the "Get started" wizard.</button>
 							</div>
 							<div class="col-sm justify-content-center text-center">
-								<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalpolicy">Cookie policy</button>
+								<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal"
+									data-bs-target="#modalpolicy">Cookie policy</button>
 							</div>
 						</div>
 					</div>
-				</p>
-				<p>
+					</p>
+					<p>
 					<h4>Import / export / delete</h4>
 					If you delete your browser data the history will reset. You can export and import your data.<br><br>
 					<div class="container">
 						<div class="row">
 							<div class="col-sm-auto justify-content-center text-center">
-								<button class="btn btn-outline-secondary btn-sm" id="exportHistory" onclick="exportHistory()">Export History</button>
+								<button class="btn btn-outline-secondary btn-sm" id="exportHistory"
+									onclick="exportHistory()">Export History</button>
 								<a id="exportHistoryLink" class="d-none">Export</a>
 								<input type="file" id="importFile" accept=".json" class="d-none" />
 							</div>
 							<div class="col-sm justify-content-center text-center">
-								<button class="btn btn-outline-secondary btn-sm" id="exportCSV" onclick="exportCSV()">Export as csv<br>(not importable!)</button>
+								<button class="btn btn-outline-secondary btn-sm" id="exportCSV"
+									onclick="exportCSV()">Export as csv<br>(not importable!)</button>
 								<a id="exportCSVLink" class="d-none">Export</a>
 							</div>
 							<div class="col-sm justify-content-center text-center">
-								<button class="btn btn-outline-secondary btn-sm" id="importHistory">Import History</button>
+								<button class="btn btn-outline-secondary btn-sm" id="importHistory">Import
+									History</button>
 							</div>
 							<div class="col-sm justify-content-center text-center">
-								<button class="btn btn-outline-secondary btn-sm" id="deleteHistory" onclick="deleteHistory()">Delete History</button>
+								<button class="btn btn-outline-secondary btn-sm" id="deleteHistory"
+									onclick="deleteHistory()">Delete History</button>
 							</div>
 							<div class="col-sm-auto justify-content-center text-center">
-								<a class="btn btn-outline-secondary btn-sm" target="_blank" href="sample_data/working_history_sample_data.json">Download Sample Data</a>
+								<a class="btn btn-outline-secondary btn-sm" target="_blank"
+									href="sample_data/working_history_sample_data.json">Download Sample Data</a>
 							</div>
 						</div>
 					</div>
 					<br>
 					<form class="mb-3">
 						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="autobackupoption" name="autobackupoption" data-bs-toggle="collapse" data-bs-target="#divautobackup">
-							<label class="form-check-label" for="autobackupoption">Enable semi-automatic backups.</label>
+							<input type="checkbox" class="form-check-input" id="autobackupoption"
+								name="autobackupoption" data-bs-toggle="collapse" data-bs-target="#divautobackup">
+							<label class="form-check-label" for="autobackupoption">Enable semi-automatic
+								backups.</label>
 						</div>
 						<div class="collapse" id="divautobackup">
 							<div class="input-group">
 								<label class="col-form-label" for="autobackupday">Backup on day </label>
-								<input type="number" name="autobackupday" id="autobackupday" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" max="31" value="1" onchange="maxValuesCustomTimeOption('autobackup', getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById('autobackupperiod'), document.getElementById('autobackupday'))">
+								<input type="number" name="autobackupday" id="autobackupday"
+									class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" max="31" value="1"
+									onchange="maxValuesCustomTimeOption('autobackup', getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById('autobackupperiod'), document.getElementById('autobackupday'))">
 								<label class="col-form-label" for="autobackupperiod"> of every </label>
-								<input type="number" name="autobackupperiod" id="autobackupperiod" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" value="1" onchange="maxValuesCustomTimeOption('autobackup', getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById('autobackupperiod'), document.getElementById('autobackupday'))">
-								<select name="autobackupperiodunit" id="autobackupperiodunit" class="form-select flex-grow-0 w-f-100 col-sm-2 mx-1" onchange="maxValuesCustomTimeOption('autobackup', getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById('autobackupperiod'), document.getElementById('autobackupday'))">
+								<input type="number" name="autobackupperiod" id="autobackupperiod"
+									class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" value="1"
+									onchange="maxValuesCustomTimeOption('autobackup', getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById('autobackupperiod'), document.getElementById('autobackupday'))">
+								<select name="autobackupperiodunit" id="autobackupperiodunit"
+									class="form-select flex-grow-0 w-f-100 col-sm-2 mx-1"
+									onchange="maxValuesCustomTimeOption('autobackup', getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById('autobackupperiod'), document.getElementById('autobackupday'))">
 									<option value="days">days</option>
 									<option value="weeks">weeks</option>
 									<option value="months" selected>months</option>
 								</select>
-								<button type="button" id="autobackupsavebutton" class="btn btn-outline-secondary" onclick="saveBackupDay()">Save</button>
+								<button type="button" id="autobackupsavebutton" class="btn btn-outline-secondary"
+									onclick="saveBackupDay()">Save</button>
 								<div class="input-group my-3">
-									<label class="col-form-label" for="autobackupdate" id="autobackupdatelabel">Backup date: </label>
-									<input type="text" name="autobackupdate" id="autobackupdate" class="form-control flex-grow-0 w-33 col-sm-5 mx-1" size="20" disabled>
+									<label class="col-form-label" for="autobackupdate" id="autobackupdatelabel">Backup
+										date: </label>
+									<input type="text" name="autobackupdate" id="autobackupdate"
+										class="form-control flex-grow-0 w-33 col-sm-5 mx-1" size="20" disabled>
 								</div>
 							</div>
 						</div>
 					</form>
 					You can download the example as a '.json' file and import it into the application.
-				</p>
-				<p>
+					</p>
+					<p>
 					<h4>Parameters</h4>
-					The value settings are saved. So if you enable something it will still be enabled on the next opening of the page.
-				</p>
-				<p>
-					<i>"Don't save today."</i><br>
-					&emsp;won't save today's date for the remainder of the day (until timestamp 00:00) or unless disabled again.
-				</p>
-				<p>
-					<i>"Automatically set end time on close."</i><br>
-					&emsp;will change the end time to the timestamp on which you close or refresh the window and thus overwrite any manual changes you made.<br>
-				</p>
-				<p>
-					<i>"Subtract X min from time on open."</i><br>
-					&emsp;will subtract X min from the time the page was opened NEXT DAY YOU OPEN THE PAGE. This is to take the time to boot your laptop, ... into account.
+					The value settings are saved. So if you enable something it will still be enabled on the next
+					opening of the page.
+					</p>
+					<p>
+						<i>"Don't save today."</i><br>
+						&emsp;won't save today's date for the remainder of the day (until timestamp 00:00) or unless
+						disabled again.
+					</p>
+					<p>
+						<i>"Automatically set end time on close."</i><br>
+						&emsp;will change the end time to the timestamp on which you close or refresh the window and
+						thus overwrite any manual changes you made.<br>
+					</p>
+					<p>
+						<i>"Subtract X min from time on open."</i><br>
+						&emsp;will subtract X min from the time the page was opened NEXT DAY YOU OPEN THE PAGE. This is
+						to take the time to boot your laptop, ... into account.
 					<div class="mb-3">
 						<div class="input-group">
 							<label class="col-form-label" for="startminsubtract_value">Minutes to subtract: </label>
-							<input type="number" name="startminsubtract_value" id="startminsubtract_value" class="form-control flex-grow-0 w-f-80 col-2 mx-1" placeholder="5" min="0" max="60" onchange="set_startminsubtract(this.value)">
+							<input type="number" name="startminsubtract_value" id="startminsubtract_value"
+								class="form-control flex-grow-0 w-f-80 col-2 mx-1" placeholder="5" min="0" max="60"
+								onchange="set_startminsubtract(this.value)">
 						</div>
 					</div>
-				</p>
-				<p>
+					</p>
+					<p>
 					<form class="mb-3">
 						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="notificationsoption" name="notificationsoption">
+							<input type="checkbox" class="form-check-input" id="notificationsoption"
+								name="notificationsoption">
 							<label class="form-check-label" for="notificationsoption">Enable notifications</label>
 						</div>
 					</form>
-				</p>
-				<!--<p>
+					</p>
+					<!--<p>
 					<h4>Reporting settings</h4>
 					Settings for the reporting view.
 					<p>
@@ -341,7 +397,7 @@
 						</div>
 					</p>
 				</p>-->
-				<p>
+					<p>
 					<h4>User interface</h4>
 					<!--<p class="mt-3 no-bottom-margin">
 						Dark mode:
@@ -366,37 +422,48 @@
 					</p>
 					<form class="mb-3">
 						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="alloption" name="alloption" onclick="allCheckBox(this, 'uiDisplayOptions');">
+							<input type="checkbox" class="form-check-input" id="alloption" name="alloption"
+								onclick="allCheckBox(this, 'uiDisplayOptions');">
 							<label class="form-check-label" for="alloption">Show / hide all</label>
 						</div>
 					</form>
 					<form id="uiDisplayOptions">
 						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="overtimeoption" name="overtimeoption" data-bs-toggle="collapse" data-bs-target="#divovertime">
+							<input type="checkbox" class="form-check-input" id="overtimeoption" name="overtimeoption"
+								data-bs-toggle="collapse" data-bs-target="#divovertime">
 							<label class="form-check-label" for="overtimeoption">Show overtime count</label>
 						</div>
 						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="totalhoursoption" name="totalhoursoption" data-bs-toggle="collapse" data-bs-target="#divtotalhours">
+							<input type="checkbox" class="form-check-input" id="totalhoursoption"
+								name="totalhoursoption" data-bs-toggle="collapse" data-bs-target="#divtotalhours">
 							<label class="form-check-label" for="totalhoursoption">Show total hours count</label>
 						</div>
 						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="weeklyovertimeoption" name="weeklyovertimeoption" data-bs-toggle="collapse" data-bs-target="#divovertimeweekly">
-							<label class="form-check-label" for="weeklyovertimeoption">Show weekly overtime balance</label>
+							<input type="checkbox" class="form-check-input" id="weeklyovertimeoption"
+								name="weeklyovertimeoption" data-bs-toggle="collapse"
+								data-bs-target="#divovertimeweekly">
+							<label class="form-check-label" for="weeklyovertimeoption">Show weekly overtime
+								balance</label>
 						</div>
 						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="totalovertimeoption" name="totalovertimeoption" data-bs-toggle="collapse" data-bs-target="#divovertimetotal">
-							<label class="form-check-label" for="totalovertimeoption">Show total overtime balance</label>
+							<input type="checkbox" class="form-check-input" id="totalovertimeoption"
+								name="totalovertimeoption" data-bs-toggle="collapse" data-bs-target="#divovertimetotal">
+							<label class="form-check-label" for="totalovertimeoption">Show total overtime
+								balance</label>
 						</div>
 						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="summaryoption" name="summaryoption" data-bs-toggle="collapse" data-bs-target="#divsummary">
+							<input type="checkbox" class="form-check-input" id="summaryoption" name="summaryoption"
+								data-bs-toggle="collapse" data-bs-target="#divsummary">
 							<label class="form-check-label" for="summaryoption">Show summary</label>
 						</div>
 						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="historyoption" name="historyoption" data-bs-toggle="collapse" data-bs-target="#historygroup">
+							<input type="checkbox" class="form-check-input" id="historyoption" name="historyoption"
+								data-bs-toggle="collapse" data-bs-target="#historygroup">
 							<label class="form-check-label" for="historyoption">Show history</label>
 						</div>
 						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="parametersoption" name="parametersoption" data-bs-toggle="collapse" data-bs-target="#divparameters">
+							<input type="checkbox" class="form-check-input" id="parametersoption"
+								name="parametersoption" data-bs-toggle="collapse" data-bs-target="#divparameters">
 							<label class="form-check-label" for="parametersoption">Show parameters</label>
 						</div>
 					</form>
@@ -411,29 +478,40 @@
 						</div>
 						<div class="w-f-90">
 							<div class="form-check form-switch-md form-switch ps-5">
-								<input type="checkbox" class="form-check-input checkneutral" id="breaktime_timeselection_option_timerange" onchange="breaktimeTimeselection();">
+								<input type="checkbox" class="form-check-input checkneutral"
+									id="breaktime_timeselection_option_timerange" onchange="breaktimeTimeselection();">
 							</div>
 						</div>
 						<div class="col-2 p-0">
-							<label class="form-check-label" for="breaktime_timeselection_option_timerange">Time range</label>
+							<label class="form-check-label" for="breaktime_timeselection_option_timerange">Time
+								range</label>
 						</div>
 					</div>
-				</p>
-				<p>
+					</p>
+					<p>
 					<h4>History deletion policy</h4>
 					<div class="mb-3 ms-1">
 						<div class="input-group mb-2">
 							<div class="row w-100">
 								<div class="col-sm">
 									<div class="form-check">
-										<input type="radio" id="historydeleteoptiondays" name="historydeleteoption" class="form-check-input" value="days" checked="checked" onchange="showHistorydeleteoptionContent()">
-										<label class="form-check-label" for="historydeleteoptiondays" data-bs-toggle="tooltip" data-bs-placement="right" title="This will keep XXX days of data.">Max days to keep history</label>
+										<input type="radio" id="historydeleteoptiondays" name="historydeleteoption"
+											class="form-check-input" value="days" checked="checked"
+											onchange="showHistorydeleteoptionContent()">
+										<label class="form-check-label" for="historydeleteoptiondays"
+											data-bs-toggle="tooltip" data-bs-placement="right"
+											title="This will keep XXX days of data.">Max days to keep history</label>
 									</div>
 								</div>
 								<div class="col-sm">
 									<div class="form-check">
-										<input type="radio" id="historydeleteoptionperiod" name="historydeleteoption" class="form-check-input" value="period" onchange="showHistorydeleteoptionContent()">
-										<label class="form-check-label" for="historydeleteoptionperiod" data-bs-toggle="tooltip" data-bs-placement="right" title="This will delete the entire history on the day that's displayed next to 'Reset date'.">Reset history on specific day</label>
+										<input type="radio" id="historydeleteoptionperiod" name="historydeleteoption"
+											class="form-check-input" value="period"
+											onchange="showHistorydeleteoptionContent()">
+										<label class="form-check-label" for="historydeleteoptionperiod"
+											data-bs-toggle="tooltip" data-bs-placement="right"
+											title="This will delete the entire history on the day that's displayed next to 'Reset date'.">Reset
+											history on specific day</label>
 									</div>
 								</div>
 							</div>
@@ -442,7 +520,8 @@
 							<div class="mb-3">
 								<div class="input-group">
 									<label class="col-form-label" for="historyretain">Days to keep: </label>
-									<input type="number" name="historyretain" id="historyretain" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="0" max="99999">
+									<input type="number" name="historyretain" id="historyretain"
+										class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="0" max="99999">
 								</div>
 							</div>
 						</div>
@@ -450,460 +529,612 @@
 							<div class="mb-3">
 								<div class="input-group">
 									<label class="col-form-label" for="historyresetday">Reset on day </label>
-									<input type="number" name="historyresetday" id="historyresetday" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" max="31" onchange="maxValuesCustomTimeOption('cleaning', getHistoryResetPeriodUnit(), calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()), document.getElementById('historyresetperiod'), document.getElementById('historyresetday'))">
+									<input type="number" name="historyresetday" id="historyresetday"
+										class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" max="31"
+										onchange="maxValuesCustomTimeOption('cleaning', getHistoryResetPeriodUnit(), calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()), document.getElementById('historyresetperiod'), document.getElementById('historyresetday'))">
 									<label class="col-form-label" for="historyresetperiod"> of every </label>
-									<input type="number" name="historyresetperiod" id="historyresetperiod" class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" onchange="maxValuesCustomTimeOption('cleaning', getHistoryResetPeriodUnit(), calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()), document.getElementById('historyresetperiod'), document.getElementById('historyresetday'))">
-									<select name="historyresetperiodunit" id="historyresetperiodunit" class="form-select flex-grow-0 w-f-100 col-sm-2 mx-1" onchange="maxValuesCustomTimeOption('cleaning', getHistoryResetPeriodUnit(), calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()), document.getElementById('historyresetperiod'), document.getElementById('historyresetday'))">
+									<input type="number" name="historyresetperiod" id="historyresetperiod"
+										class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1"
+										onchange="maxValuesCustomTimeOption('cleaning', getHistoryResetPeriodUnit(), calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()), document.getElementById('historyresetperiod'), document.getElementById('historyresetday'))">
+									<select name="historyresetperiodunit" id="historyresetperiodunit"
+										class="form-select flex-grow-0 w-f-100 col-sm-2 mx-1"
+										onchange="maxValuesCustomTimeOption('cleaning', getHistoryResetPeriodUnit(), calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()), document.getElementById('historyresetperiod'), document.getElementById('historyresetday'))">
 										<option value="days">days</option>
 										<option value="weeks">weeks</option>
 										<option value="months">months</option>
 									</select>
-									<button type="button" id="cleaningdaysavebutton" class="btn btn-outline-secondary" onclick="saveCleaningDay()">Save</button>
+									<button type="button" id="cleaningdaysavebutton" class="btn btn-outline-secondary"
+										onclick="saveCleaningDay()">Save</button>
 									<div class="input-group my-3">
-										<label class="col-form-label" for="resetdate" id="resetdatelabel">Reset date: </label>
-										<input type="text" name="resetdate" id="resetdate" class="form-control flex-grow-0 w-33 col-sm-5 mx-1" size="20" disabled>
+										<label class="col-form-label" for="resetdate" id="resetdatelabel">Reset date:
+										</label>
+										<input type="text" name="resetdate" id="resetdate"
+											class="form-control flex-grow-0 w-33 col-sm-5 mx-1" size="20" disabled>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" id="settingsmodalclosebutton" data-bs-dismiss="modal">Close</button>
+					</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" id="settingsmodalclosebutton"
+						data-bs-dismiss="modal">Close</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<div id="modalinfo" class="modal fade" tabindex="-1">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content px-2">
-			<div class="modal-header">
-				<h2>Info</h2>
-				<button type="button" class="btn float-end" data-bs-dismiss="modal"><i class="fas fa-times float-end"></i></button>
-			</div>
-			<div class="modal-body">
-				<p>
-					Here I'm posting good and useful applications for any type of device that are (mostly) free.<br>
-					I'm using these myself on my computer, smartphone or somewhere else.<br>
-					If something does cost money, in most cases, it's well spent :)<br><br>
-				</p>
-				<p>
+	<div id="modalinfo" class="modal fade" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content px-2">
+				<div class="modal-header">
+					<h2>Info</h2>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<p>
+						Here I'm posting good and useful applications for any type of device that are (mostly) free.<br>
+						I'm using these myself on my computer, smartphone or somewhere else.<br>
+						If something does cost money, in most cases, it's well spent :)<br><br>
+					</p>
+					<p>
 					<h4>Rambox</h4>
 					Rambox is an application that allows you to group multiple other applications into 1.<br>
-					You can for example have 3 outlook inboxes and 2 google calendars opened up in the same application!<br>
-					Furthermore, the amount of services, as they call it, you can add are unlimited. And if something isn't premade you can just <a href="https://github.com/ramboxapp/community-edition/wiki/Add-a-Custom-Service" target="_blank" >add a custom service</a>.<br>
+					You can for example have 3 outlook inboxes and 2 google calendars opened up in the same
+					application!<br>
+					Furthermore, the amount of services, as they call it, you can add are unlimited. And if something
+					isn't premade you can just <a
+						href="https://github.com/ramboxapp/community-edition/wiki/Add-a-Custom-Service"
+						target="_blank">add a custom service</a>.<br>
 					<br>
-					<a class="btn btn-outline-success btn-sm" href="https://rambox.pro/" target="_blank" role="button">Rambox website</a>
-				</p>
-				<p>
+					<a class="btn btn-outline-success btn-sm" href="https://rambox.pro/" target="_blank"
+						role="button">Rambox website</a>
+					</p>
+					<p>
 					<h4>Tasker</h4>
 					Tasker makes your Android smartphone smarter.<br>
-					It enables you to automate certain tasks wether it'd be settings or SMS related, tasker can make your life easier.<br>
+					It enables you to automate certain tasks wether it'd be settings or SMS related, tasker can make
+					your life easier.<br>
 					At the moment of writing it costs €3,59, but for me it's certainly worth it.<br>
-					Some of the things I'm able to do are setting my phone to silent when I'm at the office, reading my texts out loud when I'm at home or in the car, automatically setting my alarm in the morning (different ones when I work from home or not), remind me of birthdays and send random birthday texts by the push of a button, have my phone go out of vibrating mode make lots of noise when I lost it somewhere and it receives a certain text, ...<br>
+					Some of the things I'm able to do are setting my phone to silent when I'm at the office, reading my
+					texts out loud when I'm at home or in the car, automatically setting my alarm in the morning
+					(different ones when I work from home or not), remind me of birthdays and send random birthday texts
+					by the push of a button, have my phone go out of vibrating mode make lots of noise when I lost it
+					somewhere and it receives a certain text, ...<br>
 					You see the possibilities are really endless!<br>
 					<br>
-					<a class="btn btn-outline-success btn-sm" href="https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm" target="_blank" role="button">Tasker in the Google playstore</a>
-				</p>
-				<p>
+					<a class="btn btn-outline-success btn-sm"
+						href="https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm"
+						target="_blank" role="button">Tasker in the Google playstore</a>
+					</p>
+					<p>
 					<h4>Rainmeter</h4>
 					Rainmeter is a tool to customize your desktop.<br>
 					You can add different 'skins' to add buttons or displays to your computers desktop.<br>
-					Some of these include the weather forecast, quick launch buttons for applications or folders, monitoring displays (for CPU, GPU, RAM, disk size, ...), music player info and controls, time clocks, ... And all of this in different flavours.<br>
-					And the most cool aspect about it: it moves! Skins get updated every X seconds making it possible to display animations and update your weather etc.<br>
+					Some of these include the weather forecast, quick launch buttons for applications or folders,
+					monitoring displays (for CPU, GPU, RAM, disk size, ...), music player info and controls, time
+					clocks, ... And all of this in different flavours.<br>
+					And the most cool aspect about it: it moves! Skins get updated every X seconds making it possible to
+					display animations and update your weather etc.<br>
 					<br>
-					<img class="rounded mx-auto d-block" width="100%" loading="lazy" src="https://media1.tenor.com/images/c2f0bcdc67b7417d7e74b53b8f8aefb9/tenor.gif?itemid=15613840"/><br>
-					You can make your own, but you can also just download skins and even entire layouts. Check the <a href="https://www.rainmeter.net/discover/" target ="_blank">rainmeter discover page</a> to find links to libraries of great skins.<br>
+					<img class="rounded mx-auto d-block" width="100%" loading="lazy"
+						src="https://media1.tenor.com/images/c2f0bcdc67b7417d7e74b53b8f8aefb9/tenor.gif?itemid=15613840" /><br>
+					You can make your own, but you can also just download skins and even entire layouts. Check the <a
+						href="https://www.rainmeter.net/discover/" target="_blank">rainmeter discover page</a> to find
+					links to libraries of great skins.<br>
 					<br>
-					<a class="btn btn-outline-success btn-sm" href="https://www.rainmeter.net/" target="_blank" role="button">Rainmeter website</a>
-				</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+					<a class="btn btn-outline-success btn-sm" href="https://www.rainmeter.net/" target="_blank"
+						role="button">Rainmeter website</a>
+					</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<div id="modaledithistory" class="modal fade" tabindex="-1">
-	<div class="modal-dialog modal-xl">
-		<div class="modal-content px-2">
-			<div class="modal-header">
-				<h2>Edit time history</h2>
-				<button type="button" class="btn float-end" data-bs-dismiss="modal"><i class="fas fa-times float-end"></i></button>
-			</div>
-			<div class="modal-body">
-				<div id="edit_history_table">
-					<p>
-						All times displayed are in decimal hour units. You should edit them in the same way/units!!!<br>
-						Visit <a href="https://www.timecalculator.net/time-to-decimal" target="_blank">timecalculator.net</a> to help you converting.
-					</p>
-					<p class="text-danger">
-						To save an entry you need to click the save button! If you add a date that already exists it'll be overwritten!
-					</p>
-					<p>
-						You can add corrections by clicking "Add new", entering the date when you want the correction to occur, filling in the overtime (positive or negative depending on the correction you want to do) and entering the word "correction" in every other field.<br>
-						These correction can for example be used when taking up some overtime days, then you just add a negative correction of the hours you should've worked that day.
-					</p>
-					<div class="row align-items-center justify-content-around mb-2">
-						<div class="col-5">
-							<div class="input-group ms-2">
-								<span class="input-group-text rounded-start" id="history_search"><i class="fas fa-search" aria-hidden="true"></i></span>
-								<input class="form-control rounded-end" id="edit_history_search" type="search" placeholder="Search dates or corrections" aria-label="Search" aria-describedby="history_search">
+	<div id="modaledithistory" class="modal fade" tabindex="-1">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content px-2">
+				<div class="modal-header">
+					<h2>Edit time history</h2>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<div id="edit_history_table">
+						<p>
+							All times displayed are in decimal hour units. You should edit them in the same
+							way/units!!!<br>
+							Visit <a href="https://www.timecalculator.net/time-to-decimal"
+								target="_blank">timecalculator.net</a> to help you converting.
+						</p>
+						<p class="text-danger">
+							To save an entry you need to click the save button! If you add a date that already exists
+							it'll be overwritten!
+						</p>
+						<p>
+							You can add corrections by clicking "Add new", entering the date when you want the
+							correction to occur, filling in the overtime (positive or negative depending on the
+							correction you want to do) and entering the word "correction" in every other field.<br>
+							These correction can for example be used when taking up some overtime days, then you just
+							add a negative correction of the hours you should've worked that day.
+						</p>
+						<div class="row align-items-center justify-content-around mb-2">
+							<div class="col-5">
+								<div class="input-group ms-2">
+									<span class="input-group-text rounded-start" id="history_search"><i
+											class="fas fa-search" aria-hidden="true"></i></span>
+									<input class="form-control rounded-end" id="edit_history_search" type="search"
+										placeholder="Search dates or corrections" aria-label="Search"
+										aria-describedby="history_search">
+								</div>
+							</div>
+							<div class="col-7 text-end">
+								<span class="table-add me-2">
+									<button type="button" class="btn btn-primary my-1 mx-2"><i class="fa fa-plus"></i>
+										Add New</button>
+								</span>
+								<span class="table-save-all me-2">
+									<button id="btn_save_all" type="button" class="btn btn-success my-1 mx-2"><i
+											class="fa fa-save"></i> Save all</button>
+								</span>
+								<span class="table-delete-all me-2">
+									<button type="button" class="btn btn-danger my-1 mx-2"><i class="fa fa-trash"></i>
+										Delete all</button>
+								</span>
 							</div>
 						</div>
-						<div class="col-7 text-end">
-							<span class="table-add me-2">
-								<button type="button" class="btn btn-primary my-1 mx-2"><i class="fa fa-plus"></i> Add New</button>
-							</span>
-							<span class="table-save-all me-2">
-								<button id="btn_save_all" type="button" class="btn btn-success my-1 mx-2"><i class="fa fa-save"></i> Save all</button>
-							</span>
-							<span class="table-delete-all me-2">
-								<button type="button" class="btn btn-danger my-1 mx-2"><i class="fa fa-trash"></i> Delete all</button>
-							</span>
-						</div>
+						<table id="edit_history_table_object"
+							class="table table-responsive-lg table-striped table-hover align-middle text-center bg-light-subtle">
+							<thead>
+								<tr>
+									<th class="text-center px-5">Date</th>
+									<th class="text-center">Total Time No Break</th>
+									<th class="text-center">Overtime</th>
+									<th class="text-center">Total Work Time</th>
+									<th class="text-center">Start Time</th>
+									<th class="text-center">Hour Schedule</th>
+									<th class="text-center">Summary</th>
+									<th class="text-center">Edit</th>
+								</tr>
+							</thead>
+							<tbody id="edit_history_table_body">
+							</tbody>
+						</table>
 					</div>
-					<table id="edit_history_table_object" class="table table-responsive-lg table-striped table-hover align-middle text-center">
-						<thead class="table-light">
-							<tr>
-							<th class="text-center px-5">Date</th>
-							<th class="text-center">Total Time No Break</th>
-							<th class="text-center">Overtime</th>
-							<th class="text-center">Total Work Time</th>
-							<th class="text-center">Start Time</th>
-							<th class="text-center">Hour Schedule</th>
-							<th class="text-center">Summary</th>
-							<th class="text-center">Edit</th>
-							</tr>
-						</thead>
-					<tbody id="edit_history_table_body">
-					</tbody>
-					</table>
 				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<div id="modalreporting" class="modal fade" tabindex="-1">
-	<div class="modal-dialog modal-xl">
-		<div class="modal-content px-2">
-			<div class="modal-header">
-				<h2>Reporting</h2>
-				<button type="button" class="btn float-end" data-bs-dismiss="modal"><i class="fas fa-times float-end"></i></button>
-			</div>
-			<div class="modal-body">
-				<div class="mb-3">
-					<div class="input-group">
-						<label for="start_reporting_selection" class="col-form-label">Display history from</label>
-						<input id="start_reporting_selection" class="form-control mx-2 input-fixedwidth165" type="date" value="" onchange="initGraphs(); drawGraphs();">
-						<label for="end_reporting_selection" class="col-form-label">to</label>
-						<input id="end_reporting_selection" class="form-control mx-2 input-fixedwidth165" type="date" value="" onchange="initGraphs(); drawGraphs();">
+	<div id="modalreporting" class="modal fade" tabindex="-1">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content px-2">
+				<div class="modal-header">
+					<h2>Reporting</h2>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<div class="mb-3">
+						<div class="input-group">
+							<label for="start_reporting_selection" class="col-form-label">Display history from</label>
+							<input id="start_reporting_selection" class="form-control mx-2 input-fixedwidth165"
+								type="date" value="" onchange="initGraphs(); drawGraphs();">
+							<label for="end_reporting_selection" class="col-form-label">to</label>
+							<input id="end_reporting_selection" class="form-control mx-2 input-fixedwidth165"
+								type="date" value="" onchange="initGraphs(); drawGraphs();">
+						</div>
 					</div>
-				</div>
-				<div class="mb-3">
-					<button type="button" class="btn btn-outline-primary my-1" id="reporting_weektodate">Week to date</button>
-					<button type="button" class="btn btn-outline-primary my-1" id="reporting_previousweek">Previous week</button>
-					<button type="button" class="btn btn-outline-primary my-1" id="reporting_monthtodate">Month to date</button>
-					<button type="button" class="btn btn-outline-primary my-1" id="reporting_previousmonth">Previous month</button>
-					<button type="button" class="btn btn-outline-primary my-1" id="reporting_yeartodate">Year to date</button>
-					<button type="button" class="btn btn-outline-primary my-1" id="reporting_alltime">All time</button>
-				</div>
-				<p>
-					You can zoom in to certain graphs by dragging the area you want to zoom in on.<br>
-					Click right to reset the zoom level.
-				</p>
-				<!--<div class="d-flex justify-content-center w-100 h-100">
+					<div class="mb-3">
+						<button type="button" class="btn btn-outline-primary my-1" id="reporting_weektodate">Week to
+							date</button>
+						<button type="button" class="btn btn-outline-primary my-1" id="reporting_previousweek">Previous
+							week</button>
+						<button type="button" class="btn btn-outline-primary my-1" id="reporting_monthtodate">Month to
+							date</button>
+						<button type="button" class="btn btn-outline-primary my-1" id="reporting_previousmonth">Previous
+							month</button>
+						<button type="button" class="btn btn-outline-primary my-1" id="reporting_yeartodate">Year to
+							date</button>
+						<button type="button" class="btn btn-outline-primary my-1" id="reporting_alltime">All
+							time</button>
+					</div>
+					<p>
+						You can zoom in to certain graphs by dragging the area you want to zoom in on.<br>
+						Click right to reset the zoom level.
+					</p>
+					<!--<div class="d-flex justify-content-center w-100 h-100">
 					<div id="Workdays_div"></div>
 				</div>-->
-				<div class="d-flex justify-content-center w-100 h-100">
-					<div id="DaysRegisteredGauge_div" class="d-flex justify-content-center w-25"></div>
-					<div id="SumOvertimeGauge_div" class="d-flex justify-content-center w-25"></div>
-					<div id="AvgStarttimeGauge_div" class="d-flex justify-content-center w-25"></div>
-					<div id="AvgStoptimeGauge_div" class="d-flex justify-content-center w-25"></div>
+					<div class="d-flex justify-content-center w-100 h-100">
+						<div id="DaysRegisteredGauge_div" class="d-flex justify-content-center w-25"></div>
+						<div id="SumOvertimeGauge_div" class="d-flex justify-content-center w-25"></div>
+						<div id="AvgStarttimeGauge_div" class="d-flex justify-content-center w-25"></div>
+						<div id="AvgStoptimeGauge_div" class="d-flex justify-content-center w-25"></div>
+					</div>
+					<div class="d-flex justify-content-center w-100 h-100">
+						<div id="OvertimeDays_div" class="w-50 d-inline-block"></div>
+						<div id="Hourschedules_div" class="w-50 d-inline-block"></div>
+					</div>
+					<div id="OvertimeDec_div"></div>
+					<div id="OvertimeCumulative_div"></div>
+					<div id="StartDec_div"></div>
+					<div id="StopDec_div"></div>
+					<div id="TotalDec_div"></div>
+					<div id="TotalNoBreakDec_div"></div>
+					<div id="BreakDec_div"></div>
 				</div>
-				<div class="d-flex justify-content-center w-100 h-100">
-					<div id="OvertimeDays_div" class="w-50 d-inline-block"></div><div id="Hourschedules_div" class="w-50 d-inline-block"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 				</div>
-				<div id="OvertimeDec_div"></div>
-				<div id="OvertimeCumulative_div"></div>
-				<div id="StartDec_div"></div>
-				<div id="StopDec_div"></div>
-				<div id="TotalDec_div"></div>
-				<div id="TotalNoBreakDec_div"></div>
-				<div id="BreakDec_div"></div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
-</div>
 
-<div id="modalconfirm" class="modal fade" tabindex="-1">
-	<div class="modal-dialog">
-		<div class="modal-content px-2">
-			<div class="modal-header">
-				<h2>Confirm</h2>
-				<button type="button" class="btn float-end" data-bs-dismiss="modal"><i class="fas fa-times float-end"></i></button>
-			</div>
-			<div class="modal-body"></div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success" data-bs-dismiss="modal">Yes</button>
-				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+	<div id="modalconfirm" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content px-2">
+				<div class="modal-header">
+					<h2>Confirm</h2>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" data-bs-dismiss="modal">Yes</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<!-- Page HTML -->
-<div class="container-fluid h-100">
-	<div id="alertcontainer" class="row d-flex justify-content-center">
-		<div id="alertnotification" class="alert alert-danger alert-dismissible fade show w-75 my-4 me-1 alertnotification" role="alert">
-			<div class="row">
-				<div class="col-lg-2 text-center py-1 px-4 my-auto">
-					<i class="far fa-exclamation-triangle fa-4x pulsate text-warning display-2"></i>
-				</div>
-				<div class="col-lg-9 py-1 px-4">
-					<p class="mb-0">
-						Changes
+	<!-- Page HTML -->
+	<div class="container-fluid h-100">
+		<div id="alertcontainer" class="row d-flex justify-content-center">
+			<div id="alertnotification"
+				class="alert alert-danger alert-dismissible fade show w-75 my-4 me-1 alertnotification" role="alert">
+				<div class="row">
+					<div class="col-lg-2 text-center py-1 px-4 my-auto">
+						<i class="far fa-exclamation-triangle fa-4x pulsate text-warning display-2"></i>
+					</div>
+					<div class="col-lg-9 py-1 px-4">
+						<p class="mb-0">
+							Changes
 						<ul>
 							<li>
-								The first update of the year...
+								It's been a long time! <br>
+								If you have a request (could be anything) please let me know. But for now I can't seem
+								to imagine useful additions myself anymore.
 							</li>
 							<li>
-								Now it's possible to export your data in CSV format. CSV is a more supported format when it comes to data analyzers like spreadsheets so you can make some graphs yourself.<br>
-								Keep in mind that this <b><u>is not a supported type for backups</u></b>!
+								Upgraded libraries.
 							</li>
 						</ul>
-					</p>
-					<p class="mb-0">
-						Bugfixes
+						</p>
+						<p class="mb-0">
+							Bugfixes
 						<ul>
-							<li>Replaced obsolete jshint checks for eslint.</li>
-							<li>Make it possible to store up to 99999 days instead of 999.</li>
-							<li>Fix footer on small screens overlapping functionality.</li>
-							<li>Reset button still held old functionality resulting in unwanted behaviour of the current of the app.</li>
+							<li>
+								Another attempt at fixing an annoying bug where adding time to the start time would
+								result in not actually adding all time correctly. For example, when opening the page and
+								having a start time at 8:00, the end time could've been 15:59.
+							</li>
 						</ul>
-					</p>
+						</p>
+					</div>
 				</div>
+				<button type="button" class="btn-close" onclick="notificationClosed('click');" data-bs-dismiss="alert"
+					aria-label="Close"></button>
 			</div>
-			<button type="button" class="btn-close" onclick="notificationClosed('click');" data-bs-dismiss="alert" aria-label="Close"></button>
+			<div id="app_alert"
+				class="alert alert-warning alert-dismissible fade show col-10 col-lg-6 me-1 alertnotification"
+				role="alert">
+				<div id="app_alert_message"></div>
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
 		</div>
-		<div id="app_alert" class="alert alert-warning alert-dismissible fade show col-10 col-lg-6 me-1 alertnotification" role="alert">
-			<div id="app_alert_message"></div>
-			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-		</div>
-	</div>
 
-	<div class="row h-100">
-		<div class="row w-100 align-self-center">
-			<div class="col-lg-1 d-none d-lg-block bg-light"></div>
-			<div id="inputarea" class="col-lg-5 rounded-end bg-light">
-				<form>
-					<div class="mb-3 pt-3 me-xs-2 me-lg-5">
-						<div id="divstarttime" class="input-group justify-content-end my-1">
-							<label class="col-form-label" for="start_time" data-bs-toggle="tooltip" data-bs-placement="left" title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start time</label>
-							<div class="pe-2 ps-3">
-								<input name="start_time" id="start_time" type="time" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
+		<div class="row h-100">
+			<div class="row w-100 align-self-center">
+				<div class="col-lg-1 d-none d-lg-block bg-light-subtle"></div>
+				<div id="inputarea" class="col-lg-5 rounded-end bg-light-subtle">
+					<form>
+						<div class="mb-3 pt-3 me-xs-2 me-lg-5">
+							<div id="divstarttime" class="input-group justify-content-end my-1">
+								<label class="col-form-label" for="start_time" data-bs-toggle="tooltip"
+									data-bs-placement="left"
+									title="Your start time is entered automatically based on the time of opening this window, but you can make adjustments. Set this page as your starting page when opening your browser to make it easy for yourself.">Start
+									time</label>
+								<div class="pe-2 ps-3">
+									<input name="start_time" id="start_time" type="time"
+										class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();" />
+								</div>
 							</div>
-						</div>
-						<div id="divbreaktime" class="input-group justify-content-end my-3">
-							<label class="col-form-label" for="break_time_default" data-bs-toggle="tooltip" data-bs-placement="left" title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
-								Break with default
-							</label>
-							<div class="mb-1 mb-md-0 mx-3 me-sm-0">
-								<select name="break_time_default" id="break_time_default" class="form-select mb-md-0 input-fixedwidth90" onchange="addBreakDefault();">
-									<option value="0">0 min</option>
-									<option value="0.25">15 min</option>
-									<option value="0.5">30 min</option>
-									<option value="0.75">45 min</option>
-									<option value="1">1h</option>
-									<option value="1">1h 15</option>
-									<option value="1">1h 30</option>
-									<option value="1">1h 45</option>
-									<option value="1">2h</option>
-								</select>
+							<div id="divbreaktime" class="input-group justify-content-end my-3">
+								<label class="col-form-label" for="break_time_default" data-bs-toggle="tooltip"
+									data-bs-placement="left"
+									title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
+									Break with default
+								</label>
+								<div class="mb-1 mb-md-0 mx-3 me-sm-0">
+									<select name="break_time_default" id="break_time_default"
+										class="form-select mb-md-0 input-fixedwidth90" onchange="addBreakDefault();">
+										<option value="0">0 min</option>
+										<option value="0.25">15 min</option>
+										<option value="0.5">30 min</option>
+										<option value="0.75">45 min</option>
+										<option value="1">1h</option>
+										<option value="1">1h 15</option>
+										<option value="1">1h 30</option>
+										<option value="1">1h 45</option>
+										<option value="1">2h</option>
+									</select>
+								</div>
+								<div id="breaktime_timeselection_option_timerange_div" class="pe-2 ps-3 d-none">
+									<label class="col-form-label" for="break_time_start">from</label>
+									<input name="break_time_start" id="break_time_start" type="time" value="00:00"
+										class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();" />
+									<label class="col-form-label" for="break_time_end">to</label>
+									<input name="break_time_end" id="break_time_end" type="time" value="00:00"
+										class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();" />
+								</div>
+								<div id="breaktime_timeselection_option_duration_div" class="pe-2 ps-3">
+									<input name="break_time" id="break_time" type="time" value="00:00"
+										class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();" />
+								</div>
 							</div>
-							<div id="breaktime_timeselection_option_timerange_div" class="pe-2 ps-3 d-none">
-								<label class="col-form-label" for="break_time_start">from</label>
-								<input name="break_time_start" id="break_time_start" type="time" value="00:00" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
-								<label class="col-form-label" for="break_time_end">to</label>
-								<input name="break_time_end" id="break_time_end" type="time" value="00:00" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
+							<div id="divendtime" class="input-group justify-content-end my-3">
+								<label class="col-form-label" for="end_time" data-bs-toggle="tooltip"
+									data-bs-placement="left"
+									title="You can have this automatically filled in by setting the parameter at the bottom of the box. You can manually enter a value.">Time
+									to go home</label>
+								<div class="pe-2 ps-3">
+									<input name="end_time" id="end_time" type="time"
+										class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();" />
+								</div>
 							</div>
-							<div id="breaktime_timeselection_option_duration_div" class="pe-2 ps-3">
-								<input name="break_time" id="break_time" type="time" value="00:00" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
+							<div id="divtotalnobreaktime" class="input-group justify-content-end my-3">
+								<label class="col-form-label" for="totalnobreak" data-bs-toggle="tooltip"
+									data-bs-placement="left" title="These hours are your actual working hours.">Total
+									hours (no break)</label>
+								<div class="pe-2 ps-3">
+									<input name="totalnobreak" id="totalnobreak" type="time"
+										class="form-control mx-1 input-fixedwidth110" value="" disabled>
+									<input name="totalnobreakdec" id="totalnobreakdec" type="text"
+										class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
+								</div>
 							</div>
-						</div>
-						<div id="divendtime" class="input-group justify-content-end my-3">
-							<label class="col-form-label" for="end_time" data-bs-toggle="tooltip" data-bs-placement="left" title="You can have this automatically filled in by setting the parameter at the bottom of the box. You can manually enter a value.">Time to go home</label>
-							<div class="pe-2 ps-3">
-								<input name="end_time" id="end_time" type="time" class="form-control mx-1 input-fixedwidth110" onchange="calculateTotal();"/>
-							</div>
-						</div>
-						<div id="divtotalnobreaktime" class="input-group justify-content-end my-3">
-							<label class="col-form-label" for="totalnobreak" data-bs-toggle="tooltip" data-bs-placement="left" title="These hours are your actual working hours.">Total hours (no break)</label>
-							<div class="pe-2 ps-3">
-								<input name="totalnobreak" id="totalnobreak" type="time" class="form-control mx-1 input-fixedwidth110" value="" disabled>
-								<input name="totalnobreakdec" id="totalnobreakdec" type="text" class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
-							</div>
-						</div>
-						<div id="divovertime" class="collapse input-group justify-content-end my-3">
-							<label class="col-form-label" for="overtime" data-bs-toggle="tooltip" data-bs-placement="left" title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
-								Overtime @
-							</label>
-							<div class="mb-1 mb-md-0 mx-3 me-sm-0">
-								<select name="hourschedule" id="hourschedule" class="form-select input-fixedwidth90" onchange="calculateTotal();" data-bs-toggle="tooltip" data-bs-placement="top" title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
-									<option value="0">0h				&ensp;&nbsp;&emsp;&emsp;&emsp;(working overtime)</option>
-									<option value="3.04">3,04h 			&ensp;&emsp;&emsp;(part-time 2/5, 38h week)</option>
-									<option value="3.12">3,12h 			&ensp;&emsp;&emsp;(part-time 2/5, 39h week)</option>
-									<option value="3.2">3,2h 			&ensp;&ensp;&emsp;&emsp;(part-time 2/5, 40h week)</option>
-									<option value="3.8">3,8h 			&ensp;&ensp;&emsp;&emsp;(half-time, 38h week)</option>
-									<option value="3.9">3,9h 			&ensp;&ensp;&emsp;&emsp;(half-time, 39h week)</option>
-									<option value="4">4h 				&ensp;&nbsp;&emsp;&emsp;&emsp;(half-time, 40h week)</option>
-									<option value="4.56">4,56h 			&ensp;&emsp;&emsp;(part-time 3/5, 38h week)</option>
-									<option value="4.68">4,68h 			&ensp;&emsp;&emsp;(part-time 3/5, 39h week)</option>
-									<option value="4.8">4,8h 			&ensp;&ensp;&emsp;&emsp;(part-time 3/5, 40h week)</option>
-									<option value="6.08">6,08h 			&ensp;&emsp;&emsp;(part-time 4/5, 38h week)</option>
-									<option value="6.24">6,24h 			&ensp;&emsp;&emsp;(part-time 4/5, 39h week)</option>
-									<option value="6.4">6,4h 			&ensp;&ensp;&emsp;&emsp;(part-time 4/5, 40h week)</option>
-									<option value="7.6" selected>7,6h 	&ensp;&ensp;&emsp;&emsp;(full-time, 38h week)</option>
-									<option value="7.8">7,8h 			&ensp;&ensp;&emsp;&emsp;(full-time, 39h week)</option>
-									<option value="8">8h 				&ensp;&nbsp;&emsp;&emsp;&emsp;(full-time, 40h week)</option>
-									<!--
+							<div id="divovertime" class="collapse input-group justify-content-end my-3">
+								<label class="col-form-label" for="overtime" data-bs-toggle="tooltip"
+									data-bs-placement="left"
+									title="Select howmany hours you need to perform on avarage each day. The application will calculate howmuch overtime you built up / used today.">
+									Overtime @
+								</label>
+								<div class="mb-1 mb-md-0 mx-3 me-sm-0">
+									<select name="hourschedule" id="hourschedule" class="form-select input-fixedwidth90"
+										onchange="calculateTotal();" data-bs-toggle="tooltip" data-bs-placement="top"
+										title="This is calculated per day. A day in which the application isn't openend is a day not being saved. For example: if you work 2/5 in 2 full days put this to 7,6 or 8. If you work 2/5 @ 3h per day put it at 3,04.">
+										<option value="0">0h &ensp;&nbsp;&emsp;&emsp;&emsp;(working overtime)</option>
+										<option value="3.04">3,04h &ensp;&emsp;&emsp;(part-time 2/5, 38h week)</option>
+										<option value="3.12">3,12h &ensp;&emsp;&emsp;(part-time 2/5, 39h week)</option>
+										<option value="3.2">3,2h &ensp;&ensp;&emsp;&emsp;(part-time 2/5, 40h week)
+										</option>
+										<option value="3.8">3,8h &ensp;&ensp;&emsp;&emsp;(half-time, 38h week)</option>
+										<option value="3.9">3,9h &ensp;&ensp;&emsp;&emsp;(half-time, 39h week)</option>
+										<option value="4">4h &ensp;&nbsp;&emsp;&emsp;&emsp;(half-time, 40h week)
+										</option>
+										<option value="4.56">4,56h &ensp;&emsp;&emsp;(part-time 3/5, 38h week)</option>
+										<option value="4.68">4,68h &ensp;&emsp;&emsp;(part-time 3/5, 39h week)</option>
+										<option value="4.8">4,8h &ensp;&ensp;&emsp;&emsp;(part-time 3/5, 40h week)
+										</option>
+										<option value="6.08">6,08h &ensp;&emsp;&emsp;(part-time 4/5, 38h week)</option>
+										<option value="6.24">6,24h &ensp;&emsp;&emsp;(part-time 4/5, 39h week)</option>
+										<option value="6.4">6,4h &ensp;&ensp;&emsp;&emsp;(part-time 4/5, 40h week)
+										</option>
+										<option value="7.6" selected>7,6h &ensp;&ensp;&emsp;&emsp;(full-time, 38h week)
+										</option>
+										<option value="7.8">7,8h &ensp;&ensp;&emsp;&emsp;(full-time, 39h week)</option>
+										<option value="8">8h &ensp;&nbsp;&emsp;&emsp;&emsp;(full-time, 40h week)
+										</option>
+										<!--
 										&nbsp; (adds a single space)
 										&ensp; (about the width of two normal spaces)
 										&emsp; (roughly four normal spaces)
 									-->
-								</select>
-							</div>
-							<div class="pe-2 ps-3">
-								<input name="overtime" id="overtime" type="text" class="form-control mx-1 input-fixedwidth110" disabled>
-								<input name="overtimedec" id="overtimedec" type="text" class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
-							</div>
-						</div>
-						<div id="divtotalhours" class="collapse input-group justify-content-end my-3">
-							<label class="col-form-label" for="total" data-bs-toggle="tooltip" data-bs-placement="left" title="These hours are howmuch time you spent being at your workplace.">Total hours</label>
-							<div class="pe-2 ps-3">
-								<input name="total" id="total" type="time" class="form-control mx-1 input-fixedwidth110" disabled>
-								<input name="totaldec" id="totaldec" type="text" class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
-							</div>
-						</div>
-						<div class="input-group justify-content-end my-3">
-							<div id="divovertimeweekly" class="collapse input-group justify-content-end mb-1">
-								<label class="col-form-label" for="overtimeweekly" data-bs-toggle="tooltip" data-bs-placement="left" title="Here you can find howmuch overtime you've built up / used during the current week. This value doesn't include today yet.">Weekly overtime</label>
+									</select>
+								</div>
 								<div class="pe-2 ps-3">
-									<input name="overtimeweekly" id="overtimeweekly" type="text" class="fw-bold form-control mx-1 input-fixedwidth110" disabled>
+									<input name="overtime" id="overtime" type="text"
+										class="form-control mx-1 input-fixedwidth110" disabled>
+									<input name="overtimedec" id="overtimedec" type="text"
+										class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
 								</div>
 							</div>
-							<div id="divovertimetotal" class="collapse input-group justify-content-end mt-1">
-								<label class="col-form-label" for="overtimetotal" data-bs-toggle="tooltip" data-bs-placement="left" title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total overtime</label>
+							<div id="divtotalhours" class="collapse input-group justify-content-end my-3">
+								<label class="col-form-label" for="total" data-bs-toggle="tooltip"
+									data-bs-placement="left"
+									title="These hours are howmuch time you spent being at your workplace.">Total
+									hours</label>
 								<div class="pe-2 ps-3">
-									<input name="overtimetotal" id="overtimetotal" type="text" class="fw-bold form-control mx-1 input-fixedwidth110" disabled>
+									<input name="total" id="total" type="time"
+										class="form-control mx-1 input-fixedwidth110" disabled>
+									<input name="totaldec" id="totaldec" type="text"
+										class="form-control mx-1 mt-1 input-fixedwidth110" disabled>
 								</div>
 							</div>
-						</div>
-						<div id="divsummary" class="collapse input-group justify-content-end mt-3 pe-1">
-							<label class="col-form-label d-flex align-items-center w-15" for="summary" data-bs-toggle="tooltip" data-bs-placement="left" title="Write down a summary of your day. You can input multiple lines. If left blank no summary will be saved.">Day summary</label>
-							<div class="pe-2 ps-3">
-								<textarea name="summary" id="summary" class="form-control mx-1" rows="3" cols="30"></textarea>
-							</div>
-						</div>
-						<div id="historygroup" class="row collapse">
-							<div class="col-2 align-self-center d-flex justify-content-end">
-								<button id="btnedithistory" type="button" class="btn btn-outline-secondary fontsize60 ms-auto me-2 pb-1 px-2" data-bs-toggle="modal" data-bs-target="#modaledithistory"><i class="fas fa-edit"></i></button>
-							</div>
-							<div class="col d-flex justify-content-end">
-								<div id="historycontainer" class="border my-3 me-2">
-									<div id="history" class="bg-secondary bg-opacity-10 w-100"></div>
+							<div class="input-group justify-content-end my-3">
+								<div id="divovertimeweekly" class="collapse input-group justify-content-end mb-1">
+									<label class="col-form-label" for="overtimeweekly" data-bs-toggle="tooltip"
+										data-bs-placement="left"
+										title="Here you can find howmuch overtime you've built up / used during the current week. This value doesn't include today yet.">Weekly
+										overtime</label>
+									<div class="pe-2 ps-3">
+										<input name="overtimeweekly" id="overtimeweekly" type="text"
+											class="fw-bold form-control mx-1 input-fixedwidth110" disabled>
+									</div>
+								</div>
+								<div id="divovertimetotal" class="collapse input-group justify-content-end mt-1">
+									<label class="col-form-label" for="overtimetotal" data-bs-toggle="tooltip"
+										data-bs-placement="left"
+										title="Here you can find howmuch overtime you've built up / used during the period you defined in the 'Info' box. This value doesn't include today yet.">Total
+										overtime</label>
+									<div class="pe-2 ps-3">
+										<input name="overtimetotal" id="overtimetotal" type="text"
+											class="fw-bold form-control mx-1 input-fixedwidth110" disabled>
+									</div>
 								</div>
 							</div>
-						</div>
+							<div id="divsummary" class="collapse input-group justify-content-end mt-3 pe-1">
+								<label class="col-form-label d-flex align-items-center w-15" for="summary"
+									data-bs-toggle="tooltip" data-bs-placement="left"
+									title="Write down a summary of your day. You can input multiple lines. If left blank no summary will be saved.">Day
+									summary</label>
+								<div class="pe-2 ps-3">
+									<textarea name="summary" id="summary" class="form-control mx-1" rows="3"
+										cols="30"></textarea>
+								</div>
+							</div>
+							<div id="historygroup" class="row collapse">
+								<div class="col-2 align-self-center d-flex justify-content-end">
+									<button id="btnedithistory" type="button"
+										class="btn btn-outline-secondary fontsize60 ms-auto me-2 pb-1 px-2"
+										data-bs-toggle="modal" data-bs-target="#modaledithistory"><i
+											class="fas fa-edit"></i></button>
+								</div>
+								<div class="col d-flex justify-content-end">
+									<div id="historycontainer" class="border my-3 me-2">
+										<div id="history" class="bg-secondary bg-opacity-10 w-100"></div>
+									</div>
+								</div>
+							</div>
 
-						<div id="divparameters" class="collapse col me-5 input-group justify-content-end">
-							<div class="form-check form-switch mx-1">
-								<input type="checkbox" class="form-check-input checkred" id="nosave">
-								<label class="form-check-label font-sm" for="nosave" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Won't save today's date for the remainder of the day (until timestamp 00:00) or unless disabled again.">Don't save today</label>
-							</div>
-							<div>
+							<div id="divparameters" class="collapse col me-5 input-group justify-content-end">
 								<div class="form-check form-switch mx-1">
-									<input type="checkbox" class="form-check-input checkgreen" id="autoend" data-bs-toggle="collapse" data-bs-target="#autoend_today_disabled_div" aria-expanded="true" aria-controls="autoend_today_disabled_div">
-									<label class="form-check-label font-sm" for="autoend" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Will change the end time to the timestamp on which you close or refresh the window and thus overwrite any manual changes you made.">Automatically set end time on close</label>
+									<input type="checkbox" class="form-check-input checkred" id="nosave">
+									<label class="form-check-label font-sm" for="nosave" data-bs-toggle="tooltip"
+										data-bs-placement="bottom"
+										title="Won't save today's date for the remainder of the day (until timestamp 00:00) or unless disabled again.">Don't
+										save today</label>
 								</div>
-								<div class="collapse form-check form-switch mx-1" id="autoend_today_disabled_div">
-									<input type="checkbox" class="form-check-input checkred" id="autoend_today_disabled">
-									<label class="form-check-label font-sm" for="autoend_today_disabled" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Don't change the end time to the timestamp on which you close or refresh the window for today even if the previous checkmark is set.">Don't set end time on close today</label>
+								<div>
+									<div class="form-check form-switch mx-1">
+										<input type="checkbox" class="form-check-input checkgreen" id="autoend"
+											data-bs-toggle="collapse" data-bs-target="#autoend_today_disabled_div"
+											aria-expanded="true" aria-controls="autoend_today_disabled_div">
+										<label class="form-check-label font-sm" for="autoend" data-bs-toggle="tooltip"
+											data-bs-placement="bottom"
+											title="Will change the end time to the timestamp on which you close or refresh the window and thus overwrite any manual changes you made.">Automatically
+											set end time on close</label>
+									</div>
+									<div class="collapse form-check form-switch mx-1" id="autoend_today_disabled_div">
+										<input type="checkbox" class="form-check-input checkred"
+											id="autoend_today_disabled">
+										<label class="form-check-label font-sm" for="autoend_today_disabled"
+											data-bs-toggle="tooltip" data-bs-placement="bottom"
+											title="Don't change the end time to the timestamp on which you close or refresh the window for today even if the previous checkmark is set.">Don't
+											set end time on close today</label>
+									</div>
 								</div>
-							</div>
-							<div class="form-check form-switch mx-1">
-								<input type="checkbox" class="form-check-input checkgreen" id="startminsubtract">
-								<label class="form-check-label font-sm" for="startminsubtract" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Will subtract X min (set in the settings) from the time the page was opened NEXT DAY YOU OPEN THE PAGE. This is to take the time to boot your laptop, ... into account.">Subtract <span id="startminsubtract_span"></span> min from open</label>
+								<div class="form-check form-switch mx-1">
+									<input type="checkbox" class="form-check-input checkgreen" id="startminsubtract">
+									<label class="form-check-label font-sm" for="startminsubtract"
+										data-bs-toggle="tooltip" data-bs-placement="bottom"
+										title="Will subtract X min (set in the settings) from the time the page was opened NEXT DAY YOU OPEN THE PAGE. This is to take the time to boot your laptop, ... into account.">Subtract
+										<span id="startminsubtract_span"></span> min from open</label>
+								</div>
 							</div>
 						</div>
+					</form>
+				</div>
+				<div id="buttonarea" class="col-lg-5 align-self-center text-lg-start text-center">
+					<div class="row">
+						<!-- <div class="col col-sm-1 d-none d-xs-block d-sm-block d-md-block d-lg-block"></div> -->
+						<div class="col ms-xs-2 ms-lg-5">
+							<div class="row">
+								<div class="col my-3">
+									<div class="btn-group" role="group">
+										<button type="button" class="btn btn-lg btn-success leftbtn px-4 py-3"
+											onclick="add_time(getHourSchedule())" data-bs-toggle="tooltip"
+											data-bs-placement="bottom"
+											title="Adds the time selected in the hour schedule to the start time and puts it in the 'Time to go home' field."><i
+												class="fal fa-plus"></i> <span id="addtimebutton_span"></span>h</button>
+										<button type="button" class="btn btn-lg btn-success rightbtn px-4 py-3"
+											onclick="end_time()" data-bs-toggle="tooltip" data-bs-placement="bottom"
+											title="Sets the 'Time to go home' field to the current time.">End time
+											now</button>
+									</div>
+								</div>
+							</div>
+							<div id="break_btn_div" class="row">
+								<div class="col my-3">
+									<div class="btn-group" role="group">
+										<button id="break_reset_btn" type="button"
+											class="btn btn-lg btn-primary leftbtn px-4 py-3" onclick="reset_break()"
+											data-bs-toggle="tooltip" data-bs-placement="bottom"
+											title="Resets the break time."><i class="fal fa-redo"></i></button>
+										<button id="break_add5_btn" type="button"
+											class="btn btn-lg btn-primary middlebtn px-4 py-3"
+											onclick="add_break(0.084)" data-bs-toggle="tooltip"
+											data-bs-placement="bottom" title="Adds 5min of break time."><i
+												class="fal fa-plus"></i> 5min</button>
+										<button id="break_add30_btn" type="button"
+											class="btn btn-lg btn-primary middlebtn px-4 py-3" onclick="add_break(0.5)"
+											data-bs-toggle="tooltip" data-bs-placement="bottom"
+											title="Adds 30min of break time."><i class="fal fa-plus"></i> 30min</button>
+										<button id="break_counter_btn" type="button"
+											class="btn btn-lg btn-primary rightbtn px-4 py-3" onclick="break_counter()"
+											data-bs-toggle="tooltip" data-bs-placement="bottom"
+											title="Click once to start the break time counter. Click again to stop it. While running, the elapsed time will be displayed in the break time field. To resume the counter click this start button again, to reset click the reset button."><i
+												class="fal fa-stopwatch"></i> Start</button>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col my-3">
+									<div class="btn-group" role="group">
+										<button type="button" class="btn btn-lg btn-danger px-4 py-3" onclick="reset()"
+											data-bs-toggle="tooltip" data-bs-placement="bottom"
+											title="Resets all the timestamps."><i class="fal fa-redo"></i></button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- <div class="col-sm-2 d-none d-xs-block d-sm-block d-md-block d-lg-block"></div> -->
 					</div>
-				</form>
+				</div>
 			</div>
-			<div id="buttonarea" class="col-lg-5 align-self-center text-lg-start text-center">
-				<div class="row">
-					<!-- <div class="col col-sm-1 d-none d-xs-block d-sm-block d-md-block d-lg-block"></div> -->
-					<div class="col ms-xs-2 ms-lg-5">
-						<div class="row">
-							<div class="col my-3">
-								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-lg btn-success leftbtn px-4 py-3" onclick="add_time(getHourSchedule())" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Adds the time selected in the hour schedule to the start time and puts it in the 'Time to go home' field."><i class="fal fa-plus"></i> <span id="addtimebutton_span"></span>h</button>
-									<button type="button" class="btn btn-lg btn-success rightbtn px-4 py-3" onclick="end_time()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sets the 'Time to go home' field to the current time.">End time now</button>
-								</div>
-							</div>
-						</div>
-						<div id="break_btn_div" class="row">
-							<div class="col my-3">
-								<div class="btn-group" role="group">
-									<button id="break_reset_btn" type="button" class="btn btn-lg btn-primary leftbtn px-4 py-3" onclick="reset_break()"data-bs-toggle="tooltip" data-bs-placement="bottom" title="Resets the break time."><i class="fal fa-redo"></i></button>
-									<button id="break_add5_btn" type="button" class="btn btn-lg btn-primary middlebtn px-4 py-3" onclick="add_break(0.084)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Adds 5min of break time."><i class="fal fa-plus"></i> 5min</button>
-									<button id="break_add30_btn" type="button" class="btn btn-lg btn-primary middlebtn px-4 py-3" onclick="add_break(0.5)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Adds 30min of break time."><i class="fal fa-plus"></i> 30min</button>
-									<button id="break_counter_btn" type="button" class="btn btn-lg btn-primary rightbtn px-4 py-3" onclick="break_counter()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Click once to start the break time counter. Click again to stop it. While running, the elapsed time will be displayed in the break time field. To resume the counter click this start button again, to reset click the reset button."><i class="fal fa-stopwatch"></i> Start</button>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col my-3">
-								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-lg btn-danger px-4 py-3" onclick="reset()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Resets all the timestamps."><i class="fal fa-redo"></i></button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- <div class="col-sm-2 d-none d-xs-block d-sm-block d-md-block d-lg-block"></div> -->
+			<div class="row d-block d-md-none">
+				<!-- Row to keep clear of footer when using small screens -->
+				<div class="col h-f-100 "></div>
+			</div>
+		</div>
+
+		<!-- Footer HTML -->
+		<div id="footer" class="row fixed-bottom px-3 py-1">
+			<div class="col d-flex align-self-center">
+				<span class="mx-2">Senne Janssens &#169; 2023</span>
+			</div>
+			<div class="col d-flex justify-content-end">
+				<div id="footer_button_group" class="btn-group align-self-center" role="group">
+					<!--<button title="Dark mode" type="button" id="dark_mode" class="btn btn-outline-secondary leftbtn footerbtn py-1 px-4"><i class="fas fa-moon"></i></button>-->
+					<button title="Reporting" type="button"
+						class="btn btn-outline-secondary leftbtn footerbtn py-1 px-4" data-bs-toggle="modal"
+						data-bs-target="#modalreporting"><i class="fas fa-chart-line"></i></button>
+					<button title="About" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4"
+						data-bs-toggle="modal" data-bs-target="#modalabout"><i class="fas fa-info"></i></button>
+					<button title="Info" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4"
+						data-bs-toggle="modal" data-bs-target="#modalinfo"><i class="fas fa-lightbulb"></i></button>
+					<button title="Settings" type="button"
+						class="btn btn-outline-secondary rightbtn footerbtn py-1 px-4" data-bs-toggle="modal"
+						data-bs-target="#modalsettings"><i class="fas fa-cog"></i></button>
 				</div>
 			</div>
 		</div>
-		<div class="row d-block d-md-none">
-			<!-- Row to keep clear of footer when using small screens -->
-			<div class="col h-f-100 "></div>
-		</div>
 	</div>
-
-	<!-- Footer HTML -->
-    <div id="footer" class="row fixed-bottom px-3 py-1">
-		<div class="col d-flex align-self-center">
-			<span class="mx-2">Senne Janssens &#169; 2023</span>
-		</div>
-		<div class="col d-flex justify-content-end">
-			<div id="footer_button_group" class="btn-group align-self-center" role="group">
-				<!--<button title="Dark mode" type="button" id="dark_mode" class="btn btn-outline-secondary leftbtn footerbtn py-1 px-4"><i class="fas fa-moon"></i></button>-->
-				<button title="Reporting" type="button" class="btn btn-outline-secondary leftbtn footerbtn py-1 px-4" data-bs-toggle="modal" data-bs-target="#modalreporting"><i class="fas fa-chart-line"></i></button>
-				<button title="About" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4" data-bs-toggle="modal" data-bs-target="#modalabout"><i class="fas fa-info"></i></button>
-				<button title="Info" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4" data-bs-toggle="modal" data-bs-target="#modalinfo"><i class="fas fa-lightbulb"></i></button>
-				<button title="Settings" type="button" class="btn btn-outline-secondary rightbtn footerbtn py-1 px-4" data-bs-toggle="modal" data-bs-target="#modalsettings"><i class="fas fa-cog"></i></button>
-			</div>
-		</div>
-	</div>
-</div>
 </body>
+
 </html>

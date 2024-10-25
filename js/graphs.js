@@ -50,19 +50,19 @@ google.charts.load('current', { packages: ['corechart', 'gauge', 'timeline'] });
 
 function initGraphs() {
 	numberOfDaysRegistered = 0,
-	datasetOvertimeDec = [],
-	datasetOvertimeCumulative = [],
-	datasetStartDec = [],
-	datasetStopDec = [],
-	datasetTotalDec = [],
-	datasetTotalNoBreakDec = [],
-	datasetBreakDec = [],
-	datasetHourscheduleDec = [],
-	positiveOvertimeDays = 0,
-	negativeOvertimeDays = 0,
-	sumStarttime = 0,
-	sumStoptime = 0,
-	sumOvertime = 0;
+		datasetOvertimeDec = [],
+		datasetOvertimeCumulative = [],
+		datasetStartDec = [],
+		datasetStopDec = [],
+		datasetTotalDec = [],
+		datasetTotalNoBreakDec = [],
+		datasetBreakDec = [],
+		datasetHourscheduleDec = [],
+		positiveOvertimeDays = 0,
+		negativeOvertimeDays = 0,
+		sumStarttime = 0,
+		sumStoptime = 0,
+		sumOvertime = 0;
 
 	formatJSONdata();
 }
@@ -550,7 +550,7 @@ function getReportingEndDate() {
 function formatJSONdata() {
 	//var start = sortedkeys.length - datasetlength; // howmany datapoints need to be skipped before starting to draw graphs
 	const start_reporting_selection = getReportingStartDate(),
-			end_reporting_selection = getReportingEndDate();
+		end_reporting_selection = getReportingEndDate();
 
 	let timeinfo,
 		variable,
