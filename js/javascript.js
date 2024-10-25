@@ -1151,6 +1151,7 @@ $(document).ready(function () {
 		});
 
 	moment().format(); // Initialize momentjs
+	document.getElementById("year_span").innerHTML = moment().year();
 
 	let myModal;
 	if (window.location.href.indexOf('#about') != -1) {
