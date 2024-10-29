@@ -34,6 +34,9 @@ function importBootstrapColors() {
 	bs_washed_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-green').trim();
 }
 
+// eslint-disable-next-line no-unused-vars
+var colorScheme; // Variable to know if in dark or light mode
+
 // Conversion functions
 function floatToTimeString(timedec) {
 	const sign = timedec < 0 ? "-" : "",
@@ -1134,12 +1137,13 @@ $(document).ready(function () {
 	importBootstrapColors();
 	loadApp();
 
-	if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
-		//colorScheme = "dark";
+	if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+		colorScheme = "dark";
 		document.querySelector("html").setAttribute("data-bs-theme", "dark");
-	else
-		//colorScheme = "light";
+	} else {
+		colorScheme = "light";
 		document.querySelector("html").setAttribute("data-bs-theme", "light");
+	}
 
 	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')),
 		// eslint-disable-next-line no-unused-vars
