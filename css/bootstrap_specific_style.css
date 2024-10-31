@@ -89,6 +89,15 @@ body {
 	--bs-washed-red: #f7d4d7;
 	--bs-washed-yellow: #fff2cc;
 	--bs-washed-green: #a9efce;
+	--bs-leaves-border: #333;
+	--bs-leaves-shadow: #222;
+	--bs-leaves-bg-gradient: #006400;
+	--bs-leaves-bg: #005600;
+	--bs-leaves-bg-light: #309900;
+	--bs-leaves-bg-2: #2b5600;
+	--bs-leaves-bg-2-light: #5e9900;
+	--bs-leaves-bg-3: #564500;
+	--bs-leaves-bg-3-light: #990;
 }
 
 .bg-washed-red {
@@ -105,6 +114,19 @@ body {
 
 .bg-washed-green {
 	background-color: var(--bs-washed-green) !important;
+}
+
+[data-bs-theme=dark] {
+	color-scheme: dark;
+	--bs-leaves-border: #ccc;
+	--bs-leaves-shadow: #c7c7c7;
+	--bs-leaves-bg-gradient: #00ff00;
+	--bs-leaves-bg: #00f000;
+	--bs-leaves-bg-light: #74ff33;
+	--bs-leaves-bg-2: #78f000;
+	--bs-leaves-bg-2-light: #b1ff33;
+	--bs-leaves-bg-3: #f0c000;
+	--bs-leaves-bg-3-light: #ffff33;
 }
 
 /*

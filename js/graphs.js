@@ -1,6 +1,6 @@
 console.log("loaded graphs.js");
 
-/*global $, moment, google, testDateFormat, floatToTimeString, getHistoryKeys, colorScheme, bs_blue, bs_washed_red, bs_washed_green, bs_washed_yellow, bs_purple, bs_teal, bs_cyan, bs_green, bs_red, bs_yellow, bs_pink, bs_gray, ,bs_gray_dark, bs_white, bs_indigo, bs_orange, bs_light*/
+/*global $, moment, google, testDateFormat, floatToTimeString, getHistoryKeys, importBootstrapColors, colorScheme, bs_blue, bs_washed_red, bs_washed_green, bs_washed_yellow, bs_purple, bs_teal, bs_cyan, bs_green, bs_red, bs_yellow, bs_pink, bs_gray, ,bs_gray_dark, bs_body_bg, bs_white, bs_indigo, bs_orange, bs_light*/
 /*eslint no-undef: "error"*/
 
 /*
@@ -68,6 +68,7 @@ function initGraphs() {
 }
 
 function drawGraphs() {
+	importBootstrapColors();
 	//drawTimelinegraph("Workdays");
 	drawGaugegraph("DaysRegisteredGauge");
 	drawGaugegraph("AvgStarttimeGauge");
@@ -217,7 +218,7 @@ function drawAreagraph(graphtype) {
 		colors: linecolor,
 		width: '100%',
 		height: 500,
-		backgroundColor: colorScheme == "light" ? bs_white : '#2f2f2f'
+		backgroundColor: bs_body_bg
 	};
 
 	const chart = new google.visualization.AreaChart(document.getElementById(graphtype + '_div'));
@@ -309,7 +310,7 @@ function drawBargraph(graphtype) {
 		colors: linecolor,
 		width: '100%',
 		height: 500,
-		backgroundColor: colorScheme == "light" ? bs_white : '#2f2f2f'
+		backgroundColor: bs_body_bg
 	};
 
 	const chart = new google.visualization.ComboChart(document.getElementById(graphtype + '_div'));
@@ -358,7 +359,7 @@ function drawPiegraph(graphtype) {
 		colors: slicecolor,
 		width: '100%',
 		height: 300,
-		backgroundColor: colorScheme == "light" ? bs_white : '#2f2f2f'
+		backgroundColor: bs_body_bg
 	};
 
 	const chart = new google.visualization.PieChart(document.getElementById(graphtype + '_div'));
