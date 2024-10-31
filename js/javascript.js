@@ -1201,10 +1201,13 @@ $(document).on('keydown', function (e) {
 });
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-	if (event.matches)
+	if (event.matches) {
+		colorScheme = "dark";
 		document.querySelector("html").setAttribute("data-bs-theme", "dark");
-	else
+	} else {
+		colorScheme = "light";
 		document.querySelector("html").setAttribute("data-bs-theme", "light");
+	}
 });
 
 $("input").focusout(function () {
