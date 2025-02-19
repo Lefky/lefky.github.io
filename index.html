@@ -58,7 +58,7 @@
 					<p>
 						Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a>
 						(Send me a message with feedback or suggestions ;) )<br>
-						Version: <span id="currentappversion">20241031.1</span> <br>
+						Version: <span id="currentappversion">20250219.1</span> <br>
 						Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"
 							target="_blank">Check the master branch on Github</a>
 					</p>
@@ -806,12 +806,7 @@
 							Changes
 						<ul>
 							<li>
-								It's been a long time! <br>
-								If you have a request (could be anything) please let me know. But for now I can't seem
-								to imagine useful additions myself anymore.
-							</li>
-							<li>
-								Upgraded libraries.
+								Added option to not save this current session instead of only the entire day. This allows to reload the window without needing to uncheck the today box.
 							</li>
 						</ul>
 						</p>
@@ -819,12 +814,7 @@
 							Bugfixes
 						<ul>
 							<li>
-								Another attempt at fixing an annoying bug where adding time to the start time would
-								result in not actually adding all time correctly. For example, when opening the page and
-								having a start time at 8:00, the end time could've been 15:59.
-							</li>
-							<li>
-								Various bugfixes regarding the reworked dark mode and graphs.
+								None.
 							</li>
 						</ul>
 						</p>
@@ -1026,14 +1016,25 @@
 								<div>
 									<div class="form-check form-switch mx-1">
 										<input type="checkbox" class="form-check-input checkgreen" id="autoend"
-											data-bs-toggle="collapse" data-bs-target="#autoend_today_disabled_div"
-											aria-expanded="true" aria-controls="autoend_today_disabled_div">
+											data-bs-toggle="collapse" data-bs-target=".autoend_disabled_div"
+											aria-expanded="true"
+											aria-controls="autoend_session_disabled_div autoend_today_disabled_div">
 										<label class="form-check-label font-sm" for="autoend" data-bs-toggle="tooltip"
 											data-bs-placement="bottom"
 											title="Will change the end time to the timestamp on which you close or refresh the window and thus overwrite any manual changes you made.">Automatically
 											set end time on close</label>
 									</div>
-									<div class="collapse form-check form-switch mx-1" id="autoend_today_disabled_div">
+									<div class="collapse autoend_disabled_div form-check form-switch mx-1"
+										id="autoend_session_disabled_div">
+										<input type="checkbox" class="form-check-input checkred"
+											id="autoend_session_disabled">
+										<label class="form-check-label font-sm" for="autoend_session_disabled"
+											data-bs-toggle="tooltip" data-bs-placement="bottom"
+											title="Don't change the end time to the timestamp on which you close or refresh the window for this session even if the previous checkmark is set.">Don't
+											set end time on close this session</label>
+									</div>
+									<div class="collapse autoend_disabled_div form-check form-switch mx-1"
+										id="autoend_today_disabled_div">
 										<input type="checkbox" class="form-check-input checkred"
 											id="autoend_today_disabled">
 										<label class="form-check-label font-sm" for="autoend_today_disabled"
