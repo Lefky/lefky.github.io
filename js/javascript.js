@@ -1088,14 +1088,16 @@ window.onbeforeunload = function () {
 	// Set 'dont save today' and 'automatically set end time' parameters in local storage
 	const nosave = document.getElementById("nosave"),
 		autoend = document.getElementById("autoend"),
+		autoend_session_disabled = document.getElementById("autoend_session_disabled"),
 		autoend_today_disabled = document.getElementById("autoend_today_disabled");
 	if (nosave.checked == false) {
 		if (autoend.checked == false) {
 			localStorage.setItem("autoend", "false");
 			localStorage.setItem("autoend_today_disabled", "false");
 		} else {
-			if (autoend_today_disabled.checked == true) {
-				localStorage.setItem("autoend_today_disabled", todayDate());
+			if (autoend_today_disabled.checked == true || autoend_session_disabled.checked == true) {
+				if (autoend_today_disabled.checked == true)
+					localStorage.setItem("autoend_today_disabled", todayDate());
 			} else {
 				setEnd(now());
 				localStorage.setItem("autoend_today_disabled", "false");
@@ -1131,6 +1133,7 @@ window.onbeforeunload = function () {
 	localStorage.setItem("autobackupoption", document.getElementById("autobackupoption").checked.toString());
 	localStorage.setItem("parametersoption", document.getElementById("parametersoption").checked.toString());
 	localStorage.setItem("breaktime_timeselection_option_timerange", document.getElementById("breaktime_timeselection_option_timerange").checked.toString());
+	//return false; ////// DEBUG before reloading the window
 };
 
 // Listeners and initializers
