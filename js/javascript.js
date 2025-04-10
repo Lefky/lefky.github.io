@@ -162,6 +162,30 @@ function setHourSchedule(time) {
 	hourscheduleAddTimeButton(getHourSchedule());
 }
 
+function setCustomHourSchedule(time) {
+	localStorage.setItem("customhourschedule_value", time);
+	localStorage.setItem("hourschedule", time);
+	setCustomHourScheduleUI(time);
+}
+
+function setCustomHourScheduleUI(time) {
+	document.getElementById("customhourschedule_value").value = time;
+
+	const custom_option = document.createElement('option');
+    custom_option.value = time;
+	
+	if (time.includes(",")) {
+		custom_option.innerHTML = time + "h &ensp;&ensp;&emsp;&emsp;(custom option)";
+		console.log("includes comma");
+    } else {
+		custom_option.innerHTML = time + "h &ensp;&nbsp;&emsp;&emsp;&emsp;(custom option)";
+		console.log("includes NO comma");
+	}
+	
+    document.getElementById("hourschedule").appendChild(custom_option);
+	document.getElementById("hourschedule").value = time;
+}
+
 function getWorktime() {
 	let worktime = getEnd() - getStart();
 	if (getEnd() < getStart())
@@ -834,6 +858,7 @@ function setParameters() {
 		autoend_today_disabled = localStorage.getItem("autoend_today_disabled"),
 		nosave = localStorage.getItem("nosave"),
 		hourschedule = localStorage.getItem("hourschedule"),
+		customhourschedule_value = localStorage.getItem("customhourschedule_value"),
 		break_time_default = localStorage.getItem("break_time_default"),
 		startminsubtract = localStorage.getItem("startminsubtract"),
 		startminsubtract_value = localStorage.getItem("startminsubtract_value"),
@@ -862,6 +887,7 @@ function setParameters() {
 		document.getElementById("autoend_today_disabled").click();
 	if (nosave == todayDate())
 		document.getElementById("nosave").click();
+	setCustomHourScheduleUI(customhourschedule_value);
 	setHourSchedule(hourschedule);
 	if (break_time_default) {
 		document.getElementById("break_time_default").value = break_time_default;
