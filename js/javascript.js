@@ -163,26 +163,25 @@ function setHourSchedule(time) {
 }
 
 function setCustomHourSchedule(time) {
-	localStorage.setItem("customhourschedule_value", time);
-	localStorage.setItem("hourschedule", time);
-	setCustomHourScheduleUI(time);
+	if (time) {
+		localStorage.setItem("customhourschedule_value", time);
+		localStorage.setItem("hourschedule", time);
+		setCustomHourScheduleUI(time);
+	}
 }
 
 function setCustomHourScheduleUI(time) {
 	document.getElementById("customhourschedule_value").value = time;
 
 	const custom_option = document.createElement('option');
-    custom_option.value = time;
-	
-	if (time.includes(",")) {
+	custom_option.value = time;
+
+	if (time && time.includes(","))
 		custom_option.innerHTML = time + "h &ensp;&ensp;&emsp;&emsp;(custom option)";
-		console.log("includes comma");
-    } else {
-		custom_option.innerHTML = time + "h &ensp;&nbsp;&emsp;&emsp;&emsp;(custom option)";
-		console.log("includes NO comma");
-	}
-	
-    document.getElementById("hourschedule").appendChild(custom_option);
+	else
+		custom_option.innerHTML = time + "h &ensp;&nbsp;&emsp;&emsp;&emsp;(custom option)"
+
+	document.getElementById("hourschedule").appendChild(custom_option);
 	document.getElementById("hourschedule").value = time;
 }
 
