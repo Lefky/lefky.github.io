@@ -572,6 +572,8 @@ function hourscheduleAddTimeButton(hourSchedule) {
 function breaktimeTimeselection() {
 	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
 		document.getElementById("breaktime_timeselection_option_timerange_div").classList.add("d-none");
+		document.getElementById("break_time_default_label").classList.remove("d-none");
+		document.getElementById("break_time_default_div").classList.remove("d-none");
 		document.getElementById("breaktime_timeselection_option_duration_div").classList.remove("d-none");
 
 		reset_break();
@@ -594,6 +596,8 @@ function breaktimeTimeselection() {
 			});
 	} else {
 		document.getElementById("breaktime_timeselection_option_timerange_div").classList.remove("d-none");
+		document.getElementById("break_time_default_label").classList.add("d-none");
+		document.getElementById("break_time_default_div").classList.add("d-none");
 		document.getElementById("breaktime_timeselection_option_duration_div").classList.add("d-none");
 
 		reset_break();
