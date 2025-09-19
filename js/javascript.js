@@ -168,22 +168,27 @@ function setCustomHourSchedule(time) {
 		localStorage.setItem("customhourschedule_value", time);
 		localStorage.setItem("hourschedule", time);
 		setCustomHourScheduleUI(time);
+	} else {
+		localStorage.removeItem("customhourschedule_value");
 	}
 }
 
 function setCustomHourScheduleUI(time) {
 	document.getElementById("customhourschedule_value").value = time;
 
-	const custom_option = document.createElement('option');
-	custom_option.value = time;
+	if (time) {
+		const custom_option = document.createElement('option');
+		custom_option.value = time;
+		custom_option.id = "customhourschedule_value_option";
 
-	if (time && time.includes(","))
-		custom_option.innerHTML = time + "h &ensp;&ensp;&emsp;&emsp;(custom option)";
-	else
-		custom_option.innerHTML = time + "h &ensp;&nbsp;&emsp;&emsp;&emsp;(custom option)"
+		if (time && time.includes(","))
+			custom_option.innerHTML = time + "h &ensp;&ensp;&emsp;&emsp;(custom option)";
+		else
+			custom_option.innerHTML = time + "h &ensp;&nbsp;&emsp;&emsp;&emsp;(custom option)"
 
-	document.getElementById("hourschedule").appendChild(custom_option);
-	document.getElementById("hourschedule").value = time;
+		document.getElementById("hourschedule").appendChild(custom_option);
+		document.getElementById("hourschedule").value = time;
+	}
 }
 
 function getWorktime() {
