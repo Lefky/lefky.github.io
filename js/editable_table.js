@@ -108,34 +108,6 @@ function clearPlaceholder(cell) {
 }
 
 function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule, Summary) {
-	const isnumber = /^(-?)\d+(\.\d+)?$/;
-	const istext = /^[.\\\s\w\d]*$/;
-	let error_message = "";
-
-	Summary = Summary.replace(/\n/g, '\\n');
-
-	if (!testDateFormat(key))
-		error_message = error_message + "<br><br>Date for date \"" + key + "\" is not in the DD-MM-YYYY format.";
-
-	if (!isnumber.test(TotalNoBreakDec) && TotalNoBreakDec.toLowerCase() != "correction")
-		error_message = error_message + "<br><br>Total Time No Break for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
-
-	if (!isnumber.test(OvertimeDec))
-		error_message = error_message + "<br><br>Overtime for date \"" + key + "\" is not a (decimal) number.";
-
-	if (!isnumber.test(TotalDec) && TotalDec.toLowerCase() != "correction")
-		error_message = error_message + "<br><br>Total Work Time for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
-
-	if (!isnumber.test(StartDec) && StartDec.toLowerCase() != "correction")
-		error_message = error_message + "<br><br>Start Time for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
-
-	if (!isnumber.test(HourSchedule) && HourSchedule.toLowerCase() != "correction")
-		error_message = error_message + "<br><br>Hour Schedule for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
-
-	if (!istext.test(Summary) && Summary.toLowerCase() != "correction")
-		error_message = error_message + "<br><br>Summary for date \"" + key + "\" is not a valid text or the word \"correction\".";
-
-
 	if (error_message == "") {
 		Summary = Summary == "Summary" ? "" : Summary;
 		const timeinfo = '{"TotalNoBreakDec": "' + (TotalNoBreakDec.toLowerCase() != "correction" ? parseFloat(TotalNoBreakDec).toFixed(2) : "correction") + '", "OvertimeDec": "' + parseFloat(OvertimeDec).toFixed(2) + '", "TotalDec": "' + (TotalDec.toLowerCase() != "correction" ? parseFloat(TotalDec).toFixed(2) : "correction") + '", "StartDec": "' + (StartDec.toLowerCase() != "correction" ? parseFloat(StartDec).toFixed(2) : "correction") + '", "HourSchedule": "' + (HourSchedule.toLowerCase() != "correction" ? parseFloat(HourSchedule).toFixed(2) : "correction") + '", "Summary": "' + (Summary.toLowerCase() != "correction" ? Summary : "correction") + '"}';
@@ -146,6 +118,54 @@ function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSch
 		return error_message;
 	}
 	return;
+}
+
+function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule, Summary) {
+	const isnumber = /^(-?)\d+(\.\d+)?$/;
+	const istext = /^[.\\\s\w\d]*$/;
+	let error_message = "";
+
+	if (!testDateFormat(key)) {
+		error_message += "<br><br>Date for date \"" + key + "\" is not in the DD-MM-YYYY format.";
+	}
+	if (!isnumber.test(TotalNoBreakDec) && TotalNoBreakDec.toLowerCase() !== "correction") {
+		error_message += "<br><br>Total Time No Break for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
+	}
+	if (!isnumber.test(OvertimeDec)) {
+		error_message += "<br><br>Overtime for date \"" + key + "\" is not a (decimal) number.";
+	}
+	if (!isnumber.test(TotalDec) && TotalDec.toLowerCase() !== "correction") {
+		error_message += "<br><br>Total Work Time for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
+	}
+	if (!isnumber.test(StartDec) && StartDec.toLowerCase() !== "correction") {
+		error_message += "<br><br>Start Time for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
+	}
+	if (!isnumber.test(HourSchedule) && HourSchedule.toLowerCase() !== "correction") {
+		error_message += "<br><br>Hour Schedule for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
+	}
+	if (!istext.test(Summary) && Summary.toLowerCase() !== "correction") {
+		error_message += "<br><br>Summary for date \"" + key + "\" is not a valid text or the word \"correction\".";
+	}
+
+	if (error_message === "") {
+		const timeinfo = {
+			TotalNoBreakDec: TotalNoBreakDec.toLowerCase() !== "correction" ? parseFloat(TotalNoBreakDec).toFixed(2) : "correction",
+			OvertimeDec: parseFloat(OvertimeDec).toFixed(2),
+			TotalDec: TotalDec.toLowerCase() !== "correction" ? parseFloat(TotalDec).toFixed(2) : "correction",
+			StartDec: StartDec.toLowerCase() !== "correction" ? parseFloat(StartDec).toFixed(2) : "correction",
+			HourSchedule: HourSchedule.toLowerCase() !== "correction" ? parseFloat(HourSchedule).toFixed(2) : "correction",
+			// Handle placeholder or special "correction" text for the summary.
+			Summary: Summary.toLowerCase() === "correction" ? "correction" : (Summary === "Summary" ? "" : Summary)
+		};
+
+		const validJsonString = JSON.stringify(timeinfo);
+		localStorage.setItem(key, validJsonString);
+
+		return; // Return nothing on success.
+	} else {
+		error_message += "<br><br>Please correct your entry and try again.";
+		return error_message; // Return the full error message on failure.
+	}
 }
 
 $($tableID).on('click', '.record-save', function () {

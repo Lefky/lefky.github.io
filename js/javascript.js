@@ -40,10 +40,13 @@ var colorScheme; // Variable to know if in dark or light mode
 
 // Conversion functions
 function floatToTimeString(timedec) {
-	const sign = timedec < 0 ? "-" : "",
-		hours = Math.floor(Math.abs(timedec)),
-		minutes = Math.floor((Math.abs(timedec) * 60) % 60);
-	return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+	if (timedec !== "correction") {
+		const sign = timedec < 0 ? "-" : "",
+			hours = Math.floor(Math.abs(timedec)),
+			minutes = Math.floor((Math.abs(timedec) * 60) % 60);
+		return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+	} else
+		return timedec;
 }
 
 function timeStringToFloat(timestring) {
@@ -52,8 +55,10 @@ function timeStringToFloat(timestring) {
 }
 
 const reverseDateRepresentation = date => {
-	let parts = date.split('-');
-	return `${parts[2]}-${parts[1]}-${parts[0]}`;
+	if (date) {
+		let parts = date.split('-');
+		return `${parts[2]}-${parts[1]}-${parts[0]}`;
+	}
 };
 
 // Setters & getters
@@ -288,7 +293,7 @@ function setTotalNoBreakDec(time) {
 }
 
 function getSummary() {
-	return document.getElementById("summary").value.replace(/\n/g, '\\n');
+	return document.getElementById("summary").value;
 }
 
 function setSummary(summary) {
@@ -791,21 +796,38 @@ const importHistory = document.getElementById('importHistory'),
 importFile.addEventListener("change", importHistoryData, false);
 importHistory.onclick = function () { importFile.click(); };
 function importHistoryData(e) {
-	const files = e.target.files,
-		reader = new FileReader();
+	const files = e.target.files;
+	if (files.length === 0) return; // Exit if no file is selected
+
+	const reader = new FileReader();
+
 	reader.onload = readerEvent => {
-		const content = JSON.parse(readerEvent.target.result); // this is the content!
-		Object.keys(content).forEach(function (k) {
-			localStorage.setItem(k, content[k]);
-		});
-		importFile.value = ''; //clear input value after every import
-		setHistory(true);
-		setParameters();
+		try {
+			const content = JSON.parse(readerEvent.target.result); // Try to parse
+			Object.keys(content).forEach(function (k) {
+				// Also check if the value is a stringified object and parse it if needed
+				let value = content[k];
+				try {
+					// This handles old exports where values are stringified JSON
+					JSON.parse(value);
+					localStorage.setItem(k, value);
+				} catch (innerError) {
+					// This handles new exports where values are just strings
+					localStorage.setItem(k, value);
+				}
+			});
+			importFile.value = ''; //clear input value
+			setHistory(true);
+			setParameters();
+			document.getElementById("settingsmodalclosebutton").click();
+			alert("Import successful!");
+		} catch (error) {
+			// If parsing fails, show a friendly error
+			alert("Import failed! The file contains invalid JSON data.");
+			console.error("Error parsing imported file:", error);
+		}
 	};
 	reader.readAsText(files[0]);
-	setParameters();
-	document.getElementById("settingsmodalclosebutton").click();
-	alert("Import successful!");
 }
 
 function makeDate(date) {
@@ -1142,8 +1164,16 @@ window.onbeforeunload = function () {
 			}
 			localStorage.setItem("autoend", "true");
 		}
-		const timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule().toFixed(2) + '", "Summary": "' + getSummary() + '"}';
-		localStorage.setItem(todayDate(), timeinfo);
+		const timeinfo = {
+			TotalNoBreakDec: getTotalNoBreakDec(),
+			OvertimeDec: getOvertimeDec(),
+			TotalDec: getTotalDec(),
+			StartDec: getStart().toString(), // Ensure start time is a string
+			HourSchedule: getHourSchedule().toFixed(2),
+			Summary: getSummary() // Get the raw summary text
+		};
+
+		localStorage.setItem(todayDate(), JSON.stringify(timeinfo));
 		localStorage.setItem("nosave", "false");
 	} else {
 		localStorage.setItem("autoend", autoend.checked.toString());
