@@ -1,6 +1,6 @@
 console.log("loaded graphs.js");
 
-/*global $, moment, google, testDateFormat, floatToTimeString, getHistoryKeys, importBootstrapColors, colorScheme, bs_blue, bs_washed_red, bs_washed_green, bs_washed_yellow, bs_purple, bs_teal, bs_cyan, bs_green, bs_red, bs_yellow, bs_pink, bs_gray, ,bs_gray_dark, bs_body_bg, bs_white, bs_indigo, bs_orange, bs_light*/
+/*global $, dayjs, google, testDateFormat, floatToTimeString, getHistoryKeys, importBootstrapColors, colorScheme, bs_blue, bs_washed_red, bs_washed_green, bs_washed_yellow, bs_purple, bs_teal, bs_cyan, bs_green, bs_red, bs_yellow, bs_pink, bs_gray, ,bs_gray_dark, bs_body_bg, bs_white, bs_indigo, bs_orange, bs_light*/
 /*eslint no-undef: "error"*/
 
 /*
@@ -86,13 +86,13 @@ function drawGraphs() {
 }
 
 function initDateSelector() {
-	document.getElementById('start_reporting_selection').value = moment(sortedkeys[0], 'DD-MM-YYYY').format('YYYY-MM-DD');
-	document.getElementById('end_reporting_selection').value = moment().format('YYYY-MM-DD');
+	document.getElementById('start_reporting_selection').value = dayjs(reverseDateRepresentation(sortedkeys[0])).format('YYYY-MM-DD');
+	document.getElementById('end_reporting_selection').value = dayjs().add(1, "d").format('YYYY-MM-DD');
 }
 
 function setDateSelector(start, end) {
-	document.getElementById('start_reporting_selection').value = moment(start).format('YYYY-MM-DD');
-	document.getElementById('end_reporting_selection').value = moment(end).format('YYYY-MM-DD');
+	document.getElementById('start_reporting_selection').value = dayjs(start).format('YYYY-MM-DD');
+	document.getElementById('end_reporting_selection').value = dayjs(end).format('YYYY-MM-DD');
 	initGraphs();
 	drawGraphs();
 }
@@ -505,7 +505,7 @@ function drawGaugegraph(graphtype) {
 			data.addColumn({ type: 'date', id: 'Start' });
 			data.addColumn({ type: 'date', id: 'End' });
 
-			const calendar = await businessDays(getCountry(), todayDate(), "31-12-" + moment().format('YYYY'));
+			const calendar = await businessDays(getCountry(), todayDate(), "31-12-" + dayjs().format('YYYY'));
 			calendar.forEach(function (element) {
 				let type = "Workday";
 				if (element[1])
@@ -516,7 +516,7 @@ function drawGaugegraph(graphtype) {
 				const tooltip = "<b>" + element[0] + "</b><br><br>Weekend: " + element[1] + "<br>Holiday: " + element[2];
 
 				data.addRows([
-					[type, "", tooltip, new Date(moment(element[0], 'DD-MM-YYYY').format('YYYY-MM-DD')), new Date(moment(element[0], 'DD-MM-YYYY').add(1, 'd').format('YYYY-MM-DD'))]
+					[type, "", tooltip, new Date(dayjs(element[0], 'DD-MM-YYYY').format('YYYY-MM-DD')), new Date(dayjs(element[0], 'DD-MM-YYYY').add(1, 'd').format('YYYY-MM-DD'))]
 				]);
 			});
 
@@ -541,7 +541,7 @@ function drawGaugegraph(graphtype) {
 }*/
 
 function getReportingStartDate() {
-	return moment(document.getElementById('start_reporting_selection').value, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD');
+	return dayjs(document.getElementById('start_reporting_selection').value, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD');
 }
 
 function getReportingEndDate() {
@@ -565,7 +565,7 @@ function formatJSONdata() {
 
 		if (testDateFormat(key)/* && i >= start*/) {
 			timeinfo = JSON.parse(localStorage.getItem(key));
-			dateKey = moment(key, "DD-MM-YYYY");
+			dateKey = dayjs(key, "DD-MM-YYYY");
 
 			try {
 				// replace by const
@@ -613,7 +613,7 @@ function formatJSONdata() {
 						tooltip = "<div style='padding: 5%; width: 150px; font-family:Arial;font-size:14px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;'><span style='margin-bottom: 5%;'>" + key + "</span><br><span style='font-weight:normal;'>Stoptime: </span>" + floatToTimeString(variable) + "</div>";
 						sumStoptime = sumStoptime + variable;
 
-						//console.log(key + " = " + moment().format("DD-MM-YYYY"));
+						//console.log(key + " = " + dayjs().format("DD-MM-YYYY"));
 						datasetStopDec.push([dateKey, variable, tooltip]);
 					}
 				}
@@ -676,10 +676,10 @@ function updateArray(array, category) {
 /*
 async function calcBusinessDays(country, start, end) {
 	// Takes start date into account, if it's a workday it gets added
-	let day = moment(start),
+	let day = dayjs(start),
 		businessDays = 0;
 
-	return new Promise(resolve => $.getJSON('https://date.nager.at/api/v3/PublicHolidays/' + moment().format('YYYY') + '/' + country, function (response) {
+	return new Promise(resolve => $.getJSON('https://date.nager.at/api/v3/PublicHolidays/' + dayjs().format('YYYY') + '/' + country, function (response) {
 		// JSON result in `response` variable
 
 		let holidays = [];
@@ -703,13 +703,13 @@ async function calcBusinessDays(country, start, end) {
 
 async function businessDays(country, start, end){
 	// Takes start date into account, if it's a workday it gets added
-	return new Promise(resolve => $.getJSON('https://date.nager.at/api/v3/PublicHolidays/' + moment().format('YYYY') + '/' + country, function (response) {
+	return new Promise(resolve => $.getJSON('https://date.nager.at/api/v3/PublicHolidays/' + dayjs().format('YYYY') + '/' + country, function (response) {
 		// JSON result in `response` variable
 
 		let holidays = [],
 			calendar = [],
-			day = moment(start, 'DD-MM-YYYY'),
-			lastDay = moment(end, 'DD-MM-YYYY');
+			day = dayjs(start, 'DD-MM-YYYY'),
+			lastDay = dayjs(end, 'DD-MM-YYYY');
 
 		response.forEach(function (element) {
 			holidays.push(element.date);
@@ -751,35 +751,35 @@ $(window).resize(function () {
 });
 
 $('#reporting_weektodate').on('click', function () {
-	setDateSelector(moment().startOf('week').add(1, 'day'), moment());
+	setDateSelector(dayjs().startOf('week').add(1, 'day'), dayjs());
 });
 
 $('#reporting_previousweek').on('click', function () {
-	setDateSelector(moment().subtract(1, 'week').startOf('week').add(1, 'day'), moment().subtract(1, 'week').endOf('week').add(1, 'day'));
+	setDateSelector(dayjs().subtract(1, 'week').startOf('week').add(1, 'day'), dayjs().subtract(1, 'week').endOf('week').add(1, 'day'));
 });
 
 $('#reporting_monthtodate').on('click', function () {
-	setDateSelector(moment().startOf('month'), moment());
+	setDateSelector(dayjs().startOf('month'), dayjs());
 });
 
 $('#reporting_previousmonth').on('click', function () {
-	setDateSelector(moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month'));
+	setDateSelector(dayjs().subtract(1, 'month').startOf('month'), dayjs().subtract(1, 'month').endOf('month'));
 });
 
 $('#reporting_yeartodate').on('click', function () {
-	setDateSelector(moment().startOf('year'), moment());
+	setDateSelector(dayjs().startOf('year'), dayjs());
 });
 
 $('#reporting_alltime').on('click', function () {
-	setDateSelector(moment(sortedkeys[0], 'DD-MM-YYYY'), moment());
+	setDateSelector(dayjs(sortedkeys[0], 'DD-MM-YYYY'), dayjs());
 });
 
 /*
 // testing
 setTimeout(async function () {
 	var f = 'DD-MM-YYYY',
-		start = moment("15-08-2022", f),
-		end = moment("21-08-2022", f);
+		start = dayjs("15-08-2022", f),
+		end = dayjs("21-08-2022", f);
 	var country = "BE";
 	//var calculated = await calcBusinessDays(country, start, end);
 

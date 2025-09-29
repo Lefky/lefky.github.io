@@ -1,6 +1,6 @@
 console.log("loaded javascript.js");
 
-/*global $, moment, bootstrap, historyresetperiodunit, break_counter_btn */
+/*global $, dayjs, bootstrap, historyresetperiodunit, break_counter_btn */
 /*eslint no-undef: "error"*/
 /*exported reset, setBreakDefault, addBreakDefault, saveCleaningDay, saveBackupDay, allCheckBox, exportCSV, makeDate, break_counter, tooltipList */
 
@@ -40,21 +40,30 @@ var colorScheme; // Variable to know if in dark or light mode
 
 // Conversion functions
 function floatToTimeString(timedec) {
-	const sign = timedec < 0 ? "-" : "",
-		hours = Math.floor(Math.abs(timedec)),
-		minutes = Math.floor((Math.abs(timedec) * 60) % 60);
-	return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+	if (timedec !== "correction") {
+		const sign = timedec < 0 ? "-" : "",
+			hours = Math.floor(Math.abs(timedec)),
+			minutes = Math.floor((Math.abs(timedec) * 60) % 60);
+		return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+	} else
+		return timedec;
+}
+
+function timeStringToFloat(timestring) {
+	const time = dayjs(timestring, "HH:mm");
+	return dayjs.duration(time.diff(time.startOf('day')), 'milliseconds').asHours();
 }
 
 const reverseDateRepresentation = date => {
-	let parts = date.split('-');
-	return `${parts[2]}-${parts[1]}-${parts[0]}`;
+	if (date) {
+		let parts = date.split('-');
+		return `${parts[2]}-${parts[1]}-${parts[0]}`;
+	}
 };
 
 // Setters & getters
 function getStart() {
-	const time = document.getElementById("start_time").value;
-	let time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
+	let time_dec = timeStringToFloat(document.getElementById("start_time").value);
 	if (!time_dec)
 		time_dec = 0;
 
@@ -66,8 +75,7 @@ function setStart(time) {
 }
 
 function getEnd() {
-	const time = document.getElementById("end_time").value;
-	let time_dec = moment.duration(moment(time, "HH:mm").endOf('minute').format("HH:mm")).asHours();
+	let time_dec = timeStringToFloat(document.getElementById("end_time").value);
 	if (!time_dec)
 		time_dec = now();
 
@@ -85,16 +93,15 @@ function getBreak(allowNegative) {
 	let time_dec;
 
 	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
-		const time = document.getElementById("break_time").value;
-		time_dec = moment.duration(moment(time, "HH:mm").startOf('minute').format("HH:mm")).asHours();
+		time_dec = timeStringToFloat(document.getElementById("break_time").value);
 	} else {
 		let break_time_start = document.getElementById("break_time_start").value,
 			break_time_end = document.getElementById("break_time_end").value;
 
-		break_time_start = moment(break_time_start, "HH:mm");
-		break_time_end = moment(break_time_end, "HH:mm");
+		break_time_start = dayjs(break_time_start, "HH:mm");
+		break_time_end = dayjs(break_time_end, "HH:mm");
 
-		time_dec = moment.duration(break_time_end.diff(break_time_start)).asHours();
+		time_dec = dayjs.duration(break_time_end.diff(break_time_start)).asHours();
 	}
 
 	if (!allowNegative && (!time_dec || time_dec < 0))
@@ -104,8 +111,7 @@ function getBreak(allowNegative) {
 }
 
 function getBreakTimeStart() {
-	const time = document.getElementById("break_time_start").value;
-	let time_dec = moment.duration(time).asHours();
+	let time_dec = timeStringToFloat(document.getElementById("break_time_start").value);
 	if (!time_dec)
 		time_dec = 0;
 
@@ -167,22 +173,27 @@ function setCustomHourSchedule(time) {
 		localStorage.setItem("customhourschedule_value", time);
 		localStorage.setItem("hourschedule", time);
 		setCustomHourScheduleUI(time);
+	} else {
+		localStorage.removeItem("customhourschedule_value");
 	}
 }
 
 function setCustomHourScheduleUI(time) {
 	document.getElementById("customhourschedule_value").value = time;
 
-	const custom_option = document.createElement('option');
-	custom_option.value = time;
+	if (time) {
+		const custom_option = document.createElement('option');
+		custom_option.value = time;
+		custom_option.id = "customhourschedule_value_option";
 
-	if (time && time.includes(","))
-		custom_option.innerHTML = time + "h &ensp;&ensp;&emsp;&emsp;(custom option)";
-	else
-		custom_option.innerHTML = time + "h &ensp;&nbsp;&emsp;&emsp;&emsp;(custom option)"
+		if (time && time.includes(","))
+			custom_option.innerHTML = time + "h &ensp;&ensp;&emsp;&emsp;(custom option)";
+		else
+			custom_option.innerHTML = time + "h &ensp;&nbsp;&emsp;&emsp;&emsp;(custom option)"
 
-	document.getElementById("hourschedule").appendChild(custom_option);
-	document.getElementById("hourschedule").value = time;
+		document.getElementById("hourschedule").appendChild(custom_option);
+		document.getElementById("hourschedule").value = time;
+	}
 }
 
 function getWorktime() {
@@ -282,7 +293,7 @@ function setTotalNoBreakDec(time) {
 }
 
 function getSummary() {
-	return document.getElementById("summary").value.replace(/\n/g, '\\n');
+	return document.getElementById("summary").value;
 }
 
 function setSummary(summary) {
@@ -446,7 +457,7 @@ function maxValuesCustomTimeOption(type, periodunit, executionday, elem_period, 
 
 function saveCleaningDay() {
 	maxValuesCustomTimeOption("cleaning", getHistoryResetPeriodUnit(), calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()), document.getElementById("historyresetperiod"), document.getElementById("historyresetday"));
-	localStorage.setItem("cleaningday", moment(getResetDate(), "dddd, DD-MM-YYYY").format("DD-MM-YYYY"));
+	localStorage.setItem("cleaningday", dayjs(getResetDate(), "dddd, DD-MM-YYYY").format("DD-MM-YYYY"));
 	localStorage.setItem("historyresetday", getHistoryResetDay());
 	localStorage.setItem("historyresetperiod", getHistoryResetPeriod());
 	localStorage.setItem("historyresetperiodunit", getHistoryResetPeriodUnit());
@@ -461,11 +472,11 @@ function saveCleaningDay() {
 
 function saveBackupDay() {
 	maxValuesCustomTimeOption("autobackup", getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById("autobackupperiod"), document.getElementById("autobackupday"));
-	localStorage.setItem("autobackupdate", moment(getBackupDate(), "dddd, DD-MM-YYYY").format("DD-MM-YYYY"));
+	localStorage.setItem("autobackupdate", dayjs(getBackupDate(), "dddd, DD-MM-YYYY").format("DD-MM-YYYY"));
 	localStorage.setItem("autobackupday", getAutobackupDay());
 	localStorage.setItem("autobackupperiod", getAutobackupPeriod());
 	localStorage.setItem("autobackupperiodunit", getAutobackupPeriodUnit());
-	//localStorage.setItem("autobackupdate", moment(todayDate(), "dddd, DD-MM-YYYY").subtract(1, "days").format("DD-MM-YYYY"));
+	//localStorage.setItem("autobackupdate", dayjs(todayDate(), "dddd, DD-MM-YYYY").subtract(1, "days").format("DD-MM-YYYY"));
 
 	document.getElementById("autobackupsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: var(--bs-success);");
 	document.getElementById("autobackupsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: var(--bs-success);");
@@ -477,7 +488,7 @@ function saveBackupDay() {
 }
 
 function calculateExecutionDay(executionday, period, periodunit) {
-	let date = moment();
+	let date = dayjs();
 
 	if (periodunit == "days") {
 		date = date.add(period, 'days');
@@ -527,7 +538,7 @@ function setHistory(refresh_edit_table) {
 			}
 			overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo.OvertimeDec);
 
-			if (moment(key, "DD-MM-YYYY") >= moment().startOf('week'))
+			if (dayjs(key, "DD-MM-YYYY") >= dayjs().startOf('week'))
 				overtimeweekly = overtimeweekly + parseFloat(timeinfo.OvertimeDec);
 		}
 	}
@@ -571,6 +582,8 @@ function hourscheduleAddTimeButton(hourSchedule) {
 function breaktimeTimeselection() {
 	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
 		document.getElementById("breaktime_timeselection_option_timerange_div").classList.add("d-none");
+		document.getElementById("break_time_default_label").classList.remove("d-none");
+		document.getElementById("break_time_default_div").classList.remove("d-none");
 		document.getElementById("breaktime_timeselection_option_duration_div").classList.remove("d-none");
 
 		reset_break();
@@ -593,6 +606,8 @@ function breaktimeTimeselection() {
 			});
 	} else {
 		document.getElementById("breaktime_timeselection_option_timerange_div").classList.remove("d-none");
+		document.getElementById("break_time_default_label").classList.add("d-none");
+		document.getElementById("break_time_default_div").classList.add("d-none");
 		document.getElementById("breaktime_timeselection_option_duration_div").classList.add("d-none");
 
 		reset_break();
@@ -675,19 +690,19 @@ function activateConfirmationModal(message, callback) {
 function cleanLocalStorage() {
 	let keys = Object.keys(localStorage),
 		i = 0,
-		today = moment(),
+		today = dayjs(),
 		deleteoption = localStorage.getItem("historydeleteoption");
 
 	if (deleteoption == "days") {
 		const expiredate = today.subtract(getHistoryRetain(), "days");
 		// eslint-disable-next-line no-cond-assign
 		for (let key = 0; key = keys[i]; i++) {
-			if (moment(key, "DD-MM-YYYY") < expiredate && testDateFormat(key)) // days to keep data excluding today
+			if (dayjs(key, "DD-MM-YYYY") < expiredate && testDateFormat(key)) // days to keep data excluding today
 				delete localStorage[key];
 		}
 	} else if (deleteoption == "period") {
 		const cleaningdaystored = localStorage.getItem("cleaningday"),
-			cleaningday = moment(cleaningdaystored, "DD-MM-YYYY");
+			cleaningday = dayjs(cleaningdaystored, "DD-MM-YYYY");
 
 		if (cleaningday.isSameOrBefore(today)) {
 			deleteHistory();
@@ -697,10 +712,10 @@ function cleanLocalStorage() {
 }
 
 function autoBackup() {
-	const today = moment(),
+	const today = dayjs(),
 		backupsenabled = localStorage.getItem("autobackupoption"),
 		autobackupdaystored = localStorage.getItem("autobackupdate"),
-		autobackupday = moment(autobackupdaystored, "DD-MM-YYYY");
+		autobackupday = dayjs(autobackupdaystored, "DD-MM-YYYY");
 
 	if (backupsenabled == "true" && autobackupday.isSameOrBefore(today)) {
 		alert("Performing autobackup");
@@ -781,21 +796,38 @@ const importHistory = document.getElementById('importHistory'),
 importFile.addEventListener("change", importHistoryData, false);
 importHistory.onclick = function () { importFile.click(); };
 function importHistoryData(e) {
-	const files = e.target.files,
-		reader = new FileReader();
+	const files = e.target.files;
+	if (files.length === 0) return; // Exit if no file is selected
+
+	const reader = new FileReader();
+
 	reader.onload = readerEvent => {
-		const content = JSON.parse(readerEvent.target.result); // this is the content!
-		Object.keys(content).forEach(function (k) {
-			localStorage.setItem(k, content[k]);
-		});
-		importFile.value = ''; //clear input value after every import
-		setHistory(true);
-		setParameters();
+		try {
+			const content = JSON.parse(readerEvent.target.result); // Try to parse
+			Object.keys(content).forEach(function (k) {
+				// Also check if the value is a stringified object and parse it if needed
+				let value = content[k];
+				try {
+					// This handles old exports where values are stringified JSON
+					JSON.parse(value);
+					localStorage.setItem(k, value);
+				} catch (innerError) {
+					// This handles new exports where values are just strings
+					localStorage.setItem(k, value);
+				}
+			});
+			importFile.value = ''; //clear input value
+			setHistory(true);
+			setParameters();
+			document.getElementById("settingsmodalclosebutton").click();
+			alert("Import successful!");
+		} catch (error) {
+			// If parsing fails, show a friendly error
+			alert("Import failed! The file contains invalid JSON data.");
+			console.error("Error parsing imported file:", error);
+		}
 	};
 	reader.readAsText(files[0]);
-	setParameters();
-	document.getElementById("settingsmodalclosebutton").click();
-	alert("Import successful!");
 }
 
 function makeDate(date) {
@@ -805,11 +837,12 @@ function makeDate(date) {
 
 // Application functions
 function now() {
-	return moment.duration(moment().startOf('minute').format("HH:mm")).asHours();
+	const now = dayjs();
+	return dayjs.duration(now.diff(now.startOf('day')), 'milliseconds').asHours();
 }
 
 function todayDate() {
-	return moment().format("DD-MM-YYYY");
+	return dayjs().format("DD-MM-YYYY");
 }
 
 function loadApp() {
@@ -968,7 +1001,7 @@ function setParameters() {
 			document.getElementById("startminsubtract").click();
 
 			// Fix convert minutes to subtract to decimal
-			const startminsubtract_value_decimal = moment.duration("00:" + startminsubtract_value).asHours();
+			const startminsubtract_value_decimal = dayjs.duration({ minutes: startminsubtract_value }).asHours();
 			setStart(now() - startminsubtract_value_decimal);
 		} else {
 			setStart(now());
@@ -1082,7 +1115,8 @@ function break_counter() {
 		clearInterval(refreshIntervalId);
 
 		const timeInSeconds = Math.round(timer.getTime() / 1000),
-			timeInDecimalHours = moment.duration(moment.utc(timeInSeconds * 1000).format('HH:mm:ss')).asHours();
+			time = dayjs(dayjs.utc(timeInSeconds * 1000), "HH:mm:ss"),
+			timeInDecimalHours = dayjs.duration(time.diff(time.startOf('day')), 'milliseconds').asHours();
 		setBreak(timeInDecimalHours);
 		add_time(getHourSchedule());
 
@@ -1096,9 +1130,11 @@ function break_counter() {
 
 		refreshIntervalId = setInterval(() => {
 			const timeInSeconds = Math.round(timer.getTime() / 1000),
-				timeInDecimalHours = moment.duration(moment.utc(timeInSeconds * 1000).format('HH:mm:ss')).asHours();
+				time = dayjs(dayjs.utc(timeInSeconds * 1000), "HH:mm:ss"),
+				timeInDecimalHours = dayjs.duration(time.diff(time.startOf('day')), 'milliseconds').asHours();
 			setBreak(timeInDecimalHours);
 			add_time(getHourSchedule());
+
 		}, 1000);
 
 		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch fa-spin'></i> Stop";
@@ -1106,7 +1142,6 @@ function break_counter() {
 		break_counter_btn.classList.add("btn-warning");
 		break_counter_btn.classList.add("pulsate");
 	}
-
 }
 
 window.onbeforeunload = function () {
@@ -1129,8 +1164,16 @@ window.onbeforeunload = function () {
 			}
 			localStorage.setItem("autoend", "true");
 		}
-		const timeinfo = '{"TotalNoBreakDec": "' + getTotalNoBreakDec() + '", "OvertimeDec": "' + getOvertimeDec() + '", "TotalDec": "' + getTotalDec() + '", "StartDec": "' + getStart() + '", "HourSchedule": "' + getHourSchedule().toFixed(2) + '", "Summary": "' + getSummary() + '"}';
-		localStorage.setItem(todayDate(), timeinfo);
+		const timeinfo = {
+			TotalNoBreakDec: getTotalNoBreakDec(),
+			OvertimeDec: getOvertimeDec(),
+			TotalDec: getTotalDec(),
+			StartDec: getStart().toString(), // Ensure start time is a string
+			HourSchedule: getHourSchedule().toFixed(2),
+			Summary: getSummary() // Get the raw summary text
+		};
+
+		localStorage.setItem(todayDate(), JSON.stringify(timeinfo));
 		localStorage.setItem("nosave", "false");
 	} else {
 		localStorage.setItem("autoend", autoend.checked.toString());
@@ -1163,6 +1206,13 @@ window.onbeforeunload = function () {
 
 // Listeners and initializers
 $(document).ready(function () {
+	dayjs().format(); // Initialize dayjs
+	dayjs.extend(window.dayjs_plugin_duration);
+	dayjs.extend(window.dayjs_plugin_isSameOrBefore);
+	dayjs.extend(window.dayjs_plugin_customParseFormat);
+	dayjs.extend(window.dayjs_plugin_utc);
+	dayjs.extend(window.dayjs_plugin_isBetween);
+
 	importBootstrapColors();
 	loadApp();
 
@@ -1183,8 +1233,7 @@ $(document).ready(function () {
 			});
 		});
 
-	moment().format(); // Initialize momentjs
-	document.getElementById("year_span").innerHTML = moment().year();
+	document.getElementById("year_span").innerHTML = dayjs().year();
 
 	let myModal;
 	if (window.location.href.indexOf('#about') != -1) {

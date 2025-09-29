@@ -9,11 +9,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!-- Bootstrap -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-		crossorigin="anonymous"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"
+		defer></script>
 	<!-- Glow Cookies -->
 	<script src="https://cdn.jsdelivr.net/gh/manucaralmo/GlowCookies@3.1.8/src/glowCookies.min.js"></script>
 	<script>
@@ -32,9 +32,15 @@
 	<link href="css/all.min.css" rel="stylesheet" defer>
 	<!-- Custom Styles -->
 	<link href="css/bootstrap_specific_style.css" rel="stylesheet" defer>
-	<!-- Moment.js -->
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.30.1/min/moment.min.js" defer></script>
-	<!-- https://momentjs.com/docs -->
+	<!-- Day.js -->
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js" defer></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/duration.js" defer></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/isSameOrBefore.js" defer></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/customParseFormat.js"
+		defer></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/utc.js" defer></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/isBetween.js" defer></script>
+	<!-- https://day.js.org/docs/en/installation/installation -->
 	<!-- Custom scripting -->
 	<script type="text/javascript" src="js/javascript.js" defer></script>
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" defer></script>
@@ -58,7 +64,7 @@
 					<p>
 						Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a>
 						(Send me a message with feedback or suggestions ;) )<br>
-						Version: <span id="currentappversion">20250428.1</span> <br>
+						Version: <span id="currentappversion">20250922.1</span> <br>
 						Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"
 							target="_blank">Check the master branch on Github</a>
 					</p>
@@ -821,7 +827,17 @@
 							Changes
 						<ul>
 							<li>
-								Bump bootstrap version.
+								Updated dependencies to their latest versions so you guys get the latest and
+								greatest ;)
+							</li>
+							<li>
+								As this is a time tracking tool, time calculations are one of the most important
+								things and javascript can make it very hard to do these.<br>
+								1 of the dependencies was moment.js which helps with that.<br>
+								Moment.js is now in maintenance mode and the team advises to look for alternatives.<br>
+								I've replaced moment.js with day.js which is a modern alternative.<br>
+								All time calculations should still be the same, but please report if you find any
+								issues.
 							</li>
 						</ul>
 						</p>
@@ -829,7 +845,13 @@
 							Bugfixes
 						<ul>
 							<li>
-								None.
+								Small bugfix regarding UI for break timerange selection.
+							</li>
+							<li>
+								Fixed a bug for custom hour schedule where "null" values were displayed.
+							</li>
+							<li>
+								Fixed issue with data import and new lines.
 							</li>
 						</ul>
 						</p>
@@ -866,9 +888,9 @@
 								<label class="col-form-label" for="break_time_default" data-bs-toggle="tooltip"
 									data-bs-placement="left"
 									title="Choose a default break you take every day. Eg: You're deducted 30 min every day. This value will be saved for the next time the window is opened.You can enter a seperate value manually or by using the buttons too.">
-									Break with default
+									Break<span id="break_time_default_label"> with default</span>
 								</label>
-								<div class="mb-1 mb-md-0 mx-3 me-sm-0">
+								<div id="break_time_default_div" class="mb-1 mb-md-0 mx-3 me-sm-0">
 									<select name="break_time_default" id="break_time_default"
 										class="form-select mb-md-0 input-fixedwidth90" onchange="addBreakDefault();">
 										<option value="0">0 min</option>
