@@ -6,10 +6,12 @@ console.log("loaded animations.js");
 // source: https://codepen.io/uurrnn/pen/Kuylr?editors=1100
 
 let startedAnimation = false,
-	animation_list = ["leaves_div", "bb8", "superman", "carlton_dance"],
+	animation_list = ["leaves_div", "bb8", "superman", "carlton_dance", "pikachu", "super_mario	"],
 	randomAnimation = animation_list[Math.floor(Math.random() * animation_list.length)],
 	interval = "",
 	manualStoppedLeaves = false;
+
+startLeaves(); // Start animation on page load
 
 function intervalListener() {
 	if (getEnd() <= now() && !startedAnimation && !manualStoppedLeaves)
@@ -126,6 +128,34 @@ function loadAnimationCSS(selected_animation) {
 		document.body.appendChild(carlton_dance_div);
 
 		showAnimationMessage("<i class='fas fa-music faa-tada animated'></i> <a href='https://www.youtube.com/watch?v=jKlxjbhB9HE' style='color: inherit; text-decoration: inherit;' onmouseover=\"this.style.color=bs_blue\" onmouseout=\"this.style.color='inherit'\">It's not unusual to see me cry-yyyyy-yyyy, I wanna dieeeeee</a> <i class='fas fa-music faa-tada animated'></i>");
+
+	} else if (selected_animation === "pikachu") {
+		fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/pikachu.css");
+		document.head.appendChild(fileref);
+
+		const pikachu_div = document.createElement("div");
+		pikachu_div.classList = "pikachu";
+		pikachu_div.id = "pikachu";
+		document.getElementsByTagName("body")[0].appendChild(pikachu_div);
+
+		showAnimationMessage("Pika Pika! <i class='fas fa-bolt faa-pulse animated'></i> Step into the light and go be awesome outside!");
+
+	} else if (selected_animation === "super_mario") {
+		fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/super_mario.css");
+		document.head.appendChild(fileref);
+
+		const super_mario_div = document.createElement("div");
+		super_mario_div.classList = "super_mario";
+		super_mario_div.id = "super_mario";
+		document.getElementsByTagName("body")[0].appendChild(super_mario_div);
+
+		showAnimationMessage("It's-a me, Mario! <i class='fas fa-star faa-pulse animated'></i> Let's-a go HOME!");
 
 	} else {
 		console.error("Unknown animation selected: " + selected_animation);
