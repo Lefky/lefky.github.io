@@ -47,7 +47,7 @@
 	<script type="text/javascript" src="js/graphs.js" defer></script>
 	<script type="text/javascript" src="js/editable_table.js" defer></script>
 	<script type="text/javascript" src="js/introduction.js" defer></script>
-	<script type="text/javascript" src="js/leaves.js" async></script>
+	<script type="text/javascript" src="js/animations.js" async></script>
 	<script type="text/javascript" src="js/notifications.js" async></script>
 </head>
 
@@ -64,7 +64,7 @@
 					<p>
 						Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a>
 						(Send me a message with feedback or suggestions ;) )<br>
-						Version: <span id="currentappversion">20250922.1</span> <br>
+						Version: <span id="currentappversion">20251006.1</span> <br>
 						Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"
 							target="_blank">Check the master branch on Github</a>
 					</p>
@@ -820,24 +820,14 @@
 				class="alert alert-danger alert-dismissible fade show w-75 my-4 me-1 alertnotification" role="alert">
 				<div class="row">
 					<div class="col-lg-2 text-center py-1 px-4 my-auto">
-						<i class="far fa-exclamation-triangle fa-4x pulsate text-warning display-2"></i>
+						<i class="far fa-exclamation-triangle fa-4x faa-pulse animated text-warning display-2"></i>
 					</div>
 					<div class="col-lg-9 py-1 px-4">
 						<p class="mb-0">
 							Changes
 						<ul>
 							<li>
-								Updated dependencies to their latest versions so you guys get the latest and
-								greatest ;)
-							</li>
-							<li>
-								As this is a time tracking tool, time calculations are one of the most important
-								things and javascript can make it very hard to do these.<br>
-								1 of the dependencies was moment.js which helps with that.<br>
-								Moment.js is now in maintenance mode and the team advises to look for alternatives.<br>
-								I've replaced moment.js with day.js which is a modern alternative.<br>
-								All time calculations should still be the same, but please report if you find any
-								issues.
+								Added new animations when your time is finished. Discover the 4 different!
 							</li>
 						</ul>
 						</p>
@@ -845,13 +835,7 @@
 							Bugfixes
 						<ul>
 							<li>
-								Small bugfix regarding UI for break timerange selection.
-							</li>
-							<li>
-								Fixed a bug for custom hour schedule where "null" values were displayed.
-							</li>
-							<li>
-								Fixed issue with data import and new lines.
+								Fixed an issue where the introduction was still taking the info button into account.
 							</li>
 						</ul>
 						</p>
@@ -1169,8 +1153,8 @@
 						data-bs-target="#modalreporting"><i class="fas fa-chart-line"></i></button>
 					<button title="About" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4"
 						data-bs-toggle="modal" data-bs-target="#modalabout"><i class="fas fa-info"></i></button>
-					<button title="Info" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4"
-						data-bs-toggle="modal" data-bs-target="#modalinfo"><i class="fas fa-lightbulb"></i></button>
+					<!-- <button title="Info" type="button" class="btn btn-outline-secondary middlebtn footerbtn py-1 px-4"
+						data-bs-toggle="modal" data-bs-target="#modalinfo"><i class="fas fa-lightbulb"></i></button> -->
 					<button title="Settings" type="button"
 						class="btn btn-outline-secondary rightbtn footerbtn py-1 px-4" data-bs-toggle="modal"
 						data-bs-target="#modalsettings"><i class="fas fa-cog"></i></button>

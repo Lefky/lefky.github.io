@@ -1,8 +1,10 @@
 /* BB8 animations */
+/* https://codepen.io/udithishara/pen/obaLdg */
 
 .bb8 {
     position: fixed;
     bottom: 230px;
+    animation: moving 3s infinite linear;
 }
 
 .bb8:before {
