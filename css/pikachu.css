@@ -3,8 +3,8 @@
 
 .pikachu {
     position: absolute;
-    width: 1em;
-    height: 1em;
+    width: 1.1em;
+    height: 1.1em;
     font-size: 0.7vmin;
     bottom: 28.5%;
     right: 35%;
@@ -295,8 +295,8 @@
 .pikachu::before {
     content: "";
     position: absolute;
-    width: 1em;
-    height: 1em;
+    width: 1.1em;
+    height: 1.1em;
     background: transparent;
     box-shadow: 9em 12em black, 10em 12em black, 21em 12em black, 22em 12em black,
         8em 13em black, 9em 13em white, 10em 13em black, 11em 13em black,
@@ -310,8 +310,8 @@
 .pikachu::after {
     content: "";
     position: absolute;
-    width: 1em;
-    height: 1em;
+    width: 1.1em;
+    height: 1.1em;
     background: transparent;
     box-shadow: 28em 2em #388eff, 29em 2em #388eff, 27em 3em #388eff,
         28em 3em #388eff, 29em 3em #388eff, 27em 3em #388eff, 28em 3em #388eff,
