@@ -3,15 +3,14 @@ console.log("loaded animations.js");
 /*global $, now, getEnd, createNotification */
 /*eslint no-undef: "error"*/
 
-// source: https://codepen.io/uurrnn/pen/Kuylr?editors=1100
-
 let startedAnimation = false,
-	animation_list = ["leaves_div", "bb8", "superman", "carlton_dance", "pikachu", "super_mario	"],
+	animation_list = ["leaves_div", "bb8", "superman", "carlton_dance", "pikachu", "super_mario", "ghosts", "whale"],
+	//animation_list = ["pikachu"],
 	randomAnimation = animation_list[Math.floor(Math.random() * animation_list.length)],
 	interval = "",
 	manualStoppedLeaves = false;
 
-startLeaves(); // Start animation on page load
+//startLeaves(); // Start animation on page load
 
 function intervalListener() {
 	if (getEnd() <= now() && !startedAnimation && !manualStoppedLeaves)
@@ -156,6 +155,58 @@ function loadAnimationCSS(selected_animation) {
 		document.getElementsByTagName("body")[0].appendChild(super_mario_div);
 
 		showAnimationMessage("It's-a me, Mario! <i class='fas fa-star faa-pulse animated'></i> Let's-a go HOME!");
+
+	} else if (selected_animation === "ghosts") {
+		fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/ghosts.css");
+		document.head.appendChild(fileref);
+
+		const ghosts_div = document.createElement("div");
+		ghosts_div.classList = "ghosts";
+		ghosts_div.id = "ghosts";
+		document.getElementsByTagName("body")[0].appendChild(ghosts_div);
+
+		for (let i = 1; i <= 20; i++) {
+			const boo_div = document.createElement("div");
+			boo_div.classList = "boo";
+			boo_div.id = "boo" + i;
+			ghosts_div.appendChild(boo_div);
+		}
+
+		showAnimationMessage("Boo! <i class='fas fa-ghost faa-pulse animated'></i> Your haunting hours are over. Time to float on home!");
+
+	} else if (selected_animation === "whale") {
+		fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/whale.css");
+		document.head.appendChild(fileref);
+
+		const whale_div = document.createElement("div");
+		whale_div.id = "whale";
+		document.getElementsByTagName("body")[0].appendChild(whale_div);
+
+		const animal_div = document.createElement("div");
+		animal_div.classList = "whale";
+		const fountain_div = document.createElement("div");
+		fountain_div.classList = "fountain";
+		animal_div.appendChild(fountain_div);
+		whale_div.appendChild(animal_div);
+
+		const ocean_div = document.createElement("div");
+		ocean_div.classList = "ocean";
+		ocean_div.id = "ocean";
+		for (let i = 1; i <= 4; i++) {
+			const wave_div = document.createElement("div");
+			wave_div.classList = "wave";
+			wave_div.id = "wave" + i;
+			ocean_div.appendChild(wave_div);
+		}
+		whale_div.appendChild(ocean_div);
+
+		showAnimationMessage("Whale done! <i class='fas fa-whale faa-bounce animated'></i> Go ahead and ride the wave home! <i class='fas fa-water faa-horizontal animated'></i>");
 
 	} else {
 		console.error("Unknown animation selected: " + selected_animation);
