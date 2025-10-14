@@ -3,13 +3,14 @@ console.log("loaded animations.js");
 /*global $, now, getEnd, createNotification */
 /*eslint no-undef: "error"*/
 
-// source: https://codepen.io/uurrnn/pen/Kuylr?editors=1100
-
 let startedAnimation = false,
-	animation_list = ["leaves_div", "bb8", "superman", "carlton_dance"],
+	animation_list = ["leaves_div", "bb8", "superman", "carlton_dance", "pikachu", "super_mario", "ghosts", "whale", "stormtrooper", "rocket", "sonic_div"],
+	//animation_list = ["sonic_div"],
 	randomAnimation = animation_list[Math.floor(Math.random() * animation_list.length)],
 	interval = "",
 	manualStoppedLeaves = false;
+
+//startLeaves(); // Start animation on page load
 
 function intervalListener() {
 	if (getEnd() <= now() && !startedAnimation && !manualStoppedLeaves)
@@ -46,7 +47,7 @@ function stopLeaves() {
 }
 
 function loadAnimationCSS(selected_animation) {
-	fileref = document.createElement("link");
+	let fileref = document.createElement("link");
 	fileref.setAttribute("rel", "stylesheet");
 	fileref.setAttribute("type", "text/css");
 	fileref.setAttribute("href", "css/font-awsome-custom-animations.css");
@@ -126,6 +127,150 @@ function loadAnimationCSS(selected_animation) {
 		document.body.appendChild(carlton_dance_div);
 
 		showAnimationMessage("<i class='fas fa-music faa-tada animated'></i> <a href='https://www.youtube.com/watch?v=jKlxjbhB9HE' style='color: inherit; text-decoration: inherit;' onmouseover=\"this.style.color=bs_blue\" onmouseout=\"this.style.color='inherit'\">It's not unusual to see me cry-yyyyy-yyyy, I wanna dieeeeee</a> <i class='fas fa-music faa-tada animated'></i>");
+
+	} else if (selected_animation === "pikachu") {
+		fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/pikachu.css");
+		document.head.appendChild(fileref);
+
+		const pikachu_div = document.createElement("div");
+		pikachu_div.classList = "pikachu";
+		pikachu_div.id = "pikachu";
+		document.getElementsByTagName("body")[0].appendChild(pikachu_div);
+
+		showAnimationMessage("Pika Pika! <i class='fas fa-bolt faa-pulse animated'></i> Step into the light and go be awesome outside!");
+
+	} else if (selected_animation === "super_mario") {
+		fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/super_mario.css");
+		document.head.appendChild(fileref);
+
+		const super_mario_div = document.createElement("div");
+		super_mario_div.classList = "super_mario";
+		super_mario_div.id = "super_mario";
+		document.getElementsByTagName("body")[0].appendChild(super_mario_div);
+
+		showAnimationMessage("It's-a me, Mario! <i class='fas fa-star faa-pulse animated'></i> Let's-a go HOME!");
+
+	} else if (selected_animation === "ghosts") {
+		fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/ghosts.css");
+		document.head.appendChild(fileref);
+
+		const ghosts_div = document.createElement("div");
+		ghosts_div.classList = "ghosts";
+		ghosts_div.id = "ghosts";
+		document.getElementsByTagName("body")[0].appendChild(ghosts_div);
+
+		for (let i = 1; i <= 20; i++) {
+			const boo_div = document.createElement("div");
+			boo_div.classList = "boo";
+			boo_div.id = "boo" + i;
+			ghosts_div.appendChild(boo_div);
+		}
+
+		showAnimationMessage("Boo! <i class='fas fa-ghost faa-pulse animated'></i> Your haunting hours are over. Time to float on home!");
+
+	} else if (selected_animation === "whale") {
+		fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/whale.css");
+		document.head.appendChild(fileref);
+
+		const whale_div = document.createElement("div");
+		whale_div.id = "whale";
+		document.getElementsByTagName("body")[0].appendChild(whale_div);
+
+		const animal_div = document.createElement("div");
+		animal_div.classList = "whale";
+		const fountain_div = document.createElement("div");
+		fountain_div.classList = "fountain";
+		animal_div.appendChild(fountain_div);
+		whale_div.appendChild(animal_div);
+
+		const ocean_div = document.createElement("div");
+		ocean_div.classList = "ocean";
+		ocean_div.id = "ocean";
+		for (let i = 1; i <= 4; i++) {
+			const wave_div = document.createElement("div");
+			wave_div.classList = "wave";
+			wave_div.id = "wave" + i;
+			ocean_div.appendChild(wave_div);
+		}
+		whale_div.appendChild(ocean_div);
+
+		showAnimationMessage("Whale done! <i class='fas fa-whale faa-bounce animated'></i> Go ahead and ride the wave home! <i class='fas fa-water faa-horizontal animated'></i>");
+
+	} else if (selected_animation === "stormtrooper") {
+		fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/stormtrooper.css");
+		document.head.appendChild(fileref);
+
+		const stormtrooper_div = document.createElement("div");
+		stormtrooper_div.classList = "stormtrooper";
+		stormtrooper_div.id = "stormtrooper";
+		document.getElementsByTagName("body")[0].appendChild(stormtrooper_div);
+
+		showAnimationMessage("The Force is weak with this one... until 9 AM tomorrow! <i class='fas fa-battery-quarter faa-flash animated'></i>");
+
+	} else if (selected_animation === "rocket") {
+		fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/rocket.css");
+		document.head.appendChild(fileref);
+
+		const rocket_div = document.createElement("div");
+		rocket_div.classList = "rocket";
+		rocket_div.id = "rocket";
+		document.getElementsByTagName("body")[0].appendChild(rocket_div);
+
+		showAnimationMessage("Ready for launch! <i class='fas fa-rocket faa-pulse animated'></i> Let's go see the alien(s) at home :p");
+
+		fileref = document.createElement("script");
+		fileref.setAttribute("type", "text/javascript");
+		fileref.setAttribute("src", "js/rocket.js");
+		document.head.appendChild(fileref);
+
+	} else if (selected_animation === "sonic_div") {
+		fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/sonic.css");
+		document.head.appendChild(fileref);
+
+		const sonic_div = document.createElement("div");
+		sonic_div.classList = "sonic_div";
+		sonic_div.id = "sonic_div";
+		document.getElementsByTagName("body")[0].appendChild(sonic_div);
+
+		const sonic_running_div = document.createElement("div");
+		sonic_running_div.classList = "sonic";
+		sonic_running_div.id = "sonic";
+		sonic_div.appendChild(sonic_running_div);
+
+		const ground_div = document.createElement("div");
+		ground_div.classList = "ground";
+		ground_div.id = "ground";
+		sonic_div.appendChild(ground_div);
+
+		for (let i = 1; i <= 20; i++) {
+			const tile_div = document.createElement("div");
+			tile_div.classList = "tile";
+			tile_div.id = "tile" + i;
+			ground_div.appendChild(tile_div);
+		}
+
+		showAnimationMessage("Gotta go fast... to the couch! <i class='fas fa-running fa-pulse'></i> <i class='fas fa-couch'></i>");
 
 	} else {
 		console.error("Unknown animation selected: " + selected_animation);
