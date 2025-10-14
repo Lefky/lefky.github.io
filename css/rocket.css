@@ -1,0 +1,341 @@
+/* Rocket animation */
+/* https://codepen.io/khendrickthe5th/pen/gOexrbg */
+
+.rocket {
+    width: 5px;
+    height: 5px;
+    background: rgb(0, 0, 0);
+    position: absolute;
+    top: -100px;
+    left: -100px;
+    z-index: 50;
+
+    box-shadow:
+        /* Row 1 */
+        5px 0px rgb(0, 0, 0),
+        /* Row 2 */
+        -5px 5px rgb(0, 0, 0),
+        0px 5px rgb(226, 6, 18),
+        5px 5px rgb(226, 6, 18),
+        10px 5px rgb(0, 0, 0),
+        /* Row 3 */
+        -10px 10px rgb(0, 0, 0),
+        -5px 10px rgb(0, 0, 0),
+        0px 10px rgb(250, 205, 208),
+        5px 10px rgb(226, 6, 18),
+        10px 10px rgb(0, 0, 0),
+        15px 10px rgb(0, 0, 0),
+        /* Row 4 */
+        -15px 15px rgb(0, 0, 0),
+        -10px 15px rgb(0, 0, 0),
+        -5px 15px rgb(226, 6, 18),
+        0px 15px rgb(250, 205, 208),
+        5px 15px rgb(226, 6, 18),
+        10px 15px rgb(226, 6, 18),
+        15px 15px rgb(0, 0, 0),
+        20px 15px rgb(0, 0, 0),
+        /* Row 5 */
+        -20px 20px rgb(0, 0, 0),
+        -15px 20px rgb(0, 0, 0),
+        -10px 20px rgb(226, 6, 18),
+        -5px 20px rgb(250, 205, 208),
+        0px 20px rgb(226, 6, 18),
+        5px 20px rgb(226, 6, 18),
+        10px 20px rgb(226, 6, 18),
+        15px 20px rgb(226, 6, 18),
+        20px 20px rgb(0, 0, 0),
+        25px 20px rgb(0, 0, 0),
+        /* Row 6 */
+        -20px 25px rgb(0, 0, 0),
+        -15px 25px rgb(236, 236, 236),
+        -10px 25px rgb(255, 255, 255),
+        -5px 25px rgb(226, 6, 18),
+        0px 25px rgb(226, 6, 18),
+        5px 25px rgb(226, 6, 18),
+        10px 25px rgb(226, 6, 18),
+        15px 25px rgb(177, 177, 177),
+        20px 25px rgb(177, 177, 177),
+        25px 25px rgb(0, 0, 0),
+        /* Row 7 */
+        -20px 30px rgb(0, 0, 0),
+        -15px 30px rgb(236, 236, 236),
+        -10px 30px rgb(255, 255, 255),
+        -5px 30px rgb(236, 236, 236),
+        0px 30px rgb(236, 236, 236),
+        5px 30px rgb(236, 236, 236),
+        10px 30px rgb(236, 236, 236),
+        15px 30px rgb(214, 214, 214),
+        20px 30px rgb(177, 177, 177),
+        25px 30px rgb(0, 0, 0),
+        /* Row 8 */
+        -25px 35px rgb(0, 0, 0),
+        -20px 35px rgb(236, 236, 236),
+        -15px 35px rgb(255, 255, 255),
+        -10px 35px rgb(236, 236, 236),
+        -5px 35px rgb(236, 236, 236),
+        0px 35px rgb(236, 236, 236),
+        5px 35px rgb(236, 236, 236),
+        10px 35px rgb(236, 236, 236),
+        15px 35px rgb(214, 214, 214),
+        20px 35px rgb(177, 177, 177),
+        25px 35px rgb(177, 177, 177),
+        30px 35px rgb(0, 0, 0),
+        /* Row 9 */
+        -25px 40px rgb(0, 0, 0),
+        -20px 40px rgb(236, 236, 236),
+        -15px 40px rgb(255, 255, 255),
+        -10px 40px rgb(236, 236, 236),
+        -5px 40px rgb(236, 236, 236),
+        0px 40px rgb(226, 6, 18),
+        5px 40px rgb(226, 6, 18),
+        10px 40px rgb(236, 236, 236),
+        15px 40px rgb(214, 214, 214),
+        20px 40px rgb(214, 214, 214),
+        25px 40px rgb(177, 177, 177),
+        30px 40px rgb(0, 0, 0),
+        /* Row 10 */
+        -25px 45px rgb(0, 0, 0),
+        -20px 45px rgb(236, 236, 236),
+        -15px 45px rgb(255, 255, 255),
+        -10px 45px rgb(236, 236, 236),
+        -5px 45px rgb(226, 6, 18),
+        0px 45px rgb(110, 193, 221),
+        5px 45px rgb(188, 231, 250),
+        10px 45px rgb(226, 6, 18),
+        15px 45px rgb(236, 236, 236),
+        20px 45px rgb(214, 214, 214),
+        25px 45px rgb(177, 177, 177),
+        30px 45px rgb(0, 0, 0),
+        /* Row 11 */
+        -25px 50px rgb(0, 0, 0),
+        -20px 50px rgb(255, 255, 255),
+        -15px 50px rgb(236, 236, 236),
+        -10px 50px rgb(226, 6, 18),
+        -5px 50px rgb(110, 193, 221),
+        0px 50px rgb(188, 231, 250),
+        5px 50px rgb(188, 231, 250),
+        10px 50px rgb(188, 231, 250),
+        15px 50px rgb(226, 6, 18),
+        20px 50px rgb(214, 214, 214),
+        25px 50px rgb(177, 177, 177),
+        30px 50px rgb(0, 0, 0),
+        /* Row 12 */
+        -25px 55px rgb(0, 0, 0),
+        -20px 55px rgb(255, 255, 255),
+        -15px 55px rgb(236, 236, 236),
+        -10px 55px rgb(226, 6, 18),
+        -5px 55px rgb(110, 193, 221),
+        0px 55px rgb(188, 231, 250),
+        5px 55px rgb(188, 231, 250),
+        10px 55px rgb(255, 255, 255),
+        15px 55px rgb(226, 6, 18),
+        20px 55px rgb(214, 214, 214),
+        25px 55px rgb(177, 177, 177),
+        30px 55px rgb(0, 0, 0),
+        /* Row 13 */
+        -25px 60px rgb(0, 0, 0),
+        -20px 60px rgb(255, 255, 255),
+        -15px 60px rgb(236, 236, 236),
+        -10px 60px rgb(236, 236, 236),
+        -5px 60px rgb(226, 6, 18),
+        0px 60px rgb(188, 231, 250),
+        5px 60px rgb(255, 255, 255),
+        10px 60px rgb(226, 6, 18),
+        15px 60px rgb(236, 236, 236),
+        20px 60px rgb(214, 214, 214),
+        25px 60px rgb(177, 177, 177),
+        30px 60px rgb(0, 0, 0),
+        /* Row 14 */
+        -25px 65px rgb(0, 0, 0),
+        -20px 65px rgb(0, 0, 0),
+        -15px 65px rgb(255, 255, 255),
+        -10px 65px rgb(236, 236, 236),
+        -5px 65px rgb(236, 236, 236),
+        0px 65px rgb(226, 6, 18),
+        5px 65px rgb(226, 6, 18),
+        10px 65px rgb(236, 236, 236),
+        15px 65px rgb(214, 214, 214),
+        20px 65px rgb(177, 177, 177),
+        25px 65px rgb(0, 0, 0),
+        30px 65px rgb(0, 0, 0),
+        /* Row 15 */
+        -30px 70px rgb(0, 0, 0),
+        -25px 70px rgb(226, 6, 18),
+        -20px 70px rgb(0, 0, 0),
+        -15px 70px rgb(0, 0, 0),
+        -10px 70px rgb(255, 255, 255),
+        -5px 70px rgb(236, 236, 236),
+        0px 70px rgb(236, 236, 236),
+        5px 70px rgb(236, 236, 236),
+        10px 70px rgb(214, 214, 214),
+        15px 70px rgb(177, 177, 177),
+        20px 70px rgb(0, 0, 0),
+        25px 70px rgb(0, 0, 0),
+        30px 70px rgb(226, 6, 18),
+        35px 70px rgb(0, 0, 0),
+        /* Row 16 */
+        -35px 75px rgb(0, 0, 0),
+        -30px 75px rgb(226, 6, 18),
+        -25px 75px rgb(226, 6, 18),
+        -20px 75px rgb(226, 6, 18),
+        -15px 75px rgb(0, 0, 0),
+        -10px 75px rgb(255, 255, 255),
+        -5px 75px rgb(236, 236, 236),
+        0px 75px rgb(236, 236, 236),
+        5px 75px rgb(236, 236, 236),
+        10px 75px rgb(214, 214, 214),
+        15px 75px rgb(177, 177, 177),
+        20px 75px rgb(0, 0, 0),
+        25px 75px rgb(226, 6, 18),
+        30px 75px rgb(226, 6, 18),
+        35px 75px rgb(226, 6, 18),
+        40px 75px rgb(0, 0, 0),
+        /* Row 17 */
+        -35px 80px rgb(0, 0, 0),
+        -30px 80px rgb(226, 6, 18),
+        -25px 80px rgb(226, 6, 18),
+        -20px 80px rgb(226, 6, 18),
+        -15px 80px rgb(0, 0, 0),
+        -10px 80px rgb(0, 0, 0),
+        -5px 80px rgb(255, 255, 255),
+        0px 80px rgb(236, 236, 236),
+        5px 80px rgb(214, 214, 214),
+        10px 80px rgb(177, 177, 177),
+        15px 80px rgb(0, 0, 0),
+        20px 80px rgb(0, 0, 0),
+        25px 80px rgb(226, 6, 18),
+        30px 80px rgb(226, 6, 18),
+        35px 80px rgb(226, 6, 18),
+        40px 80px rgb(0, 0, 0),
+        /* Row 18 */
+        -35px 85px rgb(0, 0, 0),
+        -30px 85px rgb(226, 6, 18),
+        -25px 85px rgb(226, 6, 18),
+        -20px 85px rgb(226, 6, 18),
+        -15px 85px rgb(226, 6, 18),
+        -10px 85px rgb(0, 0, 0),
+        -5px 85px rgb(0, 0, 0),
+        0px 85px rgb(236, 236, 236),
+        5px 85px rgb(177, 177, 177),
+        10px 85px rgb(0, 0, 0),
+        15px 85px rgb(0, 0, 0),
+        20px 85px rgb(226, 6, 18),
+        25px 85px rgb(226, 6, 18),
+        30px 85px rgb(226, 6, 18),
+        35px 85px rgb(226, 6, 18),
+        40px 85px rgb(0, 0, 0),
+        /* Row 19 */
+        -35px 90px rgb(0, 0, 0),
+        -30px 90px rgb(226, 6, 18),
+        -25px 90px rgb(226, 6, 18),
+        -20px 90px rgb(226, 6, 18),
+        -15px 90px rgb(0, 0, 0),
+        -5px 90px rgb(0, 0, 0),
+        0px 90px rgb(0, 0, 0),
+        5px 90px rgb(0, 0, 0),
+        10px 90px rgb(0, 0, 0),
+        20px 90px rgb(0, 0, 0),
+        25px 90px rgb(226, 6, 18),
+        30px 90px rgb(226, 6, 18),
+        35px 90px rgb(226, 6, 18),
+        40px 90px rgb(0, 0, 0),
+        /* Row 20 */
+        -35px 95px rgb(0, 0, 0),
+        -30px 95px rgb(226, 6, 18),
+        -25px 95px rgb(226, 6, 18),
+        -20px 95px rgb(0, 0, 0),
+        -5px 95px rgb(255, 194, 5),
+        0px 95px rgb(255, 246, 205),
+        5px 95px rgb(255, 246, 205),
+        10px 95px rgb(255, 194, 5),
+        25px 95px rgb(0, 0, 0),
+        30px 95px rgb(226, 6, 18),
+        35px 95px rgb(226, 6, 18),
+        40px 95px rgb(0, 0, 0),
+        /* Row 21 */
+        -30px 100px rgb(0, 0, 0),
+        -25px 100px rgb(226, 6, 18),
+        -20px 100px rgb(0, 0, 0),
+        -5px 100px rgb(255, 194, 5),
+        0px 100px rgb(255, 246, 205),
+        5px 100px rgb(255, 246, 205),
+        10px 100px rgb(255, 194, 5),
+        25px 100px rgb(0, 0, 0),
+        30px 100px rgb(226, 6, 18),
+        35px 100px rgb(0, 0, 0),
+        /* Row 22 */
+        -30px 105px rgb(0, 0, 0),
+        -25px 105px rgb(226, 6, 18),
+        -20px 105px rgb(0, 0, 0),
+        -5px 105px rgb(255, 194, 5),
+        0px 105px rgb(252, 234, 14),
+        5px 105px rgb(252, 234, 14),
+        10px 105px rgb(255, 194, 5),
+        25px 105px rgb(0, 0, 0),
+        30px 105px rgb(226, 6, 18),
+        35px 105px rgb(0, 0, 0),
+        /* Row 23 */
+        -25px 110px rgb(0, 0, 0),
+        -5px 110px rgb(255, 145, 4),
+        0px 110px rgb(252, 234, 14),
+        5px 110px rgb(252, 234, 14),
+        10px 110px rgb(255, 145, 4),
+        30px 110px rgb(0, 0, 0);
+    /* Row 24
+        -25px 115px rgb(0, 0, 0),
+        0px 115px rgb(252, 234, 14),
+        5px 115px rgb(252, 234, 14),
+        30px 115px rgb(0, 0, 0),
+        /* Row 25
+        0px 120px rgb(232, 78, 28),
+        5px 120px rgb(232, 78, 28);*/
+}
+
+/* Create a pseudo-element for the flame */
+.rocket::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    /* Position the flame at the base of the rocket */
+    top: 115px;
+    left: -5px;
+    background: transparent;
+    /* The flame itself has no base color */
+    animation: flicker 0.15s infinite;
+}
+
+/* Keyframes for the flickering flame animation */
+@keyframes flicker {
+    0% {
+        box-shadow:
+            5px 0px rgb(253, 193, 13),
+            10px 0px rgb(253, 193, 13),
+            5px 5px rgb(227, 208, 2),
+            10px 5px rgb(227, 208, 2),
+            5px 10px rgb(232, 78, 28),
+            10px 10px rgb(232, 78, 28);
+    }
+
+    50% {
+        box-shadow:
+            5px 0px rgb(255, 236, 153),
+            10px 0px rgb(255, 236, 153),
+            5px 5px rgb(227, 208, 2),
+            10px 5px rgb(227, 208, 2),
+            /* Longer flame part */
+            0px 10px rgb(255, 145, 4),
+            5px 15px rgb(232, 78, 28),
+            10px 15px rgb(232, 78, 28),
+            15px 10px rgb(255, 145, 4);
+    }
+
+    100% {
+        box-shadow:
+            5px 0px rgb(227, 208, 2),
+            10px 0px rgb(227, 208, 2),
+            /* Shorter flame part */
+            5px 5px rgb(232, 78, 28),
+            10px 5px rgb(232, 78, 28);
+    }
+}

@@ -10,6 +10,7 @@
     animation-name: fly;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
+    z-index: 50;
 }
 
 /* The ghost's pixel art is drawn using the ::after pseudo-element and box-shadow */

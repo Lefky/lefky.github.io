@@ -4,8 +4,8 @@ console.log("loaded animations.js");
 /*eslint no-undef: "error"*/
 
 let startedAnimation = false,
-	animation_list = ["leaves_div", "bb8", "superman", "carlton_dance", "pikachu", "super_mario", "ghosts", "whale"],
-	//animation_list = ["pikachu"],
+	animation_list = ["leaves_div", "bb8", "superman", "carlton_dance", "pikachu", "super_mario", "ghosts", "whale", "stormtrooper", "rocket", "sonic_div"],
+	//animation_list = ["sonic_div"],
 	randomAnimation = animation_list[Math.floor(Math.random() * animation_list.length)],
 	interval = "",
 	manualStoppedLeaves = false;
@@ -47,7 +47,7 @@ function stopLeaves() {
 }
 
 function loadAnimationCSS(selected_animation) {
-	fileref = document.createElement("link");
+	let fileref = document.createElement("link");
 	fileref.setAttribute("rel", "stylesheet");
 	fileref.setAttribute("type", "text/css");
 	fileref.setAttribute("href", "css/font-awsome-custom-animations.css");
@@ -207,6 +207,70 @@ function loadAnimationCSS(selected_animation) {
 		whale_div.appendChild(ocean_div);
 
 		showAnimationMessage("Whale done! <i class='fas fa-whale faa-bounce animated'></i> Go ahead and ride the wave home! <i class='fas fa-water faa-horizontal animated'></i>");
+
+	} else if (selected_animation === "stormtrooper") {
+		fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/stormtrooper.css");
+		document.head.appendChild(fileref);
+
+		const stormtrooper_div = document.createElement("div");
+		stormtrooper_div.classList = "stormtrooper";
+		stormtrooper_div.id = "stormtrooper";
+		document.getElementsByTagName("body")[0].appendChild(stormtrooper_div);
+
+		showAnimationMessage("The Force is weak with this one... until 9 AM tomorrow! <i class='fas fa-battery-quarter faa-flash animated'></i>");
+
+	} else if (selected_animation === "rocket") {
+		fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/rocket.css");
+		document.head.appendChild(fileref);
+
+		const rocket_div = document.createElement("div");
+		rocket_div.classList = "rocket";
+		rocket_div.id = "rocket";
+		document.getElementsByTagName("body")[0].appendChild(rocket_div);
+
+		showAnimationMessage("Ready for launch! <i class='fas fa-rocket faa-pulse animated'></i> Let's go see the alien(s) at home :p");
+
+		fileref = document.createElement("script");
+		fileref.setAttribute("type", "text/javascript");
+		fileref.setAttribute("src", "js/rocket.js");
+		document.head.appendChild(fileref);
+
+	} else if (selected_animation === "sonic_div") {
+		fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/sonic.css");
+		document.head.appendChild(fileref);
+
+		const sonic_div = document.createElement("div");
+		sonic_div.classList = "sonic_div";
+		sonic_div.id = "sonic_div";
+		document.getElementsByTagName("body")[0].appendChild(sonic_div);
+
+		const sonic_running_div = document.createElement("div");
+		sonic_running_div.classList = "sonic";
+		sonic_running_div.id = "sonic";
+		sonic_div.appendChild(sonic_running_div);
+
+		const ground_div = document.createElement("div");
+		ground_div.classList = "ground";
+		ground_div.id = "ground";
+		sonic_div.appendChild(ground_div);
+
+		for (let i = 1; i <= 20; i++) {
+			const tile_div = document.createElement("div");
+			tile_div.classList = "tile";
+			tile_div.id = "tile" + i;
+			ground_div.appendChild(tile_div);
+		}
+
+		showAnimationMessage("Gotta go fast... to the couch! <i class='fas fa-running fa-pulse'></i> <i class='fas fa-couch'></i>");
 
 	} else {
 		console.error("Unknown animation selected: " + selected_animation);
