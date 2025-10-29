@@ -1,8 +1,9 @@
 html,
 body {
-	overflow: hidden;
+	overflow-x: hidden;
 	height: 100%;
 	font-size: 0.9rem;
+	background-color: var(--bs-light-bg-subtle);
 }
 
 /*

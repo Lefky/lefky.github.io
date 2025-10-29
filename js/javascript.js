@@ -6,7 +6,7 @@ console.log("loaded javascript.js");
 
 // Import Bootstrap colors
 // eslint-disable-next-line no-unused-vars
-var bs_blue, bs_indigo, bs_purple, bs_pink, bs_red, bs_orange, bs_yellow, bs_green, bs_gray, bs_teal, bs_cyan, bs_white, bs_gray_dark, bs_primary, bs_secondary, bs_success, bs_info, bs_warning, bs_danger, bs_light, bs_dark, bs_body_bg, bs_washed_red, bs_washed_yellow, bs_washed_green;
+var bs_blue, bs_indigo, bs_purple, bs_pink, bs_red, bs_orange, bs_yellow, bs_green, bs_gray, bs_teal, bs_cyan, bs_white, bs_gray_dark, bs_primary, bs_secondary, bs_success, bs_info, bs_warning, bs_danger, bs_light, bs_light_subtle, bs_dark, bs_body_bg, bs_washed_red, bs_washed_yellow, bs_washed_green;
 function importBootstrapColors() {
 	bs_blue = getComputedStyle(document.documentElement).getPropertyValue('--bs-blue');
 	bs_indigo = getComputedStyle(document.documentElement).getPropertyValue('--bs-indigo');
@@ -28,6 +28,7 @@ function importBootstrapColors() {
 	bs_warning = getComputedStyle(document.documentElement).getPropertyValue('--bs-warning');
 	bs_danger = getComputedStyle(document.documentElement).getPropertyValue('--bs-danger');
 	bs_light = getComputedStyle(document.documentElement).getPropertyValue('--bs-light');
+	bs_light_subtle = getComputedStyle(document.documentElement).getPropertyValue('--bs-light-bg-subtle');
 	bs_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-dark');
 	bs_body_bg = getComputedStyle(document.documentElement).getPropertyValue('--bs-body-bg');
 	bs_washed_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-red').trim();
