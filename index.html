@@ -64,7 +64,7 @@
 					<p>
 						Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a>
 						(Send me a message with feedback or suggestions ;) )<br>
-						Version: <span id="currentappversion">20251014.1</span> <br>
+						Version: <span id="currentappversion">20251029.2</span> <br>
 						Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"
 							target="_blank">Check the master branch on Github</a>
 					</p>
@@ -420,24 +420,29 @@
 				</p>-->
 					<p>
 					<h4>User interface</h4>
-					<!--<p class="mt-3 no-bottom-margin">
-						Dark mode:
+					<p class="mt-3 no-bottom-margin">
+						Appearance:
 					</p>
-					<div class="row d-flex align-items-center mb-3">
-						<div class="col-1">
-							<div class="input-group d-flex justify-content-end align-items-center">
-								<label><i class="fas fa-sun fontsize150"></i></label>
-							</div>
+					<form class="mb-3">
+						<div class="form-check form-check-inline align-middle">
+							<input class="form-check-input" type="radio" name="appearance" id="appearance_auto"
+								value="auto" checked onchange="setTheme(this.value);">
+							<label class="form-check-label" for="appearance_auto"><i class="fa fa-eclipse fontsize150"
+									aria-hidden="true"></i> Auto</label>
 						</div>
-						<div class="w-f-90">
-							<div class="form-check form-switch-md form-switch ps-5">
-								<input type="checkbox" class="form-check-input checkneutral" id="dark_mode_toggle_btn">
-							</div>
+						<div class="form-check form-check-inline align-middle">
+							<input class="form-check-input" type="radio" name="appearance" id="appearance_light"
+								value="light" onchange="setTheme(this.value);">
+							<label class="form-check-label align-middle" for="appearance_light"><i
+									class="fa fa-sun fontsize150" aria-hidden="true"></i> Light</label>
 						</div>
-						<div class="col-2">
-							<label class="form-check-label" for="dark_mode_toggle_btn"><i class="fas fa-moon fontsize150"></i></label>
+						<div class="form-check form-check-inline align-middle">
+							<input class="form-check-input" type="radio" name="appearance" id="appearance_dark"
+								value="dark" onchange="setTheme(this.value);">
+							<label class="form-check-label" for="appearance_dark"><i class="fa fa-moon fontsize150"
+									aria-hidden="true"></i> Dark</label>
 						</div>
-					</div>-->
+					</form>
 					<p class="no-bottom-margin">
 						Select which different stats and options should be visible in the UI.
 					</p>
@@ -829,6 +834,12 @@
 							<li>
 								Added new animations when your time is finished. Discover them all!
 							</li>
+							<li>
+								Added toggle to select appearance (light, dark, auto) in settings.
+							</li>
+							<li>
+								Reworked color scheme for less harsh whites where possible.
+							</li>
 						</ul>
 						</p>
 						<p class="mb-0">
@@ -1147,7 +1158,6 @@
 			</div>
 			<div class="col d-flex justify-content-end">
 				<div id="footer_button_group" class="btn-group align-self-center" role="group">
-					<!--<button title="Dark mode" type="button" id="dark_mode" class="btn btn-outline-secondary leftbtn footerbtn py-1 px-4"><i class="fas fa-moon"></i></button>-->
 					<button title="Reporting" type="button"
 						class="btn btn-outline-secondary leftbtn footerbtn py-1 px-4" data-bs-toggle="modal"
 						data-bs-target="#modalreporting"><i class="fas fa-chart-line"></i></button>

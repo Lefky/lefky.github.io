@@ -675,6 +675,24 @@ function activateConfirmationModal(message, callback) {
 	});
 }
 
+function setTheme(theme) {
+	if (theme == "auto") {
+		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+			colorScheme = "dark";
+			document.querySelector("html").setAttribute("data-bs-theme", "dark");
+		} else {
+			colorScheme = "light";
+			document.querySelector("html").setAttribute("data-bs-theme", "light");
+		}
+		localStorage.setItem("theme", "auto");
+	} else {
+		document.documentElement.setAttribute('data-bs-theme', theme);
+		colorScheme = theme;
+		console.log(document.getElementById("appearance_auto").checked);
+		localStorage.setItem("theme", theme);
+	}
+}
+
 /*function populateWorkdayCountCountries(callback) {
 	$.getJSON('https://date.nager.at/api/v3/AvailableCountries', function (response) {
 		// JSON result in `response` variable
@@ -912,7 +930,8 @@ function setParameters() {
 		weeklyovertimeoption = localStorage.getItem("weeklyovertimeoption"),
 		totalovertimeoption = localStorage.getItem("totalovertimeoption"),
 		parametersoption = localStorage.getItem("parametersoption"),
-		breaktime_timeselection_option_timerange = localStorage.getItem("breaktime_timeselection_option_timerange");
+		breaktime_timeselection_option_timerange = localStorage.getItem("breaktime_timeselection_option_timerange"),
+		theme = localStorage.getItem("theme");
 
 	if (autoend == "true")
 		document.getElementById("autoend").click();
@@ -987,6 +1006,8 @@ function setParameters() {
 		document.getElementById("breaktime_timeselection_option_timerange").click();
 		breaktimeTimeselection();
 	}
+	setTheme(theme ? theme : "auto");
+	document.getElementById("appearance_" + (theme ? theme : "auto")).checked = true;
 
 	// Check if custom time to subtract from start is stored and set value appropriatly
 	if (!startminsubtract_value)
@@ -1202,6 +1223,7 @@ window.onbeforeunload = function () {
 	localStorage.setItem("autobackupoption", document.getElementById("autobackupoption").checked.toString());
 	localStorage.setItem("parametersoption", document.getElementById("parametersoption").checked.toString());
 	localStorage.setItem("breaktime_timeselection_option_timerange", document.getElementById("breaktime_timeselection_option_timerange").checked.toString());
+	//localStorage.setItem("theme", document.querySelector('input[name="appearance"]:checked').value);
 	//return false; ////// DEBUG before reloading the window
 };
 
@@ -1216,14 +1238,6 @@ $(document).ready(function () {
 
 	importBootstrapColors();
 	loadApp();
-
-	if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-		colorScheme = "dark";
-		document.querySelector("html").setAttribute("data-bs-theme", "dark");
-	} else {
-		colorScheme = "light";
-		document.querySelector("html").setAttribute("data-bs-theme", "light");
-	}
 
 	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')),
 		// eslint-disable-next-line no-unused-vars
@@ -1280,12 +1294,12 @@ $(document).on('keydown', function (e) {
 });
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-	if (event.matches) {
-		colorScheme = "dark";
-		document.querySelector("html").setAttribute("data-bs-theme", "dark");
-	} else {
-		colorScheme = "light";
-		document.querySelector("html").setAttribute("data-bs-theme", "light");
+	if (document.querySelector('input[name="appearance"]:checked').value == "auto") {
+		if (event.matches) {
+			setTheme("dark");
+		} else {
+			setTheme("light");
+		}
 	}
 });
 
