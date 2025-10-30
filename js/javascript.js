@@ -34,6 +34,52 @@ function importBootstrapColors() {
 	bs_washed_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-red').trim();
 	bs_washed_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-yellow').trim();
 	bs_washed_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-green').trim();
+
+	// Helper function to convert a hex color string to an RGB object.
+	function hexToRgb(hex) {
+		// Remove the hash at the start if it exists
+		hex = hex.replace(/^#/, '');
+
+		// Check if it's a 3-character hex
+		if (hex.length === 3) {
+			hex = hex.split('').map(char => char + char).join('');
+		}
+
+		const bigint = parseInt(hex, 16);
+		const r = (bigint >> 16) & 255;
+		const g = (bigint >> 8) & 255;
+		const b = bigint & 255;
+
+		return { r, g, b };
+	}
+
+	// 1. Set your desired opacity (0.75 = 75%)
+	const opacity = 0.4;
+	try {
+		// 2. Get the computed hex value from Bootstrap's variable
+		const gray200_hex = getComputedStyle(document.documentElement)
+			.getPropertyValue('--bs-gray-200')
+			.trim(); // .trim() removes any whitespace
+
+		// 3. Convert the hex value to an RGB object
+		const rgb = hexToRgb(gray200_hex);
+
+		if (rgb) {
+			// 4. Create the new, dynamic CSS rule
+			const newRule = `
+                [data-bs-theme="light"] .bg-light-subtle {
+                    background-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity}) !important;
+                }
+            `;
+
+			// 5. Inject this rule into the document's <head>
+			const style = document.createElement('style');
+			style.textContent = newRule;
+			document.head.appendChild(style);
+		}
+	} catch (e) {
+		console.error("Error applying custom bg-light-subtle style:", e);
+	}
 }
 
 // eslint-disable-next-line no-unused-vars

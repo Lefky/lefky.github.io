@@ -66,17 +66,6 @@ body {
 	z-index: 1000;
 }
 
-@media (prefers-color-scheme: dark) {
-	.bg-light {
-		--bs-bg-opacity: 0.1 !important;
-	}
-
-	#historycontainer {
-		border-color: var(--bs-gray-700) !important;
-		background-color: var(--bs-body-bg) !important;
-	}
-}
-
 @media only screen and (max-width: 992px) and (max-height: 776px) {
 	#inputarea {
 		border-top-right-radius: 0 !important;
@@ -132,6 +121,10 @@ body {
 	--bs-leaves-bg-2-light: #b1ff33;
 	--bs-leaves-bg-3: #f0c000;
 	--bs-leaves-bg-3-light: #ffff33;
+}
+
+[data-bs-theme="dark"] body {
+	background-color: var(--bs-body-bg) !important;
 }
 
 /*
