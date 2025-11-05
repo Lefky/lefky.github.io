@@ -6,7 +6,7 @@ console.log("loaded javascript.js");
 
 // Import Bootstrap colors
 // eslint-disable-next-line no-unused-vars
-var bs_blue, bs_indigo, bs_purple, bs_pink, bs_red, bs_orange, bs_yellow, bs_green, bs_gray, bs_teal, bs_cyan, bs_white, bs_gray_dark, bs_primary, bs_secondary, bs_success, bs_info, bs_warning, bs_danger, bs_light, bs_dark, bs_body_bg, bs_washed_red, bs_washed_yellow, bs_washed_green;
+var bs_blue, bs_indigo, bs_purple, bs_pink, bs_red, bs_orange, bs_yellow, bs_green, bs_gray, bs_teal, bs_cyan, bs_white, bs_gray_dark, bs_primary, bs_secondary, bs_success, bs_info, bs_warning, bs_danger, bs_light, bs_light_subtle, bs_dark, bs_body_bg, bs_washed_red, bs_washed_yellow, bs_washed_green;
 function importBootstrapColors() {
 	bs_blue = getComputedStyle(document.documentElement).getPropertyValue('--bs-blue');
 	bs_indigo = getComputedStyle(document.documentElement).getPropertyValue('--bs-indigo');
@@ -28,11 +28,58 @@ function importBootstrapColors() {
 	bs_warning = getComputedStyle(document.documentElement).getPropertyValue('--bs-warning');
 	bs_danger = getComputedStyle(document.documentElement).getPropertyValue('--bs-danger');
 	bs_light = getComputedStyle(document.documentElement).getPropertyValue('--bs-light');
+	bs_light_subtle = getComputedStyle(document.documentElement).getPropertyValue('--bs-light-bg-subtle');
 	bs_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-dark');
 	bs_body_bg = getComputedStyle(document.documentElement).getPropertyValue('--bs-body-bg');
 	bs_washed_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-red').trim();
 	bs_washed_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-yellow').trim();
 	bs_washed_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-green').trim();
+
+	// Helper function to convert a hex color string to an RGB object.
+	function hexToRgb(hex) {
+		// Remove the hash at the start if it exists
+		hex = hex.replace(/^#/, '');
+
+		// Check if it's a 3-character hex
+		if (hex.length === 3) {
+			hex = hex.split('').map(char => char + char).join('');
+		}
+
+		const bigint = parseInt(hex, 16);
+		const r = (bigint >> 16) & 255;
+		const g = (bigint >> 8) & 255;
+		const b = bigint & 255;
+
+		return { r, g, b };
+	}
+
+	// 1. Set your desired opacity (0.75 = 75%)
+	const opacity = 0.4;
+	try {
+		// 2. Get the computed hex value from Bootstrap's variable
+		const gray200_hex = getComputedStyle(document.documentElement)
+			.getPropertyValue('--bs-gray-200')
+			.trim(); // .trim() removes any whitespace
+
+		// 3. Convert the hex value to an RGB object
+		const rgb = hexToRgb(gray200_hex);
+
+		if (rgb) {
+			// 4. Create the new, dynamic CSS rule
+			const newRule = `
+                [data-bs-theme="light"] .bg-light-subtle {
+                    background-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity}) !important;
+                }
+            `;
+
+			// 5. Inject this rule into the document's <head>
+			const style = document.createElement('style');
+			style.textContent = newRule;
+			document.head.appendChild(style);
+		}
+	} catch (e) {
+		console.error("Error applying custom bg-light-subtle style:", e);
+	}
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -674,6 +721,24 @@ function activateConfirmationModal(message, callback) {
 	});
 }
 
+function setTheme(theme) {
+	if (theme == "auto") {
+		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+			colorScheme = "dark";
+			document.querySelector("html").setAttribute("data-bs-theme", "dark");
+		} else {
+			colorScheme = "light";
+			document.querySelector("html").setAttribute("data-bs-theme", "light");
+		}
+		localStorage.setItem("theme", "auto");
+	} else {
+		document.documentElement.setAttribute('data-bs-theme', theme);
+		colorScheme = theme;
+		console.log(document.getElementById("appearance_auto").checked);
+		localStorage.setItem("theme", theme);
+	}
+}
+
 /*function populateWorkdayCountCountries(callback) {
 	$.getJSON('https://date.nager.at/api/v3/AvailableCountries', function (response) {
 		// JSON result in `response` variable
@@ -911,7 +976,8 @@ function setParameters() {
 		weeklyovertimeoption = localStorage.getItem("weeklyovertimeoption"),
 		totalovertimeoption = localStorage.getItem("totalovertimeoption"),
 		parametersoption = localStorage.getItem("parametersoption"),
-		breaktime_timeselection_option_timerange = localStorage.getItem("breaktime_timeselection_option_timerange");
+		breaktime_timeselection_option_timerange = localStorage.getItem("breaktime_timeselection_option_timerange"),
+		theme = localStorage.getItem("theme");
 
 	if (autoend == "true")
 		document.getElementById("autoend").click();
@@ -986,6 +1052,8 @@ function setParameters() {
 		document.getElementById("breaktime_timeselection_option_timerange").click();
 		breaktimeTimeselection();
 	}
+	setTheme(theme ? theme : "auto");
+	document.getElementById("appearance_" + (theme ? theme : "auto")).checked = true;
 
 	// Check if custom time to subtract from start is stored and set value appropriatly
 	if (!startminsubtract_value)
@@ -1201,6 +1269,7 @@ window.onbeforeunload = function () {
 	localStorage.setItem("autobackupoption", document.getElementById("autobackupoption").checked.toString());
 	localStorage.setItem("parametersoption", document.getElementById("parametersoption").checked.toString());
 	localStorage.setItem("breaktime_timeselection_option_timerange", document.getElementById("breaktime_timeselection_option_timerange").checked.toString());
+	//localStorage.setItem("theme", document.querySelector('input[name="appearance"]:checked').value);
 	//return false; ////// DEBUG before reloading the window
 };
 
@@ -1215,14 +1284,6 @@ $(document).ready(function () {
 
 	importBootstrapColors();
 	loadApp();
-
-	if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-		colorScheme = "dark";
-		document.querySelector("html").setAttribute("data-bs-theme", "dark");
-	} else {
-		colorScheme = "light";
-		document.querySelector("html").setAttribute("data-bs-theme", "light");
-	}
 
 	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')),
 		// eslint-disable-next-line no-unused-vars
@@ -1279,12 +1340,12 @@ $(document).on('keydown', function (e) {
 });
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-	if (event.matches) {
-		colorScheme = "dark";
-		document.querySelector("html").setAttribute("data-bs-theme", "dark");
-	} else {
-		colorScheme = "light";
-		document.querySelector("html").setAttribute("data-bs-theme", "light");
+	if (document.querySelector('input[name="appearance"]:checked').value == "auto") {
+		if (event.matches) {
+			setTheme("dark");
+		} else {
+			setTheme("light");
+		}
 	}
 });
 
