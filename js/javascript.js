@@ -1340,12 +1340,12 @@ $(document).on('keydown', function (e) {
 });
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+	// Check if the user has 'auto' selected
 	if (document.querySelector('input[name="appearance"]:checked').value == "auto") {
-		if (event.matches) {
-			setTheme("dark");
-		} else {
-			setTheme("light");
-		}
+		// Call setTheme("auto") again.
+		// This function handles the system check internally
+		// AND keeps the localStorage value set to "auto" instead of overwriting it with "dark"/"light".
+		setTheme("auto");
 	}
 });
 
