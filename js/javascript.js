@@ -73,9 +73,18 @@ function importBootstrapColors() {
             `;
 
 			// 5. Inject this rule into the document's <head>
-			const style = document.createElement('style');
+			const styleId = 'custom-bg-subtle-style'; // Define a unique ID to find this specific style block later
+			let style = document.getElementById(styleId);
+
+			// Check if the element already exists to prevent duplicate <style> tags in the head
+			if (!style) {
+				style = document.createElement('style');
+				style.id = styleId;
+				document.head.appendChild(style);
+			}
+
+			// Update the CSS rule (applies to both new and existing elements)
 			style.textContent = newRule;
-			document.head.appendChild(style);
 		}
 	} catch (e) {
 		console.error("Error applying custom bg-light-subtle style:", e);
@@ -688,11 +697,23 @@ function checkInputValues() {
 	setAlertMessage(app_alert_message);
 }
 
-function setAlertMessage(app_alert_message) {
-	if (app_alert_message != "") {
-		document.getElementById("app_alert_message").innerHTML = app_alert_message;
-		$("#app_alert").show();
-		setTimeout(function () { $("#app_alert").fadeOut(); }, 10000);
+function setAlertMessage(message) {
+	const alertBox = document.getElementById("app_alert");
+	const msgBox = document.getElementById("app_alert_message");
+
+	if (message !== "") {
+		msgBox.innerHTML = message;
+		alertBox.style.display = "block";
+		alertBox.style.opacity = "1"; // Ensure it's visible
+
+		// Wait 10 seconds, then fade out
+		setTimeout(function () {
+			alertBox.style.transition = "opacity 1s ease-out";
+			alertBox.style.opacity = "0";
+
+			// Hide display:none after the animation finishes
+			setTimeout(() => { alertBox.style.display = "none"; }, 1000);
+		}, 10000);
 	}
 }
 
@@ -893,11 +914,6 @@ function importHistoryData(e) {
 		}
 	};
 	reader.readAsText(files[0]);
-}
-
-function makeDate(date) {
-	const parts = date.split("-");
-	return new Date(parts[2], parts[1] - 1, parts[0]);
 }
 
 // Application functions
@@ -1274,7 +1290,7 @@ window.onbeforeunload = function () {
 };
 
 // Listeners and initializers
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
 	dayjs().format(); // Initialize dayjs
 	dayjs.extend(window.dayjs_plugin_duration);
 	dayjs.extend(window.dayjs_plugin_isSameOrBefore);
@@ -1323,7 +1339,7 @@ $(document).ready(function () {
 	}
 });
 
-$(window).on("load", function () {
+window.addEventListener("load", function () {
 	if ("serviceWorker" in navigator) {
 		navigator.serviceWorker.register("service-worker.js", { scope: "/" })
 			.then(function (registration) {
@@ -1334,18 +1350,18 @@ $(window).on("load", function () {
 	}
 });
 
-$(document).on('keydown', function (e) {
+document.addEventListener('keydown', function (e) {
 	if (e.keyCode === 13) //ENTER key code
 		add_time(getHourSchedule());
 });
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+	// Check if the user has 'auto' selected
 	if (document.querySelector('input[name="appearance"]:checked').value == "auto") {
-		if (event.matches) {
-			setTheme("dark");
-		} else {
-			setTheme("light");
-		}
+		// Call setTheme("auto") again.
+		// This function handles the system check internally
+		// AND keeps the localStorage value set to "auto" instead of overwriting it with "dark"/"light".
+		setTheme("auto");
 	}
 });
 
