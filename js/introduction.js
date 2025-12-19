@@ -1,11 +1,13 @@
 console.log("loaded introduction.js");
 
-/*global $, bootstrap, bs_light */
+/*global bootstrap, bs_light */
 /*eslint no-undef: "error"*/
 
 // eslint-disable-next-line no-unused-vars
 function startIntroduction() {
-	document.getElementById('settingsmodalclosebutton').click();
+	// jQuery replacement for triggering click/close if needed, but direct click works fine
+	const closeBtn = document.getElementById('settingsmodalclosebutton');
+	if (closeBtn) closeBtn.click();
 
 	createOverlay();
 
@@ -25,7 +27,7 @@ function startIntroduction() {
 		'<button type="button" class="btn btn-sm btn-primary me-2" onclick="stopIntroduction();">Skip introduction</button>' +
 		'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 		'"playIntroduction();' +
-		'$(\'#overlay\').remove();' +
+		'document.getElementById(\'overlay\').remove();' +
 		'document.getElementById(\'inputarea\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
 		'createOverlay();' +
 		'this.parentElement.parentElement.remove();' +
@@ -48,8 +50,10 @@ function createOverlay() {
 function playIntroduction() {
 	// Dismiss the changes notification
 	const alertNode = document.querySelector('#alertnotification');
-	const alert = new bootstrap.Alert(alertNode);
-	alert.close();
+	if (alertNode) {
+		const alert = new bootstrap.Alert(alertNode);
+		alert.close();
+	}
 
 	let new_element = document.createElement("div");
 	new_element.id = "arrow_inputarea";
@@ -62,7 +66,7 @@ function playIntroduction() {
 		'<div class="d-flex justify-content-end mt-4">' +
 		'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 		'"this.parentElement.parentElement.parentElement.remove();' +
-		'$(\'#overlay\').remove();' +
+		'document.getElementById(\'overlay\').remove();' +
 		'document.getElementById(\'inputarea\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
 		'createOverlay();' +
 		'document.getElementById(\'arrow_inputarea_start_end\').style.removeProperty(\'display\');' +
@@ -87,7 +91,7 @@ function playIntroduction() {
 		'<div class="d-flex justify-content-end mt-4">' +
 		'<button type="button" class="btn btn-sm btn-primary d-block" onclick=' +
 		'"this.parentElement.parentElement.parentElement.remove();' +
-		'$(\'#overlay\').remove();' +
+		'document.getElementById(\'overlay\').remove();' +
 		'document.getElementById(\'divendtime\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
 		'createOverlay();' +
 		'document.getElementById(\'arrow_inputarea_total_hours\').style.removeProperty(\'display\');' +
@@ -113,7 +117,7 @@ function playIntroduction() {
 		'<div class="d-flex justify-content-end mt-4">' +
 		'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 		'"this.parentElement.parentElement.parentElement.remove();' +
-		'$(\'#overlay\').remove();' +
+		'document.getElementById(\'overlay\').remove();' +
 		'document.getElementById(\'divtotalnobreaktime\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
 		'createOverlay();' +
 		'document.getElementById(\'arrow_inputarea_overtime\').style.removeProperty(\'display\');' +
@@ -137,7 +141,7 @@ function playIntroduction() {
 		'<div class="d-flex justify-content-end mt-4">' +
 		'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 		'"this.parentElement.parentElement.parentElement.remove();' +
-		'$(\'#overlay\').remove();' +
+		'document.getElementById(\'overlay\').remove();' +
 		'document.getElementById(\'divovertime\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
 		'createOverlay();' +
 		'document.getElementById(\'arrow_inputarea_total_weekly_overtime\').style.removeProperty(\'display\');' +
@@ -161,7 +165,7 @@ function playIntroduction() {
 		'<div class="d-flex justify-content-end mt-4">' +
 		'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 		'"this.parentElement.parentElement.parentElement.remove();' +
-		'$(\'#overlay\').remove();' +
+		'document.getElementById(\'overlay\').remove();' +
 		'document.getElementById(\'divovertimetotal\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
 		'createOverlay();' +
 		'document.getElementById(\'arrow_inputarea_history\').style.removeProperty(\'display\');' +
@@ -185,7 +189,7 @@ function playIntroduction() {
 		'<div class="d-flex justify-content-end mt-4">' +
 		'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 		'"this.parentElement.parentElement.parentElement.remove();' +
-		'$(\'#overlay\').remove();' +
+		'document.getElementById(\'overlay\').remove();' +
 		'document.getElementById(\'historycontainer\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
 		'createOverlay();' +
 		'document.getElementById(\'arrow_inputarea_edit_history\').style.removeProperty(\'display\');' +
@@ -208,7 +212,7 @@ function playIntroduction() {
 		'<div class="d-flex justify-content-end mt-4">' +
 		'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 		'"this.parentElement.parentElement.parentElement.remove();' +
-		'$(\'#overlay\').remove();' +
+		'document.getElementById(\'overlay\').remove();' +
 		'document.getElementById(\'historycontainer\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
 		'createOverlay();' +
 		'document.getElementById(\'arrow_inputarea_parameters\').style.removeProperty(\'display\');' +
@@ -231,7 +235,7 @@ function playIntroduction() {
 		'<div class="d-flex justify-content-end mt-4">' +
 		'<button type="button" class="btn btn-sm btn-primary" onclick=' +
 		'"this.parentElement.parentElement.parentElement.remove();' +
-		'$(\'#overlay\').remove();' +
+		'document.getElementById(\'overlay\').remove();' +
 		'document.getElementById(\'divparameters\').scrollIntoView({behaviour: \'smooth\', block: \'start\'});' +
 		'createOverlay();' +
 		'document.getElementById(\'arrow_buttonarea\').style.removeProperty(\'display\');' +
@@ -351,8 +355,8 @@ function playIntroduction() {
 	new_element.innerHTML =
 		'<button type="button" onclick="stopIntroduction();" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
 		'<div id="app_introduction_message">You are good to go!<br><br>' +
-		'Be sure to take a look at the <a href="#" onclick="$(\'#modalsettings\').modal(\'show\');">settings</a> to download and import sample data so you have a better understanding what everything looks like when actually using the application.<br><br>' +
-		'But don\'t forget to delete the history again afterwards through the <a href="#" onclick="$(\'#modalsettings\').modal(\'show\');">settings</a>.</div>' +
+		'Be sure to take a look at the <a href="#" data-bs-toggle="modal" data-bs-target="#modalsettings">settings</a> to download and import sample data so you have a better understanding what everything looks like when actually using the application.<br><br>' +
+		'But don\'t forget to delete the history again afterwards through the <a href="#" data-bs-toggle="modal" data-bs-target="#modalsettings">settings</a>.</div>' +
 		'<div class="d-flex justify-content-end mt-4">' +
 		'<button type="button" class="btn btn-sm btn-primary" onclick="stopIntroduction()">' +
 		'<span aria-hidden="true">Finish</span>' +
@@ -363,8 +367,14 @@ function playIntroduction() {
 
 // eslint-disable-next-line no-unused-vars
 function stopIntroduction() {
-	$("#overlay").remove();
-	$("#introductioncontainer").remove();
+	const overlay = document.getElementById("overlay");
+	if (overlay)
+		overlay.remove();
+
+	const container = document.getElementById("introductioncontainer");
+	if (container)
+		container.remove();
+
 	document.getElementById("inputarea").style.cssText = "z-index: initial; pointer-events: initial;";
 	document.getElementById("divstarttime").style.cssText = "background-color: inherit; z-index: initial; pointer-events: initial;";
 	document.getElementById("divbreaktime").style.cssText = "background-color: inherit; z-index: initial; pointer-events: initial;";

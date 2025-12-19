@@ -9,7 +9,7 @@ In HTML
   <div id="div_where_graph_comes"></div>
 */
 
-var sortedkeys = getHistoryKeys(),
+var sortedkeys = [],
 	numberOfDaysRegistered = 0,
 	datasetOvertimeDec = [],
 	datasetOvertimeCumulative = [],
@@ -49,6 +49,10 @@ google.charts.load('current', { packages: ['corechart', 'gauge', 'timeline'] });
 //google.charts.setOnLoadCallback(drawAreagraph);
 
 function initGraphs() {
+	// Refresh the list of dates, in case data has been removed/added
+	sortedkeys = getHistoryKeys();
+
+	// Reset variables
 	numberOfDaysRegistered = 0,
 		datasetOvertimeDec = [],
 		datasetOvertimeCumulative = [],
@@ -367,7 +371,9 @@ function drawPiegraph(graphtype) {
 
 	// If there isn't any data to display, display a notification
 	if (graphtype == "OvertimeDays" && positiveOvertimeDays == 0 && negativeOvertimeDays == 0) {
-		$('#OvertimeDays_div svg g text:first').html("No days of overtime in window");
+		const svgText = document.querySelector('#OvertimeDays_div svg g text');
+		if (svgText)
+			svgText.innerHTML = "No days of overtime in window";
 	}
 }
 
@@ -482,63 +488,22 @@ function drawGaugegraph(graphtype) {
 	const chart = new google.visualization.Gauge(document.getElementById(graphtype + '_div'));
 	chart.draw(data, options);
 
-	$('#' + graphtype + '_div svg g text:first').attr('font-size', 20); // change the fontsize of the title, there's no parameter for this
+	const gaugeTitle = document.querySelector('#' + graphtype + '_div svg g text');
+	if (gaugeTitle)
+		gaugeTitle.setAttribute('font-size', 20); // change the fontsize of the title, there's no parameter for this
 
 	// change the format of the starttime gauge to non-decimal
 	if (graphtype == "AvgStarttimeGauge") {
-		$('#AvgStarttimeGauge_div svg g g text:first').html(floatToTimeString(avg_starttime));
+		const startText = document.querySelector('#AvgStarttimeGauge_div svg g g text');
+		if (startText)
+			startText.innerHTML = floatToTimeString(avg_starttime);
 	}
 	if (graphtype == "AvgStoptimeGauge") {
-		$('#AvgStoptimeGauge_div svg g g text:first').html(floatToTimeString(avg_stoptime));
+		const stopText = document.querySelector('#AvgStoptimeGauge_div svg g g text');
+		if (stopText)
+			stopText.innerHTML = floatToTimeString(avg_stoptime);
 	}
 }
-
-/*async function drawTimelinegraph(graphtype) {
-	const data = new google.visualization.DataTable();
-	let title = "";
-
-	switch (graphtype) {
-		case "Workdays":
-			data.addColumn({ type: 'string', id: 'Day' });
-			data.addColumn({ type: 'string', id: 'dummy bar label' });
-			data.addColumn({ type: 'string', role: 'tooltip' });
-			data.addColumn({ type: 'date', id: 'Start' });
-			data.addColumn({ type: 'date', id: 'End' });
-
-			const calendar = await businessDays(getCountry(), todayDate(), "31-12-" + dayjs().format('YYYY'));
-			calendar.forEach(function (element) {
-				let type = "Workday";
-				if (element[1])
-					type = "Weekend";
-				else if (element[2])
-					type = "Holiday";
-
-				const tooltip = "<b>" + element[0] + "</b><br><br>Weekend: " + element[1] + "<br>Holiday: " + element[2];
-
-				data.addRows([
-					[type, "", tooltip, new Date(dayjs(element[0], 'DD-MM-YYYY').format('YYYY-MM-DD')), new Date(dayjs(element[0], 'DD-MM-YYYY').add(1, 'd').format('YYYY-MM-DD'))]
-				]);
-			});
-
-			break;
-		default:
-			// code block
-			console.log("No valid graphtype entered");
-	}
-
-	const options = {
-		//pieStartAngle: 270,
-		title: title,
-		width: document.getElementById("OvertimeDec_div").offsetWidth,
-		tooltip: {
-			isHtml: true
-		}
-		//height: 300
-	};
-
-	const chart = new google.visualization.Timeline(document.getElementById(graphtype + '_div'));
-	chart.draw(data, options);
-}*/
 
 function getReportingStartDate() {
 	return dayjs(document.getElementById('start_reporting_selection').value, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD');
@@ -558,19 +523,25 @@ function formatJSONdata() {
 		hourschedule,
 		tooltip,
 		hourscheduletooltip,
-		dateKey, key;
+		dateKey,
+		key,
+		in_range,
+		correction;
 
 	// eslint-disable-next-line no-cond-assign
 	for (let i = 0; key = sortedkeys[i]; i++) {
 
 		if (testDateFormat(key)/* && i >= start*/) {
 			timeinfo = JSON.parse(localStorage.getItem(key));
+			if (!timeinfo) // Prevent possible infinite loop
+				continue;
+
 			dateKey = dayjs(key, "DD-MM-YYYY");
 
 			try {
 				// replace by const
-				var in_range = dateKey.isBetween(start_reporting_selection, end_reporting_selection) ? true : false,
-					correction = timeinfo.HourSchedule.toLowerCase() == "correction" ? true : false;
+				in_range = dateKey.isBetween(start_reporting_selection, end_reporting_selection) ? true : false;
+				correction = timeinfo.HourSchedule.toLowerCase() == "correction" ? true : false;
 			} catch (err) {
 				console.log(err);
 				console.log(dateKey);
@@ -729,63 +700,66 @@ async function businessDays(country, start, end){
 */
 
 // Listeners
-document.getElementById("start_reporting_selection").addEventListener("load", initDateSelector());
+// Load initial date selector values immediately (no need for 'load' event on element)
+initDateSelector();
 
-$('#modalreporting').on('shown.bs.modal', function () {
-	// Redraw charts on opening modal
-	initGraphs();
+// Modal Events
+const modalReporting = document.getElementById('modalreporting');
+if (modalReporting) {
+	modalReporting.addEventListener('shown.bs.modal', function () {
+		// Redraw charts on opening modal
+		initGraphs();
+		drawGraphs();
+		mobileRotateScreen(true);
+	});
+
+	modalReporting.addEventListener('hidden.bs.modal', function () {
+		mobileRotateScreen(false);
+	});
+}
+
+// Window Resize
+window.addEventListener('resize', function () {
 	drawGraphs();
-
-	// Rotate screen for mobile users so it displays the entire width
-	// https://usefulangle.com/post/105/javascript-change-screen-orientation
-	mobileRotateScreen(true);
 });
 
-$('#modalreporting').on('hidden.bs.modal', function () {
-	// Rotate screen for mobile users so it displays normal again
-	mobileRotateScreen(false);
-});
+// Button Click Handlers
+function addClickListener(id, startFunc, endFunc) {
+	const el = document.getElementById(id);
+	if (el) {
+		el.addEventListener('click', function () {
+			setDateSelector(startFunc(), endFunc());
+		});
+	}
+}
 
-$(window).resize(function () {
-	drawGraphs();
-});
+// Using functions to prevent immediate execution on page load. This way the date is always calculated on click
+addClickListener('reporting_weektodate',
+	() => dayjs().startOf('week').add(1, 'day'),
+	() => dayjs()
+);
 
-$('#reporting_weektodate').on('click', function () {
-	setDateSelector(dayjs().startOf('week').add(1, 'day'), dayjs());
-});
+addClickListener('reporting_previousweek',
+	() => dayjs().subtract(1, 'week').startOf('week').add(1, 'day'),
+	() => dayjs().subtract(1, 'week').endOf('week').add(1, 'day')
+);
 
-$('#reporting_previousweek').on('click', function () {
-	setDateSelector(dayjs().subtract(1, 'week').startOf('week').add(1, 'day'), dayjs().subtract(1, 'week').endOf('week').add(1, 'day'));
-});
+addClickListener('reporting_monthtodate',
+	() => dayjs().startOf('month'),
+	() => dayjs()
+);
 
-$('#reporting_monthtodate').on('click', function () {
-	setDateSelector(dayjs().startOf('month'), dayjs());
-});
+addClickListener('reporting_previousmonth',
+	() => dayjs().subtract(1, 'month').startOf('month'),
+	() => dayjs().subtract(1, 'month').endOf('month')
+);
 
-$('#reporting_previousmonth').on('click', function () {
-	setDateSelector(dayjs().subtract(1, 'month').startOf('month'), dayjs().subtract(1, 'month').endOf('month'));
-});
+addClickListener('reporting_yeartodate',
+	() => dayjs().startOf('year'),
+	() => dayjs()
+);
 
-$('#reporting_yeartodate').on('click', function () {
-	setDateSelector(dayjs().startOf('year'), dayjs());
-});
-
-$('#reporting_alltime').on('click', function () {
-	setDateSelector(dayjs(sortedkeys[0], 'DD-MM-YYYY'), dayjs());
-});
-
-/*
-// testing
-setTimeout(async function () {
-	var f = 'DD-MM-YYYY',
-		start = dayjs("15-08-2022", f),
-		end = dayjs("21-08-2022", f);
-	var country = "BE";
-	//var calculated = await calcBusinessDays(country, start, end);
-
-	//console.log('from: ' + start.format(f), 'to: ' + end.format(f), 'is ' + calculated + ' workday(s)');
-
-
-	//console.log(await businessDays(country, start, end));
-}, 600);
-*/
+addClickListener('reporting_alltime',
+	() => dayjs(sortedkeys[0], 'DD-MM-YYYY'),
+	() => dayjs()
+);

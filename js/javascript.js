@@ -115,7 +115,18 @@ const reverseDateRepresentation = date => {
 		let parts = date.split('-');
 		return `${parts[2]}-${parts[1]}-${parts[0]}`;
 	}
+	return ""; // Return empty string as a fallback
 };
+
+function escapeHtml(text) {
+	if (!text) return "";
+	return text
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
 
 // Setters & getters
 function getStart() {
@@ -236,7 +247,15 @@ function setCustomHourSchedule(time) {
 
 function setCustomHourScheduleUI(time) {
 	document.getElementById("customhourschedule_value").value = time;
+	const select = document.getElementById("hourschedule");
 
+	// Remove existing custom option if present
+	const existingOption = document.getElementById("customhourschedule_value_option");
+	if (existingOption) {
+		existingOption.remove();
+	}
+
+	// Only add the custom option if a valid time is provided
 	if (time) {
 		const custom_option = document.createElement('option');
 		custom_option.value = time;
@@ -245,10 +264,10 @@ function setCustomHourScheduleUI(time) {
 		if (time && time.includes(","))
 			custom_option.innerHTML = time + "h &ensp;&ensp;&emsp;&emsp;(custom option)";
 		else
-			custom_option.innerHTML = time + "h &ensp;&nbsp;&emsp;&emsp;&emsp;(custom option)"
+			custom_option.innerHTML = time + "h &ensp;&nbsp;&emsp;&emsp;&emsp;(custom option)";
 
-		document.getElementById("hourschedule").appendChild(custom_option);
-		document.getElementById("hourschedule").value = time;
+		select.appendChild(custom_option);
+		select.value = time;
 	}
 }
 
@@ -587,10 +606,10 @@ function setHistory(refresh_edit_table) {
 
 			if (timeinfo.OvertimeDec.startsWith("-")) {
 				entry_history = entry_history + "<tr class='text-danger'><td>" + key + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.TotalNoBreakDec) + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.OvertimeDec) + "</td></tr>";
-				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-danger pt-3-half' contenteditable='false'>" + key + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class='text-danger pt-3-half' contenteditable='true' style='white-space: pre-wrap; word-wrap: break-word'>" + timeinfo.Summary.replace(/\\n/g, '\n') + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
+				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-danger pt-3-half' contenteditable='false'>" + key + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class='text-danger pt-3-half' contenteditable='true' style='white-space: pre-wrap; word-wrap: break-word'>" + escapeHtml(timeinfo.Summary).replace(/\\n/g, '\n') + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
 			} else {
 				entry_history = entry_history + "<tr class='text-success'><td>" + key + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.TotalNoBreakDec) + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.OvertimeDec) + "</td></tr>";
-				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-success pt-3-half' contenteditable='false'>" + key + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class='text-success pt-3-half' contenteditable='true' style='white-space: pre-wrap; word-wrap: break-word'>" + timeinfo.Summary.replace(/\\n/g, '\n') + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
+				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-success pt-3-half' contenteditable='false'>" + key + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class='text-success pt-3-half' contenteditable='true' style='white-space: pre-wrap; word-wrap: break-word'>" + escapeHtml(timeinfo.Summary).replace(/\\n/g, '\n') + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
 			}
 			overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo.OvertimeDec);
 
@@ -621,8 +640,12 @@ function notificationClosed(event) {
 	if (event == "click")
 		localStorage.setItem("lastnotifversion", version);
 
-	if (event == "onload" && version != lastnotifversion)
-		$("#alertnotification").show();
+	if (event == "onload" && version != lastnotifversion) {
+		// Remove 'd-none' if it's there, or set display block
+		const notif = document.getElementById("alertnotification");
+		notif.style.display = "block";
+		notif.classList.add("show"); // Ensure Bootstrap fade-in works
+	}
 }
 
 function set_startminsubtract(startminsubtract_value) {
@@ -729,18 +752,22 @@ function allCheckBox(allCheckboxInput, elementId) {
 }
 
 function activateConfirmationModal(message, callback) {
-	$("#modalconfirm").find(".modal-body").html("<p>" + message + "</p>");
+	const modalEl = document.getElementById('modalconfirm');
+	// Find the body within the modal and set the text
+	modalEl.querySelector(".modal-body").innerHTML = "<p>" + message + "</p>";
 
-	const modal = new bootstrap.Modal(document.getElementById('modalconfirm'), {});
+	const modal = new bootstrap.Modal(modalEl, {});
 	modal.show();
 
-	$("#modalconfirm").on('shown.bs.modal', function () {
+	// Add event listener (with {once: true} to prevent double counting when opened multiple times)
+	modalEl.addEventListener('shown.bs.modal', function () {
 		let buttons = this.querySelectorAll('.btn');
 		buttons.forEach(btn => {
 			btn.onclick = () => callback(btn.innerText.toLowerCase());
 		});
-	});
+	}, { once: true });
 }
+
 
 function setTheme(theme) {
 	if (theme == "auto") {
@@ -1365,23 +1392,33 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
 	}
 });
 
-$("input").focusout(function () {
-	checkInputValues();
-});
-
-$(".btn").mouseup(function () {
-	// Fix buttons keeping focus after being clicked
-	this.blur();
-});
-
-$("#app_alert").on("close.bs.alert", function () {
-	$(this).hide();
-	return false;
-});
-
-$("#hourschedule").on('change', function () {
-	activateConfirmationModal("Do you want to set the hour schedule for every day?<br>If not, the selected value will only be applicable today.", choice => {
-		if (choice == "yes")
-			localStorage.setItem("hourschedule", getHourSchedule());
+document.querySelectorAll("input").forEach(input => {
+	input.addEventListener("focusout", () => {
+		checkInputValues();
 	});
 });
+
+document.querySelectorAll(".btn").forEach(btn => {
+	btn.addEventListener("mouseup", function () {
+		// Fix buttons keeping focus after being clicked
+		this.blur();
+	});
+});
+
+const appAlert = document.getElementById("app_alert");
+if (appAlert) {
+	appAlert.addEventListener("close.bs.alert", function (event) {
+		event.preventDefault(); // Prevent Bootstrap from removing the element from the DOM
+		this.style.display = "none";
+	});
+}
+
+const hourScheduleSelect = document.getElementById("hourschedule");
+if (hourScheduleSelect) {
+	hourScheduleSelect.addEventListener('change', function () {
+		activateConfirmationModal("Do you want to set the hour schedule for every day?<br>If not, the selected value will only be applicable today.", choice => {
+			if (choice == "yes")
+				localStorage.setItem("hourschedule", getHourSchedule());
+		});
+	});
+}

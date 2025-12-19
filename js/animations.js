@@ -1,6 +1,6 @@
 console.log("loaded animations.js");
 
-/*global $, now, getEnd, createNotification */
+/*global now, getEnd, createNotification */
 /*eslint no-undef: "error"*/
 
 let startedAnimation = false,
