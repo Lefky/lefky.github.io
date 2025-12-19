@@ -246,7 +246,15 @@ function setCustomHourSchedule(time) {
 
 function setCustomHourScheduleUI(time) {
 	document.getElementById("customhourschedule_value").value = time;
+	const select = document.getElementById("hourschedule");
 
+	// Remove existing custom option if present
+	const existingOption = document.getElementById("customhourschedule_value_option");
+	if (existingOption) {
+		existingOption.remove();
+	}
+
+	// Only add the custom option if a valid time is provided
 	if (time) {
 		const custom_option = document.createElement('option');
 		custom_option.value = time;
@@ -255,10 +263,10 @@ function setCustomHourScheduleUI(time) {
 		if (time && time.includes(","))
 			custom_option.innerHTML = time + "h &ensp;&ensp;&emsp;&emsp;(custom option)";
 		else
-			custom_option.innerHTML = time + "h &ensp;&nbsp;&emsp;&emsp;&emsp;(custom option)"
+			custom_option.innerHTML = time + "h &ensp;&nbsp;&emsp;&emsp;&emsp;(custom option)";
 
-		document.getElementById("hourschedule").appendChild(custom_option);
-		document.getElementById("hourschedule").value = time;
+		select.appendChild(custom_option);
+		select.value = time;
 	}
 }
 
