@@ -115,6 +115,7 @@ const reverseDateRepresentation = date => {
 		let parts = date.split('-');
 		return `${parts[2]}-${parts[1]}-${parts[0]}`;
 	}
+	return ""; // Return empty string as a fallback
 };
 
 function escapeHtml(text) {
