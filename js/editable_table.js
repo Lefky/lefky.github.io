@@ -108,19 +108,6 @@ function clearPlaceholder(cell) {
 }
 
 function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule, Summary) {
-	if (error_message == "") {
-		Summary = Summary == "Summary" ? "" : Summary;
-		const timeinfo = '{"TotalNoBreakDec": "' + (TotalNoBreakDec.toLowerCase() != "correction" ? parseFloat(TotalNoBreakDec).toFixed(2) : "correction") + '", "OvertimeDec": "' + parseFloat(OvertimeDec).toFixed(2) + '", "TotalDec": "' + (TotalDec.toLowerCase() != "correction" ? parseFloat(TotalDec).toFixed(2) : "correction") + '", "StartDec": "' + (StartDec.toLowerCase() != "correction" ? parseFloat(StartDec).toFixed(2) : "correction") + '", "HourSchedule": "' + (HourSchedule.toLowerCase() != "correction" ? parseFloat(HourSchedule).toFixed(2) : "correction") + '", "Summary": "' + (Summary.toLowerCase() != "correction" ? Summary : "correction") + '"}';
-		localStorage.setItem(key, timeinfo);
-		//console.log(Summary);
-	} else {
-		error_message = error_message + "<br><br>Please correct your entry and try again.";
-		return error_message;
-	}
-	return;
-}
-
-function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule, Summary) {
 	const isnumber = /^(-?)\d+(\.\d+)?$/;
 	const istext = /^[.\\\s\w\d]*$/;
 	let error_message = "";
