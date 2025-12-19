@@ -640,8 +640,12 @@ function notificationClosed(event) {
 	if (event == "click")
 		localStorage.setItem("lastnotifversion", version);
 
-	if (event == "onload" && version != lastnotifversion)
-		$("#alertnotification").show();
+	if (event == "onload" && version != lastnotifversion) {
+		// Remove 'd-none' if it's there, or set display block
+		const notif = document.getElementById("alertnotification");
+		notif.style.display = "block";
+		notif.classList.add("show"); // Ensure Bootstrap fade-in works
+	}
 }
 
 function set_startminsubtract(startminsubtract_value) {
@@ -748,18 +752,22 @@ function allCheckBox(allCheckboxInput, elementId) {
 }
 
 function activateConfirmationModal(message, callback) {
-	$("#modalconfirm").find(".modal-body").html("<p>" + message + "</p>");
+	const modalEl = document.getElementById('modalconfirm');
+	// Find the body within the modal and set the text
+	modalEl.querySelector(".modal-body").innerHTML = "<p>" + message + "</p>";
 
-	const modal = new bootstrap.Modal(document.getElementById('modalconfirm'), {});
+	const modal = new bootstrap.Modal(modalEl, {});
 	modal.show();
 
-	$("#modalconfirm").on('shown.bs.modal', function () {
+	// Add event listener (with {once: true} to prevent double counting when opened multiple times)
+	modalEl.addEventListener('shown.bs.modal', function () {
 		let buttons = this.querySelectorAll('.btn');
 		buttons.forEach(btn => {
 			btn.onclick = () => callback(btn.innerText.toLowerCase());
 		});
-	});
+	}, { once: true });
 }
+
 
 function setTheme(theme) {
 	if (theme == "auto") {
@@ -1384,23 +1392,33 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
 	}
 });
 
-$("input").focusout(function () {
-	checkInputValues();
-});
-
-$(".btn").mouseup(function () {
-	// Fix buttons keeping focus after being clicked
-	this.blur();
-});
-
-$("#app_alert").on("close.bs.alert", function () {
-	$(this).hide();
-	return false;
-});
-
-$("#hourschedule").on('change', function () {
-	activateConfirmationModal("Do you want to set the hour schedule for every day?<br>If not, the selected value will only be applicable today.", choice => {
-		if (choice == "yes")
-			localStorage.setItem("hourschedule", getHourSchedule());
+document.querySelectorAll("input").forEach(input => {
+	input.addEventListener("focusout", () => {
+		checkInputValues();
 	});
 });
+
+document.querySelectorAll(".btn").forEach(btn => {
+	btn.addEventListener("mouseup", function () {
+		// Fix buttons keeping focus after being clicked
+		this.blur();
+	});
+});
+
+const appAlert = document.getElementById("app_alert");
+if (appAlert) {
+	appAlert.addEventListener("close.bs.alert", function (event) {
+		event.preventDefault(); // Prevent Bootstrap from removing the element from the DOM
+		this.style.display = "none";
+	});
+}
+
+const hourScheduleSelect = document.getElementById("hourschedule");
+if (hourScheduleSelect) {
+	hourScheduleSelect.addEventListener('change', function () {
+		activateConfirmationModal("Do you want to set the hour schedule for every day?<br>If not, the selected value will only be applicable today.", choice => {
+			if (choice == "yes")
+				localStorage.setItem("hourschedule", getHourSchedule());
+		});
+	});
+}

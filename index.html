@@ -26,8 +26,6 @@
 			acceptBtnBackground: getComputedStyle(document.documentElement).getPropertyValue('--bs-blue')
 		});
 	</script>
-	<!-- jquery -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
 	<!-- Font Awsome -->
 	<link href="css/all.min.css" rel="stylesheet" defer>
 	<!-- Custom Styles -->
@@ -64,7 +62,7 @@
 					<p>
 						Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a>
 						(Send me a message with feedback or suggestions ;) )<br>
-						Version: <span id="currentappversion">20251217.2</span> <br>
+						Version: <span id="currentappversion">20251219.2</span> <br>
 						Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"
 							target="_blank">Check the master branch on Github</a>
 					</p>
@@ -832,13 +830,9 @@
 							Changes
 						<ul>
 							<li>
-								Added new animations when your time is finished. Discover them all!
-							</li>
-							<li>
-								Added toggle to select appearance (light, dark, auto) in settings.
-							</li>
-							<li>
-								Reworked color scheme for less harsh whites where possible.
+								Refactored the entire codebase to not use jquery anymore. This should make the
+								application
+								perform better, be less dependant and be more future proof.
 							</li>
 						</ul>
 						</p>
@@ -846,7 +840,12 @@
 							Bugfixes
 						<ul>
 							<li>
-								Fixed an issue where the introduction was still taking the info button into account.
+								Various bugfixes.
+							</li>
+							<li>
+								Fixed an XSS vulnerability. But as this is an entire client side application this was
+								mostly a theoretical risk. As your data always stays on your own device unless you share
+								it with someone else.
 							</li>
 						</ul>
 						</p>
