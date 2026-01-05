@@ -159,6 +159,10 @@ body {
 	font-size: 70%;
 }
 
+.input-group-text {
+	font-size: 0.9rem;
+}
+
 /*
 	Height/width customisations
 */
@@ -228,6 +232,41 @@ body {
 	border-radius: 1.5rem !important;
 }
 
+.rounded-end {
+	border-bottom-left-radius: 0 !important;
+	border-top-left-radius: 0 !important;
+	border-top-right-radius: 1.5rem !important;
+	border-bottom-right-radius: 1.5rem !important;
+}
+
+/* Fix for input-groups to make them align properly again */
+.input-group>.form-control:not(:first-child),
+.input-group>.form-select:not(:first-child) {
+	border-top-left-radius: 0 !important;
+	border-bottom-left-radius: 0 !important;
+}
+
+.input-group>.form-control:not(:last-child),
+.input-group>.form-select:not(:last-child) {
+	border-top-right-radius: 0 !important;
+	border-bottom-right-radius: 0 !important;
+}
+
+.input-group>.input-group-text {
+	border-radius: 1.5rem !important;
+	/* Make sure the label is rounded too */
+}
+
+.input-group>.input-group-text:not(:first-child) {
+	border-top-left-radius: 0 !important;
+	border-bottom-left-radius: 0 !important;
+}
+
+.input-group>.input-group-text:not(:last-child) {
+	border-top-right-radius: 0 !important;
+	border-bottom-right-radius: 0 !important;
+}
+
 .btn-group .btn.leftbtn {
 	border-radius: 1.5rem 0 0 1.5rem !important;
 }
@@ -245,19 +284,6 @@ body {
 	font-size: 1.1rem;
 }
 
-.rounded-end {
-	border-bottom-left-radius: 0 !important;
-	border-top-left-radius: 0 !important;
-	border-top-right-radius: 1.5rem !important;
-	border-bottom-right-radius: 1.5rem !important;
-}
-
-.rounded-start {
-	border-bottom-left-radius: 1.5rem !important;
-	border-top-left-radius: 1.5rem !important;
-	border-top-right-radius: 0 !important;
-	border-bottom-right-radius: 0 !important;
-}
 
 /*
 	Alignment customisations

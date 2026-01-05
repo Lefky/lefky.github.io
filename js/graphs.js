@@ -90,6 +90,11 @@ function drawGraphs() {
 }
 
 function initDateSelector() {
+	// If keys are empty on initial load, fill them
+	if (sortedkeys.length === 0) {
+		sortedkeys = getHistoryKeys();
+	}
+
 	document.getElementById('start_reporting_selection').value = dayjs(reverseDateRepresentation(sortedkeys[0])).format('YYYY-MM-DD');
 	document.getElementById('end_reporting_selection').value = dayjs().add(1, "d").format('YYYY-MM-DD');
 }
