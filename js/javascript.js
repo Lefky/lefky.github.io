@@ -904,6 +904,114 @@ function exportCSV() {
 	vLink.click();
 }
 
+/*global jspdf, getHistoryKeys, testDateFormat, dayjs */
+// Helper to quickly set dates in the modal
+function setExportRange(type) {
+	const startInput = document.getElementById('export_start_date');
+	const endInput = document.getElementById('export_end_date');
+
+	// Safety check if elements exist
+	if (!startInput || !endInput) return;
+
+	if (type === 'thisMonth') {
+		startInput.value = dayjs().startOf('month').format('YYYY-MM-DD');
+		endInput.value = dayjs().endOf('month').format('YYYY-MM-DD');
+	} else if (type === 'lastMonth') {
+		startInput.value = dayjs().subtract(1, 'month').startOf('month').format('YYYY-MM-DD');
+		endInput.value = dayjs().subtract(1, 'month').endOf('month').format('YYYY-MM-DD');
+	} else if (type === 'allTime') {
+		// Find the very first key in history for start, and today for end
+		const keys = getHistoryKeys(); // Returns dates DD-MM-YYYY
+		if (keys.length > 0) {
+			// keys are sorted, so keys[0] is the oldest
+			startInput.value = dayjs(keys[0], 'DD-MM-YYYY').format('YYYY-MM-DD');
+		} else {
+			startInput.value = dayjs().format('YYYY-MM-DD');
+		}
+		endInput.value = dayjs().format('YYYY-MM-DD');
+	}
+}
+
+function exportPDF() {
+	const { jsPDF } = window.jspdf;
+	const doc = new jsPDF();
+
+	// 1. Get Date Range from Inputs
+	const startVal = document.getElementById('export_start_date').value;
+	const endVal = document.getElementById('export_end_date').value;
+
+	const startDate = startVal ? dayjs(startVal) : dayjs('1900-01-01');
+	const endDate = endVal ? dayjs(endVal) : dayjs('2100-01-01');
+
+	// 2. Get Data
+	const keys = getHistoryKeys();
+	const tableData = [];
+	let totalHours = 0;
+
+	keys.forEach(key => {
+		if (testDateFormat(key)) {
+			// Parse the key (DD-MM-YYYY) to check if it falls within range
+			const currentObj = dayjs(key, "DD-MM-YYYY");
+
+			// Check if date is within selected range (inclusive '[]')
+			if (currentObj.isBetween(startDate, endDate, 'day', '[]')) {
+
+				const timeinfo = JSON.parse(localStorage.getItem(key));
+				if (timeinfo) {
+					const date = key;
+					const start = timeinfo.StartDec !== "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "-";
+					// Calculate end time roughly (Start + Total)
+					let end = "-";
+					if (timeinfo.StartDec !== "correction" && timeinfo.TotalDec !== "correction") {
+						end = (parseFloat(timeinfo.StartDec) + parseFloat(timeinfo.TotalDec)).toFixed(2);
+						// Handle crossing midnight visual fix (optional)
+						if (parseFloat(end) >= 24) end = (parseFloat(end) - 24).toFixed(2);
+					}
+
+					const total = timeinfo.TotalDec !== "correction" ? parseFloat(timeinfo.TotalDec).toFixed(2) : "0.00";
+					const overtime = timeinfo.OvertimeDec;
+					const summary = timeinfo.Summary ? timeinfo.Summary.replace(/\n/g, " ") : "";
+
+					tableData.push([date, start, end, total, overtime, summary]);
+
+					if (!isNaN(parseFloat(total))) totalHours += parseFloat(total);
+				}
+			}
+		}
+	});
+
+	// 3. Document Styling
+	doc.setFontSize(18);
+	doc.text("Working Hours Report", 14, 22);
+
+	doc.setFontSize(11);
+	doc.setTextColor(100);
+	doc.text(`Period: ${startDate.format('DD/MM/YYYY')} - ${endDate.format('DD/MM/YYYY')}`, 14, 30);
+	doc.text(`Total Hours Recorded: ${totalHours.toFixed(2)}h`, 14, 36);
+
+	// 4. Generate Table
+	doc.autoTable({
+		head: [['Date', 'Start', 'End', 'Total', 'Overtime', 'Summary']],
+		body: tableData,
+		startY: 45,
+		theme: 'grid',
+		styles: { fontSize: 8 },
+		headStyles: { fillColor: [41, 128, 185] },
+		columnStyles: {
+			0: { cellWidth: 25 },
+			5: { cellWidth: 'auto' }
+		}
+	});
+
+	// 5. Save & Close Modal
+	doc.save(`working_hours_${startDate.format('YYYYMMDD')}_to_${endDate.format('YYYYMMDD')}.pdf`);
+
+	// Close the modal programmatically (Bootstrap 5 way)
+	const modalEl = document.getElementById('modalexport');
+	const modalInstance = bootstrap.Modal.getInstance(modalEl);
+	if (modalInstance) modalInstance.hide();
+}
+
 const importHistory = document.getElementById('importHistory'),
 	importFile = document.getElementById('importFile');
 importFile.addEventListener("change", importHistoryData, false);

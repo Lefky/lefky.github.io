@@ -38,6 +38,10 @@
 		defer></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/utc.js" defer></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/isBetween.js" defer></script>
+	<!-- jsPDF and jsPDF-AutoTable -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"
+		defer></script>
 	<!-- https://day.js.org/docs/en/installation/installation -->
 	<!-- Custom scripting -->
 	<script type="text/javascript" src="js/javascript.js" defer></script>
@@ -62,7 +66,7 @@
 					<p>
 						Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a>
 						(Send me a message with feedback or suggestions ;) )<br>
-						Version: <span id="currentappversion">20251219.3</span> <br>
+						Version: <span id="currentappversion">20260105.2</span> <br>
 						Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"
 							target="_blank">Check the master branch on Github</a>
 					</p>
@@ -276,11 +280,13 @@
 						<div class="row">
 							<div class="col-sm justify-content-center text-center">
 								<button id="btn_getting_started" class="btn btn-outline-secondary btn-sm"
-									onclick="startIntroduction();">Run through the "Get started" wizard.</button>
+									onclick="startIntroduction();"><i class="fas fa-magic me-2"></i> Run through the
+									"Get started" wizard.</button>
 							</div>
 							<div class="col-sm justify-content-center text-center">
 								<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal"
-									data-bs-target="#modalpolicy">Cookie policy</button>
+									data-bs-target="#modalpolicy"><i class="fas fa-cookie me-2"></i> Cookie
+									policy</button>
 							</div>
 						</div>
 					</div>
@@ -289,29 +295,46 @@
 					<h4>Import / export / delete</h4>
 					If you delete your browser data the history will reset. You can export and import your data.<br><br>
 					<div class="container">
-						<div class="row">
-							<div class="col-sm-auto justify-content-center text-center">
-								<button class="btn btn-outline-secondary btn-sm" id="exportHistory"
-									onclick="exportHistory()">Export History</button>
+						<div class="row gy-3">
+							<div class="col-sm-4 text-center">
+								<button class="btn btn-outline-secondary btn-sm w-100 h-100" id="exportHistory"
+									onclick="exportHistory()">
+									<i class="fas fa-file-code me-2"></i> Export History
+								</button>
 								<a id="exportHistoryLink" class="d-none">Export</a>
 								<input type="file" id="importFile" accept=".json" class="d-none" />
 							</div>
-							<div class="col-sm justify-content-center text-center">
-								<button class="btn btn-outline-secondary btn-sm" id="exportCSV"
-									onclick="exportCSV()">Export as csv<br>(not importable!)</button>
+							<div class="col-sm-4 text-center">
+								<button class="btn btn-outline-secondary btn-sm w-100 h-100" id="exportCSV"
+									onclick="exportCSV()">
+									<i class="fas fa-file-csv me-2"></i> Export as CSV<br><span
+										style="font-size: 0.7em">(not
+										importable!)</span>
+								</button>
 								<a id="exportCSVLink" class="d-none">Export</a>
 							</div>
-							<div class="col-sm justify-content-center text-center">
-								<button class="btn btn-outline-secondary btn-sm" id="importHistory">Import
-									History</button>
+							<div class="col-sm-4 text-center">
+								<button class="btn btn-outline-secondary btn-sm w-100 h-100" data-bs-toggle="modal"
+									data-bs-target="#modalexport" onclick="setExportRange('thisMonth')">
+									<i class="fas fa-file-pdf me-2"></i> Export as PDF
+								</button>
 							</div>
-							<div class="col-sm justify-content-center text-center">
-								<button class="btn btn-outline-secondary btn-sm" id="deleteHistory"
-									onclick="deleteHistory()">Delete History</button>
+							<div class="col-sm-4 text-center">
+								<button class="btn btn-outline-secondary btn-sm w-100 h-100" id="importHistory">
+									<i class="fas fa-file-import me-2"></i> Import History
+								</button>
 							</div>
-							<div class="col-sm-auto justify-content-center text-center">
-								<a class="btn btn-outline-secondary btn-sm" target="_blank"
-									href="sample_data/working_history_sample_data.json">Download Sample Data</a>
+							<div class="col-sm-4 text-center">
+								<button class="btn btn-outline-secondary btn-sm w-100 h-100" id="deleteHistory"
+									onclick="deleteHistory()">
+									<i class="fas fa-trash-alt me-2"></i> Delete History
+								</button>
+							</div>
+							<div class="col-sm-4 text-center">
+								<a class="btn btn-outline-secondary btn-sm w-100 h-100 d-flex align-items-center justify-content-center"
+									target="_blank" href="sample_data/working_history_sample_data.json">
+									<i class="fas fa-download me-2"></i> Download Sample Data
+								</a>
 							</div>
 						</div>
 					</div>
@@ -363,13 +386,11 @@
 						<i>Custom "Overtime @ ..."</i><br>
 						&emsp;will set a custom hourschedule option so you can enter specific values that aren't in the
 						defaults.
-					<div class="mb-3">
-						<div class="input-group">
-							<label class="col-form-label" for="customhourschedule_value">Hour schedule: </label>
-							<input type="number" name="customhourschedule_value" id="customhourschedule_value"
-								class="form-control flex-grow-0 w-f-80 col-2 mx-1" placeholder="0" min="0" max="24"
-								onchange="setCustomHourSchedule(this.value)">
-						</div>
+					<div class="input-group mb-3">
+						<span class="input-group-text">Hour schedule</span>
+						<input type="number" name="customhourschedule_value" id="customhourschedule_value"
+							class="form-control flex-grow-0 w-f-80 col-2" placeholder="0" min="0" max="24"
+							onchange="setCustomHourSchedule(this.value)">
 					</div>
 					</p>
 					<p>
@@ -386,13 +407,11 @@
 						<i>"Subtract X min from time on open."</i><br>
 						&emsp;will subtract X min from the time the page was opened NEXT DAY YOU OPEN THE PAGE. This is
 						to take the time to boot your laptop, ... into account.
-					<div class="mb-3">
-						<div class="input-group">
-							<label class="col-form-label" for="startminsubtract_value">Minutes to subtract: </label>
-							<input type="number" name="startminsubtract_value" id="startminsubtract_value"
-								class="form-control flex-grow-0 w-f-80 col-2 mx-1" placeholder="5" min="0" max="60"
-								onchange="set_startminsubtract(this.value)">
-						</div>
+					<div class="input-group mb-3">
+						<span class="input-group-text">Minutes to subtract</span>
+						<input type="number" name="startminsubtract_value" id="startminsubtract_value"
+							class="form-control flex-grow-0 w-f-80 col-2" placeholder="5" min="0" max="60"
+							onchange="set_startminsubtract(this.value)">
 					</div>
 					</p>
 					<p>
@@ -543,15 +562,15 @@
 						<div id="historydeleteoptiondayscontent" class="d-none">
 							<div class="mb-3">
 								<div class="input-group">
-									<label class="col-form-label" for="historyretain">Days to keep: </label>
+									<span class="input-group-text">Days to keep</span>
 									<input type="number" name="historyretain" id="historyretain"
-										class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="0" max="99999">
+										class="form-control flex-grow-0 w-f-80 col-sm-2" min="0" max="99999">
 								</div>
 							</div>
 						</div>
 						<div id="historydeleteoptionperiodscontent" class="d-none">
 							<div class="mb-3">
-								<div class="input-group">
+								<div class="d-flex align-items-center flex-wrap">
 									<label class="col-form-label" for="historyresetday">Reset on day </label>
 									<input type="number" name="historyresetday" id="historyresetday"
 										class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" max="31"
@@ -570,10 +589,9 @@
 									<button type="button" id="cleaningdaysavebutton" class="btn btn-outline-secondary"
 										onclick="saveCleaningDay()">Save</button>
 									<div class="input-group my-3">
-										<label class="col-form-label" for="resetdate" id="resetdatelabel">Reset date:
-										</label>
+										<span class="input-group-text">Reset date</span>
 										<input type="text" name="resetdate" id="resetdate"
-											class="form-control flex-grow-0 w-33 col-sm-5 mx-1" size="20" disabled>
+											class="form-control flex-grow-0 w-33 col-sm-5" size="20" disabled>
 									</div>
 								</div>
 							</div>
@@ -688,9 +706,9 @@
 						<div class="row align-items-center justify-content-around mb-2">
 							<div class="col-5">
 								<div class="input-group ms-2">
-									<span class="input-group-text rounded-start" id="history_search"><i
-											class="fas fa-search" aria-hidden="true"></i></span>
-									<input class="form-control rounded-end" id="edit_history_search" type="search"
+									<span class="input-group-text" id="history_search"><i class="fas fa-search"
+											aria-hidden="true"></i></span>
+									<input class="form-control" id="edit_history_search" type="search"
 										placeholder="Search dates or corrections" aria-label="Search"
 										aria-describedby="history_search">
 								</div>
@@ -745,7 +763,7 @@
 				</div>
 				<div class="modal-body">
 					<div class="mb-3">
-						<div class="input-group">
+						<div class="d-flex align-items-center flex-wrap">
 							<label for="start_reporting_selection" class="col-form-label">Display history from</label>
 							<input id="start_reporting_selection" class="form-control mx-2 input-fixedwidth165"
 								type="date" value="" onchange="initGraphs(); drawGraphs();">
@@ -816,6 +834,45 @@
 		</div>
 	</div>
 
+	<div id="modalexport" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Select Export Period</h3>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<p>Choose the time range for your PDF report.</p>
+
+					<div class="d-flex justify-content-between mb-3 flex-wrap gap-2">
+						<button class="btn btn-outline-primary btn-sm flex-grow-1"
+							onclick="setExportRange('thisMonth')">This Month</button>
+						<button class="btn btn-outline-primary btn-sm flex-grow-1"
+							onclick="setExportRange('lastMonth')">Last Month</button>
+						<button class="btn btn-outline-primary btn-sm flex-grow-1"
+							onclick="setExportRange('allTime')">All
+							Time</button>
+					</div>
+
+					<div class="input-group mb-3">
+						<span class="input-group-text">From</span>
+						<input type="date" id="export_start_date" class="form-control">
+					</div>
+					<div class="input-group mb-3">
+						<span class="input-group-text">To</span>
+						<input type="date" id="export_end_date" class="form-control">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-success" onclick="exportPDF()">
+						<i class="fas fa-file-pdf"></i> Generate PDF
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- Page HTML -->
 	<div class="container-fluid h-100">
 		<div id="alertcontainer" class="row d-flex justify-content-center">
@@ -844,6 +901,10 @@
 								Added an ideas page where you can see planned features and suggest new ones: <a
 									href="https://github.com/Lefky/lefky.github.io/blob/dev/Ideas.md"
 									target="_blank">Ideas page</a>
+							</li>
+							<li>
+								Added PDF export functionality. You can now export a report of your working hours in a
+								nice PDF format. Find it in the settings!
 							</li>
 						</ul>
 						</p>
