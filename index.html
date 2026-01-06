@@ -349,7 +349,7 @@
 								backups.</label>
 						</div>
 						<div class="collapse" id="divautobackup">
-							<div class="input-group">
+							<div class="d-flex align-items-center flex-wrap">
 								<label class="col-form-label" for="autobackupday">Backup on day </label>
 								<input type="number" name="autobackupday" id="autobackupday"
 									class="form-control flex-grow-0 w-f-80 col-sm-2 mx-1" min="1" max="31" value="1"
@@ -368,10 +368,9 @@
 								<button type="button" id="autobackupsavebutton" class="btn btn-outline-secondary"
 									onclick="saveBackupDay()">Save</button>
 								<div class="input-group my-3">
-									<label class="col-form-label" for="autobackupdate" id="autobackupdatelabel">Backup
-										date: </label>
+									<span class="input-group-text">Backup date</span>
 									<input type="text" name="autobackupdate" id="autobackupdate"
-										class="form-control flex-grow-0 w-33 col-sm-5 mx-1" size="20" disabled>
+										class="form-control flex-grow-0 w-33 col-sm-5" size="20" disabled>
 								</div>
 							</div>
 						</div>
