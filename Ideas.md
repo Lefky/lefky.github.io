@@ -18,6 +18,7 @@ This document outlines the planned features and improvements for the Working Hou
 ### Earnings Calculator
 * **Goal:** Enable freelancers and contractors to track estimated earnings.
 * **Approach:** Add a configurable "Hourly Rate" setting. The app will multiply total decimal hours by this rate to display daily and weekly income.
+* **Status:** Implemented!
 
 ## 2. Reporting & Export
 

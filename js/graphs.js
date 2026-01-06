@@ -23,7 +23,9 @@ var sortedkeys = [],
 	negativeOvertimeDays = 0,
 	sumStarttime = 0,
 	sumStoptime = 0,
-	sumOvertime = 0;
+	sumOvertime = 0,
+	moneyRate = "",
+	moneyRateUnit = "";
 
 // SYNC loading
 google.charts.load('current', { packages: ['corechart', 'gauge', 'timeline'] });
@@ -48,9 +50,23 @@ google.charts.load('current', { packages: ['corechart', 'gauge', 'timeline'] });
 // In comment to not load on page load, only when modal is opened
 //google.charts.setOnLoadCallback(drawAreagraph);
 
-function initGraphs() {
+function initGraphs(resetDates = false) {
 	// Refresh the list of dates, in case data has been removed/added
 	sortedkeys = getHistoryKeys();
+
+	if (resetDates) {
+		initDateSelector();
+	}
+
+	// Load money rate settings
+	moneyRate = localStorage.getItem("moneyRate");
+	moneyRateUnit = localStorage.getItem("moneyRateUnit");
+	if (moneyRate)
+		document.getElementById("moneyRate").value = moneyRate;
+	if (moneyRateUnit == "hourly")
+		document.getElementById("moneyRateUnitHourly").click();
+	else if (moneyRateUnit == "daily")
+		document.getElementById("moneyRateUnitDaily").click();
 
 	// Reset variables
 	numberOfDaysRegistered = 0,
@@ -78,6 +94,7 @@ function drawGraphs() {
 	drawGaugegraph("AvgStarttimeGauge");
 	drawGaugegraph("AvgStoptimeGauge");
 	drawGaugegraph("SumOvertimeGauge");
+	drawGaugegraph("moneyRateOvertimeGauge");
 	drawPiegraph("OvertimeDays");
 	drawPiegraph("Hourschedules");
 	drawAreagraph("OvertimeDec");
@@ -90,12 +107,13 @@ function drawGraphs() {
 }
 
 function initDateSelector() {
-	// If keys are empty on initial load, fill them
-	if (sortedkeys.length === 0) {
-		sortedkeys = getHistoryKeys();
+	// Check if there is data to prevent crashing
+	if (sortedkeys && sortedkeys.length > 0) {
+		document.getElementById('start_reporting_selection').value = dayjs(reverseDateRepresentation(sortedkeys[0])).format('YYYY-MM-DD');
+	} else {
+		// No data? Take the first of this month as fallback
+		document.getElementById('start_reporting_selection').value = dayjs().startOf('month').format('YYYY-MM-DD');
 	}
-
-	document.getElementById('start_reporting_selection').value = dayjs(reverseDateRepresentation(sortedkeys[0])).format('YYYY-MM-DD');
 	document.getElementById('end_reporting_selection').value = dayjs().add(1, "d").format('YYYY-MM-DD');
 }
 
@@ -466,6 +484,29 @@ function drawGaugegraph(graphtype) {
 			greenFrom = 0;
 			greenTo = max;
 			break;
+		case "moneyRateOvertimeGauge":
+			data.addColumn('string', 'Metric');
+			data.addColumn('number', 'Value');
+
+			let outputRate = 0;
+			if (moneyRateUnit == "monthly") {
+				outputRate = (parseFloat(moneyRate) / (22 * localStorage.getItem("hourschedule"))) * sumOvertime; // assuming 22 workdays of 8 hours each month
+			} else if (moneyRateUnit == "hourly") {
+				outputRate = parseFloat(moneyRate) * sumOvertime;
+			} else {
+				outputRate = "Error";
+			}
+
+			data.addRows([
+				['Overtime earnings', outputRate]
+			]);
+			min = 0;
+			max = Math.ceil(outputRate / 100) * 100;
+			redFrom = min;
+			redTo = 0;
+			greenFrom = 0;
+			greenTo = max;
+			break;
 		default:
 			// code block
 			console.log("No valid graphtype entered");
@@ -507,6 +548,22 @@ function drawGaugegraph(graphtype) {
 		const stopText = document.querySelector('#AvgStoptimeGauge_div svg g g text');
 		if (stopText)
 			stopText.innerHTML = floatToTimeString(avg_stoptime);
+	}
+	if (graphtype == "moneyRateOvertimeGauge") {
+		const gaugeContainer = document.getElementById('moneyRateOvertimeGauge_div');
+		const textElements = gaugeContainer.querySelectorAll('text');
+
+		textElements.forEach(textEl => {
+			const currentText = textEl.textContent.trim();
+			if (currentText === max.toString() || currentText === min.toString()) {
+				textEl.setAttribute('font-size', '12');
+				if (currentText === max.toString()) {
+					textEl.textContent = 'Millionaire';
+				} else {
+					textEl.textContent = 'Broke';
+				}
+			}
+		});
 	}
 }
 
@@ -705,15 +762,12 @@ async function businessDays(country, start, end){
 */
 
 // Listeners
-// Load initial date selector values immediately (no need for 'load' event on element)
-initDateSelector();
-
 // Modal Events
 const modalReporting = document.getElementById('modalreporting');
 if (modalReporting) {
 	modalReporting.addEventListener('shown.bs.modal', function () {
 		// Redraw charts on opening modal
-		initGraphs();
+		initGraphs(true);
 		drawGraphs();
 		mobileRotateScreen(true);
 	});
@@ -722,6 +776,16 @@ if (modalReporting) {
 		mobileRotateScreen(false);
 	});
 }
+
+function saveMoneyRateSettings() {
+	moneyRateUnit = document.querySelector('input[name="moneyRateUnit"]:checked').id == "moneyRateUnitHourly" ? "hourly" : "monthly";
+	moneyRate = document.getElementById("moneyRate").value;
+
+	localStorage.setItem("moneyRateUnit", moneyRateUnit);
+	localStorage.setItem("moneyRate", moneyRate);
+
+	drawGaugegraph("moneyRateOvertimeGauge");
+};
 
 // Window Resize
 window.addEventListener('resize', function () {

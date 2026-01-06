@@ -66,7 +66,7 @@
 					<p>
 						Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a>
 						(Send me a message with feedback or suggestions ;) )<br>
-						Version: <span id="currentappversion">20260105.2</span> <br>
+						Version: <span id="currentappversion">20260106.2</span> <br>
 						Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"
 							target="_blank">Check the master branch on Github</a>
 					</p>
@@ -798,6 +798,42 @@
 						<div id="AvgStarttimeGauge_div" class="d-flex justify-content-center w-25"></div>
 						<div id="AvgStoptimeGauge_div" class="d-flex justify-content-center w-25"></div>
 					</div>
+					<div class="mt-3">
+						<div class="d-flex align-items-center justify-content-between">
+							<div class="w-66">
+								<p>
+									Money earned by working and from overtime (based on rate).<br>
+									Enter your rate below and select if this is monthly (will assume 22 workdays each
+									month) or hourly.
+								</p>
+								<div class="d-flex align-items-center">
+									<div class="me-3">
+										<div class="form-check">
+											<input class="form-check-input" type="radio" name="moneyRateUnit"
+												id="moneyRateUnitHourly" onchange="saveMoneyRateSettings()">
+											<label class="form-check-label" for="moneyRateUnitHourly">
+												Hourly
+											</label>
+										</div>
+										<div class="form-check">
+											<input class="form-check-input" type="radio" name="moneyRateUnit"
+												id="moneyRateUnitMonthly" onchange="saveMoneyRateSettings()" checked>
+											<label class="form-check-label" for="moneyRateUnitMonthly">
+												Monthly
+											</label>
+										</div>
+									</div>
+									<div class="input-group ms-3 w-auto">
+										<span class="input-group-text">Rate (€, $, £, ...)</span>
+										<input type="number" name="moneyRate" id="moneyRate"
+											class="form-control flex-grow-0 w-f-80 col-sm-2" min="0" max="99999"
+											oninput="saveMoneyRateSettings()">
+									</div>
+								</div>
+							</div>
+							<div id="moneyRateOvertimeGauge_div" class="w-25 d-flex justify-content-center"></div>
+						</div>
+					</div>
 					<div class="d-flex justify-content-center w-100 h-100">
 						<div id="OvertimeDays_div" class="w-50 d-inline-block"></div>
 						<div id="Hourschedules_div" class="w-50 d-inline-block"></div>
@@ -886,24 +922,12 @@
 							Changes
 						<ul>
 							<li>
-								Refactored the entire codebase to not use jquery anymore. This should make the
-								application
-								perform better, be less dependant and be more future proof.
-							</li>
-							<li>
-								Added a decent readme page: <a
-									href="https://github.com/Lefky/lefky.github.io/blob/dev/README.md"
-									target="_blank">Readme
-									page</a>
-							</li>
-							<li>
-								Added an ideas page where you can see planned features and suggest new ones: <a
-									href="https://github.com/Lefky/lefky.github.io/blob/dev/Ideas.md"
-									target="_blank">Ideas page</a>
-							</li>
-							<li>
 								Added PDF export functionality. You can now export a report of your working hours in a
 								nice PDF format. Find it in the settings!
+							</li>
+							<li>
+								Added option to calculate money earned based on your overtime. Check the reporting
+								modal for this new feature ;)
 							</li>
 						</ul>
 						</p>
@@ -911,12 +935,7 @@
 							Bugfixes
 						<ul>
 							<li>
-								Various bugfixes.
-							</li>
-							<li>
-								Fixed an XSS vulnerability. But as this is an entire client side application this was
-								mostly a theoretical risk. As your data always stays on your own device unless you share
-								it with someone else.
+								Styling bugfixes.
 							</li>
 						</ul>
 						</p>
