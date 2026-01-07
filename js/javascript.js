@@ -947,6 +947,7 @@ function exportPDF() {
 	const keys = getHistoryKeys();
 	const tableData = [];
 	let totalHours = 0;
+	let totalOvertime = 0;
 
 	keys.forEach(key => {
 		if (testDateFormat(key)) {
@@ -975,6 +976,7 @@ function exportPDF() {
 					tableData.push([date, start, end, total, overtime, summary]);
 
 					if (!isNaN(parseFloat(total))) totalHours += parseFloat(total);
+					if (!isNaN(parseFloat(overtime))) totalOvertime += parseFloat(overtime);
 				}
 			}
 		}
@@ -987,13 +989,15 @@ function exportPDF() {
 	doc.setFontSize(11);
 	doc.setTextColor(100);
 	doc.text(`Period: ${startDate.format('DD/MM/YYYY')} - ${endDate.format('DD/MM/YYYY')}`, 14, 30);
-	doc.text(`Total Hours Recorded: ${totalHours.toFixed(2)}h`, 14, 36);
+	doc.text(`Total Days Recorded: ${tableData.length}`, 14, 36);
+	doc.text(`Total Hours Recorded: ${totalHours.toFixed(2)}h`, 14, 42);
+	doc.text(`Total Overtime Recorded: ${totalOvertime.toFixed(2)}h`, 14, 48);
 
 	// 4. Generate Table
 	doc.autoTable({
 		head: [['Date', 'Start', 'End', 'Total', 'Overtime', 'Summary']],
 		body: tableData,
-		startY: 45,
+		startY: 57,
 		theme: 'grid',
 		styles: { fontSize: 8 },
 		headStyles: { fillColor: [41, 128, 185] },
