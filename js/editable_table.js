@@ -22,21 +22,32 @@ document.addEventListener("DOMContentLoaded", function () {
 	const tableBody = document.getElementById('edit_history_table_body');
 	const newTr = `
     <tr class="hide">
-        <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>01-01-1900</td>
-        <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Total Time No Break</td>
-        <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Overtime</td>
-        <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Total Work Time</td>
-        <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Start Time</td>
-        <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Hour Schedule</td>
-        <td class="pt-3-half new_cell text-black-50" contenteditable="true" onfocus='clearPlaceholder(this)'>Summary</td>
+        <td class="p-1">
+            <input type="date" class="form-control history-date" value="${new Date().toISOString().split('T')[0]}">
+        </td>
+        <td class="p-1">
+            <input type="time" class="form-control history-start" value="08:00">
+        </td>
+        <td class="p-1">
+            <input type="time" class="form-control history-break" value="00:30">
+        </td>
+        <td class="p-1">
+            <input type="time" class="form-control history-total" value="08:00">
+        </td>
+        <td class="p-1">
+             <input type="number" step="0.1" class="form-control history-schedule" value="8">
+        </td>
+        <td class="p-1">
+            <input type="text" class="form-control history-summary" placeholder="Summary">
+        </td>
         <td>
             <span class="record-save">
-                <button type="button" class="btn btn-outline-success">
+                <button type="button" class="btn btn-outline-success btn-sm">
                     <i class="fa fa-save"></i>
                 </button>
             </span>
             <span class="record-delete">
-                <button type="button" class="btn btn-outline-danger">
+                <button type="button" class="btn btn-outline-danger btn-sm">
                     <i class="fa fa-trash"></i>
                 </button>
             </span>
@@ -76,16 +87,17 @@ document.addEventListener("DOMContentLoaded", function () {
 			for (let row = 0; row < table.rows.length; row++) {
 				const currentRow = table.rows.item(row);
 
-				// Safe access to cells
-				const key = currentRow.cells[0].innerText;
-				const TotalNoBreakDec = currentRow.cells[1].innerText;
-				const OvertimeDec = currentRow.cells[2].innerText;
-				const TotalDec = currentRow.cells[3].innerText;
-				const StartDec = currentRow.cells[4].innerText;
-				const HourSchedule = currentRow.cells[5].innerText;
-				const Summary = currentRow.cells[6].innerText;
+				// Safety check: does this row contain inputs? (Skip empty/hidden rows)
+				if (!currentRow.querySelector('.history-date')) continue;
 
-				const returncode = save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule, Summary);
+				const dateVal = currentRow.querySelector('.history-date').value;
+				const startVal = currentRow.querySelector('.history-start').value;
+				const breakVal = currentRow.querySelector('.history-break').value;
+				const workedVal = currentRow.querySelector('.history-total').value;
+				const scheduleVal = currentRow.querySelector('.history-schedule').value;
+				const summaryVal = currentRow.querySelector('.history-summary').value;
+
+				const returncode = save_row(dateVal, startVal, breakVal, workedVal, scheduleVal, summaryVal);
 
 				const btnSpan = currentRow.querySelector('.record-save');
 				const btn = btnSpan ? btnSpan.firstElementChild : null;
@@ -93,8 +105,9 @@ document.addEventListener("DOMContentLoaded", function () {
 				if (!returncode) {
 					currentRow.classList.remove("bg-washed-red");
 					if (btn) {
-						iconToggle(btn, "check");
-						setTimeout(() => { iconToggle(btn, "save"); }, 2000);
+						// Visual feedback (Check icon for 2 seconds)
+						btn.innerHTML = '<i class="fa fa-check"></i>';
+						setTimeout(() => { btn.innerHTML = '<i class="fa fa-save"></i>'; }, 2000);
 					}
 				} else {
 					currentRow.classList.add("bg-washed-red");
@@ -110,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			iconToggle(saveAllBtn, "check");
 			setTimeout(() => { iconToggle(saveAllBtn, "save"); }, 2000);
 
+			// Reload history to reflect changes
 			setHistory(false);
 		});
 	}
@@ -132,29 +146,36 @@ document.addEventListener("DOMContentLoaded", function () {
 			if (saveWrapper) {
 				const currentRow = saveWrapper.closest("tr");
 
-				const key = currentRow.cells[0].innerText;
-				const TotalNoBreakDec = currentRow.cells[1].innerText;
-				const OvertimeDec = currentRow.cells[2].innerText;
-				const TotalDec = currentRow.cells[3].innerText;
-				const StartDec = currentRow.cells[4].innerText;
-				const HourSchedule = currentRow.cells[5].innerText;
-				const Summary = currentRow.cells[6].innerText;
+				// Get values from inputs
+				const dateVal = currentRow.querySelector('.history-date').value;
+				const startVal = currentRow.querySelector('.history-start').value;
+				const breakVal = currentRow.querySelector('.history-break').value;
+				const workedVal = currentRow.querySelector('.history-total').value;
+				const scheduleVal = currentRow.querySelector('.history-schedule').value;
+				const summaryVal = currentRow.querySelector('.history-summary').value;
 
-				const returncode = save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule, Summary);
+				const returncode = save_row(dateVal, startVal, breakVal, workedVal, scheduleVal, summaryVal);
 
 				const btn = saveWrapper.querySelector("button");
 				const iconToggle = () => {
-					const icon = btn.querySelector('.fa-check');
-					if (icon)
-						btn.innerHTML = '<i class="fa fa-save"></i>';
-					else
-						btn.innerHTML = '<i class="fa fa-check"></i>';
+					// Check if icon exists
+					const icon = btn.querySelector('i');
+					if (icon) {
+						if (icon.classList.contains('fa-check')) {
+							btn.innerHTML = '<i class="fa fa-save"></i>';
+						} else {
+							btn.innerHTML = '<i class="fa fa-check"></i>';
+						}
+					}
 				};
 
 				if (!returncode) {
 					currentRow.classList.remove("bg-washed-red");
-					iconToggle();
-					setTimeout(iconToggle, 2000);
+					// Visual feedback (Check icon for 2 seconds)
+					btn.innerHTML = '<i class="fa fa-check"></i>';
+					setTimeout(() => { btn.innerHTML = '<i class="fa fa-save"></i>'; }, 2000);
+
+					// Reload history to reflect changes
 					setHistory(false);
 				} else {
 					currentRow.classList.add("bg-washed-red");
@@ -168,15 +189,27 @@ document.addEventListener("DOMContentLoaded", function () {
 			if (deleteWrapper) {
 				const currentRow = deleteWrapper.closest("tr");
 
-				const key = currentRow.cells[0].innerText;
-				const TotalNoBreakDec = currentRow.cells[1].innerText;
-				const OvertimeDec = currentRow.cells[2].innerText;
-				const TotalDec = currentRow.cells[3].innerText;
-				const StartDec = currentRow.cells[4].innerText;
-				const HourSchedule = currentRow.cells[5].innerText;
-				const Summary = currentRow.cells[6].innerText;
+				const dateVal = currentRow.querySelector('.history-date').value; // YYYY-MM-DD
+				const startVal = currentRow.querySelector('.history-start').value;
+				const breakVal = currentRow.querySelector('.history-break').value;
+				const workedVal = currentRow.querySelector('.history-total').value;
+				const scheduleVal = currentRow.querySelector('.history-schedule').value;
+				const summaryVal = currentRow.querySelector('.history-summary').value;
 
-				const record = "\nDelete history record with \n \nDate:                             " + key + "\nTotal Time No Break:    " + TotalNoBreakDec + "\nOvertime:                      " + OvertimeDec + "\nTotal Work Time:          " + TotalDec + "\nStart Time:                    " + StartDec + "\nHour Schedule:            " + HourSchedule + "\nSummary:\n" + Summary;
+				// 2. Generate key (YYYY-MM-DD -> DD-MM-YYYY)
+				const key = reverseDateRepresentation(dateVal);
+
+				// 3. Build confirmation message
+				let record =
+					"\nDelete history record?" +
+					"\n\nDate:                " + key +
+					"\nStart Time:       " + startVal +
+					"\nBreak Time:      " + breakVal +
+					"\nWork Time:       " + workedVal +
+					"\nSchedule:         " + scheduleVal;
+
+				if (summaryVal.trim() !== "")
+					record += "\nSummary:\n" + summaryVal;
 
 				if (confirm(record)) {
 					delete localStorage[key];
@@ -195,13 +228,37 @@ document.addEventListener("DOMContentLoaded", function () {
 			let visibleIndex = 0;
 
 			rows.forEach(row => {
-				const text = row.innerText.toLowerCase();
-				const shouldShow = text.indexOf(value) > -1 || text.indexOf("edit") > -1;
+				// We build a string of all data in this row
+				// We get all inputs within this row
+				const inputs = row.querySelectorAll('input');
+				let rowText = "";
+
+				// Paste all values together (date, time, summary, etc.)
+				inputs.forEach(input => {
+					const val = input.value.toLowerCase();
+					rowText += val + " ";
+
+					// Set date formats for searching
+					if (input.classList.contains('history-date') && val) {
+						// YYYY-MM-DD
+						const key = dayjs(val);
+
+						if (key.isValid()) {
+							// Add formats you want to search on
+							// Search for 02-09-2025
+							rowText += key.format('DD-MM-YYYY') + " ";
+							// Search for 02/09/2025 (dekt ook '09/2025')
+							rowText += key.format('DD/MM/YYYY') + " ";
+						}
+					}
+				});
+
+				// Check if the search term is in that concatenated text
+				const shouldShow = rowText.indexOf(value) > -1;
 
 				row.style.display = shouldShow ? "" : "none";
 
 				if (shouldShow) {
-					// Re-apply striping classes
 					row.classList.remove('visible-odd', 'visible-even');
 					if (visibleIndex % 2 !== 0) {
 						row.classList.add('visible-odd');
@@ -213,7 +270,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			});
 		});
 	}
-
 }); // End DOMContentLoaded
 
 // Global functions (needed for onclick attributes in HTML string)
@@ -224,59 +280,43 @@ function clearPlaceholder(cell) {
 	}
 }
 
-function save_row(key, TotalNoBreakDec, OvertimeDec, TotalDec, StartDec, HourSchedule, Summary) {
-	const isnumber = /^(-?)\d+(\.\d+)?$/;
-	const istext = /^[.\\\s\w\d]*$/;
+function save_row(dateVal, startVal, breakVal, workedVal, scheduleVal, summaryVal) {
 	let error_message = "";
 
-	// Sanitize inputs
-	key = key.trim();
-	TotalNoBreakDec = TotalNoBreakDec.trim();
-	OvertimeDec = OvertimeDec.trim();
-	TotalDec = TotalDec.trim();
-	StartDec = StartDec.trim();
-	HourSchedule = HourSchedule.trim();
-	// Summary handling
-	if (Summary.trim() === "Summary") Summary = "";
+	if (!dateVal) error_message += "<br>Date is required.";
+	if (!startVal) error_message += "<br>Start time is required.";
+	if (!workedVal) error_message += "<br>Worked hours are required.";
+	if (!scheduleVal) error_message += "<br>Schedule is required.";
 
-	if (!testDateFormat(key)) {
-		error_message += "<br><br>Date for date \"" + key + "\" is not in the DD-MM-YYYY format.";
+	if (error_message !== "") {
+		return error_message;
 	}
-	if (!isnumber.test(TotalNoBreakDec) && TotalNoBreakDec.toLowerCase() !== "correction") {
-		error_message += "<br><br>Total Time No Break for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
-	}
-	if (!isnumber.test(OvertimeDec)) {
-		error_message += "<br><br>Overtime for date \"" + key + "\" is not a (decimal) number.";
-	}
-	if (!isnumber.test(TotalDec) && TotalDec.toLowerCase() !== "correction") {
-		error_message += "<br><br>Total Work Time for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
-	}
-	if (!isnumber.test(StartDec) && StartDec.toLowerCase() !== "correction") {
-		error_message += "<br><br>Start Time for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
-	}
-	if (!isnumber.test(HourSchedule) && HourSchedule.toLowerCase() !== "correction") {
-		error_message += "<br><br>Hour Schedule for date \"" + key + "\" is not a (decimal) number or the word \"correction\".";
-	}
-	// Note: RegEx check for text disabled or customized as per original logic requirements,
-	// but here we allow basic text.
-	// if (!istext.test(Summary) && Summary.toLowerCase() !== "correction") ...
 
-	if (error_message === "") {
-		const timeinfo = {
-			TotalNoBreakDec: TotalNoBreakDec.toLowerCase() !== "correction" ? parseFloat(TotalNoBreakDec).toFixed(2) : "correction",
-			OvertimeDec: parseFloat(OvertimeDec).toFixed(2),
-			TotalDec: TotalDec.toLowerCase() !== "correction" ? parseFloat(TotalDec).toFixed(2) : "correction",
-			StartDec: StartDec.toLowerCase() !== "correction" ? parseFloat(StartDec).toFixed(2) : "correction",
-			HourSchedule: HourSchedule.toLowerCase() !== "correction" ? parseFloat(HourSchedule).toFixed(2) : "correction",
-			Summary: Summary.toLowerCase() === "correction" ? "correction" : Summary
-		};
+	// 1. Generate key (YYYY-MM-DD -> DD-MM-YYYY)
+	const key = reverseDateRepresentation(dateVal);
 
-		const validJsonString = JSON.stringify(timeinfo);
-		localStorage.setItem(key, validJsonString);
+	// 2. Convert times to decimals
+	const startDec = startVal ? timeStringToFloat(startVal) : 0;
+	const breakDec = breakVal ? timeStringToFloat(breakVal) : 0;
+	const workedDec = workedVal ? timeStringToFloat(workedVal) : 0;
+	const scheduleDec = parseFloat(scheduleVal);
 
-		return; // Success
-	} else {
-		error_message += "<br><br>Please correct your entry and try again.";
-		return error_message; // Failure
-	}
+	// 3. Calculations
+	const totalDec = workedDec + breakDec;
+	const overtimeDec = workedDec - scheduleDec;
+
+	// 4. Object building
+	const timeinfo = {
+		TotalNoBreakDec: workedDec.toFixed(2),
+		OvertimeDec: overtimeDec.toFixed(2),
+		TotalDec: totalDec.toFixed(2),
+		StartDec: startDec.toFixed(2),
+		HourSchedule: scheduleDec.toFixed(2),
+		Summary: summaryVal ? summaryVal.trim() : ""
+	};
+
+	// 5. Save
+	localStorage.setItem(key, JSON.stringify(timeinfo));
+
+	return ""; // Succes
 }
