@@ -81,6 +81,50 @@ body {
 	}
 }
 
+#edit_history_table_object input.form-control {
+	background-color: transparent;
+	border: 1px solid transparent;
+	box-shadow: none;
+	padding: 10px 5px;
+	font-size: inherit;
+	height: auto;
+	border-radius: 0;
+}
+
+#edit_history_table_object input.form-control:focus {
+	background-color: var(--bs-body-bg);
+	border: 1px solid var(--bs-primary);
+	box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+	outline: none;
+}
+
+#edit_history_table_object td {
+	padding: 0;
+	vertical-align: middle;
+}
+
+#edit_history_table_object input.form-control {
+	width: 100%;
+	text-align: center;
+}
+
+#edit_history_table_object input.history-summary {
+	text-align: left;
+	padding-left: 10px;
+}
+
+#edit_history_table_object th:nth-child(1),
+#edit_history_table_object td:nth-child(1) {
+	width: 140px;
+	min-width: 140px;
+}
+
+#edit_history_table_object th:nth-child(5),
+#edit_history_table_object td:nth-child(5) {
+	width: 100px;
+	min-width: 100px;
+}
+
 /*
 	Custom bootstrap colors
 */
@@ -200,6 +244,10 @@ body {
 
 .w-33 {
 	width: 33% !important;
+}
+
+.w-66 {
+	width: 66% !important;
 }
 
 .w-90 {

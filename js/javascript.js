@@ -594,27 +594,70 @@ function setHistory(refresh_edit_table) {
 		timeinfo;
 
 	// eslint-disable-next-line no-cond-assign
-	for (key = 0; key = revkeys[i]; i++) {
+	for (i = 0; key = revkeys[i]; i++) {
 		timeinfo = JSON.parse(localStorage.getItem(key));
+
 		if (Object.prototype.hasOwnProperty.call(timeinfo, "OvertimeDec")) {
 
-			// Fix for records made before the summary field was present
 			if (timeinfo.Summary == undefined) {
 				timeinfo.Summary = "";
-				localStorage.setItem(key, JSON.stringify(timeinfo));
 			}
 
-			if (timeinfo.OvertimeDec.startsWith("-")) {
-				entry_history = entry_history + "<tr class='text-danger'><td>" + key + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.TotalNoBreakDec) + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.OvertimeDec) + "</td></tr>";
-				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-danger pt-3-half' contenteditable='false'>" + key + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-danger pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class='text-danger pt-3-half' contenteditable='true' style='white-space: pre-wrap; word-wrap: break-word'>" + escapeHtml(timeinfo.Summary).replace(/\\n/g, '\n') + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
-			} else {
-				entry_history = entry_history + "<tr class='text-success'><td>" + key + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.TotalNoBreakDec) + "</td><td style='text-align:right;'>" + floatToTimeString(timeinfo.OvertimeDec) + "</td></tr>";
-				entry_edit_history = entry_edit_history + "<tr class='hide'><td class='text-success pt-3-half' contenteditable='false'>" + key + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalNoBreakDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.OvertimeDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.TotalDec + "</td><td class='text-success pt-3-half' contenteditable='true'>" + (timeinfo.StartDec.toLowerCase() != "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "correction") + "</td><td class='text-success pt-3-half' contenteditable='true'>" + timeinfo.HourSchedule + "</td><td class='text-success pt-3-half' contenteditable='true' style='white-space: pre-wrap; word-wrap: break-word'>" + escapeHtml(timeinfo.Summary).replace(/\\n/g, '\n') + "</td><td class=''><span class='record-save'><button type='button' class='btn btn-outline-success'><i class='fa fa-save'></i></button></span> <span class='record-delete'><button type='button' class='btn btn-outline-danger'><i class='fa fa-trash'></i></button></span></td>";
-			}
-			overtimetotal = parseFloat(overtimetotal) + parseFloat(timeinfo.OvertimeDec);
+			// Normal history (Links)
+			const colorClass = (parseFloat(timeinfo.OvertimeDec) < 0) ? "text-danger" : "text-success";
+			entry_history += `<tr class='${colorClass}'><td>${key}</td><td style='text-align:right;'>${floatToTimeString(timeinfo.TotalNoBreakDec)}</td><td style='text-align:right;'>${floatToTimeString(timeinfo.OvertimeDec)}</td></tr>`;
 
-			if (dayjs(key, "DD-MM-YYYY") >= dayjs().startOf('week'))
-				overtimeweekly = overtimeweekly + parseFloat(timeinfo.OvertimeDec);
+			overtimetotal += parseFloat(timeinfo.OvertimeDec);
+			if (dayjs(key, "DD-MM-YYYY") >= dayjs().startOf('week')) {
+				overtimeweekly += parseFloat(timeinfo.OvertimeDec);
+			}
+
+			// --- Edit Table ---
+			const dateIso = reverseDateRepresentation(key);			// Input requires YYYY-MM-DD format
+			const startString = (timeinfo.StartDec !== "correction") ? floatToTimeString(timeinfo.StartDec) : "";
+			const workedString = (timeinfo.TotalNoBreakDec !== "correction") ? floatToTimeString(timeinfo.TotalNoBreakDec) : "";
+
+			let breakDec = 0;
+			if (timeinfo.TotalDec !== "correction" && timeinfo.TotalNoBreakDec !== "correction") {
+				breakDec = Math.abs(parseFloat(timeinfo.TotalDec) - parseFloat(timeinfo.TotalNoBreakDec));
+			}
+			const breakString = floatToTimeString(breakDec);
+			const scheduleVal = timeinfo.HourSchedule;
+			const summaryVal = timeinfo.Summary ? timeinfo.Summary.replace(/"/g, "&quot;") : "";
+
+			entry_edit_history += `
+            <tr>
+                <td class="p-1">
+                    <input type="date" class="form-control history-date" value="${dateIso}">
+                </td>
+                <td class="p-1">
+                    <input type="time" class="form-control history-start" value="${startString}">
+                </td>
+                <td class="p-1">
+                    <input type="time" class="form-control history-break" value="${breakString}">
+                </td>
+                <td class="p-1">
+                    <input type="time" class="form-control history-total" value="${workedString}">
+                </td>
+                <td class="p-1">
+                    <input type="number" step="0.01" class="form-control history-schedule" value="${scheduleVal}">
+                </td>
+                <td class="p-1">
+                    <input type="text" class="form-control history-summary" value="${summaryVal}">
+                </td>
+                <td>
+                    <span class="record-save">
+                        <button type="button" class="btn btn-outline-success btn-sm">
+                            <i class="fa fa-save"></i>
+                        </button>
+                    </span>
+                    <span class="record-delete">
+                        <button type="button" class="btn btn-outline-danger btn-sm">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </span>
+                </td>
+            </tr>`;
 		}
 	}
 
@@ -947,6 +990,7 @@ function exportPDF() {
 	const keys = getHistoryKeys();
 	const tableData = [];
 	let totalHours = 0;
+	let totalOvertime = 0;
 
 	keys.forEach(key => {
 		if (testDateFormat(key)) {
@@ -975,6 +1019,7 @@ function exportPDF() {
 					tableData.push([date, start, end, total, overtime, summary]);
 
 					if (!isNaN(parseFloat(total))) totalHours += parseFloat(total);
+					if (!isNaN(parseFloat(overtime))) totalOvertime += parseFloat(overtime);
 				}
 			}
 		}
@@ -987,13 +1032,15 @@ function exportPDF() {
 	doc.setFontSize(11);
 	doc.setTextColor(100);
 	doc.text(`Period: ${startDate.format('DD/MM/YYYY')} - ${endDate.format('DD/MM/YYYY')}`, 14, 30);
-	doc.text(`Total Hours Recorded: ${totalHours.toFixed(2)}h`, 14, 36);
+	doc.text(`Total Days Recorded: ${tableData.length}`, 14, 36);
+	doc.text(`Total Hours Recorded: ${totalHours.toFixed(2)}h`, 14, 42);
+	doc.text(`Total Overtime Recorded: ${totalOvertime.toFixed(2)}h`, 14, 48);
 
 	// 4. Generate Table
 	doc.autoTable({
 		head: [['Date', 'Start', 'End', 'Total', 'Overtime', 'Summary']],
 		body: tableData,
-		startY: 45,
+		startY: 57,
 		theme: 'grid',
 		styles: { fontSize: 8 },
 		headStyles: { fillColor: [41, 128, 185] },

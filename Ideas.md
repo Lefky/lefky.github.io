@@ -18,6 +18,7 @@ This document outlines the planned features and improvements for the Working Hou
 ### Earnings Calculator
 * **Goal:** Enable freelancers and contractors to track estimated earnings.
 * **Approach:** Add a configurable "Hourly Rate" setting. The app will multiply total decimal hours by this rate to display daily and weekly income.
+* **Status:** Implemented!
 
 ## 2. Reporting & Export
 
@@ -26,13 +27,13 @@ This document outlines the planned features and improvements for the Working Hou
 * **Approach:** Integrate a client-side library like `jspdf` or `html2pdf` to render the monthly history table into a clean PDF format.
 * **Status:** Implemented!
 
-### 📅 Visual Calendar View
+### Visual Calendar View
 * **Goal:** Provide a "bird's-eye view" of attendance to easily spot gaps, holidays, or overtime patterns.
 * **Approach:** Use CSS Grid to render a monthly calendar interface, using color-coded indicators for workdays, weekends, and absences.
 
 ## 3. Technical Architecture
 
-### ☁️ Cloud Sync & Backup
+### Cloud Sync & Backup
 * **Goal:** Prevent data loss if the browser cache is cleared or the device fails.
 * **Approach:**
     * **MVP:** Integrate with Google Drive or Dropbox APIs to auto-save JSON backups.
@@ -47,7 +48,7 @@ This document outlines the planned features and improvements for the Working Hou
 
 ## 4. User Experience (UX)
 
-### ⌨Keyboard Shortcuts
+### Keyboard Shortcuts
 * **Goal:** Speed up interaction for power users.
 * **Approach:** Map hotkeys to common actions:
     * `Space`: Toggle timer.
