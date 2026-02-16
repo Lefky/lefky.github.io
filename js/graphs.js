@@ -66,7 +66,7 @@ function initGraphs(resetDates = false) {
 	if (moneyRateUnit == "hourly")
 		document.getElementById("moneyRateUnitHourly").click();
 	else if (moneyRateUnit == "daily")
-		document.getElementById("moneyRateUnitDaily").click();
+		document.getElementById("moneyRateUnitMonthy").click();
 
 	// Reset variables
 	numberOfDaysRegistered = 0,
@@ -183,7 +183,6 @@ function drawAreagraph(graphtype) {
 			linecolor = colorScheme == "light" ? [bs_gray, bs_gray_dark] : [bs_light, bs_pink];
 			break;
 		default:
-			// code block
 			console.log("No valid graphtype entered");
 	}
 
@@ -275,7 +274,6 @@ function drawBargraph(graphtype) {
 			linecolor = colorScheme == "light" ? [bs_orange, bs_gray_dark] : [bs_orange, bs_pink];
 			break;
 		default:
-			// code block
 			console.log("No valid graphtype entered");
 	}
 
@@ -368,7 +366,6 @@ function drawPiegraph(graphtype) {
 			title = "Hourschedules";
 			break;
 		default:
-			// code block
 			console.log("No valid graphtype entered");
 	}
 
@@ -490,25 +487,27 @@ function drawGaugegraph(graphtype) {
 
 			let outputRate = 0;
 			if (moneyRateUnit == "monthly") {
-				outputRate = (parseFloat(moneyRate) / (22 * localStorage.getItem("hourschedule"))) * sumOvertime; // assuming 22 workdays of 8 hours each month
+				outputRate = (parseFloat(moneyRate) / (22 * localStorage.getItem("hourschedule"))) * sumOvertime; // assuming 22 workdays each month
 			} else if (moneyRateUnit == "hourly") {
 				outputRate = parseFloat(moneyRate) * sumOvertime;
 			} else {
-				outputRate = "Error";
+				outputRate = 0;
 			}
+
+			if (isNaN(outputRate)) outputRate = 0;
 
 			data.addRows([
 				['Overtime earnings', outputRate]
 			]);
 			min = 0;
 			max = Math.ceil(outputRate / 100) * 100;
+			if (isNaN(max) || max <= 0) max = 10;
 			redFrom = min;
 			redTo = 0;
 			greenFrom = 0;
 			greenTo = max;
 			break;
 		default:
-			// code block
 			console.log("No valid graphtype entered");
 	}
 
