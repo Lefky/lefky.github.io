@@ -11,10 +11,12 @@ document.addEventListener("DOMContentLoaded", function () {
 	if (modalEditHistory) {
 		modalEditHistory.addEventListener('show.bs.modal', function () {
 			setHistory(true);
+			mobileRotateScreen(true);
 		});
 
 		modalEditHistory.addEventListener('hide.bs.modal', function () {
 			setHistory(false);
+			mobileRotateScreen(false);
 		});
 	}
 
