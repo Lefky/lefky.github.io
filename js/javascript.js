@@ -1,1525 +1,354 @@
-console.log("loaded javascript.js");
+/**
+ * javascript.js
+ * Main ES6 entry point and module orchestrator.
+ * Aggregates and re-exports submodules (time-calc, storage, ui, export),
+ * initializes application lifecycle, and exposes public API on window for
+ * backward compatibility with HTML inline event handlers and legacy scripts.
+ */
 
-/*global $, dayjs, bootstrap, historyresetperiodunit, break_counter_btn */
-/*eslint no-undef: "error"*/
-/*exported reset, setBreakDefault, addBreakDefault, saveCleaningDay, saveBackupDay, allCheckBox, exportCSV, makeDate, break_counter, tooltipList */
+console.log("loaded javascript.js (ES6 modular)");
 
-// Import Bootstrap colors
-// eslint-disable-next-line no-unused-vars
-var bs_blue, bs_indigo, bs_purple, bs_pink, bs_red, bs_orange, bs_yellow, bs_green, bs_gray, bs_teal, bs_cyan, bs_white, bs_gray_dark, bs_primary, bs_secondary, bs_success, bs_info, bs_warning, bs_danger, bs_light, bs_light_subtle, bs_dark, bs_body_bg, bs_washed_red, bs_washed_yellow, bs_washed_green;
-function importBootstrapColors() {
-	bs_blue = getComputedStyle(document.documentElement).getPropertyValue('--bs-blue');
-	bs_indigo = getComputedStyle(document.documentElement).getPropertyValue('--bs-indigo');
-	bs_purple = getComputedStyle(document.documentElement).getPropertyValue('--bs-purple');
-	bs_pink = getComputedStyle(document.documentElement).getPropertyValue('--bs-pink');
-	bs_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-red');
-	bs_orange = getComputedStyle(document.documentElement).getPropertyValue('--bs-orange');
-	bs_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-yellow');
-	bs_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-green');
-	bs_teal = getComputedStyle(document.documentElement).getPropertyValue('--bs-teal');
-	bs_cyan = getComputedStyle(document.documentElement).getPropertyValue('--bs-cyan');
-	bs_white = getComputedStyle(document.documentElement).getPropertyValue('--bs-white');
-	bs_gray = getComputedStyle(document.documentElement).getPropertyValue('--bs-gray');
-	bs_gray_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-gray-dark');
-	bs_primary = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary');
-	bs_secondary = getComputedStyle(document.documentElement).getPropertyValue('--bs-secondary');
-	bs_success = getComputedStyle(document.documentElement).getPropertyValue('--bs-success');
-	bs_info = getComputedStyle(document.documentElement).getPropertyValue('--bs-info');
-	bs_warning = getComputedStyle(document.documentElement).getPropertyValue('--bs-warning');
-	bs_danger = getComputedStyle(document.documentElement).getPropertyValue('--bs-danger');
-	bs_light = getComputedStyle(document.documentElement).getPropertyValue('--bs-light');
-	bs_light_subtle = getComputedStyle(document.documentElement).getPropertyValue('--bs-light-bg-subtle');
-	bs_dark = getComputedStyle(document.documentElement).getPropertyValue('--bs-dark');
-	bs_body_bg = getComputedStyle(document.documentElement).getPropertyValue('--bs-body-bg');
-	bs_washed_red = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-red').trim();
-	bs_washed_yellow = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-yellow').trim();
-	bs_washed_green = getComputedStyle(document.documentElement).getPropertyValue('--bs-washed-green').trim();
+/*global dayjs, bootstrap */
 
-	// Helper function to convert a hex color string to an RGB object.
-	function hexToRgb(hex) {
-		// Remove the hash at the start if it exists
-		hex = hex.replace(/^#/, '');
+// 1. Import all modules
+import {
+	floatToTimeString,
+	timeStringToFloat,
+	reverseDateRepresentation,
+	testDateFormat,
+	now,
+	todayDate,
+	calculateWorktime,
+	calculateOvertime,
+	calculateTotalNoBreak,
+	calculateExecutionDay,
+	escapeHtml,
+	Timer
+} from './time-calc.js';
 
-		// Check if it's a 3-character hex
-		if (hex.length === 3) {
-			hex = hex.split('').map(char => char + char).join('');
-		}
+import {
+	getHistoryKeys,
+	getHistoryDeleteOption,
+	getHistoryRetain,
+	getHistoryResetDay,
+	getHistoryResetPeriod,
+	getHistoryResetPeriodUnit,
+	getAutobackupDay,
+	getAutobackupPeriod,
+	getAutobackupPeriodUnit,
+	getDayRecord,
+	saveDayRecord,
+	cleanLocalStorage,
+	autoBackup,
+	deleteHistory,
+	saveCleaningDay,
+	saveBackupDay
+} from './storage.js';
 
-		const bigint = parseInt(hex, 16);
-		const r = (bigint >> 16) & 255;
-		const g = (bigint >> 8) & 255;
-		const b = bigint & 255;
+import {
+	importBootstrapColors,
+	colorScheme,
+	bs_blue, bs_indigo, bs_purple, bs_pink, bs_red, bs_orange, bs_yellow,
+	bs_green, bs_teal, bs_cyan, bs_white, bs_gray, bs_gray_dark, bs_primary,
+	bs_secondary, bs_success, bs_info, bs_warning, bs_danger, bs_light,
+	bs_light_subtle, bs_dark, bs_body_bg, bs_washed_red, bs_washed_yellow, bs_washed_green,
+	timer,
+	getStart,
+	setStart,
+	getEnd,
+	setEnd,
+	getBreak,
+	getBreakTimeStart,
+	setBreak,
+	getBreakDefault,
+	setBreakDefault,
+	addBreakDefault,
+	getHourSchedule,
+	setHourSchedule,
+	setCustomHourSchedule,
+	setCustomHourScheduleUI,
+	getWorktime,
+	calculateTotal,
+	setTotal,
+	getTotalDec,
+	setTotalDec,
+	setOvertime,
+	getOvertimeDec,
+	setOvertimeDec,
+	setOvertimeTotal,
+	setOvertimeWeekly,
+	setTotalNoBreak,
+	getTotalNoBreakDec,
+	setTotalNoBreakDec,
+	getSummary,
+	setSummary,
+	setResetDate,
+	getResetDate,
+	setBackupDate,
+	getBackupDate,
+	showHistorydeleteoptionContent,
+	maxValuesCustomTimeOption,
+	setHistory,
+	notificationClosed,
+	set_startminsubtract,
+	hourscheduleAddTimeButton,
+	breaktimeTimeselection,
+	checkInputValues,
+	setAlertMessage,
+	allCheckBox,
+	activateConfirmationModal,
+	setTheme,
+	end_time,
+	add_time,
+	add_break,
+	reset_break,
+	break_counter,
+	reset,
+	loadApp,
+	setParameters,
+	handleBeforeUnload,
+	initUIEventListeners
+} from './ui.js';
 
-		return { r, g, b };
-	}
+import {
+	exportHistory,
+	exportCSV,
+	setExportRange,
+	exportPDF,
+	importHistoryData,
+	initImportExport
+} from './export.js';
 
-	// 1. Set your desired opacity (0.75 = 75%)
-	const opacity = 0.4;
-	try {
-		// 2. Get the computed hex value from Bootstrap's variable
-		const gray200_hex = getComputedStyle(document.documentElement)
-			.getPropertyValue('--bs-gray-200')
-			.trim(); // .trim() removes any whitespace
-
-		// 3. Convert the hex value to an RGB object
-		const rgb = hexToRgb(gray200_hex);
-
-		if (rgb) {
-			// 4. Create the new, dynamic CSS rule
-			const newRule = `
-                [data-bs-theme="light"] .bg-light-subtle {
-                    background-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity}) !important;
-                }
-            `;
-
-			// 5. Inject this rule into the document's <head>
-			const styleId = 'custom-bg-subtle-style'; // Define a unique ID to find this specific style block later
-			let style = document.getElementById(styleId);
-
-			// Check if the element already exists to prevent duplicate <style> tags in the head
-			if (!style) {
-				style = document.createElement('style');
-				style.id = styleId;
-				document.head.appendChild(style);
-			}
-
-			// Update the CSS rule (applies to both new and existing elements)
-			style.textContent = newRule;
-		}
-	} catch (e) {
-		console.error("Error applying custom bg-light-subtle style:", e);
-	}
-}
-
-// eslint-disable-next-line no-unused-vars
-var colorScheme; // Variable to know if in dark or light mode
-
-// Conversion functions
-function floatToTimeString(timedec) {
-	if (timedec !== "correction") {
-		const sign = timedec < 0 ? "-" : "",
-			hours = Math.floor(Math.abs(timedec)),
-			minutes = Math.floor((Math.abs(timedec) * 60) % 60);
-		return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
-	} else
-		return timedec;
-}
-
-function timeStringToFloat(timestring) {
-	const time = dayjs(timestring, "HH:mm");
-	return dayjs.duration(time.diff(time.startOf('day')), 'milliseconds').asHours();
-}
-
-const reverseDateRepresentation = date => {
-	if (date) {
-		let parts = date.split('-');
-		return `${parts[2]}-${parts[1]}-${parts[0]}`;
-	}
-	return ""; // Return empty string as a fallback
+// 2. Re-export for external ES6 modules
+export {
+	floatToTimeString,
+	timeStringToFloat,
+	reverseDateRepresentation,
+	testDateFormat,
+	now,
+	todayDate,
+	calculateWorktime,
+	calculateOvertime,
+	calculateTotalNoBreak,
+	calculateExecutionDay,
+	escapeHtml,
+	Timer,
+	getHistoryKeys,
+	getHistoryDeleteOption,
+	getHistoryRetain,
+	getHistoryResetDay,
+	getHistoryResetPeriod,
+	getHistoryResetPeriodUnit,
+	getAutobackupDay,
+	getAutobackupPeriod,
+	getAutobackupPeriodUnit,
+	getDayRecord,
+	saveDayRecord,
+	cleanLocalStorage,
+	autoBackup,
+	deleteHistory,
+	saveCleaningDay,
+	saveBackupDay,
+	importBootstrapColors,
+	colorScheme,
+	bs_blue, bs_indigo, bs_purple, bs_pink, bs_red, bs_orange, bs_yellow,
+	bs_green, bs_teal, bs_cyan, bs_white, bs_gray, bs_gray_dark, bs_primary,
+	bs_secondary, bs_success, bs_info, bs_warning, bs_danger, bs_light,
+	bs_light_subtle, bs_dark, bs_body_bg, bs_washed_red, bs_washed_yellow, bs_washed_green,
+	timer,
+	getStart,
+	setStart,
+	getEnd,
+	setEnd,
+	getBreak,
+	getBreakTimeStart,
+	setBreak,
+	getBreakDefault,
+	setBreakDefault,
+	addBreakDefault,
+	getHourSchedule,
+	setHourSchedule,
+	setCustomHourSchedule,
+	setCustomHourScheduleUI,
+	getWorktime,
+	calculateTotal,
+	setTotal,
+	getTotalDec,
+	setTotalDec,
+	setOvertime,
+	getOvertimeDec,
+	setOvertimeDec,
+	setOvertimeTotal,
+	setOvertimeWeekly,
+	setTotalNoBreak,
+	getTotalNoBreakDec,
+	setTotalNoBreakDec,
+	getSummary,
+	setSummary,
+	setResetDate,
+	getResetDate,
+	setBackupDate,
+	getBackupDate,
+	showHistorydeleteoptionContent,
+	maxValuesCustomTimeOption,
+	setHistory,
+	notificationClosed,
+	set_startminsubtract,
+	hourscheduleAddTimeButton,
+	breaktimeTimeselection,
+	checkInputValues,
+	setAlertMessage,
+	allCheckBox,
+	activateConfirmationModal,
+	setTheme,
+	end_time,
+	add_time,
+	add_break,
+	reset_break,
+	break_counter,
+	reset,
+	loadApp,
+	setParameters,
+	handleBeforeUnload,
+	initUIEventListeners,
+	exportHistory,
+	exportCSV,
+	setExportRange,
+	exportPDF,
+	importHistoryData,
+	initImportExport
 };
 
-function escapeHtml(text) {
-	if (!text) return "";
-	return text
-		.replace(/&/g, "&amp;")
-		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;")
-		.replace(/"/g, "&quot;")
-		.replace(/'/g, "&#039;");
+// 3. Expose functions and state on global window object
+// This ensures seamless compatibility with HTML inline onclick/onchange attributes
+// and legacy scripts (graphs.js, editable_table.js, animations.js, introduction.js).
+if (typeof window !== 'undefined') {
+	window.floatToTimeString = floatToTimeString;
+	window.timeStringToFloat = timeStringToFloat;
+	window.reverseDateRepresentation = reverseDateRepresentation;
+	window.testDateFormat = testDateFormat;
+	window.now = now;
+	window.todayDate = todayDate;
+	window.calculateWorktime = calculateWorktime;
+	window.calculateOvertime = calculateOvertime;
+	window.calculateTotalNoBreak = calculateTotalNoBreak;
+	window.calculateExecutionDay = calculateExecutionDay;
+	window.escapeHtml = escapeHtml;
+	window.Timer = Timer;
+
+	window.getHistoryKeys = getHistoryKeys;
+	window.getHistoryDeleteOption = getHistoryDeleteOption;
+	window.getHistoryRetain = getHistoryRetain;
+	window.getHistoryResetDay = getHistoryResetDay;
+	window.getHistoryResetPeriod = getHistoryResetPeriod;
+	window.getHistoryResetPeriodUnit = getHistoryResetPeriodUnit;
+	window.getAutobackupDay = getAutobackupDay;
+	window.getAutobackupPeriod = getAutobackupPeriod;
+	window.getAutobackupPeriodUnit = getAutobackupPeriodUnit;
+	window.getDayRecord = getDayRecord;
+	window.saveDayRecord = saveDayRecord;
+	window.cleanLocalStorage = cleanLocalStorage;
+	window.autoBackup = autoBackup;
+	window.deleteHistory = deleteHistory;
+	window.saveCleaningDay = saveCleaningDay;
+	window.saveBackupDay = saveBackupDay;
+
+	window.importBootstrapColors = importBootstrapColors;
+	window.colorScheme = colorScheme;
+	window.timer = timer;
+	window.getStart = getStart;
+	window.setStart = setStart;
+	window.getEnd = getEnd;
+	window.setEnd = setEnd;
+	window.getBreak = getBreak;
+	window.getBreakTimeStart = getBreakTimeStart;
+	window.setBreak = setBreak;
+	window.getBreakDefault = getBreakDefault;
+	window.setBreakDefault = setBreakDefault;
+	window.addBreakDefault = addBreakDefault;
+	window.getHourSchedule = getHourSchedule;
+	window.setHourSchedule = setHourSchedule;
+	window.setCustomHourSchedule = setCustomHourSchedule;
+	window.setCustomHourScheduleUI = setCustomHourScheduleUI;
+	window.getWorktime = getWorktime;
+	window.calculateTotal = calculateTotal;
+	window.setTotal = setTotal;
+	window.getTotalDec = getTotalDec;
+	window.setTotalDec = setTotalDec;
+	window.setOvertime = setOvertime;
+	window.getOvertimeDec = getOvertimeDec;
+	window.setOvertimeDec = setOvertimeDec;
+	window.setOvertimeTotal = setOvertimeTotal;
+	window.setOvertimeWeekly = setOvertimeWeekly;
+	window.setTotalNoBreak = setTotalNoBreak;
+	window.getTotalNoBreakDec = getTotalNoBreakDec;
+	window.setTotalNoBreakDec = setTotalNoBreakDec;
+	window.getSummary = getSummary;
+	window.setSummary = setSummary;
+	window.setResetDate = setResetDate;
+	window.getResetDate = getResetDate;
+	window.setBackupDate = setBackupDate;
+	window.getBackupDate = getBackupDate;
+	window.showHistorydeleteoptionContent = showHistorydeleteoptionContent;
+	window.maxValuesCustomTimeOption = maxValuesCustomTimeOption;
+	window.setHistory = setHistory;
+	window.notificationClosed = notificationClosed;
+	window.set_startminsubtract = set_startminsubtract;
+	window.hourscheduleAddTimeButton = hourscheduleAddTimeButton;
+	window.breaktimeTimeselection = breaktimeTimeselection;
+	window.checkInputValues = checkInputValues;
+	window.setAlertMessage = setAlertMessage;
+	window.allCheckBox = allCheckBox;
+	window.activateConfirmationModal = activateConfirmationModal;
+	window.setTheme = setTheme;
+	window.end_time = end_time;
+	window.add_time = add_time;
+	window.add_break = add_break;
+	window.reset_break = reset_break;
+	window.break_counter = break_counter;
+	window.reset = reset;
+	window.loadApp = loadApp;
+	window.setParameters = setParameters;
+
+	window.exportHistory = exportHistory;
+	window.exportCSV = exportCSV;
+	window.setExportRange = setExportRange;
+	window.exportPDF = exportPDF;
+	window.importHistoryData = importHistoryData;
 }
 
-// Setters & getters
-function getStart() {
-	let time_dec = timeStringToFloat(document.getElementById("start_time").value);
-	if (!time_dec)
-		time_dec = 0;
-
-	return time_dec;
-}
-
-function setStart(time) {
-	document.getElementById("start_time").value = floatToTimeString(time);
-}
-
-function getEnd() {
-	let time_dec = timeStringToFloat(document.getElementById("end_time").value);
-	if (!time_dec)
-		time_dec = now();
-
-	return time_dec;
-}
-
-function setEnd(time) {
-	if (time > 24)
-		time = time - 24;
-
-	document.getElementById("end_time").value = floatToTimeString(time);
-}
-
-function getBreak(allowNegative) {
-	let time_dec;
-
-	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
-		time_dec = timeStringToFloat(document.getElementById("break_time").value);
-	} else {
-		let break_time_start = document.getElementById("break_time_start").value,
-			break_time_end = document.getElementById("break_time_end").value;
-
-		break_time_start = dayjs(break_time_start, "HH:mm");
-		break_time_end = dayjs(break_time_end, "HH:mm");
-
-		time_dec = dayjs.duration(break_time_end.diff(break_time_start)).asHours();
+// 4. Initialize Application Lifecycle and Global Listeners
+function initializeApp() {
+	if (typeof dayjs !== 'undefined') {
+		dayjs().format();
+		if (window.dayjs_plugin_duration) dayjs.extend(window.dayjs_plugin_duration);
+		if (window.dayjs_plugin_isSameOrBefore) dayjs.extend(window.dayjs_plugin_isSameOrBefore);
+		if (window.dayjs_plugin_customParseFormat) dayjs.extend(window.dayjs_plugin_customParseFormat);
+		if (window.dayjs_plugin_utc) dayjs.extend(window.dayjs_plugin_utc);
+		if (window.dayjs_plugin_isBetween) dayjs.extend(window.dayjs_plugin_isBetween);
 	}
-
-	if (!allowNegative && (!time_dec || time_dec < 0))
-		time_dec = 0;
-
-	return time_dec;
-}
-
-function getBreakTimeStart() {
-	let time_dec = timeStringToFloat(document.getElementById("break_time_start").value);
-	if (!time_dec)
-		time_dec = 0;
-
-	return time_dec;
-}
-
-function setBreak(time) {
-	document.getElementById("break_time").value = floatToTimeString(time);
-
-	document.getElementById("break_time_start").value = "00:00";
-	document.getElementById("break_time_end").value = floatToTimeString(time);
-}
-
-function getBreakDefault() {
-	const break_time = document.getElementById("break_time_default");
-	let time = break_time.options[break_time.selectedIndex].value;
-	if (!time)
-		time = 0;
-
-	return time;
-}
-
-function setBreakDefault(time) {
-	document.getElementById("break_time_default").value = floatToTimeString(time);
-}
-
-function addBreakDefault() {
-	const break_time_default_init = localStorage.getItem("break_time_default");
-
-	if (getBreak(false) == break_time_default_init) {
-		setBreak(getBreakDefault());
-		setEnd(parseFloat(getEnd()) + parseFloat(getBreakDefault()) - break_time_default_init);
-	}
-
-	localStorage.setItem("break_time_default", getBreakDefault());
-	calculateTotal();
-}
-
-function getHourSchedule() {
-	const hourschedule = document.getElementById("hourschedule");
-	let time = hourschedule.options[hourschedule.selectedIndex].value;
-	if (!time)
-		time = 0;
-
-	return parseFloat(time);
-}
-
-function setHourSchedule(time) {
-	if (time)
-		document.getElementById("hourschedule").value = time;
-	else
-		document.getElementById("hourschedule").value = "7.6";
-
-	hourscheduleAddTimeButton(getHourSchedule());
-}
-
-function setCustomHourSchedule(time) {
-	if (time) {
-		localStorage.setItem("customhourschedule_value", time);
-		localStorage.setItem("hourschedule", time);
-		setCustomHourScheduleUI(time);
-	} else {
-		localStorage.removeItem("customhourschedule_value");
-	}
-}
-
-function setCustomHourScheduleUI(time) {
-	document.getElementById("customhourschedule_value").value = time;
-	const select = document.getElementById("hourschedule");
-
-	// Remove existing custom option if present
-	const existingOption = document.getElementById("customhourschedule_value_option");
-	if (existingOption) {
-		existingOption.remove();
-	}
-
-	// Only add the custom option if a valid time is provided
-	if (time) {
-		const custom_option = document.createElement('option');
-		custom_option.value = time;
-		custom_option.id = "customhourschedule_value_option";
-
-		if (time && time.includes(","))
-			custom_option.innerHTML = time + "h &ensp;&ensp;&emsp;&emsp;(custom option)";
-		else
-			custom_option.innerHTML = time + "h &ensp;&nbsp;&emsp;&emsp;&emsp;(custom option)";
-
-		select.appendChild(custom_option);
-		select.value = time;
-	}
-}
-
-function getWorktime() {
-	let worktime = getEnd() - getStart();
-	if (getEnd() < getStart())
-		worktime = 24 + worktime;
-
-	if (Math.abs(worktime - getHourSchedule()) <= 0.02)
-		worktime = getHourSchedule();
-
-	return worktime.toFixed(2);
-}
-
-function calculateTotal() {
-	const worktime = getWorktime(),
-		overtimedec = getOvertimeDec(),
-		totalnobreakdec = getTotalNoBreakDec();
-
-	setTotal(worktime);
-	setOvertime(overtimedec);
-	setTotalNoBreak(totalnobreakdec);
-
-	setTotalDec(worktime);
-	setOvertimeDec(overtimedec);
-	setTotalNoBreakDec(totalnobreakdec);
-
-	hourscheduleAddTimeButton(getHourSchedule());
-}
-
-function setTotal(time) {
-	if (time < 0)
-		time = time + 24;
-
-	document.getElementById("total").value = floatToTimeString(time);
-}
-
-function getTotalDec() {
-	return parseFloat(getWorktime()).toFixed(2);
-}
-
-function setTotalDec(time) {
-	if (time < 0)
-		document.getElementById("totaldec").value = "";
-	else
-		document.getElementById("totaldec").value = time;
-}
-
-function setOvertime(time) {
-	document.getElementById("overtime").value = floatToTimeString(time);
-}
-
-function getOvertimeDec() {
-	const worktime = getWorktime(),
-		overtime = (worktime - getBreak(false) - getHourSchedule()).toFixed(2);
-
-	if (overtime.toString() == "-0.00")
-		return "0.00";
-	else
-		return overtime;
-}
-
-function setOvertimeDec(time) {
-	document.getElementById("overtimedec").value = time;
-}
-
-function setOvertimeTotal(time) {
-	document.getElementById("overtimetotal").value = floatToTimeString(time);
-
-	if (time >= 0)
-		document.getElementById("overtimetotal").setAttribute("style", "color: var(--bs-success);");
-	else
-		document.getElementById("overtimetotal").setAttribute("style", "color: var(--bs-danger);");
-}
-
-function setOvertimeWeekly(time) {
-	document.getElementById("overtimeweekly").value = floatToTimeString(time);
-
-	if (time >= 0)
-		document.getElementById("overtimeweekly").setAttribute("style", "color: var(--bs-success);");
-	else
-		document.getElementById("overtimeweekly").setAttribute("style", "color: var(--bs-danger);");
-}
-
-function setTotalNoBreak(time) {
-	document.getElementById("totalnobreak").value = floatToTimeString(time);
-}
-
-function getTotalNoBreakDec() {
-	return Math.abs(parseFloat(getWorktime() - getBreak(false))).toFixed(2);
-}
-
-function setTotalNoBreakDec(time) {
-	if (time < 0)
-		document.getElementById("totalnobreakdec").value = "";
-	else
-		document.getElementById("totalnobreakdec").value = time;
-}
-
-function getSummary() {
-	return document.getElementById("summary").value;
-}
-
-function setSummary(summary) {
-	if (summary.trim().length > 0) {
-		document.getElementById("summary").value = summary.replace(/\\n/g, '\n');
-	}
-}
-
-function getHistoryKeys() {
-	let keys = Object.keys(localStorage),
-		sortedkeys = keys.map(reverseDateRepresentation).sort().map(reverseDateRepresentation), // don't do reverse() here to have dates ascending
-		i = 0,
-		key;
-
-	// eslint-disable-next-line no-cond-assign
-	for (i = 0; key = sortedkeys[i]; i++) {
-		if (!testDateFormat(key)) {
-			sortedkeys.splice(i, 1);
-			i--;
-		}
-	}
-	return sortedkeys;
-}
-
-function getHistoryDeleteOption() {
-	let option;
-	if (document.getElementById('historydeleteoptionperiod').checked)
-		option = document.getElementById('historydeleteoptionperiod').value;
-	else if (document.getElementById('historydeleteoptiondays').checked)
-		option = document.getElementById('historydeleteoptiondays').value;
-
-	if (!option)
-		option = "days";
-
-	return option;
-}
-
-function getHistoryRetain() {
-	let days = document.getElementById("historyretain").value;
-
-	if (!days)
-		days = 99999;
-	else if (days > 99999)
-		days = 99999;
-
-	return days;
-}
-
-function getHistoryResetDay() {
-	let day = document.getElementById("historyresetday").value;
-
-	if (!day)
-		day = 31;
-	else if (day > 31)
-		day = 31;
-
-	return day;
-}
-
-function getHistoryResetPeriod() {
-	let period = document.getElementById("historyresetperiod").value,
-		historyresetperiodunit = getHistoryResetPeriodUnit();
-
-	if (historyresetperiodunit == "days")
-		period = period > 31 ? 31 : period;
-	else if (historyresetperiodunit == "weeks")
-		period = period > 4 ? 4 : period;
-	else if (historyresetperiodunit == "months")
-		period = period > 48 ? 48 : period;
-
-	return period;
-}
-
-function getHistoryResetPeriodUnit() {
-	const historyresetperiodunit = document.getElementById("historyresetperiodunit");
-	return historyresetperiodunit.options[historyresetperiodunit.selectedIndex].value;
-}
-
-function setResetDate(date) {
-	document.getElementById("resetdate").value = date;
-}
-
-function getResetDate() {
-	return document.getElementById("resetdate").value;
-}
-
-function getAutobackupDay() {
-	let day = document.getElementById("autobackupday").value;
-
-	if (!day)
-		day = 31;
-	else if (day > 31)
-		day = 31;
-
-	return day;
-}
-
-function getAutobackupPeriod() {
-	let period = document.getElementById("autobackupperiod").value;
-
-	if (historyresetperiodunit == "days")
-		period = period > 31 ? 31 : period;
-	else if (historyresetperiodunit == "weeks")
-		period = period > 4 ? 4 : period;
-	else if (historyresetperiodunit == "months")
-		period = period > 48 ? 48 : period;
-
-	return period;
-}
-
-function getAutobackupPeriodUnit() {
-	const periodunit = document.getElementById("autobackupperiodunit");
-	return periodunit.options[periodunit.selectedIndex].value;
-}
-
-function setBackupDate(date) {
-	document.getElementById("autobackupdate").value = date;
-}
-
-function getBackupDate() {
-	return document.getElementById("autobackupdate").value;
-}
-
-/*function getCountry() {
-	return document.getElementById("reporting_country").value;
-}*/
-
-// UI
-function showHistorydeleteoptionContent() {
-	if (document.getElementById("historydeleteoptiondays").checked) {
-		document.getElementById("historydeleteoptiondayscontent").classList.remove("d-none");
-		document.getElementById("historydeleteoptionperiodscontent").classList.add("d-none");
-	} else {
-		document.getElementById("historydeleteoptiondayscontent").classList.add("d-none");
-		document.getElementById("historydeleteoptionperiodscontent").classList.remove("d-none");
-		maxValuesCustomTimeOption("cleaning", getHistoryResetPeriodUnit(), calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()), document.getElementById("historyresetperiod"), document.getElementById("historyresetday"));
-	}
-}
-
-function maxValuesCustomTimeOption(type, periodunit, executionday, elem_period, elem_executionday) {
-	if (periodunit == "days") {
-		elem_period.setAttribute("max", "31");
-		elem_executionday.value = "1";
-		elem_executionday.disabled = true;
-	} else if (periodunit == "weeks") {
-		elem_period.setAttribute("max", "4");
-		elem_executionday.setAttribute("max", "7");
-		elem_executionday.disabled = false;
-	} else if (periodunit == "months") {
-		elem_period.setAttribute("max", "48");
-		elem_executionday.setAttribute("max", "31");
-		elem_executionday.disabled = false;
-	}
-
-	if (type == "cleaning")
-		setResetDate(executionday.format("dddd, DD-MM-YYYY"));
-	else if (type == "autobackup") {
-		setBackupDate(executionday.format("dddd, DD-MM-YYYY"));
-	}
-}
-
-function saveCleaningDay() {
-	maxValuesCustomTimeOption("cleaning", getHistoryResetPeriodUnit(), calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()), document.getElementById("historyresetperiod"), document.getElementById("historyresetday"));
-	localStorage.setItem("cleaningday", dayjs(getResetDate(), "dddd, DD-MM-YYYY").format("DD-MM-YYYY"));
-	localStorage.setItem("historyresetday", getHistoryResetDay());
-	localStorage.setItem("historyresetperiod", getHistoryResetPeriod());
-	localStorage.setItem("historyresetperiodunit", getHistoryResetPeriodUnit());
-
-	document.getElementById("cleaningdaysavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: var(--bs-success);");
-	document.getElementById("cleaningdaysavebutton").innerHTML = '<i class="fas fa-check"></i>';
-	setTimeout(function () {
-		document.getElementById("cleaningdaysavebutton").innerHTML = "Save";
-		document.getElementById("cleaningdaysavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear;");
-	}, 5000);
-}
-
-function saveBackupDay() {
-	maxValuesCustomTimeOption("autobackup", getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById("autobackupperiod"), document.getElementById("autobackupday"));
-	localStorage.setItem("autobackupdate", dayjs(getBackupDate(), "dddd, DD-MM-YYYY").format("DD-MM-YYYY"));
-	localStorage.setItem("autobackupday", getAutobackupDay());
-	localStorage.setItem("autobackupperiod", getAutobackupPeriod());
-	localStorage.setItem("autobackupperiodunit", getAutobackupPeriodUnit());
-	//localStorage.setItem("autobackupdate", dayjs(todayDate(), "dddd, DD-MM-YYYY").subtract(1, "days").format("DD-MM-YYYY"));
-
-	document.getElementById("autobackupsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: var(--bs-success);");
-	document.getElementById("autobackupsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: var(--bs-success);");
-	document.getElementById("autobackupsavebutton").innerHTML = '<i class="fas fa-check"></i>';
-	setTimeout(function () {
-		document.getElementById("autobackupsavebutton").innerHTML = "Save";
-		document.getElementById("autobackupsavebutton").setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear;");
-	}, 5000);
-}
-
-function calculateExecutionDay(executionday, period, periodunit) {
-	let date = dayjs();
-
-	if (periodunit == "days") {
-		date = date.add(period, 'days');
-	} else if (periodunit == "weeks") {
-		date = date.add(period, 'weeks');
-		date = date.day(executionday);
-	} else if (periodunit == "months") {
-		date = date.add(period, 'months');
-		date = date.date(executionday);
-	}
-
-	return date;
-}
-
-function testDateFormat(date) {
-	const userKeyRegExp = /^[0-9]{2}-[0-9]{2}-[0-9]{4}/;
-	return userKeyRegExp.test(date);
-}
-
-function setHistory(refresh_edit_table) {
-	let entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid var(--bs-secondary);'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>",
-		entry_edit_history = "",
-		revkeys = getHistoryKeys().reverse(),
-		overtimetotal = 0,
-		overtimeweekly = 0,
-		i = 0,
-		key,
-		timeinfo;
-
-	// eslint-disable-next-line no-cond-assign
-	for (i = 0; key = revkeys[i]; i++) {
-		timeinfo = JSON.parse(localStorage.getItem(key));
-
-		if (Object.prototype.hasOwnProperty.call(timeinfo, "OvertimeDec")) {
-
-			if (timeinfo.Summary == undefined) {
-				timeinfo.Summary = "";
-			}
-
-			// Normal history (Links)
-			const colorClass = (parseFloat(timeinfo.OvertimeDec) < 0) ? "text-danger" : "text-success";
-			entry_history += `<tr class='${colorClass}'><td>${key}</td><td style='text-align:right;'>${floatToTimeString(timeinfo.TotalNoBreakDec)}</td><td style='text-align:right;'>${floatToTimeString(timeinfo.OvertimeDec)}</td></tr>`;
-
-			overtimetotal += parseFloat(timeinfo.OvertimeDec);
-			if (dayjs(key, "DD-MM-YYYY") >= dayjs().startOf('week')) {
-				overtimeweekly += parseFloat(timeinfo.OvertimeDec);
-			}
-
-			// --- Edit Table ---
-			const dateIso = reverseDateRepresentation(key);			// Input requires YYYY-MM-DD format
-			const startString = (timeinfo.StartDec !== "correction") ? floatToTimeString(timeinfo.StartDec) : "";
-			const workedString = (timeinfo.TotalNoBreakDec !== "correction") ? floatToTimeString(timeinfo.TotalNoBreakDec) : "";
-
-			let breakDec = 0;
-			if (timeinfo.TotalDec !== "correction" && timeinfo.TotalNoBreakDec !== "correction") {
-				breakDec = Math.abs(parseFloat(timeinfo.TotalDec) - parseFloat(timeinfo.TotalNoBreakDec));
-			}
-			const breakString = floatToTimeString(breakDec);
-			const scheduleVal = timeinfo.HourSchedule;
-			const summaryVal = timeinfo.Summary ? timeinfo.Summary.replace(/"/g, "&quot;") : "";
-
-			entry_edit_history += `
-            <tr>
-                <td class="p-1">
-                    <input type="date" class="form-control history-date" value="${dateIso}">
-                </td>
-                <td class="p-1">
-                    <input type="time" class="form-control history-start" value="${startString}">
-                </td>
-                <td class="p-1">
-                    <input type="time" class="form-control history-break" value="${breakString}">
-                </td>
-                <td class="p-1">
-                    <input type="time" class="form-control history-total" value="${workedString}">
-                </td>
-                <td class="p-1">
-                    <input type="number" step="0.01" class="form-control history-schedule" value="${scheduleVal}">
-                </td>
-                <td class="p-1">
-                    <input type="text" class="form-control history-summary" value="${summaryVal}">
-                </td>
-                <td>
-                    <span class="record-save">
-                        <button type="button" class="btn btn-outline-success btn-sm">
-                            <i class="fa fa-save"></i>
-                        </button>
-                    </span>
-                    <span class="record-delete">
-                        <button type="button" class="btn btn-outline-danger btn-sm">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </span>
-                </td>
-            </tr>`;
-		}
-	}
-
-	if (revkeys == "" || revkeys == null) {
-		entry_history = "No previous data yet :(";
-		entry_edit_history = entry_history;
-	} else {
-		entry_history = entry_history + "</table>";
-	}
-	document.getElementById("history").innerHTML = entry_history;
-
-	if (refresh_edit_table)
-		document.getElementById("edit_history_table_body").innerHTML = entry_edit_history;
-
-	setOvertimeTotal(overtimetotal);
-	setOvertimeWeekly(overtimeweekly);
-}
-
-function notificationClosed(event) {
-	const version = document.getElementById("currentappversion").innerHTML,
-		lastnotifversion = localStorage.getItem("lastnotifversion");
-
-	if (event == "click")
-		localStorage.setItem("lastnotifversion", version);
-
-	if (event == "onload" && version != lastnotifversion) {
-		// Remove 'd-none' if it's there, or set display block
-		const notif = document.getElementById("alertnotification");
-		notif.style.display = "block";
-		notif.classList.add("show"); // Ensure Bootstrap fade-in works
-	}
-}
-
-function set_startminsubtract(startminsubtract_value) {
-	localStorage.setItem("startminsubtract_value", startminsubtract_value);
-	document.getElementById("startminsubtract_span").innerHTML = startminsubtract_value;
-	document.getElementById("startminsubtract_value").value = startminsubtract_value;
-}
-
-function hourscheduleAddTimeButton(hourSchedule) {
-	document.getElementById("addtimebutton_span").innerHTML = hourSchedule;
-}
-
-function breaktimeTimeselection() {
-	if (document.getElementById("breaktime_timeselection_option_timerange").checked == false) {
-		document.getElementById("breaktime_timeselection_option_timerange_div").classList.add("d-none");
-		document.getElementById("break_time_default_label").classList.remove("d-none");
-		document.getElementById("break_time_default_div").classList.remove("d-none");
-		document.getElementById("breaktime_timeselection_option_duration_div").classList.remove("d-none");
-
-		reset_break();
-
-		document.getElementById('break_btn_div').removeAttribute('title');
-		document.getElementById('break_btn_div').removeAttribute('data-toggle');
-		document.getElementById('break_btn_div').removeAttribute('data-placement');
-		document.getElementById("break_reset_btn").disabled = false;
-		document.getElementById("break_add5_btn").disabled = false;
-		document.getElementById("break_add30_btn").disabled = false;
-		document.getElementById("break_counter_btn").disabled = false;
-		// re-initialize tooltips to pickup the changes
-		const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')),
-			// eslint-disable-next-line no-unused-vars
-			tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-				return new bootstrap.Tooltip(tooltipTriggerEl, {
-					boundary: document.body,
-					'delay': { show: 1000, hide: 0 }
-				});
-			});
-	} else {
-		document.getElementById("breaktime_timeselection_option_timerange_div").classList.remove("d-none");
-		document.getElementById("break_time_default_label").classList.add("d-none");
-		document.getElementById("break_time_default_div").classList.add("d-none");
-		document.getElementById("breaktime_timeselection_option_duration_div").classList.add("d-none");
-
-		reset_break();
-
-		document.getElementById('break_btn_div').setAttribute('title', 'Only available when break time option is duration. Change this in the settings view.');
-		document.getElementById('break_btn_div').setAttribute('data-toggle', 'tooltip');
-		document.getElementById('break_btn_div').setAttribute('data-placement', 'top');
-		document.getElementById("break_reset_btn").disabled = true;
-		document.getElementById("break_add5_btn").disabled = true;
-		document.getElementById("break_add30_btn").disabled = true;
-		document.getElementById("break_counter_btn").disabled = true;
-		// re-initialize tooltips to pickup the changes
-		const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')),
-			// eslint-disable-next-line no-unused-vars
-			tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-				return new bootstrap.Tooltip(tooltipTriggerEl, {
-					boundary: document.body,
-					'delay': { show: 1000, hide: 0 }
-				});
-			});
-	}
-}
-
-function checkInputValues() {
-	let app_alert_message = "";
-
-	if (getBreak(true) < 0 && getBreakTimeStart() > 0) {
-		document.getElementById("break_time_end").value = document.getElementById("break_time_start").value;
-		app_alert_message = "<b>Holy guacamole!</b> You can't end your break before you start it, can you superman?<br> Fill in when your break ended first.";
-	}
-	setAlertMessage(app_alert_message);
-}
-
-function setAlertMessage(message) {
-	const alertBox = document.getElementById("app_alert");
-	const msgBox = document.getElementById("app_alert_message");
-
-	if (message !== "") {
-		msgBox.innerHTML = message;
-		alertBox.style.display = "block";
-		alertBox.style.opacity = "1"; // Ensure it's visible
-
-		// Wait 10 seconds, then fade out
-		setTimeout(function () {
-			alertBox.style.transition = "opacity 1s ease-out";
-			alertBox.style.opacity = "0";
-
-			// Hide display:none after the animation finishes
-			setTimeout(() => { alertBox.style.display = "none"; }, 1000);
-		}, 10000);
-	}
-}
-
-function allCheckBox(allCheckboxInput, elementId) {
-	const checks = document.querySelectorAll('#' + elementId + ' input[type="checkbox"]');
-
-	for (let i = 0; i < checks.length; i++) {
-		if (allCheckboxInput.checked == true && checks[i].checked == false)
-			checks[i].click();
-		else if (allCheckboxInput.checked == false && checks[i].checked == true)
-			checks[i].click();
-	}
-}
-
-function activateConfirmationModal(message, callback) {
-	const modalEl = document.getElementById('modalconfirm');
-	// Find the body within the modal and set the text
-	modalEl.querySelector(".modal-body").innerHTML = "<p>" + message + "</p>";
-
-	const modal = new bootstrap.Modal(modalEl, {});
-	modal.show();
-
-	// Add event listener (with {once: true} to prevent double counting when opened multiple times)
-	modalEl.addEventListener('shown.bs.modal', function () {
-		let buttons = this.querySelectorAll('.btn');
-		buttons.forEach(btn => {
-			btn.onclick = () => callback(btn.innerText.toLowerCase());
-		});
-	}, { once: true });
-}
-
-
-function setTheme(theme) {
-	if (theme == "auto") {
-		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-			colorScheme = "dark";
-			document.querySelector("html").setAttribute("data-bs-theme", "dark");
-		} else {
-			colorScheme = "light";
-			document.querySelector("html").setAttribute("data-bs-theme", "light");
-		}
-		localStorage.setItem("theme", "auto");
-	} else {
-		document.documentElement.setAttribute('data-bs-theme', theme);
-		colorScheme = theme;
-		console.log(document.getElementById("appearance_auto").checked);
-		localStorage.setItem("theme", theme);
-	}
-}
-
-/*function populateWorkdayCountCountries(callback) {
-	$.getJSON('https://date.nager.at/api/v3/AvailableCountries', function (response) {
-		// JSON result in `response` variable
-		let listitems = '<option value=none>None</option>';
-		$.each(response, function (key, value) {
-			listitems += '<option value=' + value.countryCode + '>' + value.name + '</option>';
-		});
-		$('#reporting_country').empty().append(listitems);
-		callback();
-	});
-}*/
-
-// Storage functions
-function cleanLocalStorage() {
-	let keys = Object.keys(localStorage),
-		i = 0,
-		today = dayjs(),
-		deleteoption = localStorage.getItem("historydeleteoption");
-
-	if (deleteoption == "days") {
-		const expiredate = today.subtract(getHistoryRetain(), "days");
-		// eslint-disable-next-line no-cond-assign
-		for (let key = 0; key = keys[i]; i++) {
-			if (dayjs(key, "DD-MM-YYYY") < expiredate && testDateFormat(key)) // days to keep data excluding today
-				delete localStorage[key];
-		}
-	} else if (deleteoption == "period") {
-		const cleaningdaystored = localStorage.getItem("cleaningday"),
-			cleaningday = dayjs(cleaningdaystored, "DD-MM-YYYY");
-
-		if (cleaningday.isSameOrBefore(today)) {
-			deleteHistory();
-			localStorage.setItem("cleaningday", calculateExecutionDay(getHistoryResetDay(), getHistoryResetPeriod(), getHistoryResetPeriodUnit()).format("DD-MM-YYYY"));
-		}
-	}
-}
-
-function autoBackup() {
-	const today = dayjs(),
-		backupsenabled = localStorage.getItem("autobackupoption"),
-		autobackupdaystored = localStorage.getItem("autobackupdate"),
-		autobackupday = dayjs(autobackupdaystored, "DD-MM-YYYY");
-
-	if (backupsenabled == "true" && autobackupday.isSameOrBefore(today)) {
-		alert("Performing autobackup");
-		exportHistory();
-		localStorage.setItem("autobackupdate", calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()).format("DD-MM-YYYY"));
-	}
-}
-
-function deleteHistory() {
-	if (confirm("Are you sure you wish to delete your history?\nIf you choose not to, then your data will be saved until the next cleaning time.")) {
-		for (let key in localStorage) {
-			if (testDateFormat(key))
-				delete localStorage[key];
-		}
-		setHistory(true);
-		alert("History deleted!");
-	}
-}
-
-function exportHistory() {
-	const _myArray = JSON.stringify(localStorage, null, 4); //indentation in json format, human readable
-
-	//Note: We use the anchor tag here instead button.
-	const vLink = document.getElementById('exportHistoryLink');
-
-	const vBlob = new Blob([_myArray], { type: "octet/stream" }),
-		vName = 'working_history_' + todayDate() + '.json',
-		vUrl = window.URL.createObjectURL(vBlob);
-
-	vLink.setAttribute('href', vUrl);
-	vLink.setAttribute('download', vName);
-
-	//Note: Programmatically click the link to download the file
-	vLink.click();
-}
-
-function exportCSV() {
-	let keys = getHistoryKeys(),
-		i = 0,
-		key,
-		timeinfo,
-		items = [];
-
-	// eslint-disable-next-line no-cond-assign
-	for (key = 0; key = keys[i]; i++) {
-		timeinfo = JSON.parse(localStorage.getItem(key));
-		if (Object.prototype.hasOwnProperty.call(timeinfo, "OvertimeDec")) {
-			timeinfo = Object.assign({ Date: key }, timeinfo); // Add date at the beginning of the json record
-			//timeinfo.Date = key;
-			items.push(timeinfo);
-		}
-	}
-
-	//const items = json3.items;
-	// https://stackoverflow.com/a/31536517
-	const replacer = (key, value) => value === null ? '' : value; // Specify how you want to handle null values
-	const header = Object.keys(items[0]);
-	const csv = [
-		header.join(','), // header row first
-		...items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
-	].join('\r\n');
-
-	//Note: We use the anchor tag here instead button.
-	const vLink = document.getElementById('exportCSVLink');
-
-	const vName = 'working_history_' + todayDate() + '.csv',
-		vUrl = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-
-	vLink.setAttribute('href', vUrl);
-	vLink.setAttribute('download', vName);
-
-	//Note: Programmatically click the link to download the file
-	vLink.click();
-}
-
-/*global jspdf, getHistoryKeys, testDateFormat, dayjs */
-// Helper to quickly set dates in the modal
-function setExportRange(type) {
-	const startInput = document.getElementById('export_start_date');
-	const endInput = document.getElementById('export_end_date');
-
-	// Safety check if elements exist
-	if (!startInput || !endInput) return;
-
-	if (type === 'thisMonth') {
-		startInput.value = dayjs().startOf('month').format('YYYY-MM-DD');
-		endInput.value = dayjs().endOf('month').format('YYYY-MM-DD');
-	} else if (type === 'lastMonth') {
-		startInput.value = dayjs().subtract(1, 'month').startOf('month').format('YYYY-MM-DD');
-		endInput.value = dayjs().subtract(1, 'month').endOf('month').format('YYYY-MM-DD');
-	} else if (type === 'allTime') {
-		// Find the very first key in history for start, and today for end
-		const keys = getHistoryKeys(); // Returns dates DD-MM-YYYY
-		if (keys.length > 0) {
-			// keys are sorted, so keys[0] is the oldest
-			startInput.value = dayjs(keys[0], 'DD-MM-YYYY').format('YYYY-MM-DD');
-		} else {
-			startInput.value = dayjs().format('YYYY-MM-DD');
-		}
-		endInput.value = dayjs().format('YYYY-MM-DD');
-	}
-}
-
-function exportPDF() {
-	const { jsPDF } = window.jspdf;
-	const doc = new jsPDF();
-
-	// 1. Get Date Range from Inputs
-	const startVal = document.getElementById('export_start_date').value;
-	const endVal = document.getElementById('export_end_date').value;
-
-	const startDate = startVal ? dayjs(startVal) : dayjs('1900-01-01');
-	const endDate = endVal ? dayjs(endVal) : dayjs('2100-01-01');
-
-	// 2. Get Data
-	const keys = getHistoryKeys();
-	const tableData = [];
-	let totalHours = 0;
-	let totalOvertime = 0;
-
-	keys.forEach(key => {
-		if (testDateFormat(key)) {
-			// Parse the key (DD-MM-YYYY) to check if it falls within range
-			const currentObj = dayjs(key, "DD-MM-YYYY");
-
-			// Check if date is within selected range (inclusive '[]')
-			if (currentObj.isBetween(startDate, endDate, 'day', '[]')) {
-
-				const timeinfo = JSON.parse(localStorage.getItem(key));
-				if (timeinfo) {
-					const date = key;
-					const start = timeinfo.StartDec !== "correction" ? parseFloat(timeinfo.StartDec).toFixed(2) : "-";
-					// Calculate end time roughly (Start + Total)
-					let end = "-";
-					if (timeinfo.StartDec !== "correction" && timeinfo.TotalDec !== "correction") {
-						end = (parseFloat(timeinfo.StartDec) + parseFloat(timeinfo.TotalDec)).toFixed(2);
-						// Handle crossing midnight visual fix (optional)
-						if (parseFloat(end) >= 24) end = (parseFloat(end) - 24).toFixed(2);
-					}
-
-					const total = timeinfo.TotalDec !== "correction" ? parseFloat(timeinfo.TotalDec).toFixed(2) : "0.00";
-					const overtime = timeinfo.OvertimeDec;
-					const summary = timeinfo.Summary ? timeinfo.Summary.replace(/\n/g, " ") : "";
-
-					tableData.push([date, start, end, total, overtime, summary]);
-
-					if (!isNaN(parseFloat(total))) totalHours += parseFloat(total);
-					if (!isNaN(parseFloat(overtime))) totalOvertime += parseFloat(overtime);
-				}
-			}
-		}
-	});
-
-	// 3. Document Styling
-	doc.setFontSize(18);
-	doc.text("Working Hours Report", 14, 22);
-
-	doc.setFontSize(11);
-	doc.setTextColor(100);
-	doc.text(`Period: ${startDate.format('DD/MM/YYYY')} - ${endDate.format('DD/MM/YYYY')}`, 14, 30);
-	doc.text(`Total Days Recorded: ${tableData.length}`, 14, 36);
-	doc.text(`Total Hours Recorded: ${totalHours.toFixed(2)}h`, 14, 42);
-	doc.text(`Total Overtime Recorded: ${totalOvertime.toFixed(2)}h`, 14, 48);
-
-	// 4. Generate Table
-	doc.autoTable({
-		head: [['Date', 'Start', 'End', 'Total', 'Overtime', 'Summary']],
-		body: tableData,
-		startY: 57,
-		theme: 'grid',
-		styles: { fontSize: 8 },
-		headStyles: { fillColor: [41, 128, 185] },
-		columnStyles: {
-			0: { cellWidth: 25 },
-			5: { cellWidth: 'auto' }
-		}
-	});
-
-	// 5. Save & Close Modal
-	doc.save(`working_hours_${startDate.format('YYYYMMDD')}_to_${endDate.format('YYYYMMDD')}.pdf`);
-
-	// Close the modal programmatically (Bootstrap 5 way)
-	const modalEl = document.getElementById('modalexport');
-	const modalInstance = bootstrap.Modal.getInstance(modalEl);
-	if (modalInstance) modalInstance.hide();
-}
-
-const importHistory = document.getElementById('importHistory'),
-	importFile = document.getElementById('importFile');
-importFile.addEventListener("change", importHistoryData, false);
-importHistory.onclick = function () { importFile.click(); };
-function importHistoryData(e) {
-	const files = e.target.files;
-	if (files.length === 0) return; // Exit if no file is selected
-
-	const reader = new FileReader();
-
-	reader.onload = readerEvent => {
-		try {
-			const content = JSON.parse(readerEvent.target.result); // Try to parse
-			Object.keys(content).forEach(function (k) {
-				// Also check if the value is a stringified object and parse it if needed
-				let value = content[k];
-				try {
-					// This handles old exports where values are stringified JSON
-					JSON.parse(value);
-					localStorage.setItem(k, value);
-				} catch (innerError) {
-					// This handles new exports where values are just strings
-					localStorage.setItem(k, value);
-				}
-			});
-			importFile.value = ''; //clear input value
-			setHistory(true);
-			setParameters();
-			document.getElementById("settingsmodalclosebutton").click();
-			alert("Import successful!");
-		} catch (error) {
-			// If parsing fails, show a friendly error
-			alert("Import failed! The file contains invalid JSON data.");
-			console.error("Error parsing imported file:", error);
-		}
-	};
-	reader.readAsText(files[0]);
-}
-
-// Application functions
-function now() {
-	const now = dayjs();
-	return dayjs.duration(now.diff(now.startOf('day')), 'milliseconds').asHours();
-}
-
-function todayDate() {
-	return dayjs().format("DD-MM-YYYY");
-}
-
-function loadApp() {
-	setEnd(0);
-	setTotal(0);
-	setTotalDec(0);
-	setTotalNoBreak(0);
-	setTotalNoBreakDec(0);
-	setHistory(true);
-
-	// 'lazy' loading
-	notificationClosed("onload");
-	setParameters();
-	cleanLocalStorage();
-	autoBackup();
-	if (localStorage.length < 10)
-		// eslint-disable-next-line no-undef
-		startIntroduction();
-}
-
-function reset() {
-	setEnd(0);
-	setTotal(0);
-	setTotalDec(0);
-	setTotalNoBreak(0);
-	setTotalNoBreakDec(0);
-	setHistory(true);
-
-	const timeinfo = JSON.parse(localStorage.getItem(todayDate()));
-	if (timeinfo == null) {
-		setStart(now());
-		add_time(getHourSchedule());
-	} else {
-		setStart(timeinfo.StartDec);
-		setBreak(timeinfo.TotalDec - timeinfo.TotalNoBreakDec);
-		setEnd(parseFloat(timeinfo.StartDec) + parseFloat(timeinfo.TotalDec));
-		setSummary(timeinfo.Summary);
-		calculateTotal();
-	}
-}
-
-function setParameters() {
-	// Set options to parameters from localStorage
-	const autoend = localStorage.getItem("autoend"),
-		autoend_today_disabled = localStorage.getItem("autoend_today_disabled"),
-		nosave = localStorage.getItem("nosave"),
-		hourschedule = localStorage.getItem("hourschedule"),
-		customhourschedule_value = localStorage.getItem("customhourschedule_value"),
-		break_time_default = localStorage.getItem("break_time_default"),
-		startminsubtract = localStorage.getItem("startminsubtract"),
-		startminsubtract_value = localStorage.getItem("startminsubtract_value"),
-		/*reporting_country = localStorage.getItem("country"),*/
-		historydeleteoption = localStorage.getItem("historydeleteoption"),
-		historyretain = localStorage.getItem("historyretain"),
-		historyresetday = localStorage.getItem("historyresetday"),
-		historyresetperiod = localStorage.getItem("historyresetperiod"),
-		historyresetperiodunit = localStorage.getItem("historyresetperiodunit"),
-		autobackupoption = localStorage.getItem("autobackupoption"),
-		autobackupday = localStorage.getItem("autobackupday"),
-		autobackupperiod = localStorage.getItem("autobackupperiod"),
-		autobackupperiodunit = localStorage.getItem("autobackupperiodunit"),
-		overtimeoption = localStorage.getItem("overtimeoption"),
-		totalhoursoption = localStorage.getItem("totalhoursoption"),
-		summaryoption = localStorage.getItem("summaryoption"),
-		historyoption = localStorage.getItem("historyoption"),
-		weeklyovertimeoption = localStorage.getItem("weeklyovertimeoption"),
-		totalovertimeoption = localStorage.getItem("totalovertimeoption"),
-		parametersoption = localStorage.getItem("parametersoption"),
-		breaktime_timeselection_option_timerange = localStorage.getItem("breaktime_timeselection_option_timerange"),
-		theme = localStorage.getItem("theme");
-
-	if (autoend == "true")
-		document.getElementById("autoend").click();
-	if (autoend_today_disabled == todayDate())
-		document.getElementById("autoend_today_disabled").click();
-	if (nosave == todayDate())
-		document.getElementById("nosave").click();
-	setCustomHourScheduleUI(customhourschedule_value);
-	setHourSchedule(hourschedule);
-	if (break_time_default) {
-		document.getElementById("break_time_default").value = break_time_default;
-		setBreak(break_time_default);
-	} else {
-		document.getElementById("break_time_default").value = 0;
-	}
-	/*populateWorkdayCountCountries(function () {
-		if (reporting_country) {
-			//$("#reporting_country").val(reporting_country);
-			document.getElementById("reporting_country").value = reporting_country;
-		}
-	});*/
-	if (historydeleteoption == "days") {
-		document.getElementById("historydeleteoptiondays").click();
-	} else if (historydeleteoption == "period") {
-		document.getElementById("historydeleteoptionperiod").click();
-	}
-	if (historyretain)
-		document.getElementById("historyretain").value = historyretain;
-	if (historyresetday)
-		document.getElementById("historyresetday").value = historyresetday;
-	if (historyresetperiod)
-		document.getElementById("historyresetperiod").value = historyresetperiod;
-	if (historyresetperiodunit)
-		document.getElementById("historyresetperiodunit").value = historyresetperiodunit;
-	showHistorydeleteoptionContent();
-	if (autobackupoption == "true")
-		document.getElementById("autobackupoption").click();
-	if (autobackupday)
-		document.getElementById("autobackupday").value = autobackupday;
-	if (autobackupperiod)
-		document.getElementById("autobackupperiod").value = autobackupperiod;
-	if (autobackupperiodunit)
-		document.getElementById("autobackupperiodunit").value = autobackupperiodunit;
-	maxValuesCustomTimeOption("autobackup", getAutobackupPeriodUnit(), calculateExecutionDay(getAutobackupDay(), getAutobackupPeriod(), getAutobackupPeriodUnit()), document.getElementById("autobackupperiod"), document.getElementById("autobackupday"));
-	// Set UI visibility options
-	if (overtimeoption == "true" && totalhoursoption == "true" && weeklyovertimeoption == "true" && totalovertimeoption == "true" && summaryoption == "true" && historyoption == "true" && parametersoption == "true") {
-		document.getElementById("alloption").click();
-	} else {
-		if (overtimeoption == "true" || overtimeoption === null) {
-			document.getElementById("overtimeoption").click();
-		}
-		if (totalhoursoption == "true" || totalhoursoption === null) {
-			document.getElementById("totalhoursoption").click();
-		}
-		if (weeklyovertimeoption == "true" || weeklyovertimeoption === null) {
-			document.getElementById("weeklyovertimeoption").click();
-		}
-		if (totalovertimeoption == "true" || totalovertimeoption === null) {
-			document.getElementById("totalovertimeoption").click();
-		}
-		if (summaryoption == "true" || summaryoption === null) {
-			document.getElementById("summaryoption").click();
-		}
-		if (historyoption == "true" || historyoption === null) {
-			document.getElementById("historyoption").click();
-		}
-		if (parametersoption == "true" || parametersoption === null) {
-			document.getElementById("parametersoption").click();
-		}
-	}
-	if (breaktime_timeselection_option_timerange == "true") {
-		document.getElementById("breaktime_timeselection_option_timerange").click();
-		breaktimeTimeselection();
-	}
-	setTheme(theme ? theme : "auto");
-	document.getElementById("appearance_" + (theme ? theme : "auto")).checked = true;
-
-	// Check if custom time to subtract from start is stored and set value appropriatly
-	if (!startminsubtract_value)
-		set_startminsubtract("5");
-	else
-		set_startminsubtract(startminsubtract_value);
-
-	// If subtract from start is checked set UI and deduct the amount of time stored in localstorage
-	// If the page was already opened today, fill in that start time
-	const timeinfo = JSON.parse(localStorage.getItem(todayDate()));
-	if (timeinfo == null) {
-		if (startminsubtract == "true") {
-			document.getElementById("startminsubtract").click();
-
-			// Fix convert minutes to subtract to decimal
-			const startminsubtract_value_decimal = dayjs.duration({ minutes: startminsubtract_value }).asHours();
-			setStart(now() - startminsubtract_value_decimal);
-		} else {
-			setStart(now());
-		}
-		add_time(getHourSchedule());
-	} else {
-		setStart(timeinfo.StartDec);
-		setBreak(timeinfo.TotalDec - timeinfo.TotalNoBreakDec);
-		setEnd(parseFloat(timeinfo.StartDec) + parseFloat(timeinfo.TotalDec));
-		setSummary(timeinfo.Summary);
-		calculateTotal();
-		if (startminsubtract == "true")
-			document.getElementById("startminsubtract").click();
-	}
-}
-
-// eslint-disable-next-line no-unused-vars
-function end_time() {
-	setEnd(now());
-	calculateTotal();
-}
-
-function add_time(time) {
-	setEnd(getStart() + time + getBreak(false));
-	calculateTotal();
-}
-
-// eslint-disable-next-line no-unused-vars
-function add_break(time) {
-	setBreak(time + getBreak(false));
-	setEnd(time + getEnd());
-	calculateTotal();
-}
-
-function reset_break() {
-	// Timer functionality
-	timer.stop(); // Stop break timer
-	timer.reset(); // Reset break timer
-	clearInterval(refreshIntervalId); // Clear break timer refresh interval
-	break_counter_started = false;
-	break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Start";
-	break_counter_btn.classList.remove("btn-warning");
-	break_counter_btn.classList.add("btn-primary");
-	break_counter_btn.classList.remove("pulsate");
-
-	// Regular functionality
-	setEnd(getEnd() - getBreak(false));
-	setBreak(0);
-	calculateTotal();
-}
-
-class Timer {
-	constructor() {
-		this.isRunning = false;
-		this.startTime = 0;
-		this.overallTime = 0;
-	}
-	_getTimeElapsedSinceLastStart() {
-		if (!this.startTime) {
-			return 0;
-		}
-
-		return Date.now() - this.startTime;
-	}
-	start() {
-		if (this.isRunning) {
-			return console.warn('Timer is already running');
-		}
-		this.isRunning = true;
-		this.startTime = Date.now();
-	}
-	stop() {
-		if (!this.isRunning) {
-			return console.warn('Timer is already stopped');
-		}
-		this.isRunning = false;
-		this.overallTime = this.overallTime + this._getTimeElapsedSinceLastStart();
-	}
-	reset() {
-		this.overallTime = 0;
-		if (this.isRunning) {
-			this.startTime = Date.now();
-			return;
-		}
-		this.startTime = 0;
-	}
-	getTime() {
-		if (!this.startTime) {
-			return 0;
-		}
-		if (this.isRunning) {
-			return this.overallTime + this._getTimeElapsedSinceLastStart();
-		}
-		return this.overallTime;
-	}
-}
-
-const timer = new Timer(); // Initialize object to
-let break_counter_started = false,
-	refreshIntervalId = 0;
-function break_counter() {
-	const break_counter_btn = document.getElementById("break_counter_btn");
-
-	// Delete old localstorage entries for previous version timer
-	localStorage.removeItem("break_counter_start_time");
-	localStorage.removeItem("break_counter_started");
-
-	if (break_counter_started) {
-		break_counter_started = false;
-		timer.stop();
-		clearInterval(refreshIntervalId);
-
-		const timeInSeconds = Math.round(timer.getTime() / 1000),
-			time = dayjs(dayjs.utc(timeInSeconds * 1000), "HH:mm:ss"),
-			timeInDecimalHours = dayjs.duration(time.diff(time.startOf('day')), 'milliseconds').asHours();
-		setBreak(timeInDecimalHours);
-		add_time(getHourSchedule());
-
-		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch'></i> Resume";
-		break_counter_btn.classList.remove("btn-warning");
-		break_counter_btn.classList.add("btn-primary");
-		break_counter_btn.classList.remove("pulsate");
-	} else {
-		break_counter_started = true;
-		timer.start();
-
-		refreshIntervalId = setInterval(() => {
-			const timeInSeconds = Math.round(timer.getTime() / 1000),
-				time = dayjs(dayjs.utc(timeInSeconds * 1000), "HH:mm:ss"),
-				timeInDecimalHours = dayjs.duration(time.diff(time.startOf('day')), 'milliseconds').asHours();
-			setBreak(timeInDecimalHours);
-			add_time(getHourSchedule());
-
-		}, 1000);
-
-		break_counter_btn.innerHTML = "<i class='fal fa-stopwatch fa-spin'></i> Stop";
-		break_counter_btn.classList.remove("btn-primary");
-		break_counter_btn.classList.add("btn-warning");
-		break_counter_btn.classList.add("pulsate");
-	}
-}
-
-window.onbeforeunload = function () {
-	// Set 'dont save today' and 'automatically set end time' parameters in local storage
-	const nosave = document.getElementById("nosave"),
-		autoend = document.getElementById("autoend"),
-		autoend_session_disabled = document.getElementById("autoend_session_disabled"),
-		autoend_today_disabled = document.getElementById("autoend_today_disabled");
-	if (nosave.checked == false) {
-		if (autoend.checked == false) {
-			localStorage.setItem("autoend", "false");
-			localStorage.setItem("autoend_today_disabled", "false");
-		} else {
-			if (autoend_today_disabled.checked == true || autoend_session_disabled.checked == true) {
-				if (autoend_today_disabled.checked == true)
-					localStorage.setItem("autoend_today_disabled", todayDate());
-			} else {
-				setEnd(now());
-				localStorage.setItem("autoend_today_disabled", "false");
-			}
-			localStorage.setItem("autoend", "true");
-		}
-		const timeinfo = {
-			TotalNoBreakDec: getTotalNoBreakDec(),
-			OvertimeDec: getOvertimeDec(),
-			TotalDec: getTotalDec(),
-			StartDec: getStart().toString(), // Ensure start time is a string
-			HourSchedule: getHourSchedule().toFixed(2),
-			Summary: getSummary() // Get the raw summary text
-		};
-
-		localStorage.setItem(todayDate(), JSON.stringify(timeinfo));
-		localStorage.setItem("nosave", "false");
-	} else {
-		localStorage.setItem("autoend", autoend.checked.toString());
-		localStorage.setItem("nosave", todayDate());
-	}
-	// Set 'subtract 5 min from start time' parameter in local storage
-	localStorage.setItem("startminsubtract", document.getElementById("startminsubtract").checked.toString());
-	// Set 'hour schedule' parameter in local storage get set in #hourschedule listener
-	// Set 'default break time' parameter in local storage
-	localStorage.setItem("break_time_default", getBreakDefault());
-	// Clear break counter
-	localStorage.setItem("break_counter_started", "false");
-	// Set 'history retain time' parameter in local storage
-	localStorage.setItem("historydeleteoption", getHistoryDeleteOption());
-	localStorage.setItem("historyretain", getHistoryRetain());
-	// Set 'default break time' parameter in local storage
-	//localStorage.setItem("country", getCountry());
-	// Set UI visibility options
-	localStorage.setItem("overtimeoption", document.getElementById("overtimeoption").checked.toString());
-	localStorage.setItem("totalhoursoption", document.getElementById("totalhoursoption").checked.toString());
-	localStorage.setItem("weeklyovertimeoption", document.getElementById("weeklyovertimeoption").checked.toString());
-	localStorage.setItem("totalovertimeoption", document.getElementById("totalovertimeoption").checked.toString());
-	localStorage.setItem("summaryoption", document.getElementById("summaryoption").checked.toString());
-	localStorage.setItem("historyoption", document.getElementById("historyoption").checked.toString());
-	localStorage.setItem("autobackupoption", document.getElementById("autobackupoption").checked.toString());
-	localStorage.setItem("parametersoption", document.getElementById("parametersoption").checked.toString());
-	localStorage.setItem("breaktime_timeselection_option_timerange", document.getElementById("breaktime_timeselection_option_timerange").checked.toString());
-	//localStorage.setItem("theme", document.querySelector('input[name="appearance"]:checked').value);
-	//return false; ////// DEBUG before reloading the window
-};
-
-// Listeners and initializers
-document.addEventListener("DOMContentLoaded", function () {
-	dayjs().format(); // Initialize dayjs
-	dayjs.extend(window.dayjs_plugin_duration);
-	dayjs.extend(window.dayjs_plugin_isSameOrBefore);
-	dayjs.extend(window.dayjs_plugin_customParseFormat);
-	dayjs.extend(window.dayjs_plugin_utc);
-	dayjs.extend(window.dayjs_plugin_isBetween);
 
 	importBootstrapColors();
 	loadApp();
+	initImportExport();
+	initUIEventListeners();
 
-	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')),
-		// eslint-disable-next-line no-unused-vars
-		tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+	if (typeof bootstrap !== 'undefined') {
+		const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+		tooltipTriggerList.map(function (tooltipTriggerEl) {
 			return new bootstrap.Tooltip(tooltipTriggerEl, {
 				boundary: document.body,
-				'delay': { show: 1000, hide: 0 }
+				delay: { show: 1000, hide: 0 }
 			});
 		});
+	}
+}
 
-	document.getElementById("year_span").innerHTML = dayjs().year();
-
-	let myModal;
-	if (window.location.href.indexOf('#about') != -1) {
-		myModal = new bootstrap.Modal(document.getElementById('modalabout'));
-		myModal.show();
-	}
-	if (window.location.href.indexOf('#settings') != -1) {
-		myModal = new bootstrap.Modal(document.getElementById('modalsettings'));
-		myModal.show();
-	}
-	if (window.location.href.indexOf('#info') != -1) {
-		myModal = new bootstrap.Modal(document.getElementById('modalinfo'));
-		myModal.show();
-	}
-	if (window.location.href.indexOf('#history') != -1) {
-		myModal = new bootstrap.Modal(document.getElementById('modaledithistory'));
-		myModal.show();
-	}
-	if (window.location.href.indexOf('#reporting') != -1) {
-		myModal = new bootstrap.Modal(document.getElementById('modalreporting'));
-		myModal.show();
-	}
-	if (window.location.href.indexOf('#policy') != -1) {
-		myModal = new bootstrap.Modal(document.getElementById('modalpolicy'));
-		myModal.show();
-	}
-});
+if (document.readyState === "loading") {
+	document.addEventListener("DOMContentLoaded", initializeApp);
+} else {
+	initializeApp();
+}
 
 window.addEventListener("load", function () {
 	if ("serviceWorker" in navigator) {
@@ -1532,48 +361,21 @@ window.addEventListener("load", function () {
 	}
 });
 
-document.addEventListener('keydown', function (e) {
-	if (e.keyCode === 13) //ENTER key code
-		add_time(getHourSchedule());
-});
+window.onbeforeunload = function () {
+	handleBeforeUnload();
+};
 
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-	// Check if the user has 'auto' selected
-	if (document.querySelector('input[name="appearance"]:checked').value == "auto") {
-		// Call setTheme("auto") again.
-		// This function handles the system check internally
-		// AND keeps the localStorage value set to "auto" instead of overwriting it with "dark"/"light".
-		setTheme("auto");
+document.addEventListener('keydown', function (e) {
+	if (e.keyCode === 13) {
+		add_time(getHourSchedule());
 	}
 });
 
-document.querySelectorAll("input").forEach(input => {
-	input.addEventListener("focusout", () => {
-		checkInputValues();
-	});
-});
-
-document.querySelectorAll(".btn").forEach(btn => {
-	btn.addEventListener("mouseup", function () {
-		// Fix buttons keeping focus after being clicked
-		this.blur();
-	});
-});
-
-const appAlert = document.getElementById("app_alert");
-if (appAlert) {
-	appAlert.addEventListener("close.bs.alert", function (event) {
-		event.preventDefault(); // Prevent Bootstrap from removing the element from the DOM
-		this.style.display = "none";
-	});
-}
-
-const hourScheduleSelect = document.getElementById("hourschedule");
-if (hourScheduleSelect) {
-	hourScheduleSelect.addEventListener('change', function () {
-		activateConfirmationModal("Do you want to set the hour schedule for every day?<br>If not, the selected value will only be applicable today.", choice => {
-			if (choice == "yes")
-				localStorage.setItem("hourschedule", getHourSchedule());
-		});
+if (window.matchMedia) {
+	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+		const appearance = document.querySelector('input[name="appearance"]:checked');
+		if (appearance && appearance.value === "auto") {
+			setTheme("auto");
+		}
 	});
 }
