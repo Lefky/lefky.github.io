@@ -1,0 +1,8 @@
+{
+  "name": "Working Hours Tracker",
+  "description": "A lightweight, privacy-focused Progressive Web Application (PWA) to track your daily working hours, breaks, and overtime balance.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

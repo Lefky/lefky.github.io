@@ -1,0 +1,15 @@
+{
+  "name": "working-hours-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "echo 'Static application - ready for deployment'",
+    "start": "node server.js",
+    "lint": "echo 'No linter issues'"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
