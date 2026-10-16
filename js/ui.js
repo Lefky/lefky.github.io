@@ -288,7 +288,7 @@ export function setCustomHourScheduleUI(time) {
 }
 
 export function getWorktime() {
-	return calculateWorktime(getStart(), getEnd(), getHourSchedule());
+	return calculateWorktime(getStart(), getEnd(), getHourSchedule(), getBreak(false));
 }
 
 export function calculateTotal() {
@@ -737,8 +737,9 @@ export function add_time(time) {
 }
 
 export function add_break(time) {
-	setBreak(time + getBreak(false));
-	setEnd(time + getEnd());
+	const normalizedTime = Math.abs(time - 0.084) < 0.001 ? (5 / 60) : time;
+	setBreak(normalizedTime + getBreak(false));
+	setEnd(normalizedTime + getEnd());
 	calculateTotal();
 }
 

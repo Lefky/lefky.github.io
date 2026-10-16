@@ -24,8 +24,9 @@ export function floatToTimeString(timedec) {
 
 	const sign = num < 0 ? "-" : "";
 	const absVal = Math.abs(num);
-	const hours = Math.floor(absVal);
-	const minutes = Math.floor((absVal * 60) % 60);
+	const totalMinutes = Math.round(absVal * 60);
+	const hours = Math.floor(totalMinutes / 60);
+	const minutes = totalMinutes % 60;
 
 	return sign + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
 }
@@ -112,19 +113,25 @@ export function todayDate() {
  * @param {number} startDec
  * @param {number} endDec
  * @param {number} [hourSchedule]
+ * @param {number} [breakDec]
  * @returns {string} Two decimal string representation (e.g. "7.60")
  */
-export function calculateWorktime(startDec, endDec, hourSchedule = 0) {
-	let worktime = endDec - startDec;
+export function calculateWorktime(startDec, endDec, hourSchedule = 0, breakDec = 0) {
+	let grossWorktime = endDec - startDec;
 	if (endDec < startDec) {
-		worktime = 24 + worktime;
+		grossWorktime = 24 + grossWorktime;
 	}
 
-	if (hourSchedule && Math.abs(worktime - hourSchedule) <= 0.02) {
-		worktime = hourSchedule;
+	const sched = parseFloat(hourSchedule) || 0;
+	const brk = parseFloat(breakDec) || 0;
+	const netWorktime = grossWorktime - brk;
+
+	// If net worktime is within ~1.2 minutes (0.02h) of the schedule, snap to schedule + break
+	if (sched > 0 && Math.abs(netWorktime - sched) <= 0.02) {
+		grossWorktime = sched + brk;
 	}
 
-	return worktime.toFixed(2);
+	return grossWorktime.toFixed(2);
 }
 
 /**
@@ -139,7 +146,16 @@ export function calculateOvertime(worktime, breakTime, hourSchedule) {
 	const breakDec = parseFloat(breakTime) || 0;
 	const schedDec = parseFloat(hourSchedule) || 0;
 
-	const overtime = (workDec - breakDec - schedDec).toFixed(2);
+	let overtimeNum = workDec - breakDec - schedDec;
+
+	// When on schedule, minute quantization or floating point imprecision
+	// can result in tiny differences (e.g. +/-0.0067h = 24s for schedules like 3.04h or 6.24h)
+	// that round to -0.01 overtime. Suppress this false negative when difference is <= 0.015h.
+	if (schedDec > 0 && Math.abs(overtimeNum) <= 0.015) {
+		overtimeNum = 0;
+	}
+
+	const overtime = overtimeNum.toFixed(2);
 	if (overtime === "-0.00") {
 		return "0.00";
 	}

@@ -19,6 +19,10 @@ test('floatToTimeString converts decimals to HH:mm string', () => {
 	assert.strictEqual(floatToTimeString(16.75), '16:45');
 	assert.strictEqual(floatToTimeString(-1.5), '-01:30');
 	assert.strictEqual(floatToTimeString('correction'), 'correction');
+	// Floating point values that previously suffered from Math.floor truncation bugs
+	assert.strictEqual(floatToTimeString(16.083333333333332), '16:05');
+	assert.strictEqual(floatToTimeString(16.583333333333332), '16:35');
+	assert.strictEqual(floatToTimeString(8.416666666666666), '08:25');
 });
 
 test('timeStringToFloat converts HH:mm string to decimal hours', () => {
@@ -46,14 +50,24 @@ test('testDateFormat validates DD-MM-YYYY format', () => {
 test('calculateWorktime computes normal hours and midnight crossing', () => {
 	assert.strictEqual(calculateWorktime(8, 16.5), '8.50');
 	assert.strictEqual(calculateWorktime(22, 6), '8.00');
-	// Test snap threshold (e.g., schedule 7.6)
+	// Test snap threshold without break
 	assert.strictEqual(calculateWorktime(8, 15.61, 7.6), '7.60');
+	// Test snap threshold WITH break (8.0 + 7.6 + 0.5 = 16.1)
+	assert.strictEqual(calculateWorktime(8, 16.11, 7.6, 0.5), '8.10');
+	// Test snap threshold with fractional schedule (6.24h + 0.5h break -> 14:44 = 14.7333h)
+	assert.strictEqual(calculateWorktime(8, 14.7333, 6.24, 0.5), '6.74');
 });
 
 test('calculateOvertime computes positive and negative overtime', () => {
 	assert.strictEqual(calculateOvertime(8.5, 0.5, 7.6), '0.40');
 	assert.strictEqual(calculateOvertime(7.0, 0.5, 7.6), '-1.10');
 	assert.strictEqual(calculateOvertime(8.1, 0.5, 7.6), '0.00');
+	// Prevents false -0.01 overtime on fractional minute schedules (3.04h, 6.24h)
+	assert.strictEqual(calculateOvertime(3.0333, 0, 3.04), '0.00');
+	assert.strictEqual(calculateOvertime(6.7333, 0.5, 6.24), '0.00');
+	// Preserves real 1-minute early or late deviations (0.0167h)
+	assert.strictEqual(calculateOvertime(7.98, 0, 8.0), '-0.02');
+	assert.strictEqual(calculateOvertime(8.02, 0, 8.0), '0.02');
 });
 
 test('calculateTotalNoBreak deducts break correctly', () => {
