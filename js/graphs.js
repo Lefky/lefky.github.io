@@ -140,24 +140,61 @@ function setDateSelector(start, end) {
 }
 
 function mobileRotateScreen(rotate) {
-	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-		if (rotate) {
-			document.documentElement.requestFullscreen();
-			document.documentElement.webkitRequestFullScreen();
+	try {
+		if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+			if (rotate) {
+				const req = document.documentElement.requestFullscreen ||
+					document.documentElement.webkitRequestFullScreen ||
+					document.documentElement.mozRequestFullScreen ||
+					document.documentElement.msRequestFullscreen;
+				if (req) {
+					try {
+						const p = req.call(document.documentElement);
+						if (p && typeof p.catch === 'function') p.catch(() => { });
+					} catch (e) {
+						// ignore error if fullscreen request is blocked
+					}
+				}
 
-			let current_mode = screen.orientation;
-			console.log(current_mode.type);
-			console.log(current_mode.angle);
-
-			screen.orientation.lock("landscape");
-			current_mode = screen.orientation;
-		} else {
-			screen.orientation.unlock();
-			document.exitFullscreen();
-			document.webkitExitFullscreen();
+				if (screen.orientation && typeof screen.orientation.lock === 'function') {
+					try {
+						const lockPromise = screen.orientation.lock("landscape");
+						if (lockPromise && typeof lockPromise.catch === 'function') {
+							lockPromise.catch(() => { });
+						}
+					} catch (e) {
+						// ignore orientation lock error
+					}
+				}
+			} else {
+				if (screen.orientation && typeof screen.orientation.unlock === 'function') {
+					try {
+						screen.orientation.unlock();
+					} catch (e) {
+						// ignore unlock error
+					}
+				}
+				if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
+					const exit = document.exitFullscreen ||
+						document.webkitExitFullscreen ||
+						document.mozCancelFullScreen ||
+						document.msExitFullscreen;
+					if (exit) {
+						try {
+							const p = exit.call(document);
+							if (p && typeof p.catch === 'function') p.catch(() => { });
+						} catch (e) {
+							// ignore exit error
+						}
+					}
+				}
+			}
 		}
+	} catch (err) {
+		console.warn("mobileRotateScreen error:", err);
 	}
 }
+window.mobileRotateScreen = mobileRotateScreen;
 
 function drawAreagraph(graphtype) {
 	const data = new google.visualization.DataTable();
