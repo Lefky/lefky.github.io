@@ -42,9 +42,11 @@ This document outlines the planned features and improvements for the Working Hou
 ### Modular Refactoring (ES6)
 * **Goal:** Improve code maintainability by breaking down the monolithic `javascript.js` file.
 * **Approach:** Refactor the codebase into logical ES6 modules:
-    * `storage.js` (Data persistence)
-    * `ui.js` (DOM interactions)
-    * `time-logic.js` (Calculations)
+    * `time-calc.js` (Time conversions, date math, calculation engine, timer)
+    * `storage.js` (localStorage data persistence, cleanup, and backups)
+    * `ui.js` (DOM interactions, view state, themes, and input syncing)
+    * `export.js` (JSON, CSV, and PDF report generation)
+* **Status:** Implemented!
 
 ## 4. User Experience (UX)
 

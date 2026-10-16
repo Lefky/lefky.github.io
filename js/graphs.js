@@ -58,15 +58,20 @@ function initGraphs(resetDates = false) {
 		initDateSelector();
 	}
 
-	// Load money rate settings
-	moneyRate = localStorage.getItem("moneyRate");
-	moneyRateUnit = localStorage.getItem("moneyRateUnit");
-	if (moneyRate)
-		document.getElementById("moneyRate").value = moneyRate;
-	if (moneyRateUnit == "hourly")
-		document.getElementById("moneyRateUnitHourly").click();
-	else if (moneyRateUnit == "daily")
-		document.getElementById("moneyRateUnitDaily").click();
+	// Load money rate settings safely
+	moneyRate = localStorage.getItem("moneyRate") || "";
+	moneyRateUnit = localStorage.getItem("moneyRateUnit") || "monthly";
+	const rateInput = document.getElementById("moneyRate");
+	if (rateInput) {
+		rateInput.value = moneyRate;
+	}
+	const hourlyRadio = document.getElementById("moneyRateUnitHourly");
+	const monthlyRadio = document.getElementById("moneyRateUnitMonthly");
+	if (moneyRateUnit === "hourly") {
+		if (hourlyRadio) hourlyRadio.checked = true;
+	} else {
+		if (monthlyRadio) monthlyRadio.checked = true;
+	}
 
 	// Reset variables
 	numberOfDaysRegistered = 0,
@@ -88,22 +93,32 @@ function initGraphs(resetDates = false) {
 }
 
 function drawGraphs() {
-	importBootstrapColors();
-	//drawTimelinegraph("Workdays");
-	drawGaugegraph("DaysRegisteredGauge");
-	drawGaugegraph("AvgStarttimeGauge");
-	drawGaugegraph("AvgStoptimeGauge");
-	drawGaugegraph("SumOvertimeGauge");
-	drawGaugegraph("moneyRateOvertimeGauge");
-	drawPiegraph("OvertimeDays");
-	drawPiegraph("Hourschedules");
-	drawAreagraph("OvertimeDec");
-	drawAreagraph("OvertimeCumulative");
-	drawAreagraph("StartDec");
-	drawAreagraph("StopDec");
-	drawBargraph("TotalDec");
-	drawBargraph("TotalNoBreakDec");
-	drawAreagraph("BreakDec");
+	if (typeof importBootstrapColors === 'function') {
+		importBootstrapColors();
+	}
+	const graphList = [
+		() => drawGaugegraph("DaysRegisteredGauge"),
+		() => drawGaugegraph("AvgStarttimeGauge"),
+		() => drawGaugegraph("AvgStoptimeGauge"),
+		() => drawGaugegraph("SumOvertimeGauge"),
+		() => drawGaugegraph("moneyRateOvertimeGauge"),
+		() => drawPiegraph("OvertimeDays"),
+		() => drawPiegraph("Hourschedules"),
+		() => drawAreagraph("OvertimeDec"),
+		() => drawAreagraph("OvertimeCumulative"),
+		() => drawAreagraph("StartDec"),
+		() => drawAreagraph("StopDec"),
+		() => drawBargraph("TotalDec"),
+		() => drawBargraph("TotalNoBreakDec"),
+		() => drawAreagraph("BreakDec")
+	];
+	graphList.forEach(fn => {
+		try {
+			fn();
+		} catch (err) {
+			console.error("Error drawing individual graph in reporting:", err);
+		}
+	});
 }
 
 function initDateSelector() {
@@ -125,24 +140,61 @@ function setDateSelector(start, end) {
 }
 
 function mobileRotateScreen(rotate) {
-	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-		if (rotate) {
-			document.documentElement.requestFullscreen();
-			document.documentElement.webkitRequestFullScreen();
+	try {
+		if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+			if (rotate) {
+				const req = document.documentElement.requestFullscreen ||
+					document.documentElement.webkitRequestFullScreen ||
+					document.documentElement.mozRequestFullScreen ||
+					document.documentElement.msRequestFullscreen;
+				if (req) {
+					try {
+						const p = req.call(document.documentElement);
+						if (p && typeof p.catch === 'function') p.catch(() => { });
+					} catch (e) {
+						// ignore error if fullscreen request is blocked
+					}
+				}
 
-			let current_mode = screen.orientation;
-			console.log(current_mode.type);
-			console.log(current_mode.angle);
-
-			screen.orientation.lock("landscape");
-			current_mode = screen.orientation;
-		} else {
-			screen.orientation.unlock();
-			document.exitFullscreen();
-			document.webkitExitFullscreen();
+				if (screen.orientation && typeof screen.orientation.lock === 'function') {
+					try {
+						const lockPromise = screen.orientation.lock("landscape");
+						if (lockPromise && typeof lockPromise.catch === 'function') {
+							lockPromise.catch(() => { });
+						}
+					} catch (e) {
+						// ignore orientation lock error
+					}
+				}
+			} else {
+				if (screen.orientation && typeof screen.orientation.unlock === 'function') {
+					try {
+						screen.orientation.unlock();
+					} catch (e) {
+						// ignore unlock error
+					}
+				}
+				if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
+					const exit = document.exitFullscreen ||
+						document.webkitExitFullscreen ||
+						document.mozCancelFullScreen ||
+						document.msExitFullscreen;
+					if (exit) {
+						try {
+							const p = exit.call(document);
+							if (p && typeof p.catch === 'function') p.catch(() => { });
+						} catch (e) {
+							// ignore exit error
+						}
+					}
+				}
+			}
 		}
+	} catch (err) {
+		console.warn("mobileRotateScreen error:", err);
 	}
 }
+window.mobileRotateScreen = mobileRotateScreen;
 
 function drawAreagraph(graphtype) {
 	const data = new google.visualization.DataTable();
@@ -401,169 +453,202 @@ function drawPiegraph(graphtype) {
 }
 
 function drawGaugegraph(graphtype) {
-	const data = new google.visualization.DataTable();
-	let min = 0,
-		max = 0,
-		redFrom,
-		redTo,
-		yellowFrom,
-		yellowTo,
-		greenFrom,
-		greenTo,
-		redColor = bs_washed_red,
-		yellowColor = bs_washed_yellow,
-		greenColor = bs_washed_green,
-		majorTicks,
-		minorTicks = 5;
+	try {
+		const container = document.getElementById(graphtype + '_div');
+		if (!container) return;
+		if (typeof google === 'undefined' || !google.visualization || !google.visualization.DataTable || !google.visualization.Gauge) {
+			console.warn("Google Charts Gauge is not yet loaded");
+			return;
+		}
 
-	let avg_starttime,
-		avg_stoptime;
+		const data = new google.visualization.DataTable();
+		let min = 0,
+			max = 0,
+			redFrom,
+			redTo,
+			yellowFrom,
+			yellowTo,
+			greenFrom,
+			greenTo,
+			redColor = bs_washed_red,
+			yellowColor = bs_washed_yellow,
+			greenColor = bs_washed_green,
+			majorTicks,
+			minorTicks = 5;
 
-	switch (graphtype) {
-		case "DaysRegisteredGauge":
-			data.addColumn('string', 'Metric');
-			data.addColumn('number', 'Value');
-			data.addRows([
-				['Days registered', numberOfDaysRegistered],
-			]);
-			min = 0;
-			max = localStorage.getItem("historyretain");
-			redFrom = max - ((max / 100) * 5);
-			redTo = max;
-			yellowFrom = max - ((max / 100) * 7.5);
-			yellowTo = max - ((max / 100) * 5);
-			break;
-		case "AvgStarttimeGauge":
-			data.addColumn('string', 'Metric');
-			data.addColumn('number', 'Value');
-			avg_starttime = sumStarttime / numberOfDaysRegistered;
-			data.addRows([
-				['Avg starttime', avg_starttime]
-			]);
-			min = 0;
-			max = 24;
-			redFrom = 4;
-			redTo = 6;
-			yellowFrom = 10;
-			yellowTo = 12;
-			greenFrom = 6;
-			greenTo = 10;
-			redColor = bs_washed_yellow;
-			majorTicks = ["0", "3", "", "", "12", "", "", "21", "24"];
-			minorTicks = 3;
-			break;
-		case "AvgStoptimeGauge":
-			data.addColumn('string', 'Metric');
-			data.addColumn('number', 'Value');
-			avg_stoptime = sumStoptime / numberOfDaysRegistered;
-			data.addRows([
-				['Avg stoptime', avg_stoptime]
-			]);
-			min = 0;
-			max = 24;
-			redFrom = 12.5;
-			redTo = 14.5;
-			yellowFrom = 18.5;
-			yellowTo = 20.5;
-			greenFrom = 14.5;
-			greenTo = 18.5;
-			redColor = bs_washed_yellow;
-			majorTicks = ["0", "3", "", "", "12", "", "", "21", "24"];
-			minorTicks = 3;
-			break;
-		case "SumOvertimeGauge":
-			data.addColumn('string', 'Metric');
-			data.addColumn('number', 'Value');
-			data.addRows([
-				['Total overtime', sumOvertime]
-			]);
-			min = -50;
-			max = 50;
-			redFrom = min;
-			redTo = 0;
-			greenFrom = 0;
-			greenTo = max;
-			break;
-		case "moneyRateOvertimeGauge":
-			data.addColumn('string', 'Metric');
-			data.addColumn('number', 'Value');
+		let avg_starttime,
+			avg_stoptime;
 
-			let outputRate = 0;
-			if (moneyRateUnit == "monthly") {
-				outputRate = (parseFloat(moneyRate) / (22 * localStorage.getItem("hourschedule"))) * sumOvertime; // assuming 22 workdays of 8 hours each month
-			} else if (moneyRateUnit == "hourly") {
-				outputRate = parseFloat(moneyRate) * sumOvertime;
-			} else {
-				outputRate = "Error";
-			}
+		switch (graphtype) {
+			case "DaysRegisteredGauge":
+				data.addColumn('string', 'Metric');
+				data.addColumn('number', 'Value');
+				data.addRows([
+					['Days registered', numberOfDaysRegistered || 0],
+				]);
+				min = 0;
+				max = parseInt(localStorage.getItem("historyretain"), 10) || 30;
+				redFrom = max - ((max / 100) * 5);
+				redTo = max;
+				yellowFrom = max - ((max / 100) * 7.5);
+				yellowTo = max - ((max / 100) * 5);
+				break;
+			case "AvgStarttimeGauge":
+				data.addColumn('string', 'Metric');
+				data.addColumn('number', 'Value');
+				avg_starttime = numberOfDaysRegistered ? (sumStarttime / numberOfDaysRegistered) : 0;
+				data.addRows([
+					['Avg starttime', avg_starttime]
+				]);
+				min = 0;
+				max = 24;
+				redFrom = 4;
+				redTo = 6;
+				yellowFrom = 10;
+				yellowTo = 12;
+				greenFrom = 6;
+				greenTo = 10;
+				redColor = bs_washed_yellow;
+				majorTicks = ["0", "3", "", "", "12", "", "", "21", "24"];
+				minorTicks = 3;
+				break;
+			case "AvgStoptimeGauge":
+				data.addColumn('string', 'Metric');
+				data.addColumn('number', 'Value');
+				avg_stoptime = numberOfDaysRegistered ? (sumStoptime / numberOfDaysRegistered) : 0;
+				data.addRows([
+					['Avg stoptime', avg_stoptime]
+				]);
+				min = 0;
+				max = 24;
+				redFrom = 12.5;
+				redTo = 14.5;
+				yellowFrom = 18.5;
+				yellowTo = 20.5;
+				greenFrom = 14.5;
+				greenTo = 18.5;
+				redColor = bs_washed_yellow;
+				majorTicks = ["0", "3", "", "", "12", "", "", "21", "24"];
+				minorTicks = 3;
+				break;
+			case "SumOvertimeGauge":
+				data.addColumn('string', 'Metric');
+				data.addColumn('number', 'Value');
+				const safeSumOvertime = (typeof sumOvertime === 'number' && !isNaN(sumOvertime)) ? sumOvertime : 0;
+				data.addRows([
+					['Total overtime', safeSumOvertime]
+				]);
+				min = -50;
+				max = 50;
+				redFrom = min;
+				redTo = 0;
+				greenFrom = 0;
+				greenTo = max;
+				break;
+			case "moneyRateOvertimeGauge":
+				data.addColumn('string', 'Metric');
+				data.addColumn('number', 'Value');
 
-			data.addRows([
-				['Overtime earnings', outputRate]
-			]);
-			min = 0;
-			max = Math.ceil(outputRate / 100) * 100;
-			redFrom = min;
-			redTo = 0;
-			greenFrom = 0;
-			greenTo = max;
-			break;
-		default:
-			// code block
-			console.log("No valid graphtype entered");
-	}
+				let outputRate = 0;
+				const parsedRate = parseFloat(moneyRate);
+				const rateValid = !isNaN(parsedRate) && parsedRate > 0;
+				const schedHours = parseFloat(localStorage.getItem("hourschedule")) || 7.6;
+				const currentOvertime = (typeof sumOvertime === 'number' && !isNaN(sumOvertime)) ? sumOvertime : 0;
 
-	const options = {
-		/* https://developers.google.com/chart/interactive/docs/gallery/gauge#configuration-options */
-		redFrom: redFrom,
-		redTo: redTo,
-		yellowFrom: yellowFrom,
-		yellowTo: yellowTo,
-		greenFrom: greenFrom,
-		greenTo: greenTo,
-		redColor: redColor,
-		yellowColor: yellowColor,
-		greenColor: greenColor,
-		majorTicks: majorTicks,
-		minorTicks: minorTicks,
-		min: min,
-		max: max,
-		width: '100%',
-		height: 250
-	};
-
-	const chart = new google.visualization.Gauge(document.getElementById(graphtype + '_div'));
-	chart.draw(data, options);
-
-	const gaugeTitle = document.querySelector('#' + graphtype + '_div svg g text');
-	if (gaugeTitle)
-		gaugeTitle.setAttribute('font-size', 20); // change the fontsize of the title, there's no parameter for this
-
-	// change the format of the starttime gauge to non-decimal
-	if (graphtype == "AvgStarttimeGauge") {
-		const startText = document.querySelector('#AvgStarttimeGauge_div svg g g text');
-		if (startText)
-			startText.innerHTML = floatToTimeString(avg_starttime);
-	}
-	if (graphtype == "AvgStoptimeGauge") {
-		const stopText = document.querySelector('#AvgStoptimeGauge_div svg g g text');
-		if (stopText)
-			stopText.innerHTML = floatToTimeString(avg_stoptime);
-	}
-	if (graphtype == "moneyRateOvertimeGauge") {
-		const gaugeContainer = document.getElementById('moneyRateOvertimeGauge_div');
-		const textElements = gaugeContainer.querySelectorAll('text');
-
-		textElements.forEach(textEl => {
-			const currentText = textEl.textContent.trim();
-			if (currentText === max.toString() || currentText === min.toString()) {
-				textEl.setAttribute('font-size', '12');
-				if (currentText === max.toString()) {
-					textEl.textContent = 'Millionaire';
+				if (rateValid) {
+					if (moneyRateUnit === "monthly") {
+						outputRate = (parsedRate / (22 * schedHours)) * currentOvertime;
+					} else {
+						outputRate = parsedRate * currentOvertime;
+					}
 				} else {
-					textEl.textContent = 'Broke';
+					outputRate = 0;
 				}
+
+				if (isNaN(outputRate) || !isFinite(outputRate)) {
+					outputRate = 0;
+				}
+				outputRate = Math.round(outputRate * 100) / 100;
+
+				data.addRows([
+					['Overtime earnings', outputRate]
+				]);
+
+				if (outputRate >= 0) {
+					min = 0;
+					max = Math.max(100, Math.ceil(outputRate / 50) * 50);
+					redFrom = min;
+					redTo = 0;
+					greenFrom = 0;
+					greenTo = max;
+				} else {
+					min = Math.min(-100, Math.floor(outputRate / 50) * 50);
+					max = Math.max(100, Math.abs(min));
+					redFrom = min;
+					redTo = 0;
+					greenFrom = 0;
+					greenTo = max;
+				}
+				break;
+			default:
+				console.log("No valid graphtype entered");
+				return;
+		}
+
+		const options = {
+			redFrom: redFrom,
+			redTo: redTo,
+			yellowFrom: yellowFrom,
+			yellowTo: yellowTo,
+			greenFrom: greenFrom,
+			greenTo: greenTo,
+			redColor: redColor,
+			yellowColor: yellowColor,
+			greenColor: greenColor,
+			majorTicks: majorTicks,
+			minorTicks: minorTicks,
+			min: min,
+			max: max,
+			width: '100%',
+			height: 250
+		};
+
+		const chart = new google.visualization.Gauge(container);
+		chart.draw(data, options);
+
+		const gaugeTitle = container.querySelector('svg g text');
+		if (gaugeTitle) {
+			gaugeTitle.setAttribute('font-size', '20');
+		}
+
+		if (graphtype === "AvgStarttimeGauge") {
+			const startText = container.querySelector('svg g g text');
+			if (startText && typeof floatToTimeString === 'function') {
+				startText.innerHTML = floatToTimeString(avg_starttime);
 			}
-		});
+		}
+		if (graphtype === "AvgStoptimeGauge") {
+			const stopText = container.querySelector('svg g g text');
+			if (stopText && typeof floatToTimeString === 'function') {
+				stopText.innerHTML = floatToTimeString(avg_stoptime);
+			}
+		}
+		if (graphtype === "moneyRateOvertimeGauge") {
+			const textElements = container.querySelectorAll('text');
+			textElements.forEach(textEl => {
+				const currentText = textEl.textContent.trim();
+				if (currentText === max.toString() || currentText === min.toString()) {
+					textEl.setAttribute('font-size', '12');
+					if (currentText === max.toString()) {
+						textEl.textContent = 'Millionaire';
+					} else {
+						textEl.textContent = 'Broke';
+					}
+				}
+			});
+		}
+	} catch (err) {
+		console.error("Error drawing gauge graph " + graphtype + ":", err);
 	}
 }
 
@@ -778,14 +863,17 @@ if (modalReporting) {
 }
 
 function saveMoneyRateSettings() {
-	moneyRateUnit = document.querySelector('input[name="moneyRateUnit"]:checked').id == "moneyRateUnitHourly" ? "hourly" : "monthly";
-	moneyRate = document.getElementById("moneyRate").value;
+	const checked = document.querySelector('input[name="moneyRateUnit"]:checked');
+	moneyRateUnit = (checked && checked.id === "moneyRateUnitHourly") ? "hourly" : "monthly";
+	const rateInput = document.getElementById("moneyRate");
+	moneyRate = rateInput ? rateInput.value : "";
 
 	localStorage.setItem("moneyRateUnit", moneyRateUnit);
 	localStorage.setItem("moneyRate", moneyRate);
 
 	drawGaugegraph("moneyRateOvertimeGauge");
-};
+}
+window.saveMoneyRateSettings = saveMoneyRateSettings;
 
 // Window Resize
 window.addEventListener('resize', function () {

@@ -1,6 +1,6 @@
 console.log("loaded editable_table.js");
 
-/*global app_alert_message, testDateFormat, setHistory, setAlertMessage, deleteHistory */
+/*global app_alert_message, testDateFormat, setHistory, setAlertMessage, deleteHistory, mobileRotateScreen */
 /*eslint no-undef: "error"*/
 
 // Helper: Wacht tot DOM geladen is (vervangt $(document).ready)
@@ -11,10 +11,16 @@ document.addEventListener("DOMContentLoaded", function () {
 	if (modalEditHistory) {
 		modalEditHistory.addEventListener('show.bs.modal', function () {
 			setHistory(true);
+			if (typeof mobileRotateScreen === 'function') {
+				mobileRotateScreen(true);
+			}
 		});
 
 		modalEditHistory.addEventListener('hide.bs.modal', function () {
 			setHistory(false);
+			if (typeof mobileRotateScreen === 'function') {
+				mobileRotateScreen(false);
+			}
 		});
 	}
 
