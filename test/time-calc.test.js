@@ -95,3 +95,38 @@ test('Timer tracks elapsed time accurately', async () => {
 	timer.reset();
 	assert.strictEqual(timer.getTime(), 0);
 });
+
+test('floatToTimeString handles edge values and invalid inputs', () => {
+	assert.strictEqual(floatToTimeString(null), '00:00');
+	assert.strictEqual(floatToTimeString(undefined), '00:00');
+	assert.strictEqual(floatToTimeString('not-a-number'), '00:00');
+	assert.strictEqual(floatToTimeString(NaN), '00:00');
+	assert.strictEqual(floatToTimeString(24), '24:00');
+	assert.strictEqual(floatToTimeString(23.983333333333334), '23:59');
+	assert.strictEqual(floatToTimeString(-0.08333333333333333), '-00:05');
+});
+
+test('timeStringToFloat handles edge formats and invalid inputs', () => {
+	assert.strictEqual(timeStringToFloat(''), 0);
+	assert.strictEqual(timeStringToFloat(null), 0);
+	assert.strictEqual(timeStringToFloat(undefined), 0);
+	assert.strictEqual(timeStringToFloat('invalid'), 0);
+	assert.strictEqual(timeStringToFloat('08:05'), 8 + 5 / 60);
+	assert.strictEqual(timeStringToFloat('23:59'), 23 + 59 / 60);
+});
+
+test('calculateWorktime handles midnight crossing with breaks and fractional hours', () => {
+	// Shift from 22:00 to 06:30 (8.5h total), scheduled 8h with 0.5h break -> snap to 8.50
+	assert.strictEqual(calculateWorktime(22, 6.5, 8.0, 0.5), '8.50');
+	// Shift from 23:00 to 07:00 (8.0h total)
+	assert.strictEqual(calculateWorktime(23, 7), '8.00');
+	// Zero duration (start equals end)
+	assert.strictEqual(calculateWorktime(8, 8), '0.00');
+});
+
+test('calculateTotalNoBreak handles zero and fractional values', () => {
+	assert.strictEqual(calculateTotalNoBreak(0, 0), '0.00');
+	assert.strictEqual(calculateTotalNoBreak(8, 0), '8.00');
+	assert.strictEqual(calculateTotalNoBreak('invalid', 0.5), '0.50');
+});
+

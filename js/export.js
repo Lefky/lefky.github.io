@@ -26,6 +26,48 @@ export function exportHistory() {
 }
 
 /**
+ * Formats an array of records into a valid CSV string.
+ * @param {Array<object>} items
+ * @returns {string}
+ */
+export function formatCSV(items) {
+	if (!items || items.length === 0) return '';
+	const replacer = (key, value) => (value === null ? '' : value);
+	const header = Object.keys(items[0]);
+	return [
+		header.join(','),
+		...items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
+	].join('\r\n');
+}
+
+/**
+ * Validates and writes imported payload into storage.
+ * @param {object} content
+ * @param {Storage} [targetStorage=localStorage]
+ * @returns {number} Number of keys imported
+ */
+export function processImportPayload(content, targetStorage = (typeof localStorage !== 'undefined' ? localStorage : null)) {
+	if (!content || typeof content !== 'object') {
+		throw new Error("Invalid import payload: expected an object");
+	}
+	if (!targetStorage) {
+		throw new Error("No storage target available");
+	}
+	let count = 0;
+	Object.keys(content).forEach(function (k) {
+		const value = content[k];
+		try {
+			JSON.parse(value);
+			targetStorage.setItem(k, value);
+		} catch (innerError) {
+			targetStorage.setItem(k, typeof value === 'object' ? JSON.stringify(value) : String(value));
+		}
+		count++;
+	});
+	return count;
+}
+
+/**
  * Generates and downloads a CSV export containing all historical work records.
  */
 export function exportCSV() {
@@ -50,12 +92,7 @@ export function exportCSV() {
 		return;
 	}
 
-	const replacer = (key, value) => (value === null ? '' : value);
-	const header = Object.keys(items[0]);
-	const csv = [
-		header.join(','),
-		...items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
-	].join('\r\n');
+	const csv = formatCSV(items);
 
 	const vLink = document.getElementById('exportCSVLink');
 	if (!vLink) return;
@@ -199,15 +236,7 @@ export function importHistoryData(e) {
 	reader.onload = readerEvent => {
 		try {
 			const content = JSON.parse(readerEvent.target.result);
-			Object.keys(content).forEach(function (k) {
-				const value = content[k];
-				try {
-					JSON.parse(value);
-					localStorage.setItem(k, value);
-				} catch (innerError) {
-					localStorage.setItem(k, typeof value === 'object' ? JSON.stringify(value) : value);
-				}
-			});
+			processImportPayload(content, localStorage);
 
 			if (importFile) importFile.value = '';
 

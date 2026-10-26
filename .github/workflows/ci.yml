@@ -1,0 +1,45 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    name: Build, Lint & Test (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build bundle
+        run: npm run build
+
+      - name: Verify bundle is up to date (no uncommitted drift)
+        run: |
+          if ! git diff --exit-code js/javascript.js; then
+            echo "::error::js/javascript.js differs from source modules in js/main.js or js/*.js. Run 'npm run build' and commit the resulting js/javascript.js."
+            exit 1
+          fi
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run unit test suite
+        run: npm test

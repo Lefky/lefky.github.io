@@ -113,6 +113,8 @@ import {
 import {
 	exportHistory,
 	exportCSV,
+	formatCSV,
+	processImportPayload,
 	setExportRange,
 	exportPDF,
 	importHistoryData,
@@ -213,6 +215,8 @@ export {
 	initUIEventListeners,
 	exportHistory,
 	exportCSV,
+	formatCSV,
+	processImportPayload,
 	setExportRange,
 	exportPDF,
 	importHistoryData,
@@ -312,6 +316,8 @@ if (typeof window !== 'undefined') {
 
 	window.exportHistory = exportHistory;
 	window.exportCSV = exportCSV;
+	window.formatCSV = formatCSV;
+	window.processImportPayload = processImportPayload;
 	window.setExportRange = setExportRange;
 	window.exportPDF = exportPDF;
 	window.importHistoryData = importHistoryData;
