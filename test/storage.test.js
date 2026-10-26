@@ -52,3 +52,23 @@ test('getHistoryKeys returns only valid date keys in chronological ascending ord
 	const keys = getHistoryKeys();
 	assert.deepStrictEqual(keys, ['25-09-2026', '01-10-2026', '14-10-2026']);
 });
+
+test('getHistoryKeys sorts chronologically across year and month boundaries', () => {
+	global.localStorage.clear();
+	global.localStorage.setItem('05-01-2026', JSON.stringify({}));
+	global.localStorage.setItem('31-12-2025', JSON.stringify({}));
+	global.localStorage.setItem('15-06-2024', JSON.stringify({}));
+	global.localStorage.setItem('28-02-2025', JSON.stringify({}));
+
+	const keys = getHistoryKeys();
+	assert.deepStrictEqual(keys, ['15-06-2024', '28-02-2025', '31-12-2025', '05-01-2026']);
+});
+
+test('getDayRecord returns null for non-existent records and handles corrupt JSON', () => {
+	global.localStorage.clear();
+	assert.strictEqual(getDayRecord('non-existent-key'), null);
+
+	global.localStorage.setItem('01-01-2026', 'corrupt-not-json');
+	assert.strictEqual(getDayRecord('01-01-2026'), null);
+});
+
