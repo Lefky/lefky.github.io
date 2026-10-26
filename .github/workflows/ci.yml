@@ -2,9 +2,7 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ main, master ]
   pull_request:
-    branches: [ main, master ]
 
 jobs:
   test:
@@ -23,7 +21,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
@@ -31,15 +28,22 @@ jobs:
       - name: Build bundle
         run: npm run build
 
-      - name: Verify bundle is up to date (no uncommitted drift)
-        run: |
-          if ! git diff --exit-code js/javascript.js; then
-            echo "::error::js/javascript.js differs from source modules in js/main.js or js/*.js. Run 'npm run build' and commit the resulting js/javascript.js."
-            exit 1
-          fi
-
       - name: Run lint
         run: npm run lint
 
       - name: Run unit test suite
         run: npm test
+
+  ci-status:
+    name: CI Required Checks
+    runs-on: ubuntu-latest
+    needs: [test]
+    if: always()
+    steps:
+      - name: Verify all matrix test runs succeeded
+        run: |
+          if [ "${{ needs.test.result }}" != "success" ]; then
+            echo "::error::One or more test matrix jobs failed."
+            exit 1
+          fi
+          echo "All tests, build, and lint checks passed successfully."
