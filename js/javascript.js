@@ -323,6 +323,7 @@ function initializeApp() {
 		dayjs().format();
 		if (window.dayjs_plugin_duration) dayjs.extend(window.dayjs_plugin_duration);
 		if (window.dayjs_plugin_isSameOrBefore) dayjs.extend(window.dayjs_plugin_isSameOrBefore);
+		if (window.dayjs_plugin_isSameOrAfter) dayjs.extend(window.dayjs_plugin_isSameOrAfter);
 		if (window.dayjs_plugin_customParseFormat) dayjs.extend(window.dayjs_plugin_customParseFormat);
 		if (window.dayjs_plugin_utc) dayjs.extend(window.dayjs_plugin_utc);
 		if (window.dayjs_plugin_isBetween) dayjs.extend(window.dayjs_plugin_isBetween);
