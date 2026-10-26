@@ -45,13 +45,13 @@
 		defer></script>
 	<!-- https://day.js.org/docs/en/installation/installation -->
 	<!-- Custom scripting -->
-	<script type="module" src="js/javascript.js"></script>
+	<script type="text/javascript" src="js/introduction.js" defer></script>
+	<script type="text/javascript" src="js/javascript.js" defer></script>
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" defer></script>
 	<script type="text/javascript" src="js/graphs.js" defer></script>
 	<script type="text/javascript" src="js/editable_table.js" defer></script>
-	<script type="text/javascript" src="js/introduction.js" defer></script>
-	<script type="text/javascript" src="js/notifications.js" async></script>
-	<script type="text/javascript" src="js/animations.js" async></script>
+	<script type="text/javascript" src="js/notifications.js" defer></script>
+	<script type="text/javascript" src="js/animations.js" defer></script>
 </head>
 
 <body>
@@ -67,7 +67,7 @@
 					<p>
 						Author: <a href="https://www.linkedin.com/in/sennejanssens/" target="_blank">Senne Janssens</a>
 						(Send me a message with feedback or suggestions ;) )<br>
-						Version: <span id="currentappversion">20261016.1</span> <br>
+						Version: <span id="currentappversion">20261026.2</span> <br>
 						Release notes: <a href="https://github.com/Lefky/lefky.github.io/commits/master"
 							target="_blank">Check the master branch on Github</a>
 					</p>
@@ -954,6 +954,15 @@
 								straightforward. Hence why it's been
 								happing for years now. But now it's finally fixed and the calculations are more accurate
 								than ever!
+							</li>
+							<li>
+								Fixed a bug regarding a missing function of the time calculation library that was cause
+								certain functions to break like the edit history modal.
+							</li>
+							<li>
+								Fixed a bug where the first ever loading of the page locally would cause the app to fail
+								and the main javascript was never loaded. This didn't have impact when accessing the app
+								over the internet.
 							</li>
 						</ul>
 						</p>
