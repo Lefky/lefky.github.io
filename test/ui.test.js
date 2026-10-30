@@ -5,6 +5,8 @@ import { notificationClosed } from '../js/ui.js';
 
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const releaseNotes = readFileSync(new URL('../RELEASE_NOTES.md', import.meta.url), 'utf8');
+const uiSource = readFileSync(new URL('../js/ui.js', import.meta.url), 'utf8');
+const styles = readFileSync(new URL('../css/bootstrap_specific_style.css', import.meta.url), 'utf8');
 
 test('weekly overtime action is grouped after End time now, outside the end-time input row', () => {
 	const buttonIndex = html.indexOf('id="applyWeeklyOvertimeButton"');
@@ -22,6 +24,19 @@ test('weekly overtime action is grouped after End time now, outside the end-time
 	assert.doesNotMatch(html.slice(endTimeRowStart, nextRowStart), /applyWeeklyOvertimeButton/);
 	assert.match(html.slice(buttonIndex, groupEnd), /<i class="fal fa-minus"><\/i> Use overtime/);
 	assert.doesNotMatch(html.slice(buttonIndex, groupEnd), /Use weekly OT/);
+});
+
+test('main history preview keeps its rounded frame and separate header fixed while rows scroll', () => {
+	assert.match(uiSource, /history-preview-table'><colgroup><col><col><col><\/colgroup><tbody>/);
+	assert.match(uiSource, /getElementById\("historyheader"\)/);
+	assert.match(styles, /#historyheader \.history-preview-table,\s*#history \.history-preview-table\s*\{[^}]*table-layout:\s*fixed;/);
+	assert.match(styles, /#historycontainer\s*\{[^}]*height:\s*150px;[^}]*overflow:\s*hidden;/);
+	assert.match(styles, /#historyheader\s*\{[^}]*flex:\s*0 0 32px;[^}]*overflow:\s*hidden;[^}]*scrollbar-gutter:\s*stable;/);
+	assert.match(styles, /#history\s*\{[^}]*overflow-y:\s*auto;[^}]*overflow-x:\s*hidden;[^}]*scrollbar-gutter:\s*stable;/);
+	assert.match(styles, /#historyheader \.history-preview-table col,\s*#history \.history-preview-table col\s*\{\s*width:\s*33\.333%;/);
+	assert.match(styles, /#historyheader \.history-preview-table th\s*\{[^}]*height:\s*31px;/);
+	assert.doesNotMatch(styles, /#history \.history-preview-table th\s*\{[^}]*position:\s*sticky;/);
+	assert.doesNotMatch(styles, /#edit_history_table_object[^}]*history-preview-table/);
 });
 
 test('release-note version headings use version identifiers, including the planned release', () => {

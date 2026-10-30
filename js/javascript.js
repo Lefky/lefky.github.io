@@ -788,7 +788,7 @@
     }
   }
   function setHistory(refresh_edit_table) {
-    let entry_history = "<table width='100%' height='100%'><tr style='border-bottom: 1px solid var(--bs-secondary);'><th style='width: 33%;'>Date</th><th style='width: 33%;text-align:right;'>Time (no break)</th><th style='width: 33%;text-align:right;'>Overtime</th></tr>";
+    let entry_history = "<table class='history-preview-table'><colgroup><col><col><col></colgroup><tbody>";
     let entry_edit_history = "";
     const revkeys = getHistoryKeys().reverse();
     let overtimetotal = 0;
@@ -802,7 +802,7 @@
             timeinfo.Summary = "";
           }
           const colorClass = parseFloat(timeinfo.OvertimeDec) < 0 ? "text-danger" : "text-success";
-          entry_history += `<tr class='${colorClass}'><td>${key}</td><td style='text-align:right;'>${floatToTimeString(timeinfo.TotalNoBreakDec)}</td><td style='text-align:right;'>${floatToTimeString(timeinfo.OvertimeDec)}</td></tr>`;
+          entry_history += `<tr class='${colorClass}'><td>${key}</td><td>${floatToTimeString(timeinfo.TotalNoBreakDec)}</td><td>${floatToTimeString(timeinfo.OvertimeDec)}</td></tr>`;
           overtimetotal += parseFloat(timeinfo.OvertimeDec) || 0;
           if (typeof dayjs !== "undefined" && key !== todayDate() && dayjs(key, "DD-MM-YYYY").isSameOrAfter(dayjs().startOf("week"))) {
             overtimeweekly += parseFloat(timeinfo.OvertimeDec) || 0;
@@ -859,10 +859,14 @@
       entry_history = "No previous data yet :(";
       entry_edit_history = entry_history;
     } else {
-      entry_history = entry_history + "</table>";
+      entry_history = entry_history + "</tbody></table>";
     }
     const historyElem = document.getElementById("history");
     if (historyElem) historyElem.innerHTML = entry_history;
+    const historyHeaderElem = document.getElementById("historyheader");
+    if (historyHeaderElem) {
+      historyHeaderElem.innerHTML = "<table class='history-preview-table'><colgroup><col><col><col></colgroup><thead><tr><th scope='col'>Date</th><th scope='col'>Time (no break)</th><th scope='col'>Overtime</th></tr></thead></table>";
+    }
     if (refresh_edit_table) {
       const editHistoryElem = document.getElementById("edit_history_table_body");
       if (editHistoryElem) editHistoryElem.innerHTML = entry_edit_history;
