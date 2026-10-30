@@ -911,61 +911,74 @@
 	<!-- Page HTML -->
 	<div class="container-fluid h-100">
 		<div id="alertcontainer" class="row d-flex justify-content-center">
-			<div id="alertnotification"
+			<div id="alertnotification" data-notification-version="20261030.1"
 				class="alert alert-danger alert-dismissible fade show w-75 my-4 me-1 alertnotification" role="alert">
 				<div class="row">
 					<div class="col-lg-2 text-center py-1 px-4 my-auto">
 						<i class="far fa-exclamation-triangle fa-4x faa-pulse animated text-warning display-2"></i>
 					</div>
 					<div class="col-lg-9 py-1 px-4">
-						<p>
-							So far this application has been running for a while and I have been using it myself for a
-							long time. An update has been a while in the making and I finally got around to it. This
-							update brings some new features and a few bugfixes.<br>
-							But most of all, I've started using AI to build this application. This means that the code
-							is now more efficient and easier to maintain. It also means that I can add new features
-							faster and more easily. I hope you enjoy this update and I look forward to your feedback!
-						</p>
-						<p class="mb-0">
-							Changes
-						<ul>
-							<li>
-								Rotation for mobile screens is now better handled in both the graphs as edit history
-								modal.
-							</li>
-							<li>
-								Added unit tests and refactored into dedicated ES6 modules, separating calculation
-								logic, data persistence, export
-								generation, and DOM manipulation. Nerd speak aside, this means the code is now more in
-								line with coding standards.
-							</li>
-						</ul>
-						</p>
-						<p class="mb-0">
-							Bugfixes
-						<ul>
-							<li>
-								Billing rate isn't causing the graphs to break anymore in certain scenarios.
-							</li>
-							<li>
-								There was an annoying bug where certain timestamps would cause an overtime of -0.01 or
-								-0.02 to be displayed. This
-								was hard to fix initially as time calculations in javascript are not always
-								straightforward. Hence why it's been
-								happing for years now. But now it's finally fixed and the calculations are more accurate
-								than ever!
-							</li>
-							<li>
-								Fixed a bug regarding a missing function of the time calculation library that was cause
-								certain functions to break like the edit history modal.
-							</li>
-							<li>
-								Fixed a bug where the first ever loading of the page locally would cause the app to fail
-								and the main javascript was never loaded. This didn't have impact when accessing the app
-								over the internet.
-							</li>
-						</ul>
-						</p>
+						<section aria-label="20261030.1 release notes">
+							<p><strong>20261030.1</strong></p>
+							<p class="mb-0">Changes</p>
+							<ul>
+								<li>
+									Use saved overtime earned earlier this week to adjust today's planned end time.
+									Today's saved overtime is excluded and totals recalculate immediately.
+								</li>
+								<li>
+									The weekly overtime action is grouped beside "End time now" so the planned end-time
+									input stays aligned with the other time fields.
+								</li>
+							</ul>
+						</section>
+						<hr>
+						<section aria-label="Previous release 20261026.2">
+							<p><strong>Previous release: 20261026.2</strong></p>
+							<p>
+								So far this application has been running for a while and I have been using it myself
+								for a long time. An update has been a while in the making and I finally got around to
+								it. This update brings some new features and a few bugfixes.<br>
+								But most of all, I've started using AI to build this application. This means that the
+								code is now more efficient and easier to maintain. It also means that I can add new
+								features faster and more easily. I hope you enjoy this update and I look forward to
+								your feedback!
+							</p>
+							<p class="mb-0">Changes</p>
+							<ul>
+								<li>
+									Rotation for mobile screens is now better handled in both the graphs as edit history
+									modal.
+								</li>
+								<li>
+									Added unit tests and refactored into dedicated ES6 modules, separating calculation
+									logic, data persistence, export
+									generation, and DOM manipulation. Nerd speak aside, this means the code is now more
+									in line with coding standards.
+								</li>
+							</ul>
+							<p class="mb-0">Bugfixes</p>
+							<ul>
+								<li>Billing rate isn't causing the graphs to break anymore in certain scenarios.</li>
+								<li>
+									There was an annoying bug where certain timestamps would cause an overtime of
+									-0.01 or -0.02 to be displayed. This
+									was hard to fix initially as time calculations in javascript are not always
+									straightforward. Hence why it's been
+									happing for years now. But now it's finally fixed and the calculations are more
+									accurate than ever!
+								</li>
+								<li>
+									Fixed a bug regarding a missing function of the time calculation library that was
+									cause certain functions to break like the edit history modal.
+								</li>
+								<li>
+									Fixed a bug where the first ever loading of the page locally would cause the app
+									to fail and the main javascript was never loaded. This didn't have impact when
+									accessing the app over the internet.
+								</li>
+							</ul>
+						</section>
 					</div>
 				</div>
 				<button type="button" class="btn-close" onclick="notificationClosed('click');" data-bs-dismiss="alert"

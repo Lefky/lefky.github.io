@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-10-30
+goal: Keep release history concise and provide safe, representative local data
+  for manual testing.
