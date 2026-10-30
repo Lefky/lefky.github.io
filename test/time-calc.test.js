@@ -8,6 +8,7 @@ import {
 	calculateWorktime,
 	calculateOvertime,
 	calculateTotalNoBreak,
+	adjustEndTimeForOvertime,
 	escapeHtml,
 	Timer
 } from '../js/time-calc.js';
@@ -130,3 +131,9 @@ test('calculateTotalNoBreak handles zero and fractional values', () => {
 	assert.strictEqual(calculateTotalNoBreak('invalid', 0.5), '0.50');
 });
 
+test('adjustEndTimeForOvertime applies signed weekly overtime to the planned shift', () => {
+	assert.strictEqual(adjustEndTimeForOvertime(8, 17, 2), 15);
+	assert.strictEqual(adjustEndTimeForOvertime(8, 17, -1), 18);
+	assert.strictEqual(adjustEndTimeForOvertime(22, 6, 1), 5);
+	assert.strictEqual(adjustEndTimeForOvertime(8, 17, 10), 8);
+});

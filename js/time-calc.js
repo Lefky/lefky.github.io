@@ -175,6 +175,27 @@ export function calculateTotalNoBreak(worktime, breakTime) {
 }
 
 /**
+ * Applies a signed overtime balance to a planned shift end, returning a clock hour.
+ * @param {number|string} startDec
+ * @param {number|string} endDec
+ * @param {number|string} overtimeDec
+ * @returns {number}
+ */
+export function adjustEndTimeForOvertime(startDec, endDec, overtimeDec) {
+	const start = parseFloat(startDec) || 0;
+	const end = parseFloat(endDec) || 0;
+	const overtime = parseFloat(overtimeDec) || 0;
+	let shiftDuration = end - start;
+
+	if (shiftDuration < 0) {
+		shiftDuration += 24;
+	}
+
+	const adjustedDuration = Math.max(0, shiftDuration - overtime);
+	return (start + adjustedDuration) % 24;
+}
+
+/**
  * Calculates future execution date based on period and unit.
  * @param {number|string} executionday
  * @param {number|string} period

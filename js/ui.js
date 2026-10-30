@@ -9,6 +9,7 @@ import {
 	floatToTimeString,
 	timeStringToFloat,
 	reverseDateRepresentation,
+	adjustEndTimeForOvertime,
 	calculateWorktime,
 	calculateOvertime,
 	calculateTotalNoBreak,
@@ -143,6 +144,7 @@ export function importBootstrapColors() {
 
 // Timer state
 export const timer = new Timer();
+let weeklyOvertimeBalance = 0;
 let break_counter_started = false;
 let refreshIntervalId = 0;
 
@@ -482,7 +484,9 @@ export function setHistory(refresh_edit_table) {
 				entry_history += `<tr class='${colorClass}'><td>${key}</td><td style='text-align:right;'>${floatToTimeString(timeinfo.TotalNoBreakDec)}</td><td style='text-align:right;'>${floatToTimeString(timeinfo.OvertimeDec)}</td></tr>`;
 
 				overtimetotal += parseFloat(timeinfo.OvertimeDec) || 0;
-				if (typeof dayjs !== 'undefined' && dayjs(key, "DD-MM-YYYY").isSameOrAfter(dayjs().startOf('week'))) {
+				if (typeof dayjs !== 'undefined' &&
+					key !== todayDate() &&
+					dayjs(key, "DD-MM-YYYY").isSameOrAfter(dayjs().startOf('week'))) {
 					overtimeweekly += parseFloat(timeinfo.OvertimeDec) || 0;
 				}
 
@@ -553,24 +557,24 @@ export function setHistory(refresh_edit_table) {
 	}
 
 	setOvertimeTotal(overtimetotal);
+	weeklyOvertimeBalance = overtimeweekly;
 	setOvertimeWeekly(overtimeweekly);
 }
 
 export function notificationClosed(event) {
 	const versionElem = document.getElementById("currentappversion");
 	const version = versionElem ? versionElem.innerHTML : "";
+	const notif = document.getElementById("alertnotification");
+	const notificationVersion = notif ? notif.dataset.notificationVersion || version : version;
 	const lastnotifversion = localStorage.getItem("lastnotifversion");
 
 	if (event === "click") {
-		localStorage.setItem("lastnotifversion", version);
+		localStorage.setItem("lastnotifversion", notificationVersion);
 	}
 
-	if (event === "onload" && version !== lastnotifversion) {
-		const notif = document.getElementById("alertnotification");
-		if (notif) {
-			notif.style.display = "block";
-			notif.classList.add("show");
-		}
+	if (event === "onload" && notif && notificationVersion !== lastnotifversion) {
+		notif.style.display = "block";
+		notif.classList.add("show");
 	}
 }
 
@@ -733,6 +737,12 @@ export function end_time() {
 
 export function add_time(time) {
 	setEnd(getStart() + time + getBreak(false));
+	calculateTotal();
+}
+
+export function applyWeeklyOvertime() {
+	const adjustedEnd = adjustEndTimeForOvertime(getStart(), getEnd(), weeklyOvertimeBalance);
+	setEnd(adjustedEnd);
 	calculateTotal();
 }
 

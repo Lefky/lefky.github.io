@@ -1222,10 +1222,17 @@
 											data-bs-placement="bottom"
 											title="Adds the time selected in the hour schedule to the start time and puts it in the 'Time to go home' field."><i
 												class="fal fa-plus"></i> <span id="addtimebutton_span"></span>h</button>
-										<button type="button" class="btn btn-lg btn-success rightbtn px-4 py-3"
+										<button type="button" class="btn btn-lg btn-success middlebtn px-4 py-3"
 											onclick="end_time()" data-bs-toggle="tooltip" data-bs-placement="bottom"
 											title="Sets the 'Time to go home' field to the current time.">End time
 											now</button>
+										<button id="applyWeeklyOvertimeButton" type="button"
+											class="btn btn-lg btn-success rightbtn px-4 py-3"
+											onclick="applyWeeklyOvertime()" data-bs-toggle="tooltip"
+											data-bs-placement="bottom"
+											title="Subtracts the saved overtime balance from earlier this week from the planned end time.">
+											<i class="fal fa-minus"></i> Use overtime
+										</button>
 									</div>
 								</div>
 							</div>

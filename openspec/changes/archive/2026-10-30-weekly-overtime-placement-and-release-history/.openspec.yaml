@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-10-30
+goal: Keep the time-entry layout aligned and release announcements accurate,
+  retained, and tied to merge-bound releases.

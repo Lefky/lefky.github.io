@@ -15,6 +15,7 @@ import {
 	floatToTimeString,
 	timeStringToFloat,
 	reverseDateRepresentation,
+	adjustEndTimeForOvertime,
 	testDateFormat,
 	now,
 	todayDate,
@@ -100,6 +101,7 @@ import {
 	setTheme,
 	end_time,
 	add_time,
+	applyWeeklyOvertime,
 	add_break,
 	reset_break,
 	break_counter,
@@ -126,6 +128,7 @@ export {
 	floatToTimeString,
 	timeStringToFloat,
 	reverseDateRepresentation,
+	adjustEndTimeForOvertime,
 	testDateFormat,
 	now,
 	todayDate,
@@ -205,6 +208,7 @@ export {
 	setTheme,
 	end_time,
 	add_time,
+	applyWeeklyOvertime,
 	add_break,
 	reset_break,
 	break_counter,
@@ -307,6 +311,7 @@ if (typeof window !== 'undefined') {
 	window.setTheme = setTheme;
 	window.end_time = end_time;
 	window.add_time = add_time;
+	window.applyWeeklyOvertime = applyWeeklyOvertime;
 	window.add_break = add_break;
 	window.reset_break = reset_break;
 	window.break_counter = break_counter;

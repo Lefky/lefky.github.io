@@ -92,6 +92,17 @@
     const breakDec = parseFloat(breakTime) || 0;
     return Math.abs(parseFloat(workDec - breakDec)).toFixed(2);
   }
+  function adjustEndTimeForOvertime(startDec, endDec, overtimeDec) {
+    const start = parseFloat(startDec) || 0;
+    const end = parseFloat(endDec) || 0;
+    const overtime = parseFloat(overtimeDec) || 0;
+    let shiftDuration = end - start;
+    if (shiftDuration < 0) {
+      shiftDuration += 24;
+    }
+    const adjustedDuration = Math.max(0, shiftDuration - overtime);
+    return (start + adjustedDuration) % 24;
+  }
   function calculateExecutionDay(executionday, period, periodunit) {
     if (typeof dayjs !== "undefined") {
       let date = dayjs();
@@ -356,7 +367,7 @@
     if (saveBtn) {
       saveBtn.setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: var(--bs-success);");
       saveBtn.innerHTML = '<i class="fas fa-check"></i>';
-      setTimeout(function () {
+      setTimeout(function() {
         saveBtn.innerHTML = "Save";
         saveBtn.setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear;");
       }, 5e3);
@@ -383,7 +394,7 @@
     if (saveBtn) {
       saveBtn.setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear; color: white; background-color: var(--bs-success);");
       saveBtn.innerHTML = '<i class="fas fa-check"></i>';
-      setTimeout(function () {
+      setTimeout(function() {
         saveBtn.innerHTML = "Save";
         saveBtn.setAttribute("style", "float: none; margin-left: 5px; vertical-align: middle; transition: 0.7s linear;");
       }, 5e3);
@@ -509,6 +520,7 @@
     }
   }
   var timer = new Timer();
+  var weeklyOvertimeBalance = 0;
   var break_counter_started = false;
   var refreshIntervalId = 0;
   function getStart() {
@@ -792,7 +804,7 @@
           const colorClass = parseFloat(timeinfo.OvertimeDec) < 0 ? "text-danger" : "text-success";
           entry_history += `<tr class='${colorClass}'><td>${key}</td><td style='text-align:right;'>${floatToTimeString(timeinfo.TotalNoBreakDec)}</td><td style='text-align:right;'>${floatToTimeString(timeinfo.OvertimeDec)}</td></tr>`;
           overtimetotal += parseFloat(timeinfo.OvertimeDec) || 0;
-          if (typeof dayjs !== "undefined" && dayjs(key, "DD-MM-YYYY").isSameOrAfter(dayjs().startOf("week"))) {
+          if (typeof dayjs !== "undefined" && key !== todayDate() && dayjs(key, "DD-MM-YYYY").isSameOrAfter(dayjs().startOf("week"))) {
             overtimeweekly += parseFloat(timeinfo.OvertimeDec) || 0;
           }
           const dateIso = reverseDateRepresentation(key);
@@ -856,21 +868,21 @@
       if (editHistoryElem) editHistoryElem.innerHTML = entry_edit_history;
     }
     setOvertimeTotal(overtimetotal);
+    weeklyOvertimeBalance = overtimeweekly;
     setOvertimeWeekly(overtimeweekly);
   }
   function notificationClosed(event) {
     const versionElem = document.getElementById("currentappversion");
     const version = versionElem ? versionElem.innerHTML : "";
+    const notif = document.getElementById("alertnotification");
+    const notificationVersion = notif ? notif.dataset.notificationVersion || version : version;
     const lastnotifversion = localStorage.getItem("lastnotifversion");
     if (event === "click") {
-      localStorage.setItem("lastnotifversion", version);
+      localStorage.setItem("lastnotifversion", notificationVersion);
     }
-    if (event === "onload" && version !== lastnotifversion) {
-      const notif = document.getElementById("alertnotification");
-      if (notif) {
-        notif.style.display = "block";
-        notif.classList.add("show");
-      }
+    if (event === "onload" && notif && notificationVersion !== lastnotifversion) {
+      notif.style.display = "block";
+      notif.classList.add("show");
     }
   }
   function set_startminsubtract(startminsubtract_value) {
@@ -929,7 +941,7 @@
     }
     if (typeof bootstrap !== "undefined") {
       const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-      tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+      tooltipTriggerList.forEach(function(tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl, {
           boundary: document.body,
           delay: { show: 1e3, hide: 0 }
@@ -954,7 +966,7 @@
       msgBox.innerHTML = message;
       alertBox.style.display = "block";
       alertBox.style.opacity = "1";
-      setTimeout(function () {
+      setTimeout(function() {
         alertBox.style.transition = "opacity 1s ease-out";
         alertBox.style.opacity = "0";
         setTimeout(() => {
@@ -979,7 +991,7 @@
     modalEl.querySelector(".modal-body").innerHTML = "<p>" + message + "</p>";
     const modal = new bootstrap.Modal(modalEl, {});
     modal.show();
-    modalEl.addEventListener("shown.bs.modal", function () {
+    modalEl.addEventListener("shown.bs.modal", function() {
       const buttons = this.querySelectorAll(".btn");
       buttons.forEach((btn) => {
         btn.onclick = () => callback(btn.innerText.toLowerCase());
@@ -1011,6 +1023,11 @@
   }
   function add_time(time) {
     setEnd(getStart() + time + getBreak(false));
+    calculateTotal();
+  }
+  function applyWeeklyOvertime() {
+    const adjustedEnd = adjustEndTimeForOvertime(getStart(), getEnd(), weeklyOvertimeBalance);
+    setEnd(adjustedEnd);
     calculateTotal();
   }
   function add_break(time) {
@@ -1275,20 +1292,20 @@
       });
     });
     document.querySelectorAll(".btn").forEach((btn) => {
-      btn.addEventListener("mouseup", function () {
+      btn.addEventListener("mouseup", function() {
         this.blur();
       });
     });
     const appAlert = document.getElementById("app_alert");
     if (appAlert) {
-      appAlert.addEventListener("close.bs.alert", function (event) {
+      appAlert.addEventListener("close.bs.alert", function(event) {
         event.preventDefault();
         this.style.display = "none";
       });
     }
     const hourScheduleSelect = document.getElementById("hourschedule");
     if (hourScheduleSelect) {
-      hourScheduleSelect.addEventListener("change", function () {
+      hourScheduleSelect.addEventListener("change", function() {
         activateConfirmationModal("Do you want to set the hour schedule for every day?<br>If not, the selected value will only be applicable today.", (choice) => {
           if (choice === "yes") {
             localStorage.setItem("hourschedule", getHourSchedule());
@@ -1350,7 +1367,7 @@
       throw new Error("No storage target available");
     }
     let count = 0;
-    Object.keys(content).forEach(function (k) {
+    Object.keys(content).forEach(function(k) {
       const value = content[k];
       try {
         JSON.parse(value);
@@ -1513,7 +1530,7 @@
       importFile.addEventListener("change", importHistoryData, false);
     }
     if (importHistoryBtn && importFile) {
-      importHistoryBtn.onclick = function () {
+      importHistoryBtn.onclick = function() {
         importFile.click();
       };
     }
@@ -1600,6 +1617,7 @@
     window.setTheme = setTheme;
     window.end_time = end_time;
     window.add_time = add_time;
+    window.applyWeeklyOvertime = applyWeeklyOvertime;
     window.add_break = add_break;
     window.reset_break = reset_break;
     window.break_counter = break_counter;
@@ -1630,7 +1648,7 @@
     initUIEventListeners();
     if (typeof bootstrap !== "undefined") {
       const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-      tooltipTriggerList.map(function (tooltipTriggerEl) {
+      tooltipTriggerList.map(function(tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl, {
           boundary: document.body,
           delay: { show: 1e3, hide: 0 }
@@ -1643,22 +1661,22 @@
   } else {
     initializeApp();
   }
-  window.addEventListener("load", function () {
+  window.addEventListener("load", function() {
     if (localStorage.length < 10 && typeof window.startIntroduction === "function" && !document.getElementById("introductioncontainer")) {
       window.startIntroduction();
     }
     if ("serviceWorker" in navigator && window.location.protocol.startsWith("http")) {
-      navigator.serviceWorker.register("service-worker.js", { scope: "/" }).then(function (registration) {
+      navigator.serviceWorker.register("service-worker.js", { scope: "/" }).then(function(registration) {
         console.log("Service worker registered successfully:", registration);
-      }).catch(function (e) {
+      }).catch(function(e) {
         console.error("Error during service worker registration:", e);
       });
     }
   });
-  window.onbeforeunload = function () {
+  window.onbeforeunload = function() {
     handleBeforeUnload();
   };
-  document.addEventListener("keydown", function (e) {
+  document.addEventListener("keydown", function(e) {
     if (e.keyCode === 13) {
       add_time(getHourSchedule());
     }
